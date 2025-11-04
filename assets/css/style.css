@@ -2,6 +2,7 @@
   /* الألوان الأساسية */
   --primary-color: #003366;
   --primary-color-50: rgba(0, 51, 102, 0.5); /* نسخة 50% شفافية */
+  --primary-color-hover:#00264D;
   --background-color: #F9FAFB;
   
   /* ألوان البطاقات */
@@ -58,10 +59,10 @@ body{
   background-color: var(--background-color);
 }
 
-/* ====== Headings & Text Styles ====== */
+/* ====== Typography Utility Classes ====== */
 
-/* Display / Large -> h1 */
-h1 {
+/* Display / Large */
+.display-lg {
   font-size: 4.625rem; /* 74px */
   font-weight: 900; /* Black */
   letter-spacing: -0.01875rem; /* -0.3px */
@@ -70,8 +71,8 @@ h1 {
   color: var(--primary-color);
 }
 
-/* Headline / Medium -> h2 */
-h2 {
+/* Headline / Medium */
+.headline-md {
   font-size: 2.25rem; /* 36px */
   font-weight: 400; /* Regular */
   letter-spacing: 0;
@@ -80,8 +81,8 @@ h2 {
   color: var(--primary-color);
 }
 
-/* Headline / Small -> h3 */
-h3 {
+/* Headline / Small */
+.headline-sm {
   font-size: 1.9375rem; /* 31px */
   font-weight: 400;
   letter-spacing: 0;
@@ -90,8 +91,8 @@ h3 {
   color: var(--primary-color);
 }
 
-/* Title / Large -> h4 */
-h4 {
+/* Title / Large */
+.title-lg {
   font-size: 1.75rem; /* 28px */
   font-weight: 700;
   letter-spacing: 0;
@@ -100,8 +101,8 @@ h4 {
   color: var(--primary-color);
 }
 
-/* Title / Medium -> h5 */
-h5 {
+/* Title / Medium */
+.title-md {
   font-size: 1.3125rem; /* 21px */
   font-weight: 600;
   letter-spacing: 0.0125rem; /* 0.2px */
@@ -110,19 +111,18 @@ h5 {
   color: var(--primary-color);
 }
 
-/* Title / Small -> h6 */
-h6 {
+/* Title / Small */
+.title-sm {
   font-size: 1.125rem; /* 18px */
   font-weight: 600;
   letter-spacing: 0.009375rem; /* 0.15px */
   line-height: 1.3;
   margin: 0 0 0.3em 0;
   color: var(--primary-color);
-
 }
 
 /* Body / Medium */
-p, li {
+.body-md {
   font-size: 1.125rem; /* 18px */
   font-weight: 400;
   letter-spacing: 0.021875rem; /* 0.35px */
@@ -132,23 +132,23 @@ p, li {
 }
 
 /* Body / Small */
-small, .text-small {
+.body-sm {
   font-size: 0.9375rem; /* 15px */
   font-weight: 400;
   letter-spacing: 0.03125rem; /* 0.5px */
   line-height: 1.4;
   color: var(--primary-color);
-
 }
 
 /* Label / Large */
-label, button {
+.label-lg {
   font-size: 1.125rem; /* 18px */
   font-weight: 400;
   letter-spacing: 0.009375rem; /* 0.15px */
   line-height: 1;
   color: var(--primary-color);
 }
+
 
 input {
   height: 48px;
@@ -172,5 +172,5 @@ input {
 }
 
 .button1:hover {
-  background-color: #00264D; 
+  background-color: var(--primary-color-hover); 
 }
