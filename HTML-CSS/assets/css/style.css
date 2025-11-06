@@ -15,6 +15,8 @@
 
   /* ألوان النصوص أو العناصر الأخرى */
   --white-color: #FFFFFF;
+  --white-color-50: rgba(255, 255, 255, 0.5);
+  --gray-color: #C6C6C6;
   --green-color: #198754;
   --red-color: #DC3545;
 }
@@ -58,6 +60,8 @@
 
 body {
   background-color: var(--background-color);
+  min-width: 1440px;
+  overflow: hidden;
 }
 
 /* ====== Typography Utility Classes ====== */
@@ -206,4 +210,17 @@ input:focus {
 
 .button1:hover {
   background-color: var(--primary-color-hover);
+}
+
+.primary-color {
+  color: var(--primary-color);
+}
+
+.primary-color-50 {
+  color: var(--primary-color-50);
+}
+
+.space-between {
+  display: flex;
+  justify-content: space-between;
 }
