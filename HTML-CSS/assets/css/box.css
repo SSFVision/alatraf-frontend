@@ -12,6 +12,10 @@
   overflow-y: auto;
 }
 
+.box.max-hight-712 {
+  max-height: 712px;
+}
+
 .center-content {
   align-self: center;
   text-align: center;
@@ -21,8 +25,7 @@
   position: sticky;
   top: 0;
   background-color: var(--white-color);
-  z-index: 10;
-  padding: 8px;
+  z-index: 1;
 }
 
 .login-box {
