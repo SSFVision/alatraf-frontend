@@ -53,12 +53,9 @@ aside .title-sm {
 .menu-line {
   display: block;
   width: 100%;
-  /* تقدر تغير العرض */
   height: 0.8px;
-  /* سمك الخط */
   background-color: var(--white-color);
   margin: 16px auto;
-  /* مسافة فوق + في المنتصف */
   border-radius: 2px;
 }
 
@@ -72,6 +69,10 @@ aside button.active {
 
 aside button.active .title-md {
   color: var(--primary-color);
+}
+
+aside button img {
+  content: url(../icons/home-white.svg);
 }
 
 aside button.active img {
