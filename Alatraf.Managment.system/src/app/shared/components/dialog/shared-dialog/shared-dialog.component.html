@@ -1,11 +1,11 @@
 <!-- backdrop -->
-<div class="dialog-backdrop" (click)="backdropClick()"></div>
+<div class="backdrop" (click)="backdropClick()"></div>
 
 <!-- dialog box -->
 <div
   #dialogBox
-  class="box dialog dialog-box"
-  [style.width]="config.width || '500px'"
+  class="box dialog"
+  [style.width]="config.width || '650px'"
   role="dialog"
   aria-modal="true"
   aria-labelledby="dialogTitle"

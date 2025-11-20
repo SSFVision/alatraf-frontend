@@ -13,7 +13,11 @@ import { PatientService } from '../../Services/patient.service';
 import { ApiResult } from '../../../../../core/models/ApiResult';
 import { FormsModule } from '@angular/forms';
 import { DialogService } from '../../../../../shared/components/dialog/dialog.service';
-import { DialogConfig } from '../../../../../shared/components/dialog/DialogConfig';
+import {
+  DialogConfig,
+  DialogType,
+} from '../../../../../shared/components/dialog/DialogConfig';
+import { EMPTY } from 'rxjs';
 
 @Component({
   selector: 'app-patients-page',
@@ -83,18 +87,14 @@ export class PatientsPageComponent implements OnInit {
     const config: DialogConfig = {
       title: 'حذف بيانات المريض',
       message: 'هل أنت متأكد من حذف بيانات المريض التالية؟',
-      type: 'delete',
       payload: {
         'رقم المريض': patient.nationalNo,
         الاسم: patient.fullname,
         // ' رقم الهاتف': patient.phone,
       },
-      confirmText: 'حذف',
-      cancelText: 'إلغاء',
-      showCancel: true,
     };
 
-    this.dialogService.confirm(config).subscribe((confirmed) => {
+    this.dialogService.confirmDelete(config).subscribe((confirmed) => {
       if (confirmed) {
         this.patientService.deletePatient(patient.patientId).subscribe({
           next: (res) => {
@@ -107,7 +107,7 @@ export class PatientsPageComponent implements OnInit {
               .confirm({
                 title: 'خطأ',
                 message: 'حدث خطأ أثناء الحذف.',
-                type: 'warning',
+                type: DialogType.Warning,
                 confirmText: 'موافق',
                 showCancel: false,
               })
