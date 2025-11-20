@@ -1,14 +1,12 @@
 import {
   Component,
   OnInit,
-  computed,
-  effect,
   inject,
   signal,
 } from '@angular/core';
 import { RouterOutlet, RouterLink } from '@angular/router';
 import { PatientsListComponent } from '../../components/patients.list/patients.list.component';
-import { Patient, PatientFilterDto } from '../../models/patient.model';
+import { Patient, PatientFilterDto, PatientType } from '../../models/patient.model';
 import { PatientService } from '../../Services/patient.service';
 import { ApiResult } from '../../../../../core/models/ApiResult';
 import { FormsModule } from '@angular/forms';
@@ -17,11 +15,11 @@ import {
   DialogConfig,
   DialogType,
 } from '../../../../../shared/components/dialog/DialogConfig';
-import { EMPTY } from 'rxjs';
+import { debounceTime, Subject, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-patients-page',
-  imports: [PatientsListComponent, RouterLink, RouterOutlet, FormsModule],
+  imports: [PatientsListComponent, RouterLink, RouterOutlet, FormsModule,],
   templateUrl: './patients.page.component.html',
   styleUrl: './patients.page.component.css',
 })
@@ -29,58 +27,45 @@ export class PatientsPageComponent implements OnInit {
   private patientService = inject(PatientService);
   private dialogService = inject(DialogService);
 
-  patients = this.patientService.loadedPatients;
-  searchText = signal<string>('');
-  debouncedSearchText = signal<string>('');
-  // فلترة المرضى باستخدام النص بعد الـ debounce
-  // filteredPatients = computed(() => {
-  //   const term = this.debouncedSearchText().toLowerCase();
-  //   if (!term) return this.patients();
-
-  //   return this.patients().filter(
-  //     (patient) =>
-  //       patient.fullname.toLowerCase().includes(term) ||
-  //       patient.phone?.toLowerCase().includes(term)
-  //   );
-  // });
-
-  private debounceTimer: any;
+  patients = signal<Patient[]>([]);
+  searchText = new Subject<string>();
   filters: PatientFilterDto = {};
-  constructor() {
-    effect(() => {
-      const value = this.searchText();
-      clearTimeout(this.debounceTimer);
-      this.debounceTimer = setTimeout(() => {
-        this.filters.searchTerm = value;
-        this.loadAllPatients(this.filters);
-      }, 200);
-    });
-  }
-
+PatientType=PatientType
   ngOnInit() {
-    // this.loadAllPatients(this.filters);
+    // Listen to search input with debounce
+    this.searchText
+      .pipe(
+        debounceTime(300), // wait 300ms after last key
+        switchMap((term) => {
+          // switch to new API call
+          this.filters.searchTerm = term;
+          return this.patientService.getPatients(this.filters);
+        })
+      )
+      .subscribe({
+        next: (result: ApiResult<Patient[]>) => {
+          if (result.isSuccess) {
+            this.patients.set(result.data ?? []);
+          }
+        },
+        error: (err) => console.error(err),
+      });
+
+    // Initial load
+    this.loadAllPatients();
   }
 
-  loadAllPatients(patientFilter: PatientFilterDto): void {
-    this.patientService.getPatients(patientFilter).subscribe({
-      next: (result: ApiResult<Patient[]>) => {
-        if (result.isSuccess) {
-          // this.patients = result.data ?? [];
-        } else {
-          console.log('Failed to load patients.');
-        }
-      },
-      error: (err) => {
-        // this.patients = err.body ?? [];
+  onSearch(term: string) {
+    this.searchText.next(term); // pushes new value to debounced observable
+  }
 
-        console.error('Customer Load Error:', err);
+  loadAllPatients() {
+    this.patientService.getPatients(this.filters).subscribe({
+      next: (result) => {
+        if (result.isSuccess) this.patients.set(result.data ?? []);
       },
+      error: (err) => console.error(err),
     });
-  }
-
-  onSearch(value: string) {
-    this.searchText.set(value);
-    this.filters.searchTerm = value;
   }
 
   onDeletePatient(patient: Patient) {
@@ -116,5 +101,11 @@ export class PatientsPageComponent implements OnInit {
         });
       }
     });
+  }
+
+  // Optional: filter changes (gender, patientType)
+  onFilterChange(filter: Partial<PatientFilterDto>) {
+    Object.assign(this.filters, filter);
+    this.loadAllPatients();
   }
 }

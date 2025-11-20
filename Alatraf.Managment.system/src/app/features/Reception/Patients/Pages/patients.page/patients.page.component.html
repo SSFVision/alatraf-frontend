@@ -13,12 +13,13 @@
         alt="search"
       />
       <input
+        #searchBox
         type="text"
         placeholder="بحث: اسم المريض أو الرقم"
-        [ngModel]="searchText()"
-        (ngModelChange)="onSearch($event)"
+        (input)="onSearch(searchBox.value)"
       />
     </div>
+
     <app-patients-list
       [patients]="patients()"
       (deletePatient)="onDeletePatient($event)"
