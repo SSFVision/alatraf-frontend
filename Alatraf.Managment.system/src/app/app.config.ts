@@ -15,6 +15,7 @@ import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { InMemoryDataService } from './mocks/in-memory-data.service';
 import { mockApiResponseInterceptor } from './core/interceptors/mock-api-response.interceptor';
 import { loadingInterceptor } from './core/interceptors/loading.interceptor';
+import { SkeletonLoadingInterceptor } from './core/interceptors/skeleteon-loading.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -27,7 +28,11 @@ export const appConfig: ApplicationConfig = {
       })
     ),
     provideHttpClient(
-      withInterceptors([loadingInterceptor, mockApiResponseInterceptor])
+      withInterceptors([
+        SkeletonLoadingInterceptor,
+        loadingInterceptor,
+        mockApiResponseInterceptor,
+      ])
     ),
     importProvidersFrom(
       HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService, {
