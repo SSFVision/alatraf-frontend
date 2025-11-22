@@ -231,58 +231,6 @@ input::placeholder {
   width: 100%;
 }
 
-
-
-/* كل العناصر تتبع box-sizing */
-* {
-  box-sizing: border-box;
-}
-
-/* Firefox */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: var(--primary-color) var(--background-color);
-}
-
-/* Chrome, Edge, Safari */
-*::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-  background: transparent;
-  /* خلفية شريط الشفاف */
-}
-
-*::-webkit-scrollbar-track {
-  background: var(--background-color);
-  border-radius: 16px;
-}
-
-*::-webkit-scrollbar-thumb {
-  background-color: var(--primary-color);
-  border-radius: 16px;
-  border: 2px solid var(--background-color);
-  transition: background-color 0.3s, opacity 0.3s;
-  opacity: 0.3;
-  /* شفاف افتراضي */
-}
-
-*::-webkit-scrollbar-thumb:hover,
-*::-webkit-scrollbar-thumb:active {
-  background-color: var(--primary-color-hover);
-  opacity: 1;
-  /* يظهر بوضوح عند المرور */
-}
-
-*::-webkit-scrollbar-corner {
-  background: var(--background-color);
-}
-
-/* خيار إضافي: عند تمرير العنصر نفسه يظهر السكولبار أكثر وضوحاً */
-*:hover::-webkit-scrollbar-thumb {
-  opacity: 0.7;
-}
-
-
 input,
 select {
   height: 40px;
@@ -339,13 +287,62 @@ select {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  height: 100%;
+  height: fit-content;
   max-height: 500px;
   overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.box {
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-color) var(--background-color);
+}
+
+.box::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background: transparent;
+}
+
+.box::-webkit-scrollbar-track {
+  background: var(--background-color);
+  border-radius: 16px;
+}
+
+.box::-webkit-scrollbar-thumb {
+  background-color: var(--primary-color);
+  border-radius: 16px;
+  border: 2px solid var(--background-color);
+  opacity: 0.3;
+  transition: background-color 0.3s, opacity 0.3s;
+}
+
+.box::-webkit-scrollbar-thumb:hover,
+.box::-webkit-scrollbar-thumb:active {
+  background-color: var(--primary-color-hover);
+  opacity: 1;
+}
+
+.box::-webkit-scrollbar-corner {
+  background: var(--background-color);
+}
+
+/* عند مرور الماوس على .box سكروول بار يصبح أوضح */
+.box:hover::-webkit-scrollbar-thumb {
+  opacity: 0.7;
+}
+
+.max-width-320 {
+  max-width: 320px;
 }
 
 .box.max-hight-712 {
   max-height: 712px;
+}
+
+.box.max-hight-800 {
+  max-height: 680px;
+  min-height: 680px;
 }
 
 .center-content {
@@ -383,7 +380,7 @@ select {
 /* button */
 
 .btn {
-  padding: 8px 48px;
+  padding: 4px 40px;
   border-radius: 16px;
   border: none;
   cursor: pointer;
@@ -397,7 +394,12 @@ select {
 }
 
 .btn.big-btn {
-  padding: 16px 48px;
+  padding: 12px 48px;
+}
+
+.btn.small-btn {
+  padding: 0 8px;
+  font-size: 0.875rem;
 }
 
 .btn.primary {
@@ -433,13 +435,15 @@ select {
 }
 
 .btn.icon {
-  padding: 4px 8px;
+  width: 24px;
+  height: 24px;
   border-radius: 8px;
+  padding: 0;
 }
 
 .btn.icon img {
-  height: 20px;
-  width: 20px;
+  height: 16px;
+  width: 16px;
   vertical-align: middle;
 }
 
@@ -471,19 +475,21 @@ thead {
   box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.2);
 }
 
+th,
+td {
+  padding: 4px 8px;
+  border-right: 1px solid var(--gray-color);
+  border-bottom: 1px solid var(--gray-color);
+}
+
 th {
   text-align: start;
+  padding: 8px 16px;
+  white-space: nowrap;
 }
 
 th.th-expand {
   width: 90%;
-}
-
-th,
-td {
-  padding: 8px 16px;
-  border-right: 1px solid var(--gray-color);
-  border-bottom: 1px solid var(--gray-color);
 }
 
 tr:last-child td {
