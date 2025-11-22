@@ -1,45 +1,79 @@
 import { InMemoryDbService, RequestInfo } from 'angular-in-memory-web-api';
+
 import { PATIENTS_MOCK_DATA } from './patients/patient.mock';
 import { PatientController } from './patients/patient.controller';
 
+import { MOCK_SERVICES } from './services/mock-services.data';
+import { ServiceController } from './services/service.controller';
+
 export class InMemoryDataService implements InMemoryDbService {
+
   createDb() {
     return {
       patients: PATIENTS_MOCK_DATA,
+      services: MOCK_SERVICES,
     };
   }
 
   get(reqInfo: RequestInfo) {
-    if (reqInfo.collectionName === 'patients') {
-      if (reqInfo.id) {
-        // If URL contains an ID, return single patient
-        return PatientController.getById(reqInfo);
-      } else {
-        // Otherwise return all patients
-        return PatientController.getAll(reqInfo);
-      }
+    switch (reqInfo.collectionName) {
+
+      case 'patients':
+        return reqInfo.id
+          ? PatientController.getById(reqInfo)
+          : PatientController.getAll(reqInfo);
+
+      case 'services':
+        return reqInfo.id
+          ? ServiceController.getById(reqInfo)
+          : ServiceController.getAll(reqInfo);
+
+      default:
+        return undefined;
     }
-    return undefined;
   }
 
   post(reqInfo: RequestInfo) {
-    if (reqInfo.collectionName === 'patients') {
-      return PatientController.create(reqInfo);
+    switch (reqInfo.collectionName) {
+
+      case 'patients':
+        return PatientController.create(reqInfo);
+
+      case 'services':
+        return ServiceController.create(reqInfo);
+
+      default:
+        return undefined;
     }
-    return undefined;
   }
+
 
   put(reqInfo: RequestInfo) {
-    if (reqInfo.collectionName === 'patients') {
-      return PatientController.update(reqInfo);
+    switch (reqInfo.collectionName) {
+
+      case 'patients':
+        return PatientController.update(reqInfo);
+
+      case 'services':
+        return ServiceController.update(reqInfo);
+
+      default:
+        return undefined;
     }
-    return undefined;
   }
 
+ 
   delete(reqInfo: RequestInfo) {
-    if (reqInfo.collectionName === 'patients') {
-      return PatientController.delete(reqInfo);
+    switch (reqInfo.collectionName) {
+
+      case 'patients':
+        return PatientController.delete(reqInfo);
+
+      case 'services':
+        return ServiceController.delete(reqInfo);
+
+      default:
+        return undefined;
     }
-    return undefined;
   }
 }
