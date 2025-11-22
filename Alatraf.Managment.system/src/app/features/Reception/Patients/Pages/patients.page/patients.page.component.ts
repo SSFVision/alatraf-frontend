@@ -89,15 +89,17 @@ export class PatientsPageComponent implements OnInit {
             }
           },
           error: (error) => {
-            this.dialogService
-              .confirm({
-                title: 'خطأ',
-                message: 'حدث خطأ أثناء الحذف.',
-                type: DialogType.Warning,
-                confirmText: 'موافق',
-                showCancel: false,
-              })
-              .subscribe();
+            this.toast.error('حدث خطأ أثناء الحذف.');
+
+            // this.dialogService
+            //   .confirm({
+            //     title: 'خطأ',
+            //     message: 'حدث خطأ أثناء الحذف.',
+            //     type: DialogType.Warning,
+            //     confirmText: 'موافق',
+            //     showCancel: false,
+            //   })
+            //   .subscribe();
           },
         });
       }

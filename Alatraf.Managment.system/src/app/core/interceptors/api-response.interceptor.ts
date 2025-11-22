@@ -18,6 +18,21 @@ export const apiResponseInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req).pipe(
     map((event: HttpEvent<any>) => {
       if (event instanceof HttpResponse) {
+        const body = event.body;
+        // ---------------------------------------------------------
+        // 🔥 1. Handle Mock API Errors (In-Memory Web API)
+        // ---------------------------------------------------------
+
+        if (body && body.isSuccess === false) {
+          if (body.errorMessage) {
+            toast.error(body.errorMessage);
+          }
+
+          // Do NOT wrap again — just return the ApiResult-like body
+          return event.clone({ body });
+        }
+
+        
         const apiResult = ApiResult.success(event.body);
         const successMsg = req.headers.get('X-Success-Toast');
         if (successMsg) {
@@ -28,6 +43,7 @@ export const apiResponseInterceptor: HttpInterceptorFn = (req, next) => {
       }
       return event;
     }),
+
     catchError((error: any) => {
       let apiResult;
       if (error instanceof HttpErrorResponse) {

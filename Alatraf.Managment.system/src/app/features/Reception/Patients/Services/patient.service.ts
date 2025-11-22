@@ -56,14 +56,17 @@ export class PatientService extends BaseApiService {
     id: number,
     dto: CreateUpdatePatientDto
   ): Observable<ApiResult<Patient>> {
+    let header = new HttpHeaders();
+    header = header.set('X-Success-Toast', 'تم تعديل بيانات المريض بنجاح');
+
     return this.put<Patient>(`${this.endpoint}/${id}`, dto);
   }
 
   // DELETE a patient
   deletePatient(id: number): Observable<ApiResult<void>> {
-    // let header = new HttpHeaders();
-    // header = header.set('X-Enable-Loader', 'true');
+    let header = new HttpHeaders();
+    header = header.set('X-Enable-Loader', 'true');
 
-    return this.delete<void>(`${this.endpoint}/${id}`, undefined);
+    return this.delete<void>(`${this.endpoint}/${id}`, undefined, header);
   }
 }
