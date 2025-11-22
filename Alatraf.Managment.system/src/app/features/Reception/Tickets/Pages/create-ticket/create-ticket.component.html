@@ -33,17 +33,18 @@
     [formGroup]="form"
     (ngSubmit)="onCreateTicket()"
   >
-    <app-service-select
-      class="row flex-center"
-      formControlName="serviceId"
-    ></app-service-select>
 
-    <button
-      class="btn primary label-md"
-      type="submit"
-      [disabled]="form.invalid || loading"
-    >
-      طباعة
-    </button>
+  <div class="row flex-center" >
+
+ 
+    <app-service-select class="row flex-center" formControlName="serviceId">
+    </app-service-select>
+<div *ngIf="isInvalid('serviceId')" class="error-message">
+      اختر واحدة من الخدمات
+    </div>
+  </div>
+   
+    <!--  -->
+    <button class="btn primary label-md" type="submit" [disabled]="isInvalid('serviceId') || isSaved"  >حفظ و طباعة</button>
   </form>
 </div>

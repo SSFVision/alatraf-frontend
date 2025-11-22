@@ -8,6 +8,7 @@ import { CreateTicketDto } from '../../models/create-ticket.dto';
 import { TicketService } from '../../ticket.service';
 import { NgIf } from '@angular/common';
 import { Patient } from '../../../Patients/models/patient.model';
+import { ToastService } from '../../../../../core/services/toast.service';
 
 @Component({
   selector: 'app-create-ticket',
@@ -25,6 +26,7 @@ export class CreateTicketComponent implements OnInit {
   private router = inject(Router);
   private fb = inject(FormBuilder);
 
+  private toast = inject(ToastService);
   patientService = inject(PatientService);
   ticketService = inject(TicketService);
 
@@ -45,23 +47,32 @@ export class CreateTicketComponent implements OnInit {
       this.loading = false;
     });
   }
-
+  isSaved = false;
   onCreateTicket() {
-    if (this.form.invalid) return;
+    if (this.form.valid) {
+      this.isSaved = true;
+      const dto: CreateTicketDto = {
+        patientId: this.patient.patientId,
+        serviceId: this.form.value.serviceId!,
+      };
 
-    const dto: CreateTicketDto = {
-      patientId: this.patient.patientId,
-      serviceId: this.form.value.serviceId!,
-    };
+      this.ticketService.createTicket(dto).subscribe((res) => {
+        if (res.isSuccess && res.data) {
+          console.log(res.data);
+          // this.router.navigate(['/reception/tickets/print', res.data.id]);
+          this.toast.success('لقد قمت بإنشاء التذكرة بنجاح');
 
-    this.ticketService.createTicket(dto).subscribe((res) => {
-      if (res.isSuccess && res.data) {
-        console.log(res.data);
-        // this.router.navigate(['/reception/tickets/print', res.data.id]);
-      }
-    });
+          this.router.navigate(['../']);
+        }
+      });
+    } else {
+      this.form.markAllAsTouched();
+    }
   }
-
+  isInvalid(controlName: string): boolean {
+    const control = this.form.get(controlName);
+    return !!(control && control.invalid && control.touched);
+  }
   onClose() {
     this.router.navigate(['../']);
   }
