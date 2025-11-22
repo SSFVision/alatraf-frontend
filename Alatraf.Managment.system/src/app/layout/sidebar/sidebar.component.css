@@ -76,13 +76,13 @@ button.active .title-md {
   color: var(--primary-color);
 }
 
-button img {
+/* button img {
   content: url("/assets/icons/home-white.svg");
-}
+} */
 
-button.active img {
+/* button.active img {
   content: url("/assets/icons/home-blue.svg");
-}
+} */
 
 :host>button {
   margin: 40px 0;
