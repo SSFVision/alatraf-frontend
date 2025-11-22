@@ -1,15 +1,10 @@
-import {
-  Component,
-  inject,
-  input,
-  signal,
-  OnChanges,
-  DestroyRef,
-} from '@angular/core';
+import { Component, inject, input, signal, DestroyRef } from '@angular/core';
 import { PatientFormComponent } from '../../components/patient-form/patient-form.component';
 import { Router } from '@angular/router';
 import { CreateUpdatePatientDto, Patient } from '../../models/patient.model';
 import { PatientService } from '../../Services/patient.service';
+import { DialogService } from '../../../../../shared/components/dialog/dialog.service';
+import { ArabicSuccessMessages } from '../../../../../core/locals/Arabic';
 
 @Component({
   selector: 'app-patient-add-edit-page',
@@ -20,6 +15,7 @@ import { PatientService } from '../../Services/patient.service';
 export class PatientAddEditPageComponent {
   private router = inject(Router);
   private patientService = inject(PatientService);
+  private dialogService = inject(DialogService);
 
   private destroyRef = inject(DestroyRef);
 
@@ -60,7 +56,25 @@ export class PatientAddEditPageComponent {
 
       console.log('this is the updated  patient info ', newpatien);
     } else {
-    const Addedpatient=this.patientService.createPatient(newpatien).subscribe();
+      const Addedpatient = this.patientService
+        .createPatient(newpatien)
+        .subscribe({
+          next: (res) => {
+            if (res.isSuccess && res.data) {
+              const patientId = res.data.patientId;
+              this.dialogService
+                .confirmSuccess(ArabicSuccessMessages.saved)
+                .subscribe((confirmed) => {
+                  if (confirmed) {
+                    this.router.navigate([
+                      'registration/patients/view/',
+                      patientId,
+                    ]);
+                  }
+                });
+            }
+          },
+        });
 
       console.log('Add new patient info ', newpatien);
     }

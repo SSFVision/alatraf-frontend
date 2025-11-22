@@ -3,7 +3,7 @@
 <div class="box dialog">
   <div class="space-between sticky">
     <h2 class="title-lg">
-      {{ mode() ? "تعديل  بيانات المريض" : " اصدار تذكرة خدمة" }}
+      {{ mode() ? "تعديل  بيانات المريض" : "إضافة مريض جديد" }}
     </h2>
     <img
       src="assets/icons/close-icon.svg"
@@ -52,7 +52,9 @@
     <div class="row flex-center">
       <label class="label-lg">رقم الهاتف</label>
       <input class="label-lg" type="number" formControlName="phone" />
-      <div *ngIf="isInvalid('phone')" class="error-message">رقم الهاتف مطلوب</div>
+      <div *ngIf="isInvalid('phone')" class="error-message">
+        رقم الهاتف مطلوب
+      </div>
     </div>
     <div class="row flex-center">
       <label class="label-lg">العنوان</label>
@@ -62,12 +64,10 @@
     <div class="row flex-center">
       <label class="label-lg">رقم الهوية</label>
       <input class="label-lg" type="text" formControlName="nationalNo" />
-      
     </div>
-    
 
     <button class="btn primary label-md" type="submit">
-      {{ mode() ? "حفظ" : "طباعة" }}
+      {{ mode() ? "حفظ التعديل" : "حفظ" }}
     </button>
   </form>
 </div>

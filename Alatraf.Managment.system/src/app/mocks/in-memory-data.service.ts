@@ -5,72 +5,116 @@ import { PatientController } from './patients/patient.controller';
 
 import { MOCK_SERVICES } from './services/mock-services.data';
 import { ServiceController } from './services/service.controller';
+import { MOCK_TICKETS } from './Tickets/mock-tickets.data';
+import { TicketController } from './Tickets/ticket.controller';
+
 
 export class InMemoryDataService implements InMemoryDbService {
 
+  // ------------------------------------------
+  // ENTITY NAMES (Avoid repeating strings)
+  // ------------------------------------------
+  private readonly PATIENTS = 'patients';
+  private readonly SERVICES = 'services';
+  private readonly TICKETS = 'tickets';
+
+  // ------------------------------------------
+  // DATABASE
+  // ------------------------------------------
   createDb() {
     return {
-      patients: PATIENTS_MOCK_DATA,
-      services: MOCK_SERVICES,
+      [this.PATIENTS]: PATIENTS_MOCK_DATA,
+      [this.SERVICES]: MOCK_SERVICES,
+      [this.TICKETS]: MOCK_TICKETS
     };
   }
 
+  // ------------------------------------------
+  // GET
+  // ------------------------------------------
   get(reqInfo: RequestInfo) {
-    switch (reqInfo.collectionName) {
+    const entity = reqInfo.collectionName;
 
-      case 'patients':
+    switch (entity) {
+
+      case this.PATIENTS:
         return reqInfo.id
           ? PatientController.getById(reqInfo)
           : PatientController.getAll(reqInfo);
 
-      case 'services':
+      case this.SERVICES:
         return reqInfo.id
           ? ServiceController.getById(reqInfo)
           : ServiceController.getAll(reqInfo);
 
+      case this.TICKETS:
+        return reqInfo.id
+          ? TicketController.getById(reqInfo)
+          : TicketController.getAll(reqInfo);
+
       default:
         return undefined;
     }
   }
 
+  // ------------------------------------------
+  // POST
+  // ------------------------------------------
   post(reqInfo: RequestInfo) {
-    switch (reqInfo.collectionName) {
+    const entity = reqInfo.collectionName;
 
-      case 'patients':
+    switch (entity) {
+
+      case this.PATIENTS:
         return PatientController.create(reqInfo);
 
-      case 'services':
+      case this.SERVICES:
         return ServiceController.create(reqInfo);
 
+      case this.TICKETS:
+        return TicketController.create(reqInfo);
+
       default:
         return undefined;
     }
   }
 
-
+  // ------------------------------------------
+  // PUT
+  // ------------------------------------------
   put(reqInfo: RequestInfo) {
-    switch (reqInfo.collectionName) {
+    const entity = reqInfo.collectionName;
 
-      case 'patients':
+    switch (entity) {
+
+      case this.PATIENTS:
         return PatientController.update(reqInfo);
 
-      case 'services':
+      case this.SERVICES:
         return ServiceController.update(reqInfo);
 
+      // Tickets do not have update here
       default:
         return undefined;
     }
   }
 
- 
+  // ------------------------------------------
+  // DELETE
+  // ------------------------------------------
   delete(reqInfo: RequestInfo) {
-    switch (reqInfo.collectionName) {
+    const entity = reqInfo.collectionName;
 
-      case 'patients':
+    switch (entity) {
+
+      case this.PATIENTS:
         return PatientController.delete(reqInfo);
 
-      case 'services':
+      case this.SERVICES:
         return ServiceController.delete(reqInfo);
+
+      case this.TICKETS:
+        return TicketController.delete(reqInfo);
 
       default:
         return undefined;

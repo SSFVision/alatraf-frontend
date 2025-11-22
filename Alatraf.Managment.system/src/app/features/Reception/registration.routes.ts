@@ -9,6 +9,17 @@ export const ReceptionRoutes: Routes = [
       ),
     children: [
       {
+        path: 'view/:patientId',
+        // loadComponent: () =>
+        //   import('./Patients/components/patient-summary-card/patient-summary-card.component').then(
+        //     (m) => m.PatientSummaryCardComponent
+        //   ),
+        loadComponent: () =>
+          import('./Tickets/Pages/create-ticket/create-ticket.component').then(
+            (m) => m.CreateTicketComponent
+          ),
+      },
+      {
         path: 'add',
         loadComponent: () =>
           import(
@@ -24,5 +35,6 @@ export const ReceptionRoutes: Routes = [
       },
     ],
   },
+
   { path: '', redirectTo: 'patients', pathMatch: 'full' },
 ];
