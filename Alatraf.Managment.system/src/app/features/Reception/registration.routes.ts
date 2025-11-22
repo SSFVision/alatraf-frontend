@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { PatientsRoutes } from './Patients/patients.routes';
 
 export const ReceptionRoutes: Routes = [
   {
@@ -7,22 +8,8 @@ export const ReceptionRoutes: Routes = [
       import('./Patients/Pages/patients.page/patients.page.component').then(
         (m) => m.PatientsPageComponent
       ),
-    children: [
-      {
-        path: 'add',
-        loadComponent: () =>
-          import(
-            './Patients/Pages/patient-add-edit-page/patient-add-edit-page.component'
-          ).then((m) => m.PatientAddEditPageComponent),
-      },
-      {
-        path: 'edit/:patientId',
-        loadComponent: () =>
-          import(
-            './Patients/Pages/patient-add-edit-page/patient-add-edit-page.component'
-          ).then((m) => m.PatientAddEditPageComponent),
-      },
-    ],
+    children: PatientsRoutes,
   },
+
   { path: '', redirectTo: 'patients', pathMatch: 'full' },
 ];
