@@ -1,0 +1,22 @@
+
+   <div class="width-100">
+      <p class="title-md">بيانات الخدمة</p>
+
+      <span class="home-line"></span>
+    </div>
+<div class="row flex-center">
+  <label class="label-lg">نوع الخدمة</label>
+
+  <select
+    class="label-lg"
+    [disabled]="disabled"
+    (change)="onSelectChange($any($event.target).value)"
+    (blur)="markAsTouched()"
+  >
+    <option value="">اختر الخدمة</option>
+
+    <option *ngFor="let s of services()" [value]="s.serviceId">
+      {{ s.name }}
+    </option>
+  </select>
+</div>
