@@ -11,23 +11,15 @@ export class NavigationRootFacade {
   private location = inject(Location);
   private authNav = inject(NavigationAuthFacade);
 
-  // -------------------------------------------------------------
-  // INTERNAL GENERIC NAVIGATION METHOD
-  // -------------------------------------------------------------
+ 
   private go(path: string | any[], extras?: NavigationExtras): void {
     this.router.navigate(Array.isArray(path) ? path : [path], extras);
   }
 
-  // -------------------------------------------------------------
-  // GLOBAL NAVIGATION
-  // -------------------------------------------------------------
 
-  /** Go to landing page (login screen) */
   goToLanding(extras?: NavigationExtras): void {
     this.go(AppRoutes.auth.login, extras);
   }
-
-  /** Navigate to Unauthorized page */
   goUnauthorized(): void {
     this.go(AppRoutes.system.unauthorized, { replaceUrl: true });
   }
@@ -42,19 +34,13 @@ export class NavigationRootFacade {
     this.authNav.goToRoleHome(role);
   }
 
-  // -------------------------------------------------------------
-  // BACK NAVIGATION
-  // -------------------------------------------------------------
-
+ 
   /** Browser back navigation */
   goBack(): void {
     this.location.back();
   }
 
-  /**
-   * Go back or navigate to a safe default path
-   * Useful after form cancel / failed back stack
-   */
+ 
   goBackOrDefault(defaultRoute: string, extras?: NavigationExtras): void {
     try {
       this.location.back();

@@ -4,14 +4,13 @@ import { AppRoutes } from '../routing/app.routes.map';
 
 @Injectable({ providedIn: 'root' })
 export class NavigationReceptionFacade {
-
   private router = inject(Router);
 
   // -----------------------
   // PATIENTS
   // -----------------------
   goToPatientsList(extras?: NavigationExtras): void {
-    this.go(AppRoutes.reception.patients.root, extras);
+    this.go(AppRoutes.reception.patients.root, { replaceUrl: true });
   }
 
   goToPatientsAdd(extras?: NavigationExtras): void {
@@ -29,7 +28,10 @@ export class NavigationReceptionFacade {
   // -----------------------
   // TICKETS
   // -----------------------
-  goToTicketsCreate(patientId: number | string, extras?: NavigationExtras): void {
+  goToTicketsCreate(
+    patientId: number | string,
+    extras?: NavigationExtras
+  ): void {
     this.go(AppRoutes.reception.tickets.create(patientId), extras);
   }
 
