@@ -553,7 +553,6 @@ th.buttons {
 }
 
 .search-box {
-  position: relative;
   flex: 1;
   margin: auto 0;
 }
@@ -598,6 +597,8 @@ th.buttons {
   color: var(--white-color);
   vertical-align: middle;
 }
+
+/* filters */
 
 .filters-container {
   display: flex;
