@@ -164,7 +164,7 @@ input::placeholder {
   font-weight: 400;
   letter-spacing: 0.12px;
   /* 0.009375rem ≈ 0.15px × 0.85 */
-  line-height: 1;
+  line-height: 1.5;
   color: var(--primary-color);
 }
 
