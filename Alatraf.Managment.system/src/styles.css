@@ -523,17 +523,6 @@ th.th-expand {
   width: 90%;
 }
 
-tr:last-child td {
-  border-bottom: none;
-}
-
-th:last-child,
-td:last-child,
-th:first-child,
-td:first-child {
-  border-right: none;
-}
-
 table tbody tr {
   border-bottom: 1px solid var(--gray-color);
   position: relative;
