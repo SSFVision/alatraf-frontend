@@ -1,6 +1,7 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { MENU_CONFIG, MenuCategory } from '../../core/navigation/sidebar.items';
 import { RouterLink, RouterLinkActive } from "@angular/router";
+import { NavigationAuthFacade } from '../../core/navigation/navigation-auth.facade';
 
 @Component({
   selector: 'app-sidebar',
@@ -9,7 +10,9 @@ import { RouterLink, RouterLinkActive } from "@angular/router";
   styleUrl: './sidebar.component.css',
 })
 export class SidebarComponent {
-  // menu: = [];
+
+
+
  menu =signal< MenuCategory[]>([])
   constructor() {
     this.menu.set( MENU_CONFIG.map((category) => {
@@ -21,7 +24,9 @@ export class SidebarComponent {
     }).filter((category) => category.items.length > 0)); // remove empty categories
   }
 
-  OnClickRoute(){
-    
+
+  private navAuth=inject(NavigationAuthFacade);
+  OnLogOut(){
+this.navAuth.goToLogout();
   }
 }

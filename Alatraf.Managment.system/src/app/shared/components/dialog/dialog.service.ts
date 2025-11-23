@@ -81,7 +81,7 @@ export class DialogService {
     });
   }
 
-  confirmSuccess(message: string, title = 'Success'): Observable<boolean> {
+  confirmSuccess(message: string, title = 'نجاح'): Observable<boolean> {
     return this.confirm({
       type: DialogType.Success,
       title,

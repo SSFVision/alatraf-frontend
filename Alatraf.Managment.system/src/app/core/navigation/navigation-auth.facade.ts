@@ -10,7 +10,6 @@ export class NavigationAuthFacade {
   private router = inject(Router);
 
   private go(path: string | any[], extras?: NavigationExtras): void {
-    console.log(path);
     this.router.navigate(Array.isArray(path) ? path : [path], extras);
   }
 

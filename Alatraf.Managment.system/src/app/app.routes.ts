@@ -68,17 +68,12 @@ import { MainLayoutComponent } from './core/Layouts/main-layout/main-layout.comp
 //   // },
 // ];
 
-
-
-
 export const APP_ROUTES: Routes = [
-
   {
     path: '',
     redirectTo: AppRoutes.auth.login, // 'auth/login'
     pathMatch: 'full',
   },
-
 
   {
     path: AppRoutes.auth.root, // 'auth'
@@ -112,17 +107,8 @@ export const APP_ROUTES: Routes = [
       // },
     ],
   },
- // {
-  //   path: AppRoutes.system.unauthorized,
-  //   loadComponent: () =>
-  //     import('./core/pages/unauthorized.page').then((m) => m.UnauthorizedPage),
-  // },
-  // {
-  //   path: AppRoutes.system.notFound,
-  //   loadComponent: () =>
-  //     import('./core/pages/not-found.page').then((m) => m.NotFoundPage),
-  // },
- {
+
+  {
     path: '**',
     redirectTo: AppRoutes.system.notFound,
   },
