@@ -16,10 +16,11 @@ import {
 } from '../../../../../shared/components/dialog/DialogConfig';
 import { debounceTime, filter, finalize, Subject, switchMap } from 'rxjs';
 import { ToastService } from '../../../../../core/services/toast.service';
+import { NavigationReceptionFacade } from '../../../../../core/navigation/navigation-reception.facade';
 
 @Component({
   selector: 'app-patients-page',
-  imports: [PatientsListComponent, RouterLink, RouterOutlet, FormsModule],
+  imports: [PatientsListComponent, RouterOutlet, FormsModule],
   templateUrl: './patients.page.component.html',
   styleUrl: './patients.page.component.css',
 })
@@ -28,6 +29,7 @@ export class PatientsPageComponent implements OnInit {
   private dialogService = inject(DialogService);
   private toast = inject(ToastService);
   isDeleting = signal(false);
+  private navReception = inject(NavigationReceptionFacade);
 
   patients = signal<Patient[]>([]);
   searchText = new Subject<string>();
@@ -114,4 +116,9 @@ export class PatientsPageComponent implements OnInit {
     Object.assign(this.filters, filter);
     this.loadAllPatients();
   }
+
+  onAddPatient() {
+  this.navReception.goToPatientsAdd();
+}
+
 }

@@ -60,17 +60,11 @@
       <td class="body-md">{{ patient.nationalNo }}</td>
       <td class="body-md">{{ patient.fullname }}</td>
       <td class="row gap-16">
-        <button
-          class="btn primary small-btn"
-          [routerLink]="['view/', patient.patientId]"
-        >
+        <button class="btn primary small-btn" (click)="OnCreateTicket(patient)">
           <p class="label-sm">اصدار تذكرة</p>
         </button>
 
-        <button
-          class="btn primary icon"
-          [routerLink]="['edit/', patient.patientId]"
-        >
+        <button class="btn primary icon" (click)="OnEditPatient(patient)">
           <img src="assets/icons/pencil-icon.svg" alt="تعديل" />
         </button>
 
