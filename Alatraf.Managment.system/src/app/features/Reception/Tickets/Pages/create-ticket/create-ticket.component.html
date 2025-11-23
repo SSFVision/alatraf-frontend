@@ -1,0 +1,50 @@
+<div class="backdrop" (click)="onClose()"></div>
+
+<div class="box dialog">
+  <!-- Header (always visible instantly) -->
+  <div class="space-between sticky">
+    <h2 class="title-lg">اصدار تذكرة خدمة</h2>
+    <img
+      src="assets/icons/close-icon.svg"
+      class="close-icon"
+      (click)="onClose()"
+    />
+  </div>
+  <div>
+    <p class="title-md">بيانات المريض</p>
+    <span class="home-line"></span>
+  </div>
+  <div class="padding-LR-24 mt-12" *ngIf="loading">
+    <p class="label-lg">جاري تحميل بيانات المريض...</p>
+  </div>
+
+  <app-patient-summary-card
+    *ngIf="!loading"
+    [patient]="patient"
+  ></app-patient-summary-card>
+
+  <div class="width-100 mt-20">
+    <p class="title-md">بيانات الخدمة</p>
+    <span class="home-line"></span>
+  </div>
+
+  <form
+    class="padding-LR-24 column gap-16"
+    [formGroup]="form"
+    (ngSubmit)="onCreateTicket()"
+  >
+
+  <div class="row flex-center" >
+
+ 
+    <app-service-select class="row flex-center" formControlName="serviceId">
+    </app-service-select>
+<div *ngIf="isInvalid('serviceId')" class="error-message">
+      اختر واحدة من الخدمات
+    </div>
+  </div>
+   
+    <!--  -->
+    <button class="btn primary label-md" type="submit" [disabled]="isInvalid('serviceId') || isSaved"  >حفظ و طباعة</button>
+  </form>
+</div>

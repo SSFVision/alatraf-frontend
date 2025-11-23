@@ -4,7 +4,6 @@
   <img alt="الصفحة الرئيسية" src="/assets/icons/home-white.svg" />
   <p class="title-md">الصفحة الرئيسية</p>
 </button>
-
 <ul>
   @for (cat of menu(); track $index) {
 
@@ -16,12 +15,17 @@
   </li>
   @for (item of cat.items; track $index) {
   <li>
-    <button routerLinkActive="active">
-      <img alt="{{ item.label }}" [src]="item.icon ? item.icon : '/assets/icons/home-white.svg'" />
-      <p class="title-md" [routerLink]="[item.route]">
+    <button [routerLink]="[item.route]" routerLinkActive="active" #rla="routerLinkActive">
+
+      <img alt="{{ item.label }}" [src]="!rla.isActive
+        ? (item.icon || '/assets/icons/home-white.svg')
+        : (item.activeIcon || '/assets/icons/home-blue.svg')" />
+
+      <p class="title-md">
         {{ item.label }}
       </p>
     </button>
+
   </li>
   } }
 </ul>

@@ -1,0 +1,60 @@
+<!-- <div class="backdrop" (click)="onClose()"></div> -->
+
+@if (patient()) {
+<!-- <div class="box dialog">
+  <div class="space-between sticky">
+    <h2 class="title-lg">اصدار تذكرة خدمة</h2>
+    <img
+      src="assets/icons/close-icon.svg"
+      alt="إغلاق"
+      class="close-icon"
+      (click)="onClose()"
+    />
+  </div>
+
+  <div>
+    <p class="title-md">بيانات المريض</p>
+    <span class="home-line"></span>
+  </div> -->
+
+  <div class="padding-LR-24 column gap-16">
+    <div class="row flex-center">
+      <label class="label-lg">رقم المريض</label>
+      <input
+        class="label-lg"
+        [value]="patient()?.autoRegistrationNumber"
+        disabled
+      />
+
+      <label class="label-lg">رقم الهوية</label>
+      <input class="label-lg" [value]="patient()?.nationalNo" disabled />
+    </div>
+    <div class="row flex-center">
+      <label class="label-lg">الاسم</label>
+      <input class="label-lg" [value]="patient()?.fullname" disabled />
+    </div>
+
+    <div class="row flex-center">
+      <label class="label-lg">الجنس</label>
+      <input
+        class="label-lg"
+        [value]="patient()?.gender ? 'ذكر' : 'أنثى'"
+        disabled
+      />
+
+      <label class="label-lg">تاريخ الميلاد</label>
+      <input
+        class="label-lg"
+        type="date"
+        [value]="patient()?.birthdate | date : 'yyyy-MM-dd'"
+        disabled
+      />
+    </div>
+
+    <div class="row flex-center">
+      <label class="label-lg">رقم الهاتف</label>
+      <input class="label-lg" [value]="patient()?.phone" disabled />
+    </div>
+  </div>
+<!-- </div> -->
+}

@@ -3,49 +3,49 @@
   --primary-color: #003366;
   --primary-color-50: rgba(0, 51, 102, 0.5);
   /* نسخة 50% شفافية */
-  --primary-color-hover: #00264D;
-  --background-color: #F9FAFB;
+  --primary-color-hover: #00264d;
+  --background-color: #f9fafb;
 
   /* ألوان البطاقات */
-  --card-color: #CCE5FF;
-  --card-active-color: #B2D9FF;
-  --card-yellow: #FFF3CD;
-  --card-green: #D1E7DD;
-  --card-red: #F8D7DA;
+  --card-color: #cce5ff;
+  --card-active-color: #b2d9ff;
+  --card-yellow: #fff3cd;
+  --card-green: #d1e7dd;
+  --card-red: #f8d7da;
 
   /* ألوان النصوص أو العناصر الأخرى */
-  --white-color: #FFFFFF;
+  --white-color: #ffffff;
   --white-color-50: rgba(255, 255, 255, 0.5);
-  --gray-color: #C6C6C6;
+  --gray-color: #c6c6c6;
   --green-color: #198754;
-  --red-color: #DC3545;
+  --red-color: #dc3545;
 }
 
 /* ====== Cairo Font Faces ====== */
 @font-face {
-  font-family: 'Cairo';
-  src: url('/assets/fonts/Cairo-Light.ttf') format('truetype');
+  font-family: "Cairo";
+  src: url("/assets/fonts/Cairo-Light.ttf") format("truetype");
   font-weight: 300;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Cairo';
-  src: url('/assets/fonts/Cairo-Regular.ttf') format('truetype');
+  font-family: "Cairo";
+  src: url("/assets/fonts/Cairo-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Cairo';
-  src: url('/assets/fonts/Cairo-SemiBold.ttf') format('truetype');
+  font-family: "Cairo";
+  src: url("/assets/fonts/Cairo-SemiBold.ttf") format("truetype");
   font-weight: 600;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Cairo';
-  src: url('/assets/fonts/Cairo-Bold.ttf') format('truetype');
+  font-family: "Cairo";
+  src: url("/assets/fonts/Cairo-Bold.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
 }
@@ -54,7 +54,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Cairo', sans-serif;
+  font-family: "Cairo", sans-serif;
   direction: rtl;
 }
 
@@ -172,7 +172,6 @@ input::placeholder {
   color: var(--primary-color-50);
 }
 
-
 .primary-color {
   color: var(--primary-color);
 }
@@ -259,7 +258,7 @@ label {
 
 select {
   appearance: none;
-  background-image: url('/assets/icons/dropdown-icon.svg');
+  background-image: url("/assets/icons/dropdown-icon.svg");
   background-repeat: no-repeat;
   background-position: left 8px center;
   background-size: 20px;
@@ -384,7 +383,8 @@ select {
   border-radius: 16px;
   border: none;
   cursor: pointer;
-  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s, border-color 0.3s;
+  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s,
+    border-color 0.3s;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -392,7 +392,9 @@ select {
   font-family: inherit;
   font-size: 1rem;
 }
-
+.close-icon {
+  cursor: pointer;
+}
 .btn.big-btn {
   padding: 12px 48px;
 }
@@ -468,7 +470,6 @@ table {
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
   background-color: var(--white-color);
 }
-
 
 thead {
   background-color: var(--background-color);

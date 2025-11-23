@@ -1,6 +1,3 @@
-/* this classes for the errors of the reactive form */
-/* patient-form.component.css */
-
 input.ng-invalid.ng-touched,
 select.ng-invalid.ng-touched {
   border: 1px solid var(--card-red);
@@ -12,4 +9,3 @@ select.ng-invalid.ng-touched {
   margin-top: 2px;
   margin-right: 10px;
 }
-
