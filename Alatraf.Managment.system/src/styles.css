@@ -575,6 +575,10 @@ th.buttons {
   background-color: var(--card-color);
 }
 
+.card:active {
+  border: 2px var(--primary-color) solid;
+}
+
 .blue-card {
   background-color: var(--primary-color);
   justify-content: space-between;
