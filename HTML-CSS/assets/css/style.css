@@ -164,7 +164,7 @@ input::placeholder {
   font-weight: 400;
   letter-spacing: 0.12px;
   /* 0.009375rem ≈ 0.15px × 0.85 */
-  line-height: 1;
+  line-height: 1.5;
   color: var(--primary-color);
 }
 
@@ -529,7 +529,7 @@ th.th-expand {
   width: 90%;
 }
 
-tr:last-child td {
+/* tr:last-child td {
   border-bottom: none;
 }
 
@@ -538,7 +538,7 @@ td:last-child,
 th:first-child,
 td:first-child {
   border-right: none;
-}
+} */
 
 table tbody tr {
   border-bottom: 1px solid var(--gray-color);
@@ -553,7 +553,6 @@ th.buttons {
 }
 
 .search-box {
-  position: relative;
   flex: 1;
   margin: auto 0;
 }
@@ -597,4 +596,32 @@ th.buttons {
 .blue-card .headline-sm {
   color: var(--white-color);
   vertical-align: middle;
+}
+
+/* filters */
+
+.filters-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+}
+
+.filter-btn {
+  padding: 2px 12px;
+  border-radius: 16px;
+  border: none;
+  background-color: var(--primary-color-50);
+  color: var(--white-color);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.filter-btn:hover {
+  background-color: var(--primary-color-hover);
+}
+
+.filter-btn.active {
+  background-color: var(--primary-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }

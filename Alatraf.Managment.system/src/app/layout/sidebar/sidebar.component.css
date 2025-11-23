@@ -88,9 +88,13 @@ button.active .title-md {
   margin: 40px 0;
 }
 
-ul,
 ul li {
   list-style: none;
+  margin-bottom: 4px;
+}
+
+li:last-child {
+  margin-bottom: 0;
 }
 
 
