@@ -2,13 +2,14 @@ import { Component, inject, OnInit } from '@angular/core';
 import { PatientSummaryCardComponent } from '../../../Patients/components/patient-summary-card/patient-summary-card.component';
 import { ServiceSelectComponent } from '../../../../../shared/components/service-select/service-select.component';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { PatientService } from '../../../Patients/Services/patient.service';
 import { CreateTicketDto } from '../../models/create-ticket.dto';
 import { TicketService } from '../../ticket.service';
 import { NgIf } from '@angular/common';
 import { Patient } from '../../../Patients/models/patient.model';
 import { ToastService } from '../../../../../core/services/toast.service';
+import { NavigationReceptionFacade } from '../../../../../core/navigation/navigation-reception.facade';
 
 @Component({
   selector: 'app-create-ticket',
@@ -23,8 +24,9 @@ import { ToastService } from '../../../../../core/services/toast.service';
 })
 export class CreateTicketComponent implements OnInit {
   private route = inject(ActivatedRoute);
-  private router = inject(Router);
+  // private router = inject(Router);
   private fb = inject(FormBuilder);
+  private navReception = inject(NavigationReceptionFacade);
 
   private toast = inject(ToastService);
   patientService = inject(PatientService);
@@ -58,11 +60,8 @@ export class CreateTicketComponent implements OnInit {
 
       this.ticketService.createTicket(dto).subscribe((res) => {
         if (res.isSuccess && res.data) {
-          console.log(res.data);
-          // this.router.navigate(['/reception/tickets/print', res.data.id]);
           this.toast.success('لقد قمت بإنشاء التذكرة بنجاح');
-
-          this.router.navigate(['../']);
+          this.onClose();
         }
       });
     } else {
@@ -74,6 +73,6 @@ export class CreateTicketComponent implements OnInit {
     return !!(control && control.invalid && control.touched);
   }
   onClose() {
-    this.router.navigate(['../']);
+    this.navReception.goToPatientsList();
   }
 }

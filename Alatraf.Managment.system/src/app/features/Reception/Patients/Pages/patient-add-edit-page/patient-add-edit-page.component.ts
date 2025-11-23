@@ -1,10 +1,10 @@
 import { Component, inject, input, signal, DestroyRef } from '@angular/core';
 import { PatientFormComponent } from '../../components/patient-form/patient-form.component';
-import { Router } from '@angular/router';
 import { CreateUpdatePatientDto, Patient } from '../../models/patient.model';
 import { PatientService } from '../../Services/patient.service';
 import { DialogService } from '../../../../../shared/components/dialog/dialog.service';
 import { ArabicSuccessMessages } from '../../../../../core/locals/Arabic';
+import { NavigationReceptionFacade } from '../../../../../core/navigation/navigation-reception.facade';
 
 @Component({
   selector: 'app-patient-add-edit-page',
@@ -13,9 +13,9 @@ import { ArabicSuccessMessages } from '../../../../../core/locals/Arabic';
   styleUrl: './patient-add-edit-page.component.css',
 })
 export class PatientAddEditPageComponent {
-  private router = inject(Router);
   private patientService = inject(PatientService);
   private dialogService = inject(DialogService);
+  private navReception = inject(NavigationReceptionFacade);
 
   private destroyRef = inject(DestroyRef);
 
@@ -64,14 +64,7 @@ export class PatientAddEditPageComponent {
               const patientId = res.data.patientId;
               this.dialogService
                 .confirmSuccess(ArabicSuccessMessages.saved)
-                .subscribe((confirmed) => {
-                  if (confirmed) {
-                    this.router.navigate([
-                      'registration/patients/view/',
-                      patientId,
-                    ]);
-                  }
-                });
+                .subscribe();
             }
           },
         });
@@ -79,7 +72,6 @@ export class PatientAddEditPageComponent {
       console.log('Add new patient info ', newpatien);
     }
 
-    // console.log(newpatien);
     this.closeModal();
   }
 
@@ -87,8 +79,6 @@ export class PatientAddEditPageComponent {
     this.closeModal();
   }
   private closeModal() {
-    this.router.navigate(['../'], {
-      replaceUrl: true,
-    });
+    this.navReception.goToPatientsList();
   }
 }

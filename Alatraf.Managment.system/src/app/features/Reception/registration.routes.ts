@@ -10,6 +10,11 @@ export const ReceptionRoutes: Routes = [
       ),
     children: PatientsRoutes,
   },
+  //  {
+  //   path: 'patients',
+  //   loadChildren: () =>
+  //     import('./Patients/patients.routes').then(m => m.PatientsRoutes),
+  // },
 
   { path: '', redirectTo: 'patients', pathMatch: 'full' },
 ];
