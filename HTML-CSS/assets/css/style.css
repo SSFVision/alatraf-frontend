@@ -598,3 +598,29 @@ th.buttons {
   color: var(--white-color);
   vertical-align: middle;
 }
+
+.filters-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+}
+
+.filter-btn {
+  padding: 2px 12px;
+  border-radius: 16px;
+  border: none;
+  background-color: var(--primary-color-50);
+  color: var(--white-color);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.filter-btn:hover {
+  background-color: var(--primary-color-hover);
+}
+
+.filter-btn.active {
+  background-color: var(--primary-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
