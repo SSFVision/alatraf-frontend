@@ -1,12 +1,22 @@
 <div class="toast-container">
-      <div
-        class="toast"
-        *ngFor="let t of toastService.toasts()"
-        [class.success]="t.type === 'success'"
-        [class.error]="t.type === 'error'"
-        [class.warning]="t.type === 'warning'"
-        [class.info]="t.type === 'info'"
-      >
-        <p>{{ t.message }}</p>
-      </div>
+  <div class="toast" *ngFor="let t of toastService.toasts()" [class.success]="t.type === 'success'"
+    [class.error]="t.type === 'error'" [class.warning]="t.type === 'warning'" [class.info]="t.type === 'info'">
+
+    <div class="row gap-16">
+      <ng-container [ngSwitch]="t.type">
+
+        <img *ngSwitchCase="'success'" src="assets/icons/success-icon.svg" alt="Success Icon" />
+
+        <img *ngSwitchCase="'error'" src="assets/icons/error-icon.svg" alt="Error Icon" />
+
+        <img *ngSwitchCase="'warning'" src="assets/icons/warning-icon.svg" alt="Warning Icon" />
+
+        <img *ngSwitchCase="'info'" src="assets/icons/info-icon.svg" alt="Info Icon" />
+
+      </ng-container>
+
+
+      <p class="title-sm">{{ t.message }}</p>
     </div>
+  </div>
+</div>
