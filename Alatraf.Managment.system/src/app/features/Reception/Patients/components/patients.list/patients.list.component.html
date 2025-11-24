@@ -54,8 +54,9 @@
 
     <!-- ⭐ SHOW REAL DATA WHEN NOT LOADING -->
     @else { @if (patients().length > 0) { @for (patient of patients(); track
-    patient.patientId) {
-    <tr (click)="OnShowPatient(patient.patientId)" class="hover-row">
+    patient) {
+    <!-- (click)="OnShowPatient(patient.patientId)"  -->
+    <tr class="hover-row">
       <td class="body-md">{{ patient.phone }}</td>
       <td class="body-md">{{ patient.nationalNo }}</td>
       <td class="body-md">{{ patient.fullname }}</td>

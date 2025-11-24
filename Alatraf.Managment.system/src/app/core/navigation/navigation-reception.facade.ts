@@ -7,8 +7,6 @@ export class NavigationReceptionFacade {
   private router = inject(Router);
 
   // -----------------------
-  // PATIENTS
-  // -----------------------
   goToPatientsList(extras?: NavigationExtras): void {
     this.go(AppRoutes.reception.patients.root, { replaceUrl: true });
   }
@@ -25,14 +23,10 @@ export class NavigationReceptionFacade {
     this.go(AppRoutes.reception.patients.view(id), extras);
   }
 
-  // -----------------------
-  // TICKETS
-  // -----------------------
   goToTicketsCreate(
     patientId: number | string,
     extras?: NavigationExtras
   ): void {
-
     this.go(AppRoutes.reception.tickets.create(patientId), extras);
   }
 
@@ -40,9 +34,6 @@ export class NavigationReceptionFacade {
     this.go(AppRoutes.reception.tickets.print(ticketId), extras);
   }
 
-  // -----------------------
-  // INTERNAL
-  // -----------------------
   private go(path: string | any[], extras?: NavigationExtras): void {
     this.router.navigate(Array.isArray(path) ? path : [path], extras);
   }
