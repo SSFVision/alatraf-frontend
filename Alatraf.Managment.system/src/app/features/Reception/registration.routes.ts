@@ -10,11 +10,11 @@ export const ReceptionRoutes: Routes = [
       ),
     children: PatientsRoutes,
   },
-  //  {
-  //   path: 'patients',
-  //   loadChildren: () =>
-  //     import('./Patients/patients.routes').then(m => m.PatientsRoutes),
-  // },
+  {
+    path: 'tickets',
+    loadChildren: () =>
+      import('./Tickets/tickets.routes').then((m) => m.TicketsRoutes),
+  },
 
   { path: '', redirectTo: 'patients', pathMatch: 'full' },
 ];

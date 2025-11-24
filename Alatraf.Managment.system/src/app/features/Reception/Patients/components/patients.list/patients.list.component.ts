@@ -24,10 +24,13 @@ export class PatientsListComponent {
     this.deletePatient.emit(patient);
   }
 
-  OnEditPatient(patient:Patient){
-    this.navReception.goToPatientsEdit(patient.patientId)
+  OnEditPatient(patient: Patient) {
+    this.navReception.goToPatientsEdit(patient.patientId);
   }
-   OnCreateTicket(patient:Patient){
-    this.navReception.goToPatientsView(patient.patientId)
+  OnCreateTicket(patient: Patient) {
+    this.navReception.goToTicketsCreate(patient.patientId);
+  }
+  OnShowPatient(patientId:number){
+    this.navReception.goToPatientsView(patientId)
   }
 }

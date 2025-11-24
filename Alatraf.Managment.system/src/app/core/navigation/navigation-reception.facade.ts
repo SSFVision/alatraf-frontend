@@ -32,6 +32,7 @@ export class NavigationReceptionFacade {
     patientId: number | string,
     extras?: NavigationExtras
   ): void {
+
     this.go(AppRoutes.reception.tickets.create(patientId), extras);
   }
 

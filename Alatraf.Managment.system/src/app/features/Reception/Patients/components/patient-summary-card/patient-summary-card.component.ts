@@ -1,7 +1,7 @@
 import { Component, inject, input, Input, output, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Patient } from '../../models/patient.model';
-import { Router } from '@angular/router';
+import { NavigationReceptionFacade } from '../../../../../core/navigation/navigation-reception.facade';
 
 @Component({
   selector: 'app-patient-summary-card',
@@ -13,13 +13,14 @@ export class PatientSummaryCardComponent {
   patient = input<Patient | null>(null);
   close = output();
 
-  private rout = inject(Router);
+  private nav = inject(NavigationReceptionFacade);
 
   onClose() {
     this.closeDialog();
   }
 
   closeDialog() {
-    this.rout.navigate(['./']);
+    console.log('Go To Patients List');
+    this.nav.goToPatientsList();
   }
 }
