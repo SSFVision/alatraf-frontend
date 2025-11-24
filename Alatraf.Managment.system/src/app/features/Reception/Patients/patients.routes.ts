@@ -5,8 +5,8 @@ export const PatientsRoutes: Routes = [
     path: 'view/:patientId',
 
     loadComponent: () =>
-      import('../Tickets/Pages/create-ticket/create-ticket.component').then(
-        (m) => m.CreateTicketComponent
+      import('./Pages/show-patient-details/show-patient-details.component').then(
+        (m) => m.ShowPatientDetailsComponent
       ),
   },
   {

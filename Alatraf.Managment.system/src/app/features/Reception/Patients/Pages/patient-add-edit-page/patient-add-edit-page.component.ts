@@ -64,7 +64,11 @@ export class PatientAddEditPageComponent {
               const patientId = res.data.patientId;
               this.dialogService
                 .confirmSuccess(ArabicSuccessMessages.saved)
-                .subscribe();
+                .subscribe((confirm) => {
+                  if (confirm) {
+                    this.navReception.goToTicketsCreate(patientId);
+                  }
+                });
             }
           },
         });
