@@ -4,10 +4,11 @@ import { Patient } from '../../models/patient.model';
 import { SkeletonComponent } from '../../../../../shared/components/skeleton/skeleton.component';
 import { SkeletonsLoadingService } from '../../../../../core/services/skeletons-loading.service';
 import { NavigationReceptionFacade } from '../../../../../core/navigation/navigation-reception.facade';
+import { StopPropagationDirective } from '../../../../../shared/Directives/stop-propagation.directive';
 
 @Component({
   selector: 'app-patients-list',
-  imports: [SkeletonComponent],
+  imports: [SkeletonComponent,StopPropagationDirective],
   standalone: true,
   templateUrl: './patients.list.component.html',
   styleUrl: './patients.list.component.css',
