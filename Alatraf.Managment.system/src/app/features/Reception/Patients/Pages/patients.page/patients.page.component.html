@@ -6,13 +6,14 @@
   <div class="box">
     <h1 class="title-lg">البحث عن مريض</h1>
 
-    <div class="search-box sticky">
+    <div class="search-box">
       <img src="assets/icons/search-icon.svg" class="search-icon" alt="search" />
       <input #searchBox type="text" placeholder="بحث: اسم المريض أو الرقم" (input)="onSearch(searchBox.value)" />
     </div>
-
-    <app-patients-list [patients]="patients()" (deletePatient)="onDeletePatient($event)">
-      ></app-patients-list>
+    <div class="max-hight-460">
+      <app-patients-list [patients]="patients()" (deletePatient)="onDeletePatient($event)">
+        ></app-patients-list>
+    </div>
   </div>
   <router-outlet></router-outlet>
 </main>
