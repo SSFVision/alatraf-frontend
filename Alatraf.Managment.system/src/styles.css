@@ -544,25 +544,6 @@ th.buttons {
   border-bottom: none;
 }
 
-.search-box {
-  flex: 1;
-  margin: auto 0;
-}
-
-.search-box input {
-  width: 100%;
-  padding-right: 40px;
-  box-sizing: border-box;
-}
-
-.search-box .search-icon {
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
-}
-
 /* card */
 
 .card {
@@ -620,4 +601,25 @@ th.buttons {
 .filter-btn.active {
   background-color: var(--primary-color);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+
+.search-box {
+  position: relative;
+  flex: 1;
+  margin: auto 0;
+}
+
+.search-box input {
+  width: 100%;
+  padding-right: 40px;
+  box-sizing: border-box;
+}
+
+.search-box .search-icon {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
 }
