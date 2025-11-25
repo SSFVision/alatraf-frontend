@@ -1,4 +1,4 @@
-import { PERMISSIONS } from '../models/constants/permissions';
+import { PERMISSIONS } from '../auth/models/permissions.map';
 import { AppRoutes } from '../routing/app.routes.map';
 
 export interface MenuItem {

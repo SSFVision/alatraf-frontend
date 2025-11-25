@@ -1,9 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { Router, NavigationExtras } from '@angular/router';
 import { AppRoutes } from '../routing/app.routes.map';
+import { AppUserRole } from '../auth/models/app.user.roles.enum';
 
-// Define the available user roles
-export type AppUserRole = 'Reception' | 'Doctor' | 'Admin' | 'Manager' | 'Finance';
 
 @Injectable({ providedIn: 'root' })
 export class NavigationAuthFacade {
@@ -13,25 +12,21 @@ export class NavigationAuthFacade {
     this.router.navigate(Array.isArray(path) ? path : [path], extras);
   }
 
-
   goToLogin(extras?: NavigationExtras): void {
     this.go(AppRoutes.auth.login, extras);
   }
 
   goToLogout(extras?: NavigationExtras): void {
-    // (You will clear session/tokens in your AuthService)
     this.go(AppRoutes.auth.login, { replaceUrl: true, ...extras });
   }
 
   goToTokenExpired(): void {
     this.go(AppRoutes.auth.login, {
       replaceUrl: true,
-      queryParams: { reason: 'expired' }
+      queryParams: { reason: 'expired' },
     });
   }
 
-
-  /** Determine home route based on user role */
   private getHomeRouteForRole(role: AppUserRole): string {
     switch (role) {
       case 'Reception':

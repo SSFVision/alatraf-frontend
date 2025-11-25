@@ -11,8 +11,8 @@ import { Observable, catchError, switchMap, throwError } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { SessionStore } from '../auth/session.store';
 import { TokenStorageFacade } from '../auth/token-storage/token-storage.facade';
-import { RefreshTokenRequest } from '../models/auth/auth.models';
 import { NavigationAuthFacade } from '../navigation/navigation-auth.facade';
+import { RefreshTokenRequest } from '../auth/models/refresh-token-request.model';
 
 function isAuthEndpoint(url: string): boolean {
   return (

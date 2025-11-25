@@ -1,3 +1,5 @@
+import { UserModel } from "./user.model";
+
 export interface UserSession {
   user: UserModel | null;
 

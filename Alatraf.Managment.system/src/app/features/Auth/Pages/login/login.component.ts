@@ -1,5 +1,6 @@
-import { Component, inject } from '@angular/core';
-import { NavigationAuthFacade } from '../../../../core/navigation/navigation-auth.facade';
+import { LoginRequest } from './../../../../core/auth/models/login-request.model';
+import { Component, Inject, inject } from '@angular/core';
+import { AuthFacade } from '../../../../core/auth/auth.facade';
 
 @Component({
   selector: 'app-login',
@@ -8,10 +9,10 @@ import { NavigationAuthFacade } from '../../../../core/navigation/navigation-aut
   styleUrl: './login.component.css',
 })
 export class LoginComponent {
-  private navAuth = inject(NavigationAuthFacade);
+  aut = inject(AuthFacade);
 
   OnLogin() {
-    
-    this.navAuth.redirectAfterLogin('Reception');
+    console.log('login clalled');
+    // this.aut.login();
   }
 }

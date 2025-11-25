@@ -7,7 +7,8 @@ import { SessionStore } from './session.store';
 
 import { LoginRequest } from './models/login-request.model';
 import { RefreshTokenRequest } from './models/refresh-token-request.model';
-import { NavigationAuthFacade, AppUserRole } from '../navigation/navigation-auth.facade';
+import { NavigationAuthFacade } from '../navigation/navigation-auth.facade';
+import { AppUserRole } from './models/app.user.roles.enum';
 
 @Injectable({ providedIn: 'root' })
 export class AuthFacade {
