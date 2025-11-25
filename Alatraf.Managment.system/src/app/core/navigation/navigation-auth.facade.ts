@@ -35,7 +35,7 @@ export class NavigationAuthFacade {
   private getHomeRouteForRole(role: AppUserRole): string {
     switch (role) {
       case 'Reception':
-        return AppRoutes.reception.patients.root;
+        return AppRoutes.reception.root;
 
       case 'Doctor':
         return AppRoutes.doctor.dashboard;

@@ -4,10 +4,11 @@ import { Patient } from '../../models/patient.model';
 import { SkeletonComponent } from '../../../../../shared/components/skeleton/skeleton.component';
 import { SkeletonsLoadingService } from '../../../../../core/services/skeletons-loading.service';
 import { NavigationReceptionFacade } from '../../../../../core/navigation/navigation-reception.facade';
+import { StopPropagationDirective } from '../../../../../shared/Directives/stop-propagation.directive';
 
 @Component({
   selector: 'app-patients-list',
-  imports: [SkeletonComponent],
+  imports: [SkeletonComponent,StopPropagationDirective],
   standalone: true,
   templateUrl: './patients.list.component.html',
   styleUrl: './patients.list.component.css',
@@ -24,10 +25,13 @@ export class PatientsListComponent {
     this.deletePatient.emit(patient);
   }
 
-  OnEditPatient(patient:Patient){
-    this.navReception.goToPatientsEdit(patient.patientId)
+  OnEditPatient(patient: Patient) {
+    this.navReception.goToPatientsEdit(patient.patientId);
   }
-   OnCreateTicket(patient:Patient){
-    this.navReception.goToPatientsView(patient.patientId)
+  OnCreateTicket(patient: Patient) {
+    this.navReception.goToTicketsCreate(patient.patientId);
+  }
+  OnShowPatient(patientId:number){
+    this.navReception.goToPatientsView(patientId)
   }
 }

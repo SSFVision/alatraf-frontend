@@ -17,6 +17,8 @@ import { MainLayoutComponent } from './core/Layouts/main-layout/main-layout.comp
 //     pathMatch: 'full',
 //   },
 // ];
+
+
 // export const APP_ROUTES: Routes = [
 //   {
 //     path: AppRoutes.auth.root, // 'auth'
@@ -30,15 +32,15 @@ import { MainLayoutComponent } from './core/Layouts/main-layout/main-layout.comp
 //     ],
 //   },
 
-//   {
-//     path: AppRoutes.reception.root,
-//     component: MainLayoutComponent,
+  // {
+  //   path: AppRoutes.reception.root,
+  //   component: MainLayoutComponent,
 
-//     loadChildren: () =>
-//       import('./features/Reception/registration.routes').then(
-//         (m) => m.ReceptionRoutes
-//       ),
-//   },
+  //   loadChildren: () =>
+  //     import('./features/Reception/registration.routes').then(
+  //       (m) => m.ReceptionRoutes
+  //     ),
+  // },
 
 //   // =========================================================
 //   // SYSTEM PAGES (UNAUTHORIZED + 404)

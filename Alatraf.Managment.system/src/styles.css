@@ -378,7 +378,7 @@ textarea {
 }
 
 .max-hight-460 {
-  max-height: 460px;
+  max-height: 420px;
   overflow-y: auto;
 }
 
@@ -501,7 +501,7 @@ table {
   width: 100%;
   border-collapse: collapse;
   border-radius: 16px;
-  overflow-y: hidden;
+  overflow: hidden;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
   background-color: var(--white-color);
 }
