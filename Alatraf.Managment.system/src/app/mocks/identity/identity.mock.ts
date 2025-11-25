@@ -13,9 +13,9 @@ export const IDENTITY_USERS_MOCK: IdentityUserMock[] = [
   },
   {
     userId: 2,
-    userName: 'doctor',
-    password: '123',
-    roles: ['Doctor'],
+    userName: 'yy',
+    password: 'yy',
+    roles: ['Reception'],
     permissions: ['view_patient'],
   },
   {
@@ -28,7 +28,7 @@ export const IDENTITY_USERS_MOCK: IdentityUserMock[] = [
       'add_patient',
       'delete_patient',
       'update_patient',
-      'view_dashboard',
+      'add_ticket',
     ],
   },
 ];

@@ -1,4 +1,4 @@
-import { Component, Inject, inject } from '@angular/core';
+import { Component, ElementRef, Inject, inject, ViewChild } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NavigationAuthFacade } from '../../../../core/navigation/navigation-auth.facade';
 import { AppUserRole } from '../../../../core/auth/models/app.user.roles.enum';
@@ -14,42 +14,117 @@ import { LoginRequest } from '../../../../core/auth/models/login-request.model';
   styleUrl: './login.component.css',
 })
 export class LoginComponent {
-  private fb = inject(FormBuilder);
+  // private fb = inject(FormBuilder);
+  // private auth = inject(AuthFacade);
+
+  // isLoading = false;
+  // serverError: string | null = null;
+
+  // loginForm = this.fb.group({
+  //   userName: ['', Validators.required],
+  //   password: ['', Validators.required],
+  // });
+
+  // OnLogin() {
+  //   if (this.loginForm.invalid) {
+  //     this.loginForm.markAllAsTouched();
+  //     return;
+  //   }
+
+  //   this.serverError = null;
+  //   this.isLoading = true;
+
+  //   const request: LoginRequest = {
+  //     userName: this.loginForm.value.userName!,
+  //     password: this.loginForm.value.password!,
+  //   };
+
+  //   this.auth.login(request).subscribe({
+  //     next: () => {
+  //       this.isLoading = false;
+  //       // Navigation is handled inside AuthFacade.login()
+  //     },
+  //     error: (err) => {
+  //       this.isLoading = false;
+  //       // this.serverError = 'فشل تسجيل الدخول';
+     
+  //       this.serverError = err?.errorMessage || 'فشل تسجيل الدخول';
+  //     }
+  //   });
+  // }
+
+   private fb = inject(FormBuilder);
   private auth = inject(AuthFacade);
+
+  @ViewChild('usernameInput') usernameInput!: ElementRef;
+  @ViewChild('passwordInput') passwordInput!: ElementRef;
 
   isLoading = false;
   serverError: string | null = null;
+  shake = false;
 
   loginForm = this.fb.group({
     userName: ['', Validators.required],
     password: ['', Validators.required],
   });
 
-  OnLogin() {
-    if (this.loginForm.invalid) {
-      this.loginForm.markAllAsTouched();
+  ngOnInit(): void {
+    // Auto focus username
+    setTimeout(() => this.usernameInput?.nativeElement?.focus(), 150);
+  }
+
+  private focusFirstInvalidField() {
+    if (this.loginForm.controls['userName'].invalid) {
+      this.usernameInput.nativeElement.focus();
       return;
     }
+    if (this.loginForm.controls['password'].invalid) {
+      this.passwordInput.nativeElement.focus();
+      return;
+    }
+  }
+
+  OnLogin() {
+    // Mark all fields touched to show errors
+    this.loginForm.markAllAsTouched();
+    this.loginForm.updateValueAndValidity();
+
+    // If invalid → shake + focus first invalid
+    if (this.loginForm.invalid) {
+      this.shake = true;
+      this.focusFirstInvalidField();
+      setTimeout(() => (this.shake = false), 500);
+      return;
+    }
+
+    if (this.isLoading) return; // Prevent double submit
 
     this.serverError = null;
     this.isLoading = true;
 
     const request: LoginRequest = {
-      userName: this.loginForm.value.userName!,
-      password: this.loginForm.value.password!,
+      userName: this.loginForm.value.userName!.trim(),
+      password: this.loginForm.value.password!.trim(),
     };
 
     this.auth.login(request).subscribe({
       next: () => {
         this.isLoading = false;
-        // Navigation is handled inside AuthFacade.login()
       },
       error: (err) => {
         this.isLoading = false;
-        // this.serverError = 'فشل تسجيل الدخول';
-     
         this.serverError = err?.errorMessage || 'فشل تسجيل الدخول';
-      }
+      },
     });
+  }
+
+  onKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      this.OnLogin();
+    }
+  }
+
+  clearServerError() {
+    if (this.serverError) this.serverError = null;
   }
 }

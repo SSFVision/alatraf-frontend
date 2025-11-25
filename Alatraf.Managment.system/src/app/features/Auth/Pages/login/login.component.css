@@ -31,8 +31,44 @@ button {
   padding: 16px 48px;
   align-self: center;
 }
+
+
+input.ng-invalid.ng-touched,
+select.ng-invalid.ng-touched {
+  border: 1px solid var(--card-red);
+}
+/* Shake Animation */
+.shake {
+  animation: shake 0.4s;
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  50% { transform: translateX(6px); }
+  75% { transform: translateX(-6px); }
+  100% { transform: translateX(0); }
+}
+
+/* Invalid Input Border */
+input.invalid {
+  border: 1px solid #e63946 !important;
+  background-color: #fff6f6;
+}
+
+/* Fade In Error Text */
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-3px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .error-text {
-  color: #ff4d4f; 
-  font-size: 14px;
-  margin: 4px 0 8px 0;
+  color: var(--red-color);
+  font-size: 0.8rem;
+  margin-top: 2px;
+  margin-right: 10px;
 }

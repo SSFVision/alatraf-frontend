@@ -1,25 +1,11 @@
- <!-- <div class="box login-box">
-    <div class="logo">
-      <img src="assets\images\logo-blue.svg" alt="مركز الأطراف و العلاج الطبيعي">
-    </div>
-    <form >
-      <label class="label-lg" for="username">اسم المستخدم</label>
-      <input class="label-lg" type="text" id="username" name="username" placeholder="ادخل اسم المستخدم">
-
-      <label class="label-lg" for="password">كلمـة الـــــمرور</label>
-      <input class="label-lg" type="password" id="password" name="password" placeholder="ادخل كلمة المرور">
-
-      <button class="btn primary label-lg" type="button" (click)="OnLogin()">تسجيل الدخول</button>
-    </form>
-  </div> -->
-<div class="box login-box">
+<!-- <div class="box login-box">
   <div class="logo">
-    <img src="assets/images/logo-blue.svg" alt="مركز الأطراف و العلاج الطبيعي">
+    <img
+      src="assets/images/logo-blue.svg"
+      alt="مركز الأطراف و العلاج الطبيعي"
+    />
   </div>
-
   <form [formGroup]="loginForm">
-
-    <!-- USERNAME -->
     <label class="label-lg" for="username">اسم المستخدم</label>
     <input
       class="label-lg"
@@ -28,13 +14,16 @@
       placeholder="ادخل اسم المستخدم"
       formControlName="userName"
     />
-
-    <!-- username error -->
-    <p class="error-text" *ngIf="loginForm.controls['userName'].touched && loginForm.controls['userName'].invalid">
+    <p
+      class="error-text"
+      *ngIf="
+        loginForm.controls['userName'].touched &&
+        loginForm.controls['userName'].invalid
+      "
+    >
       الرجاء إدخال اسم المستخدم
     </p>
 
-    <!-- PASSWORD -->
     <label class="label-lg" for="password">كلمـة الـــــمرور</label>
     <input
       class="label-lg"
@@ -44,8 +33,72 @@
       formControlName="password"
     />
 
-    <!-- password error -->
-    <p class="error-text" *ngIf="loginForm.controls['password'].touched && loginForm.controls['password'].invalid">
+    <p
+      class="error-text"
+      *ngIf="
+        loginForm.controls['password'].touched &&
+        loginForm.controls['password'].invalid
+      "
+    >
+      الرجاء إدخال كلمة المرور
+    </p>
+
+    <button
+      class="btn primary label-lg"
+      type="button"
+      (click)="OnLogin()"
+      [disabled]="loginForm.invalid || isLoading"
+    >
+      <span *ngIf="!isLoading">تسجيل الدخول</span>
+      <span *ngIf="isLoading">جاري تسجيل الدخول...</span>
+    </button>
+
+    <p class="error-text" *ngIf="serverError">
+      {{ serverError }}
+    </p>
+  </form>
+</div> 
+ -->
+<div class="box login-box" [class.shake]="shake">
+  <div class="logo">
+    <img src="assets/images/logo-blue.svg" alt="مركز الأطراف و العلاج الطبيعي">
+  </div>
+
+  <form [formGroup]="loginForm" (keypress)="onKeyPress($event)">
+
+    <!-- USERNAME -->
+    <label class="label-lg" for="username">اسم المستخدم</label>
+    <input
+      #usernameInput
+      class="label-lg"
+      type="text"
+      id="username"
+      placeholder="ادخل اسم المستخدم"
+      formControlName="userName"
+      (input)="clearServerError()"
+      [class.invalid]="loginForm.controls['userName'].touched && loginForm.controls['userName'].invalid"
+    />
+
+    <p class="error-text fade-in"
+       *ngIf="loginForm.controls['userName'].touched && loginForm.controls['userName'].invalid">
+      الرجاء إدخال اسم المستخدم
+    </p>
+
+    <!-- PASSWORD -->
+    <label class="label-lg" for="password">كلمـة الـــــمرور</label>
+    <input
+      #passwordInput
+      class="label-lg"
+      type="password"
+      id="password"
+      placeholder="ادخل كلمة المرور"
+      formControlName="password"
+      (input)="clearServerError()"
+      [class.invalid]="loginForm.controls['password'].touched && loginForm.controls['password'].invalid"
+    />
+
+    <p class="error-text fade-in"
+       *ngIf="loginForm.controls['password'].touched && loginForm.controls['password'].invalid">
       الرجاء إدخال كلمة المرور
     </p>
 
@@ -60,8 +113,8 @@
       <span *ngIf="isLoading">جاري تسجيل الدخول...</span>
     </button>
 
-    <!-- server error -->
-    <p class="error-text" *ngIf="serverError">
+    <!-- SERVER ERROR -->
+    <p class="error-text fade-in" *ngIf="serverError">
       {{ serverError }}
     </p>
 
