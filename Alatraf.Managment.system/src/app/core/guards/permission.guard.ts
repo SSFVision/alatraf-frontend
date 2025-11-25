@@ -3,9 +3,7 @@ import { CanActivateFn } from '@angular/router';
 import { AuthFacade } from '../auth/auth.facade';
 import { NavigationAuthFacade } from '../navigation/navigation-auth.facade';
 
-
 export const PermissionGuard: CanActivateFn = (route) => {
-
   const auth = inject(AuthFacade);
   const navigation = inject(NavigationAuthFacade);
 
@@ -29,7 +27,8 @@ export const PermissionGuard: CanActivateFn = (route) => {
   const role = user?.roles?.[0] as any;
 
   if (role) {
-    navigation.goToRoleHome(role);
+    console.log('Redirect To the Login page if not have permission');
+    navigation.goToLogin({ replaceUrl: true });
   } else {
     navigation.goToLogin({ replaceUrl: true });
   }

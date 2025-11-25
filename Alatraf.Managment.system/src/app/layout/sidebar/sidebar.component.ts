@@ -1,7 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
 import { MENU_CONFIG, MenuCategory } from '../../core/navigation/sidebar.items';
-import { RouterLink, RouterLinkActive } from "@angular/router";
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { NavigationAuthFacade } from '../../core/navigation/navigation-auth.facade';
+import { AuthFacade } from '../../core/auth/auth.facade';
 
 @Component({
   selector: 'app-sidebar',
@@ -10,23 +11,43 @@ import { NavigationAuthFacade } from '../../core/navigation/navigation-auth.faca
   styleUrl: './sidebar.component.css',
 })
 export class SidebarComponent {
+  auth = inject(AuthFacade);
 
-
-
- menu =signal< MenuCategory[]>([])
-  constructor() {
-    this.menu.set( MENU_CONFIG.map((category) => {
-      const filteredItems = category.items;
-      return {
-        ...category,
-        items: filteredItems,
-      };
-    }).filter((category) => category.items.length > 0)); // remove empty categories
+  menu = signal<MenuCategory[]>([]);
+   constructor() {
+    this.buildMenu();
   }
 
+  private buildMenu() {
+    this.menu.set(
+      MENU_CONFIG
+        .map((category) => {
+          const filteredItems = category.items.filter(item =>
+            this.canShowItem(item.requiredPermissions)
+          );
 
-  private navAuth=inject(NavigationAuthFacade);
-  OnLogOut(){
-this.navAuth.goToLogout();
+          return {
+            ...category,
+            items: filteredItems,
+          };
+        })
+        .filter((category) => category.items.length > 0)
+    );
+  }
+
+  private canShowItem(requiredPermissions: string[]): boolean {
+    // If no permissions required → always show
+    if (!requiredPermissions || requiredPermissions.length === 0) {
+      return true;
+    }
+
+    // Check every required permission
+    return requiredPermissions.every((perm) =>
+      this.auth.hasPermission(perm)
+    );
+  }
+
+  OnLogOut() {
+    this.auth.logout();
   }
 }

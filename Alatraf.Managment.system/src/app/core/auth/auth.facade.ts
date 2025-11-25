@@ -1,5 +1,6 @@
+import { UserModel } from './models/user.model';
 import { Injectable, inject } from '@angular/core';
-import { tap, switchMap } from 'rxjs';
+import { tap, switchMap, catchError } from 'rxjs';
 
 import { AuthService } from './auth.service';
 import { TokenStorageFacade } from './token-storage/token-storage.facade';
@@ -12,7 +13,6 @@ import { AppUserRole } from './models/app.user.roles.enum';
 
 @Injectable({ providedIn: 'root' })
 export class AuthFacade {
-
   // Inject dependencies
   private authService = inject(AuthService);
   private tokenStorage = inject(TokenStorageFacade);
@@ -24,7 +24,6 @@ export class AuthFacade {
   // -------------------------------------------------------
   login(request: LoginRequest) {
     return this.authService.login(request).pipe(
-
       // Step A: store tokens
       tap((tokenResponse) => {
         this.tokenStorage.setTokens(tokenResponse);
@@ -36,10 +35,10 @@ export class AuthFacade {
 
       // Step C: attach user to session + navigate by role
       tap((user) => {
+        console.log('info After Sucess Login ', user);
         this.sessionStore.setUser(user);
-
-        const primaryRole = user.roles?.[0] as AppUserRole;
-        this.navigation.redirectAfterLogin(primaryRole);
+        const primaryRole = user.roles?.[0].toString();
+        this.navigation.redirectAfterLogin(primaryRole as AppUserRole);
       })
     );
   }
@@ -55,9 +54,6 @@ export class AuthFacade {
     );
   }
 
-  // -------------------------------------------------------
-  // 3. MANUAL Refresh Token (rarely used manually)
-  // -------------------------------------------------------
   refreshToken() {
     const refreshToken = this.tokenStorage.getRefreshToken();
     const expiredAccessToken = this.tokenStorage.getAccessToken();
@@ -104,7 +100,22 @@ export class AuthFacade {
     return this.sessionStore.hasRole(role);
   }
 
+  // hasPermission(permission: string) {
+  //   return this.sessionStore.hasPermission(permission);
+  // }
   hasPermission(permission: string) {
+    const user = this.sessionStore.user();
+    if (!user) return false;
+
+    // 🔥 SUPER ROLES: Admin + Manager have full access
+    if (
+      user.roles?.includes(AppUserRole.Admin) ||
+      user.roles?.includes(AppUserRole.Manager)
+    ) {
+      return true;
+    }
+
+    // 🔐 Normal permission check
     return this.sessionStore.hasPermission(permission);
   }
 }

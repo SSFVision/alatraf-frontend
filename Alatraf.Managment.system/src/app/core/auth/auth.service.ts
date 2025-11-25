@@ -10,7 +10,7 @@ import { UserModel } from './models/user.model';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
-  private baseUrl = 'https://localhost:7007/identity' // 👈 Base route
+  private baseUrl = 'api/identity' // 👈 Base route
 
   constructor(private http: HttpClient) {}
 
@@ -32,6 +32,7 @@ export class AuthService {
   // 3. Get Current User Info (userId, roles, permissions)
   // ---------------------------------------------------------
   getCurrentUser(): Observable<UserModel> {
+    console.log("Start getting user info ");
     return this.http.get<UserModel>(`${this.baseUrl}/current-user/claims`);
   }
 }

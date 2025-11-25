@@ -18,8 +18,8 @@ export class TokenStorageFacade {
     //  Choose ONE strategy for development or production:
 
     // this.strategy = this.memory;     // High security / testing
-    // this.strategy = this.local;      // Simple / development
-    this.strategy = this.hybrid;        // ⭐ Recommended for production
+    this.strategy = this.local;      // Simple / development
+    // this.strategy = this.hybrid;        // ⭐ Recommended for production
   }
 
   // Wrapper methods

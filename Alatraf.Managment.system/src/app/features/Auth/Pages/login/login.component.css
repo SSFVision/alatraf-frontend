@@ -31,3 +31,8 @@ button {
   padding: 16px 48px;
   align-self: center;
 }
+.error-text {
+  color: #ff4d4f; 
+  font-size: 14px;
+  margin: 4px 0 8px 0;
+}

@@ -61,15 +61,30 @@
       <td class="body-md">{{ patient.nationalNo }}</td>
       <td class="body-md">{{ patient.fullname }}</td>
       <td class="row gap-16">
-        <button class="btn primary small-btn" (click)="OnCreateTicket(patient)" stopPropagation>
+        <button
+          class="btn primary small-btn"
+          (click)="OnCreateTicket(patient)"
+          stopPropagation
+          *appHasPermission="permession.TICKETS.ADD"
+        >
           <p class="label-sm">اصدار تذكرة</p>
         </button>
 
-        <button class="btn primary icon" (click)="OnEditPatient(patient)" stopPropagation>
+        <button
+          class="btn primary icon"
+          (click)="OnEditPatient(patient)"
+          stopPropagation
+          *appHasPermission="permession.PATIENTS.UPDATE"
+        >
           <img src="assets/icons/pencil-icon.svg" alt="تعديل" />
         </button>
 
-        <button class="btn danger icon" (click)="onDeleteClick(patient)" stopPropagation>
+        <button
+          class="btn danger icon"
+          (click)="onDeleteClick(patient)"
+          stopPropagation
+          *appHasPermission="permession.PATIENTS.DELETE"
+        >
           <img src="assets/icons/trash-icon.svg" alt="حذف" />
         </button>
       </td>

@@ -14,13 +14,6 @@ import { TokenStorageFacade } from '../auth/token-storage/token-storage.facade';
 import { NavigationAuthFacade } from '../navigation/navigation-auth.facade';
 import { RefreshTokenRequest } from '../auth/models/refresh-token-request.model';
 
-function isAuthEndpoint(url: string): boolean {
-  return (
-    url.includes('/identity/token/generate') ||
-    url.includes('/identity/token/refresh-token') ||
-    url.includes('/identity/current-user/claims')
-  );
-}
 
 export const authInterceptor: HttpInterceptorFn = (
   req: HttpRequest<any>,
@@ -32,10 +25,7 @@ export const authInterceptor: HttpInterceptorFn = (
   const sessionStore = inject(SessionStore);
   const navigation = inject(NavigationAuthFacade);
 
-  if (isAuthEndpoint(req.url)) {
-    return next(req);
-  }
-
+ 
   // -------------------------------------------------------------
   // 2. Add Authorization header if access token exists
   // -------------------------------------------------------------

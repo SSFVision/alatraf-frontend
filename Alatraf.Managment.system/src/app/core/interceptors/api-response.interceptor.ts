@@ -12,9 +12,20 @@ import { ToastService } from '../services/toast.service';
 import { catchError, map, of } from 'rxjs';
 import { handleException } from '../errors/helpers/handle-exception';
 import { handleErrorResponse } from '../errors/helpers/handle-error-response';
+
+
+function isAuthEndpoint(url: string): boolean {
+  return (
+    url.includes('/identity/token/generate') ||
+    url.includes('/identity/token/refresh-token') ||
+    url.includes('/identity/current-user/claims')
+  );
+}
 export const apiResponseInterceptor: HttpInterceptorFn = (req, next) => {
   const toast = inject(ToastService);
-
+ if (isAuthEndpoint(req.url)) {
+    return next(req);
+  }
   return next(req).pipe(
     map((event: HttpEvent<any>) => {
       if (event instanceof HttpResponse) {

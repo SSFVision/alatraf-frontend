@@ -9,4 +9,11 @@ export const PERMISSIONS = {
     DELETE: 'delete_patient',
     UPDATE: 'update_patient',
   },
+  TICKETS: {
+  VIEW: 'view_ticket',
+  ADD: 'add_ticket',
+  DELETE: 'delete_ticket',
+  UPDATE: 'update_ticket',
+},
+
 } as const;
