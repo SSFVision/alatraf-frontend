@@ -24,7 +24,6 @@ import { NavigationReceptionFacade } from '../../../../../core/navigation/naviga
 })
 export class CreateTicketComponent implements OnInit {
   private route = inject(ActivatedRoute);
-  // private router = inject(Router);
   private fb = inject(FormBuilder);
   private navReception = inject(NavigationReceptionFacade);
 
@@ -41,7 +40,6 @@ export class CreateTicketComponent implements OnInit {
 
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('patientId'));
-
     this.patientService.getPatientById(id).subscribe((res) => {
       if (res.isSuccess && res.data) {
         this.patient = res.data;

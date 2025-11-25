@@ -26,7 +26,7 @@ import { NgIf } from '@angular/common';
   styleUrl: './patient-form.component.css',
 })
 export class PatientFormComponent implements OnChanges, OnInit {
-  patient = input.required<CreateUpdatePatientDto | undefined>();
+  patient = input.required<CreateUpdatePatientDto | null>();
 
   close = output();
   save = output<CreateUpdatePatientDto>();
