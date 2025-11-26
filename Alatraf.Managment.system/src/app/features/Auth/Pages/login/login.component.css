@@ -1,13 +1,9 @@
 .login-box {
-  background-color: var(--white-color);
   width: 720px;
-  height: 556px;
+  /* height: 556px; */
   display: flex;
   align-items: center;
-  flex-direction: column;
-  border-radius: 16px;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
-  padding: 48px 40px 0 40px;
+  padding: 48px;
 }
 
 .login-box form {
@@ -21,40 +17,42 @@
   margin-bottom: 24px;
 }
 
-input {
-  margin-bottom: 16px;
+label {
+  margin-top: 16px;
 }
 
 button {
-  align-self: center;
   margin-top: 36px;
-  padding: 16px 48px;
   align-self: center;
 }
 
-
-input.ng-invalid.ng-touched,
-select.ng-invalid.ng-touched {
-  border: 1px solid var(--card-red);
-}
 /* Shake Animation */
 .shake {
   animation: shake 0.4s;
 }
 
 @keyframes shake {
-  0% { transform: translateX(0); }
-  25% { transform: translateX(-6px); }
-  50% { transform: translateX(6px); }
-  75% { transform: translateX(-6px); }
-  100% { transform: translateX(0); }
+  0% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-6px);
+  }
+
+  50% {
+    transform: translateX(6px);
+  }
+
+  75% {
+    transform: translateX(-6px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
 }
 
-/* Invalid Input Border */
-input.invalid {
-  border: 1px solid #e63946 !important;
-  background-color: #fff6f6;
-}
 
 /* Fade In Error Text */
 .fade-in {
@@ -62,13 +60,13 @@ input.invalid {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-3px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
 
-.error-text {
-  color: var(--red-color);
-  font-size: 0.8rem;
-  margin-top: 2px;
-  margin-right: 10px;
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

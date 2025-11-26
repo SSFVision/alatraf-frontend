@@ -1,0 +1,92 @@
+.space-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  white-space: nowrap;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.gap-16 {
+  gap: 16px;
+}
+
+.gap-24 {
+  gap: 24px;
+}
+
+.gap-32 {
+  gap: 32px;
+}
+
+.padding-24 {
+  padding: 24px;
+}
+
+.padding-LR-24 {
+  padding: 0 24px;
+}
+
+.padding-80 {
+  padding: 80px;
+}
+
+.width-100 {
+  width: 100%;
+}
+
+.WH-40 {
+  width: 40px;
+  height: 40px;
+}
+
+.border-radius-20 {
+  border-radius: 20px;
+}
+
+.margin-auto {
+  margin: auto;
+}
+
+.center {
+  text-align: center;
+}
+
+/* box styling */
+
+.max-width-324 {
+  max-width: 324px;
+}
+
+.max-hight-712 {
+  max-height: 712px;
+  overflow-y: auto;
+}
+
+.max-hight-800 {
+  max-height: 680px;
+  min-height: 680px;
+  overflow-y: auto;
+}
+
+.max-hight-460 {
+  max-height: 420px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}

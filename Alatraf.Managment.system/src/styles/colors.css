@@ -1,0 +1,39 @@
+:root {
+  /* الألوان الأساسية */
+  --primary-color: #003366;
+  --primary-color-50: rgba(0, 51, 102, 0.5);
+  /* نسخة 50% شفافية */
+  --primary-color-hover: #00264d;
+  --background-color: #f9fafb;
+
+  /* ألوان البطاقات */
+  --card-color: #cce5ff;
+  --card-active-color: #b2d9ff;
+  --card-yellow: #fff3cd;
+  --card-green: #d1e7dd;
+  --card-red: #f8d7da;
+
+  /* ألوان النصوص أو العناصر الأخرى */
+  --white-color: #ffffff;
+  --white-color-50: rgba(255, 255, 255, 0.5);
+  --gray-color: #c6c6c6;
+  --green-color: #198754;
+  --red-color: #dc3545;
+}
+
+.primary-color {
+  color: var(--primary-color);
+}
+
+.primary-color-50 {
+  color: var(--primary-color-50) !important;
+}
+
+.white-color {
+  color: var(--white-color) !important;
+}
+
+.primary-color-background {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+}
