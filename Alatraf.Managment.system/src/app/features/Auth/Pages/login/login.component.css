@@ -1,13 +1,9 @@
 .login-box {
-  background-color: var(--white-color);
   width: 720px;
-  height: 556px;
+  /* height: 556px; */
   display: flex;
   align-items: center;
-  flex-direction: column;
-  border-radius: 16px;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
-  padding: 48px 40px 0 40px;
+  padding: 48px;
 }
 
 .login-box form {
@@ -26,16 +22,8 @@ label {
 }
 
 button {
-  align-self: center;
   margin-top: 36px;
-  padding: 16px 48px;
   align-self: center;
-}
-
-
-input.ng-invalid.ng-touched,
-select.ng-invalid.ng-touched {
-  border: 1px solid var(--card-red);
 }
 
 /* Shake Animation */
@@ -65,11 +53,6 @@ select.ng-invalid.ng-touched {
   }
 }
 
-/* Invalid Input Border */
-input.invalid {
-  border: 1px solid var(--red-color) !important;
-  background-color: #fff6f6;
-}
 
 /* Fade In Error Text */
 .fade-in {
@@ -86,14 +69,4 @@ input.invalid {
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-.error-text {
-  color: var(--red-color);
-  margin-top: 2px;
-  margin-right: 10px;
-}
-
-.center {
-  text-align: center;
 }

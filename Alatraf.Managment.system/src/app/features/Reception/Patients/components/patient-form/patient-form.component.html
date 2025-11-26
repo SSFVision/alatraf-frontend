@@ -3,14 +3,9 @@
 <div class="box dialog">
   <div class="space-between sticky">
     <h2 class="title-lg">
-      {{ mode() ? "تعديل  بيانات المريض" : "إضافة مريض جديد" }}
+      {{ mode() ? "تعديل بيانات المريض" : "إضافة مريض جديد" }}
     </h2>
-    <img
-      src="assets/icons/close-icon.svg"
-      alt="إغلاق"
-      (click)="onClose()"
-      class="close-icon"
-    />
+    <img src="assets/icons/close-icon.svg" alt="إغلاق" (click)="onClose()" class="close-icon cursor-pointer" />
   </div>
 
   <div>
@@ -18,24 +13,16 @@
     <span class="home-line"></span>
   </div>
 
-  <form
-    class="padding-LR-24 column gap-16"
-    [formGroup]="form"
-    (ngSubmit)="onSave()"
-  >
+  <form class="padding-LR-24 column gap-16" [formGroup]="form" (ngSubmit)="onSave()">
     <div class="row flex-center">
       <label class="label-lg">رقم المريض</label>
-      <input
-        class="label-lg"
-        type="text"
-        formControlName="autoRegistrationNumber"
-      />
+      <input class="label-lg" type="text" formControlName="autoRegistrationNumber" />
     </div>
 
     <div class="row flex-center">
       <label class="label-lg">الاسم</label>
       <input class="label-lg" type="text" formControlName="fullname" />
-      <div *ngIf="isInvalid('fullname')" class="error-message">الاسم مطلوب</div>
+      <div *ngIf="isInvalid('fullname')" class="error-message label-lg">الاسم مطلوب</div>
     </div>
 
     <div class="row flex-center">
@@ -52,7 +39,7 @@
     <div class="row flex-center">
       <label class="label-lg">رقم الهاتف</label>
       <input class="label-lg" type="number" formControlName="phone" />
-      <div *ngIf="isInvalid('phone')" class="error-message">
+      <div *ngIf="isInvalid('phone')" class="error-message label-lg">
         رقم الهاتف مطلوب
       </div>
     </div>

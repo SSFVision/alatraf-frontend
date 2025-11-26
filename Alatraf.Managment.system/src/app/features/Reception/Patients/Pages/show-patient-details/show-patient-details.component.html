@@ -1,13 +1,8 @@
 <div class="backdrop" (click)="onClose()"></div>
-<div class="box dialog">
+<div class="box dialog ">
   <div class="space-between sticky">
     <h2 class="title-lg">بيانات المريض</h2>
-    <img
-      src="assets/icons/close-icon.svg"
-      alt="إغلاق"
-      class="close-icon"
-      (click)="onClose()"
-    />
+    <img src="assets/icons/close-icon.svg" alt="إغلاق" class="close-icon" (click)="onClose()" />
   </div>
 
   <div>
@@ -15,8 +10,9 @@
     <span class="home-line"></span>
   </div>
   <app-patient-summary-card [patient]="patient"></app-patient-summary-card>
-  <span class="home-line"></span>
-  <button class="btn primary label-md" type="button" (click)="onClose()">
-    إغلاق
-  </button>
+  <div class="flex-center">
+    <button class="btn primary label-md" type="button" (click)="onClose()">
+      إغلاق
+    </button>
+  </div>
 </div>

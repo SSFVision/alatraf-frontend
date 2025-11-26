@@ -29,6 +29,10 @@
   color: var(--primary-color-50);
 }
 
+.white-color {
+  color: var(--white-color);
+}
+
 .primary-color-background {
   background-color: var(--primary-color);
   color: var(--white-color);

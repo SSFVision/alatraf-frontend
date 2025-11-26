@@ -61,6 +61,10 @@
   margin: auto;
 }
 
+.center {
+  text-align: center;
+}
+
 /* box styling */
 
 .max-width-320 {
