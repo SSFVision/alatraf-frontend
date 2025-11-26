@@ -1,0 +1,23 @@
+<main class="row gap-16 padding-24">
+  
+  <app-waiting-patient-page class="box max-width-320 culumn gap-24 max-hight-800"></app-waiting-patient-page>
+
+  @if (selectedPatient()) {
+
+  <router-outlet></router-outlet>
+  }@else {
+
+  <div class="box max-hight-800 gap-16 flex-center">
+    <img
+      src="assets/images/bro.svg"
+      alt="اضافة تشخيص"
+      width="496.75"
+      height="512"
+      class="padding-32"
+    />
+    <p class="title-md primary-color-50">مرحباً بك</p>
+  </div>
+
+  }
+  </main>
+<!-- </main> -->

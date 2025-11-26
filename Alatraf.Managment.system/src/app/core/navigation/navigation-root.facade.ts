@@ -2,7 +2,8 @@ import { Injectable, inject } from '@angular/core';
 import { Router, NavigationExtras } from '@angular/router';
 import { Location } from '@angular/common';
 import { AppRoutes } from '../routing/app.routes.map';
-import { NavigationAuthFacade, AppUserRole } from './navigation-auth.facade';
+import { NavigationAuthFacade } from './navigation-auth.facade';
+import { AppUserRole } from '../auth/models/app.user.roles.enum';
 
 @Injectable({ providedIn: 'root' })
 export class NavigationRootFacade {

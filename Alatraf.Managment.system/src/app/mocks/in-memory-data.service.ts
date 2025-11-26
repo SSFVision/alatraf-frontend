@@ -5,34 +5,39 @@ import { PatientController } from './patients/patient.controller';
 
 import { MOCK_SERVICES } from './services/mock-services.data';
 import { ServiceController } from './services/service.controller';
+
 import { MOCK_TICKETS } from './Tickets/mock-tickets.data';
 import { TicketController } from './Tickets/ticket.controller';
 
+import { IdentityController } from './identity/identity.controller';
+import { IDENTITY_USERS_MOCK } from './identity/identity.mock';
 
 export class InMemoryDataService implements InMemoryDbService {
 
-  // ------------------------------------------
-  // ENTITY NAMES (Avoid repeating strings)
-  // ------------------------------------------
   private readonly PATIENTS = 'patients';
   private readonly SERVICES = 'services';
   private readonly TICKETS = 'tickets';
+  private readonly IDENTITY = 'identity'; // identity mock users
 
-  // ------------------------------------------
-  // DATABASE
-  // ------------------------------------------
   createDb() {
     return {
       [this.PATIENTS]: PATIENTS_MOCK_DATA,
       [this.SERVICES]: MOCK_SERVICES,
-      [this.TICKETS]: MOCK_TICKETS
+      [this.TICKETS]: MOCK_TICKETS,
+      [this.IDENTITY]: IDENTITY_USERS_MOCK, // optional visible list
     };
   }
 
-  // ------------------------------------------
+  // -------------------------
   // GET
-  // ------------------------------------------
+  // -------------------------
   get(reqInfo: RequestInfo) {
+
+    // IDENTITY CLAIMS
+    if (reqInfo.req.url.includes('/identity/current-user/claims')) {
+      return IdentityController.getCurrentUser(reqInfo);
+    }
+
     const entity = reqInfo.collectionName;
 
     switch (entity) {
@@ -57,10 +62,21 @@ export class InMemoryDataService implements InMemoryDbService {
     }
   }
 
-  // ------------------------------------------
+  // -------------------------
   // POST
-  // ------------------------------------------
+  // -------------------------
   post(reqInfo: RequestInfo) {
+
+    // IDENTITY LOGIN
+    if (reqInfo.req.url.includes('/identity/token/generate')) {
+      return IdentityController.login(reqInfo);
+    }
+
+    // IDENTITY REFRESH
+    if (reqInfo.req.url.includes('/identity/token/refresh-token')) {
+      return IdentityController.refresh(reqInfo);
+    }
+
     const entity = reqInfo.collectionName;
 
     switch (entity) {
@@ -79,29 +95,27 @@ export class InMemoryDataService implements InMemoryDbService {
     }
   }
 
-  // ------------------------------------------
+  // -------------------------
   // PUT
-  // ------------------------------------------
+  // -------------------------
   put(reqInfo: RequestInfo) {
     const entity = reqInfo.collectionName;
 
     switch (entity) {
-
       case this.PATIENTS:
         return PatientController.update(reqInfo);
 
       case this.SERVICES:
         return ServiceController.update(reqInfo);
 
-      // Tickets do not have update here
       default:
         return undefined;
     }
   }
 
-  // ------------------------------------------
+  // -------------------------
   // DELETE
-  // ------------------------------------------
+  // -------------------------
   delete(reqInfo: RequestInfo) {
     const entity = reqInfo.collectionName;
 

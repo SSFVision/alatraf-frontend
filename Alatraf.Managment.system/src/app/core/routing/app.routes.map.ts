@@ -1,5 +1,4 @@
 export const AppRoutes = {
-
   auth: {
     root: 'auth',
     login: 'auth/login',
@@ -13,11 +12,9 @@ export const AppRoutes = {
 
       add: 'reception/patients/add',
 
-      edit: (id: number | string) =>
-        `reception/patients/edit/${id}`,
+      edit: (id: number | string) => `reception/patients/edit/${id}`,
 
-      view: (id: number | string) =>
-        `reception/patients/view/${id}`,
+      view: (id: number | string) => `reception/patients/view/${id}`,
     },
 
     tickets: {
@@ -33,9 +30,13 @@ export const AppRoutes = {
 
   doctor: {
     root: 'doctor',
-    dashboard: 'doctor/dashboard',
+    diagnosis: {
+      root: 'doctor/diagnosis',
+      create: (patientId: number | string) =>
+        `doctor/diagnosis/create/${patientId}`,
+      view: (id: number | string) => `doctor/diagnosis/view/${id}`,
+    },
   },
-
   admin: {
     root: 'admin',
     dashboard: 'admin/dashboard',

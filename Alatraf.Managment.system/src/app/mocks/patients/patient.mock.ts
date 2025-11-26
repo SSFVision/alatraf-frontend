@@ -110,5 +110,6 @@ export const PATIENTS_MOCK_DATA: Patient[] = [
     gender: false,
     patientType: PatientType.Normal,
     autoRegistrationNumber: 'AR110'
-  }
+  },
+   
 ];

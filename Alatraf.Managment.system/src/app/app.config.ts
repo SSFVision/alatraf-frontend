@@ -18,6 +18,7 @@ import { loadingInterceptor } from './core/interceptors/loading.interceptor';
 import { SkeletonLoadingInterceptor } from './core/interceptors/skeleteon-loading.interceptor';
 import { apiResponseInterceptor } from './core/interceptors/api-response.interceptor';
 import { GlobalErrorHandler } from './core/errors/global-error-handler';
+import { authInterceptor } from './core/interceptors/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -33,6 +34,7 @@ export const appConfig: ApplicationConfig = {
     ),
     provideHttpClient(
       withInterceptors([
+        authInterceptor,
         SkeletonLoadingInterceptor,
         loadingInterceptor,
         apiResponseInterceptor,
