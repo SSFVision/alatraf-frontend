@@ -33,7 +33,7 @@ export class NavigationAuthFacade {
         return AppRoutes.reception.root;
 
       case 'Doctor':
-        return AppRoutes.doctor.dashboard;
+        return AppRoutes.doctor.root;
 
       case 'Admin':
         return AppRoutes.admin.dashboard;

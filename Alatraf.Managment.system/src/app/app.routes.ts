@@ -27,7 +27,6 @@ export const APP_ROUTES: Routes = [
     path: '',
     component: MainLayoutComponent,
     canActivate: [AuthGuard],
-
     children: [
       {
         path: AppRoutes.reception.root, // 'reception'
@@ -36,13 +35,11 @@ export const APP_ROUTES: Routes = [
             (m) => m.ReceptionRoutes
           ),
       },
-
-      // You’ll add doctor/admin/finance here later
-      // {
-      //   path: AppRoutes.doctor.root,
-      //   loadChildren: () => import('./features/Doctor/doctor.routes')
-      //     .then(m => m.DoctorRoutes),
-      // },
+      {
+        path: AppRoutes.doctor.root, // ← 'doctor'
+        loadChildren: () =>
+          import('./features/Doctor/doctor.routes').then((m) => m.DoctorRoutes),
+      },
     ],
   },
 

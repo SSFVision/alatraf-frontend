@@ -56,7 +56,7 @@ export const MENU_CONFIG: MenuCategory[] = [
         route: AppRoutes.reception.patients.add,
         requiredPermissions: [PERMISSIONS.PATIENTS.ADD],
       },
-     
+
       {
         label: 'تعديل مريض',
         icon: 'assets/icons/user-icon-w.svg',
@@ -70,6 +70,19 @@ export const MENU_CONFIG: MenuCategory[] = [
         activeIcon: 'assets/icons/user-icon-b.svg',
         route: AppRoutes.reception.patients.edit(3),
         requiredPermissions: [PERMISSIONS.PATIENTS.DELETE],
+      },
+    ],
+  },
+  {
+    category: 'التشخيصات',
+    CateRoute: AppRoutes.doctor.root,
+    items: [
+      {
+        label: 'إدارة التشخيصات',
+        icon: 'assets/icons/user-icon-w.svg',
+        activeIcon: 'assets/icons/user-icon-b.svg',
+        route: AppRoutes.doctor.diagnosis.root,
+        requiredPermissions: [PERMISSIONS.DIAGNOSIS.VIEW],
       },
     ],
   },
