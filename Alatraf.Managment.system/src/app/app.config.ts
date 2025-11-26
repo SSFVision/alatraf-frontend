@@ -34,10 +34,10 @@ export const appConfig: ApplicationConfig = {
     ),
     provideHttpClient(
       withInterceptors([
-        authInterceptor,
         SkeletonLoadingInterceptor,
         loadingInterceptor,
         apiResponseInterceptor,
+        authInterceptor,
       ])
     ),
     importProvidersFrom(

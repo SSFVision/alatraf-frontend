@@ -1,5 +1,5 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
-import { Subject, Observable, of, filter } from 'rxjs';
+import { Subject, Observable, of } from 'rxjs';
 import {
   catchError,
   debounceTime,
@@ -25,13 +25,16 @@ export class PatientsFacade {
   private patientService = inject(PatientService);
   private toast = inject(ToastService);
 
+  // ============================
+  // STATE SIGNALS
+  // ============================
   private _patients = signal<Patient[]>([]);
   patients = this._patients.asReadonly();
 
   private _selectedPatient = signal<Patient | null>(null);
   selectedPatient = this._selectedPatient.asReadonly();
 
-  private _filters = signal<PatientFilterDto>({});
+  private _filters = signal<PatientFilterDto>({}); // only searchTerm used
   filters = this._filters.asReadonly();
 
   isEditMode = signal<boolean>(false);
@@ -43,34 +46,49 @@ export class PatientsFacade {
 
   hasPatients = computed(() => this._patients().length > 0);
 
-  // 🔍 Internal search stream (for debounce)
+  // Debounced search stream
   private searchTerm$ = new Subject<string>();
 
   constructor() {
     this.initSearchSubscription();
   }
 
-  // ------------------------------------------------------
-  // 🔍 SEARCH HANDLING (with debounce)
-  // ------------------------------------------------------
+  // ============================
+  // 🔍 FILTER SANITIZATION
+  // ============================
+  // This ensures ONLY searchTerm is ever sent
+  private sanitizeFilters(filters: PatientFilterDto) {
+    const clean: any = {};
+
+    if (filters.searchTerm && filters.searchTerm.trim() !== '') {
+      clean.searchTerm = filters.searchTerm.trim();
+    }
+
+    return clean;
+  }
+
+  // ============================
+  // 🔍 SEARCH SUBSCRIPTION
+  // ============================
   private initSearchSubscription() {
     this.searchTerm$
       .pipe(
         debounceTime(300),
         tap((term) => {
-          // Update filters with search term
           this._filters.update((f) => ({
             ...f,
-            searchTerm: term || undefined,
+            searchTerm: term?.trim() || undefined,
           }));
           this.isLoadingList.set(true);
         }),
         switchMap(() =>
-          this.patientService.getPatients(this._filters()).pipe(
-            tap((result) => this.handlePatientsResult(result)),
-            catchError((err) => this.handlePatientsError(err)),
-            finalize(() => this.isLoadingList.set(false))
-          )
+          this.patientService
+            .getPatients(this.sanitizeFilters(this._filters()))
+            .pipe(
+              tap((result) => this.handlePatientsResult(result)),
+              catchError((err) => this.handlePatientsError(err)),
+              finalize(() => this.isLoadingList.set(false))
+            )
         )
       )
       .subscribe();
@@ -80,14 +98,14 @@ export class PatientsFacade {
     this.searchTerm$.next(term);
   }
 
+  // ============================
+  // 📌 LOAD & RELOAD
+  // ============================
   loadPatients(): void {
-    if (this._patients().length > 0) return; // already loaded
-    console.log('Called ');
-
     this.isLoadingList.set(true);
 
     this.patientService
-      .getPatients(this._filters())
+      .getPatients(this.sanitizeFilters(this._filters()))
       .pipe(
         tap((result) => this.handlePatientsResult(result)),
         catchError((err) => this.handlePatientsError(err)),
@@ -97,6 +115,7 @@ export class PatientsFacade {
   }
 
   reloadPatients(): void {
+    this._patients.set([]); // force new load
     this.loadPatients();
   }
 
@@ -105,37 +124,54 @@ export class PatientsFacade {
       ...current,
       ...partial,
     }));
-    this.loadPatients();
+    this.reloadPatients();
   }
 
   clearFilters(): void {
     this._filters.set({});
-    this.loadPatients();
+    this.reloadPatients();
   }
 
-  private handlePatientsResult(result: ApiResult<Patient[]>): void {
-    if (result.isSuccess && result.data) {
-      this._patients.set(result.data);
-    } else {
+ private handlePatientsResult(result: ApiResult<Patient[]>): void {
+
+  if (result.isSuccess && Array.isArray(result.data)) {
+
+    // EMPTY LIST CASE
+    if (result.data.length === 0) {
       this._patients.set([]);
-      const msg =
-        result.errorMessage ||
-        'فشل في جلب بيانات المرضى، يرجى المحاولة لاحقاً.';
-      this.toast.error(msg);
+
+      // Show NO RESULT toast only if user has typed a search
+      if (this._filters().searchTerm && this._filters().searchTerm !== '') {
+        this.toast.error('لا توجد نتائج مطابقة لبحثك.');
+      }
+
+      return;
     }
+
+    // NORMAL SUCCESS
+    this._patients.set(result.data);
+    return;
   }
+
+  // ERROR CASE
+  this._patients.set([]);
+  const msg =
+    result.errorMessage ||
+    'فشل في جلب بيانات المرضى، يرجى المحاولة لاحقاً.';
+  this.toast.error(msg);
+}
+
 
   private handlePatientsError(err: any): Observable<never> {
     console.error('Error loading patients:', err);
     this._patients.set([]);
     this.toast.error('حدث خطأ أثناء جلب بيانات المرضى.');
-    // Re-throw or return EMPTY; here we just complete the stream:
     return of() as never;
   }
 
-  // ------------------------------------------------------
-  // 👁️ PATIENT DETAILS (for view / edit)
-  // ------------------------------------------------------
+  // ============================
+  // 👁️ DETAILS (EDIT / VIEW)
+  // ============================
   enterCreateMode(): void {
     this.isEditMode.set(false);
     this._selectedPatient.set(null);
@@ -178,7 +214,6 @@ export class PatientsFacade {
   }
 
   loadPatientDetails(id: number): void {
-    // For view-only page if you have it
     this.isLoadingDetails.set(true);
 
     this.patientService
@@ -206,30 +241,18 @@ export class PatientsFacade {
       .subscribe();
   }
 
-  // ------------------------------------------------------
-  // 💾 CREATE / UPDATE
-  // ------------------------------------------------------
-  /**
-   * Create a new patient.
-   * Facade:
-   *  - handles ApiResult
-   *  - updates local list
-   *  - shows toasts
-   *  - returns created Patient (or null on error)
-   */
+  // ============================
+  // 💾 CREATE
+  // ============================
   createPatient(dto: CreateUpdatePatientDto): Observable<Patient | null> {
     this.isSaving.set(true);
 
     return this.patientService.createPatient(dto).pipe(
       tap((res) => {
         if (res.isSuccess && res.data) {
-          const created = res.data;
-          // Update cache list
-          console.log("new patient ",created);
-          // this._patients.update(list => [created, ...list]);
-
-          // this._patients.update((list) => [...list, created]);
           this.toast.success('تم حفظ بيانات المريض بنجاح');
+
+          this.reloadPatients();
         } else {
           const msg =
             res.errorMessage || 'فشل حفظ بيانات المريض، يرجى المحاولة لاحقاً.';
@@ -246,13 +269,9 @@ export class PatientsFacade {
     );
   }
 
-  /**
-   * Update an existing patient by id.
-   *  - handles ApiResult
-   *  - updates list + selected patient
-   *  - shows toasts
-   *  - returns updated Patient (or null on error)
-   */
+  // ============================
+  // ✏️ UPDATE
+  // ============================
   updatePatient(
     id: number,
     dto: CreateUpdatePatientDto
@@ -262,18 +281,9 @@ export class PatientsFacade {
     return this.patientService.updatePatient(id, dto).pipe(
       tap((res) => {
         if (res.isSuccess && res.data) {
-          const updated = res.data;
-          // Update cached list
-          this._patients.update((list) =>
-            list.map((p) => (p.patientId === updated.patientId ? updated : p))
-          );
-          // Update selected patient if same
-          const current = this._selectedPatient();
-          if (current && current.patientId === updated.patientId) {
-            this._selectedPatient.set(updated);
-          }
-
           this.toast.success('تم تعديل بيانات المريض بنجاح');
+
+          this.reloadPatients();
         } else {
           const msg =
             res.errorMessage ||
@@ -291,17 +301,9 @@ export class PatientsFacade {
     );
   }
 
-  // ------------------------------------------------------
+  // ============================
   // 🗑️ DELETE
-  // ------------------------------------------------------
-  /**
-   * Delete a patient.
-   * Component should handle the confirm dialog.
-   * Facade:
-   *  - calls API
-   *  - updates local list on success
-   *  - shows toasts
-   */
+  // ============================
   deletePatient(patient: Patient): Observable<boolean> {
     if (!patient?.patientId) return of(false);
 
@@ -310,11 +312,9 @@ export class PatientsFacade {
     return this.patientService.deletePatient(patient.patientId).pipe(
       tap((res) => {
         if (res.isSuccess) {
-          // Remove from cached list
-          this._patients.update((list) =>
-            list.filter((p) => p.patientId !== patient.patientId)
-          );
           this.toast.success('تم حذف بيانات المريض بنجاح');
+
+          this.reloadPatients();
         } else {
           const msg =
             res.errorMessage || 'فشل حذف بيانات المريض، يرجى المحاولة لاحقاً.';

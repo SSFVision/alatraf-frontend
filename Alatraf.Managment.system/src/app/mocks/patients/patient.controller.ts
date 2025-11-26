@@ -11,31 +11,23 @@ export function generatePatientId(patients: Patient[]): number {
 export class PatientController {
 
   // --------------------------
-  // GET ALL
+  // GET ALL (ONLY searchTerm)
   // --------------------------
   static getAll(reqInfo: RequestInfo) {
     try {
       let patients = reqInfo.collection as Patient[];
       const query = reqInfo.query;
 
-      const patientType = query.get('patientType')?.[0];
-      const gender = query.get('gender')?.[0];
-      const searchTerm = query.get('searchTerm')?.[0]?.toLowerCase();
+      // only use searchTerm
+      const rawSearch = query.get('searchTerm')?.[0] ?? '';
+      const searchTerm = rawSearch.trim().toLowerCase();
 
-      if (patientType) {
-        patients = patients.filter((p) => p.patientType === +patientType);
-      }
-
-      if (gender) {
-        patients = patients.filter((p) => p.gender === (gender === 'true'));
-      }
-
-      if (searchTerm) {
+      if (searchTerm !== '') {
         patients = patients.filter(
           (p) =>
             p.fullname.toLowerCase().includes(searchTerm) ||
-            p.phone?.includes(searchTerm) ||
-            p.nationalNo?.includes(searchTerm)
+            p.phone?.toLowerCase().includes(searchTerm) ||
+            p.nationalNo?.toLowerCase().includes(searchTerm)
         );
       }
 
@@ -46,7 +38,11 @@ export class PatientController {
       }));
 
     } catch (error) {
-      return PatientController.mockError(reqInfo, 500, 'Failed to load patients.');
+      return PatientController.mockError(
+        reqInfo,
+        404,
+        'Failed to load patients.'
+      );
     }
   }
 
@@ -84,7 +80,11 @@ export class PatientController {
       const body = req.body;
 
       if (!body) {
-        return PatientController.mockError(reqInfo, 400, 'Request body is missing.');
+        return PatientController.mockError(
+          reqInfo,
+          400,
+          'Request body is missing.'
+        );
       }
 
       const collection = reqInfo.collection as Patient[];
@@ -123,7 +123,11 @@ export class PatientController {
       const body = req.body;
 
       if (!body) {
-        return PatientController.mockError(reqInfo, 400, 'Request body is missing.');
+        return PatientController.mockError(
+          reqInfo,
+          400,
+          'Request body is missing.'
+        );
       }
 
       const id = parseInt(reqInfo.id as string, 10);
@@ -151,47 +155,43 @@ export class PatientController {
   // --------------------------
   // DELETE
   // --------------------------
+  static delete(reqInfo: RequestInfo) {
+    const id = parseInt(reqInfo.id as string, 10);
+    const collection = reqInfo.collection as Patient[];
+    const index = collection.findIndex((p) => p.patientId === id);
 
-static delete(reqInfo: RequestInfo) {
-  const id = parseInt(reqInfo.id as string, 10);
-  const collection = reqInfo.collection as Patient[];
-  const index = collection.findIndex(p => p.patientId === id);
-
-  return reqInfo.utils.createResponse$(() => {
-
-    // Simulate NOT FOUND error
-    if (index === -1) {
-      return {
-        status: 200,   // Always return 200 for in-memory mock
-        body: {
-          isSuccess: false,
-          errorMessage: "العنصر المطلوب غير موجود.",
-          statusCode: 404
-        }
-      };
-    }
-
-    // Success case
-    collection.splice(index, 1);
-
-    return {
-      status: 200,
-      body: {
-        isSuccess: true,
-        data: {}
+    return reqInfo.utils.createResponse$(() => {
+      if (index === -1) {
+        return {
+          status: 200, // In-memory API always returns 200
+          body: {
+            isSuccess: false,
+            errorMessage: 'العنصر المطلوب غير موجود.',
+            statusCode: 404,
+          },
+        };
       }
-    };
-  });
-}
 
+      collection.splice(index, 1);
 
-
-
+      return {
+        status: 200,
+        body: {
+          isSuccess: true,
+          data: {},
+        },
+      };
+    });
+  }
 
   // --------------------------
-  // COMMON ERROR BUILDER
+  // ERROR HELPER
   // --------------------------
-  private static mockError(reqInfo: RequestInfo, status: number, detail: string) {
+  private static mockError(
+    reqInfo: RequestInfo,
+    status: number,
+    detail: string
+  ) {
     return reqInfo.utils.createResponse$(() => ({
       status,
       statusText: 'Error',

@@ -9,7 +9,7 @@ import { inject } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { ApiResult } from '../models/ApiResult';
 import { ToastService } from '../services/toast.service';
-import { catchError, map, of, throwError } from 'rxjs';
+import { catchError, map, of } from 'rxjs';
 import { handleException } from '../errors/helpers/handle-exception';
 import { handleErrorResponse } from '../errors/helpers/handle-error-response';
 
@@ -56,23 +56,13 @@ export const apiResponseInterceptor: HttpInterceptorFn = (req, next) => {
     }),
 
     catchError((error: any) => {
-
-    // IMPORTANT: Forward 401 to auth interceptor
-      if (error instanceof HttpErrorResponse && error.status === 401) {
-        return throwError(() => error);
-      }
-
-
       let apiResult;
       if (error instanceof HttpErrorResponse) {
         apiResult = handleErrorResponse(error);
         if (apiResult.errorMessage) {
-          // console.log("Accoure");
           toast.error(apiResult.errorMessage);
         }
       } else {
-          console.log("Accoure");
-
         apiResult = handleException(error);
         if (apiResult.errorMessage) {
           toast.error(apiResult.errorMessage);

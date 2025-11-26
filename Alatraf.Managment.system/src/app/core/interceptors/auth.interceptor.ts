@@ -35,8 +35,10 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
       if (error.status === 401) {
-        const refreshToken = tokenStorage.getRefreshToken();
+      console.log("401 anuthentication");
 
+        const refreshToken = tokenStorage.getRefreshToken();
+console.log("this the refresh tocken ",refreshToken);
         if (!refreshToken || !accessToken) {
           sessionStore.clear();
           tokenStorage.clear();
