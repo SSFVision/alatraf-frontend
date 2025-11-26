@@ -26,11 +26,11 @@
 }
 
 .primary-color-50 {
-  color: var(--primary-color-50);
+  color: var(--primary-color-50) !important;
 }
 
 .white-color {
-  color: var(--white-color);
+  color: var(--white-color) !important;
 }
 
 .primary-color-background {
