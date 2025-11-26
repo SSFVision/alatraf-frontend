@@ -41,7 +41,7 @@
     <!-- ⭐ SHOW SKELETON ROWS WHILE LOADING -->
     @if (pageLoader.isLoading()) { @for (i of skeletonRows; track i) {
     <tr>
-      <td><app-skeleton width="70%" height="16px">WA</app-skeleton></td>
+      <td><app-skeleton width="70%" height="16px"></app-skeleton></td>
       <td><app-skeleton width="70%" height="16px"></app-skeleton></td>
       <td><app-skeleton width="90%" height="16px"></app-skeleton></td>
       <td class="row gap-16">
@@ -61,30 +61,18 @@
       <td class="body-md">{{ patient.nationalNo }}</td>
       <td class="body-md">{{ patient.fullname }}</td>
       <td class="row gap-16">
-        <button
-          class="btn primary small-btn"
-          (click)="OnCreateTicket(patient)"
-          stopPropagation
-          *appHasPermission="permession.TICKETS.ADD"
-        >
+        <button class="btn primary small-btn" (click)="OnCreateTicket(patient)" stopPropagation
+          *appHasPermission="permession.TICKETS.ADD">
           <p class="label-sm">اصدار تذكرة</p>
         </button>
 
-        <button
-          class="btn primary icon"
-          (click)="OnEditPatient(patient)"
-          stopPropagation
-          *appHasPermission="permession.PATIENTS.UPDATE"
-        >
+        <button class="btn primary icon" (click)="OnEditPatient(patient)" stopPropagation
+          *appHasPermission="permession.PATIENTS.UPDATE">
           <img src="assets/icons/pencil-icon.svg" alt="تعديل" />
         </button>
 
-        <button
-          class="btn danger icon"
-          (click)="onDeleteClick(patient)"
-          stopPropagation
-          *appHasPermission="permession.PATIENTS.DELETE"
-        >
+        <button class="btn danger icon" (click)="onDeleteClick(patient)" stopPropagation
+          *appHasPermission="permession.PATIENTS.DELETE">
           <img src="assets/icons/trash-icon.svg" alt="حذف" />
         </button>
       </td>

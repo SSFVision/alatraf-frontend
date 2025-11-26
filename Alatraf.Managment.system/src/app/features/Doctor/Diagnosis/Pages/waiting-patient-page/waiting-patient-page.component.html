@@ -9,12 +9,8 @@
   </div>
 </div>
 
-<div class="search-box sticky">
-  <img
-    src="../../assets/icons/search-icon.svg"
-    class="search-icon"
-    alt="search"
-  />
+<div class="search-box">
+  <img src="../../assets/icons/search-icon.svg" class="search-icon" alt="search" />
   <input type="text" placeholder="بحث: اسم المريض أو الرقم" />
 </div>
 
@@ -23,9 +19,8 @@
   <button class="filter-btn">الأطراف الصناعية</button>
   <button class="filter-btn">العلاج الطبيعي</button>
 </div>
-
-@for (item of waitingPatients;track $index) {
-<app-patient-card></app-patient-card>
-
-}
-<!-- </div> -->
+<div class="max-hight-712 column gap-16">
+  @for (item of waitingPatients;track $index) {
+  <app-patient-card></app-patient-card>
+  }
+</div>

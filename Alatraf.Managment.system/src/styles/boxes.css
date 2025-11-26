@@ -1,0 +1,86 @@
+/* box */
+.box {
+  background-color: var(--white-color);
+  border-radius: 16px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
+  padding: 12px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: fit-content;
+  box-sizing: border-box;
+}
+
+.box {
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-color) var(--background-color);
+}
+
+.box::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background: transparent;
+}
+
+.box::-webkit-scrollbar-track {
+  background: var(--background-color);
+  border-radius: 16px;
+}
+
+.box::-webkit-scrollbar-thumb {
+  background-color: var(--primary-color);
+  border-radius: 16px;
+  border: 2px solid var(--background-color);
+  opacity: 0.3;
+  transition: background-color 0.3s, opacity 0.3s;
+}
+
+.box::-webkit-scrollbar-thumb:hover,
+.box::-webkit-scrollbar-thumb:active {
+  background-color: var(--primary-color-hover);
+  opacity: 1;
+}
+
+.box::-webkit-scrollbar-corner {
+  background: var(--background-color);
+}
+
+/* عند مرور الماوس على .box سكروول بار يصبح أوضح */
+.box:hover::-webkit-scrollbar-thumb {
+  opacity: 0.7;
+}
+
+.center-content {
+  align-self: center;
+  text-align: center;
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+  background-color: var(--white-color);
+  z-index: 1;
+}
+
+/* search box */
+
+.search-box {
+  position: relative;
+  flex: 1;
+  margin: auto 0;
+}
+
+.search-box input {
+  width: 100%;
+  padding-right: 40px;
+  box-sizing: border-box;
+}
+
+.search-box .search-icon {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
