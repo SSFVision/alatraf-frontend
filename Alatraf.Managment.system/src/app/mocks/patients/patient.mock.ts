@@ -3,7 +3,7 @@ import { Patient, PatientType } from './patient.dto';
 export const PATIENTS_MOCK_DATA: Patient[] = [
   {
     patientId: 1,
-    fullname:'وليد محمد عون الحكيمي',
+    fullname: 'وليد محمد عون الحكيمي',
     birthdate: '1990-05-10',
     phone: '0501234567',
     nationalNo: 'A1234567',
@@ -111,5 +111,114 @@ export const PATIENTS_MOCK_DATA: Patient[] = [
     patientType: PatientType.Normal,
     autoRegistrationNumber: 'AR110'
   },
-   
+  {
+    patientId: 11,
+    fullname: 'أحمد صالح عبدالكريم المنيع (أحمو)',
+    birthdate: '1987-01-17',
+    phone: '0509911223',
+    nationalNo: 'K9911223',
+    address: 'شارع الفجر 808',
+    gender: true,
+    patientType: PatientType.Normal,
+    autoRegistrationNumber: 'AR111'
+  },
+  {
+    patientId: 12,
+    fullname: 'ريم ماجد عبدالله السبيعي (ريومة)',
+    birthdate: '1994-09-03',
+    phone: '0508822114',
+    nationalNo: 'L8822114',
+    address: 'شارع التعاون 909',
+    gender: false,
+    patientType: PatientType.Wounded,
+    autoRegistrationNumber: 'AR112'
+  },
+  {
+    patientId: 13,
+    fullname: 'زياد محمد ناصر العتيبي (زد)',
+    birthdate: '1990-06-22',
+    phone: '0507733445',
+    nationalNo: 'M7733445',
+    address: 'شارع التحرير 1001',
+    gender: true,
+    patientType: PatientType.Normal,
+    autoRegistrationNumber: 'AR113'
+  },
+  {
+    patientId: 14,
+    fullname: 'جنى فؤاد عادل المطيري (جوجو)',
+    birthdate: '1999-03-18',
+    phone: '0506644552',
+    nationalNo: 'N6644552',
+    address: 'شارع الزهور 1102',
+    gender: false,
+    patientType: PatientType.Normal,
+    autoRegistrationNumber: 'AR114'
+  },
+  {
+    patientId: 15,
+    fullname: 'رائد عبدالله فهد الشهراني (رود)',
+    birthdate: '1983-11-29',
+    phone: '0505552213',
+    nationalNo: 'O5552213',
+    address: 'شارع السكينة 1203',
+    gender: true,
+    patientType: PatientType.Wounded,
+    autoRegistrationNumber: 'AR115'
+  },
+  {
+    patientId: 16,
+    fullname: 'جواهر سالم محمد البقمي (جوجو)',
+    birthdate: '1996-07-08',
+    phone: '0504466332',
+    nationalNo: 'P4466332',
+    address: 'شارع الأمل 1304',
+    gender: false,
+    patientType: PatientType.Normal,
+    autoRegistrationNumber: 'AR116'
+  },
+  {
+    patientId: 17,
+    fullname: 'فارس عارف حسن القاضي (فروسي)',
+    birthdate: '1989-12-14',
+    phone: '0503377441',
+    nationalNo: 'Q3377441',
+    address: 'شارع الغروب 1405',
+    gender: true,
+    patientType: PatientType.Normal,
+    autoRegistrationNumber: 'AR117'
+  },
+  {
+    patientId: 18,
+    fullname: 'شذى خالد إبراهيم السحيباني (شذوذ)',
+    birthdate: '1997-02-11',
+    phone: '0502288556',
+    nationalNo: 'R2288556',
+    address: 'شارع اللؤلؤ 1506',
+    gender: false,
+    patientType: PatientType.Wounded,
+    autoRegistrationNumber: 'AR118'
+  },
+  {
+    patientId: 19,
+    fullname: 'عادل ناصر محمد الحارثي (عدولي)',
+    birthdate: '1981-10-05',
+    phone: '0501199664',
+    nationalNo: 'S1199664',
+    address: 'شارع الوطن 1607',
+    gender: true,
+    patientType: PatientType.Wounded,
+    autoRegistrationNumber: 'AR119'
+  },
+  {
+    patientId: 20,
+    fullname: 'أريج صالح عبدالله السديري (ريجو)',
+    birthdate: '1994-08-27',
+    phone: '0500099775',
+    nationalNo: 'T0099775',
+    address: 'شارع النسيم 1708',
+    gender: false,
+    patientType: PatientType.Normal,
+    autoRegistrationNumber: 'AR120'
+  }
 ];
