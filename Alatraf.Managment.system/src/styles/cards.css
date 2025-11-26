@@ -1,0 +1,28 @@
+.card {
+  padding: 8px 16px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--card-color);
+}
+
+.card:active {
+  border: 2px var(--primary-color) solid;
+}
+
+.blue-card {
+  background-color: var(--primary-color);
+  justify-content: space-between;
+  width: 240px;
+  height: 180px;
+}
+
+.blue-card .title-sm {
+  color: var(--white-color-50);
+}
+
+.blue-card .display-lg,
+.blue-card .headline-sm {
+  color: var(--white-color);
+  vertical-align: middle;
+}
