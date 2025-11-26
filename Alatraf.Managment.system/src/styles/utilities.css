@@ -21,11 +21,14 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  align-items: center;
 }
 
 .gap-16 {
   gap: 16px;
+}
+
+.gap-24 {
+  gap: 24px;
 }
 
 .gap-32 {
@@ -67,8 +70,8 @@
 
 /* box styling */
 
-.max-width-320 {
-  max-width: 320px;
+.max-width-324 {
+  max-width: 324px;
 }
 
 .max-hight-712 {

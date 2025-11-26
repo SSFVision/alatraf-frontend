@@ -100,12 +100,8 @@ th {
 /* Body / Medium */
 .body-md {
   font-size: 13.6px;
-  /* 16px × 0.85 */
   font-weight: 400;
   letter-spacing: 0.3px;
-  /* 0.021875rem ≈ 0.35px × 0.85 */
-  line-height: 1.6;
-  margin: 0 0 1em 0;
   color: var(--primary-color);
 }
 
