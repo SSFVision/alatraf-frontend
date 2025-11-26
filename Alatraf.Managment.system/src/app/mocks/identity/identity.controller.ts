@@ -43,7 +43,7 @@ export class IdentityController {
       const response: TokenResponseMock = {
         accessToken,
         refreshToken,
-        expiresOnUtc: IdentityController.addMinutes(15).toISOString(),
+        expiresOnUtc: IdentityController.addMinutes(1).toISOString(),
         tokenType: 'Bearer',
         userId: user.userId,
       };
@@ -78,7 +78,7 @@ export class IdentityController {
 
       const newAccess = IdentityController.generateToken();
       const newRefresh = IdentityController.generateToken();
-IdentityController.accessTokens[newAccess] = userId;
+      IdentityController.accessTokens[newAccess] = userId;
 
       // Replace old refresh token
       delete this.refreshTokens[body.refreshToken];
@@ -87,7 +87,7 @@ IdentityController.accessTokens[newAccess] = userId;
       const response: TokenResponseMock = {
         accessToken: newAccess,
         refreshToken: newRefresh,
-        expiresOnUtc: IdentityController.addMinutes(15).toISOString(),
+        expiresOnUtc: IdentityController.addMinutes(10).toISOString(),
         tokenType: 'Bearer',
         userId,
       };

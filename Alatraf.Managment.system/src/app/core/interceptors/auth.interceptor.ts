@@ -1,34 +1,26 @@
-import {
-  HttpInterceptorFn,
-  HttpRequest,
-  HttpHandlerFn,
-  HttpEvent,
-  HttpErrorResponse
-} from '@angular/common/http';
+import { HttpInterceptorFn, HttpErrorResponse } from "@angular/common/http";
+import { inject } from "@angular/core";
+import { catchError, throwError, switchMap } from "rxjs";
+import { AuthService } from "../auth/auth.service";
+import { RefreshTokenRequest } from "../auth/models/refresh-token-request.model";
+import { SessionStore } from "../auth/session.store";
+import { TokenStorageFacade } from "../auth/token-storage/token-storage.facade";
+import { NavigationAuthFacade } from "../navigation/navigation-auth.facade";
 
-import { inject } from '@angular/core';
-import { Observable, catchError, switchMap, throwError } from 'rxjs';
-import { AuthService } from '../auth/auth.service';
-import { SessionStore } from '../auth/session.store';
-import { TokenStorageFacade } from '../auth/token-storage/token-storage.facade';
-import { NavigationAuthFacade } from '../navigation/navigation-auth.facade';
-import { RefreshTokenRequest } from '../auth/models/refresh-token-request.model';
-
-
-export const authInterceptor: HttpInterceptorFn = (
-  req: HttpRequest<any>,
-  next: HttpHandlerFn
-): Observable<HttpEvent<any>> => {
-
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const tokenStorage = inject(TokenStorageFacade);
   const authService = inject(AuthService);
   const sessionStore = inject(SessionStore);
   const navigation = inject(NavigationAuthFacade);
 
- 
-  // -------------------------------------------------------------
-  // 2. Add Authorization header if access token exists
-  // -------------------------------------------------------------
+  // Skip login & refresh endpoints
+  if (
+    req.url.includes('/identity/token/generate') ||
+    req.url.includes('/identity/token/refresh-token')
+  ) {
+    return next(req);
+  }
+
   const accessToken = tokenStorage.getAccessToken();
 
   let authReq = req;
@@ -40,41 +32,29 @@ export const authInterceptor: HttpInterceptorFn = (
     });
   }
 
-  // -------------------------------------------------------------
-  // 3. Handle request
-  // -------------------------------------------------------------
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
-
-      // -----------------------------------------------------------
-      // 4. If unauthorized and we have refresh token — try to refresh
-      // -----------------------------------------------------------
       if (error.status === 401) {
         const refreshToken = tokenStorage.getRefreshToken();
-        const expiredToken = accessToken;
 
-        if (!refreshToken || !expiredToken) {
+        if (!refreshToken || !accessToken) {
           sessionStore.clear();
           tokenStorage.clear();
-          navigation.goToLogout(); 
-
+          navigation.goToLogout();
           return throwError(() => error);
         }
 
-        const requestBody: RefreshTokenRequest = {
+        const body: RefreshTokenRequest = {
           refreshToken,
-          expiredAccessToken: expiredToken
+          expiredAccessToken: accessToken
         };
 
-        // Refresh the token
-        return authService.refreshToken(requestBody).pipe(
+        return authService.refreshToken(body).pipe(
           switchMap((newTokens) => {
-            // Save new tokens
             tokenStorage.setTokens(newTokens);
             sessionStore.setTokens(newTokens);
 
-            // Retry the original request with new token
-            const retryReq = req.clone({
+            const retryReq = authReq.clone({
               setHeaders: {
                 Authorization: `${newTokens.tokenType} ${newTokens.accessToken}`
               }
@@ -82,21 +62,15 @@ export const authInterceptor: HttpInterceptorFn = (
 
             return next(retryReq);
           }),
-
-          // If refresh fails → logout
           catchError(() => {
             sessionStore.clear();
             tokenStorage.clear();
-          navigation.goToLogout(); 
-          
-            return throwError(() => error);
+            navigation.goToLogout();
+            return throwError(() => new Error('Refresh token failed'));
           })
         );
       }
 
-      // -----------------------------------------------------------
-      // 5. Other errors → just forward them
-      // -----------------------------------------------------------
       return throwError(() => error);
     })
   );
