@@ -21,7 +21,7 @@
         (input)="onSearch(searchBox.value)"
       />
     </div>
-    @if (patients()) {
+    @if (patients().length>0) {
     <div class="max-hight-460">
       <app-patients-list
         [patients]="patients()"
@@ -30,11 +30,23 @@
         ></app-patients-list
       >
     </div>
+    } @else {
+    <div class="box max-hight-712">
+      <img
+        src="assets/images/amico.svg"
+        width="439"
+        height="355.98"
+        alt="البحث عن مريض"
+        class="center-content padding-24"
+      />
+
+      <p class="title-md primary-color-50 center-content">
+        ابحث عن المريض بواسطة اسمه
+        <br />
+        أو الرقم الخاص به
+      </p>
+    </div>
     }
-
-  @else {
-
-  }
   </div>
   <router-outlet></router-outlet>
 </main>
