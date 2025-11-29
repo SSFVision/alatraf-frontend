@@ -51,7 +51,7 @@ export class NavigationAuthFacade {
 
   /** Used after successful login */
   redirectAfterLogin(role: AppUserRole): void {
-    console.log("try Navigate ",role);
+    // console.log("try Navigate ",role);
     const home = this.getHomeRouteForRole(role);
     this.go(home, { replaceUrl: true });
   }

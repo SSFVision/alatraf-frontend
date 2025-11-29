@@ -10,7 +10,7 @@ export const SkeletonLoadingInterceptor: HttpInterceptorFn = (req, next) => {
   // const skip = req.headers.get('X-Skip-Page-Loader') === 'true';
 
   // if (isGetRequest && !skip) {
-  pageLoader.start();
+  // pageLoader.start();
   // }
 
   return next(req).pipe(

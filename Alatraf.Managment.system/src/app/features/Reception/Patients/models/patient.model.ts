@@ -29,7 +29,5 @@ export interface CreateUpdatePatientDto {
 
 // Optional: filters for GET
 export interface PatientFilterDto {
-  patientType?: PatientType;
-  gender?: boolean;
   searchTerm?: string;
 }

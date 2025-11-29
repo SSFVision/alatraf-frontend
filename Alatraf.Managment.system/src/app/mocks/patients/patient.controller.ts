@@ -1,5 +1,5 @@
-import { RequestInfo, ResponseOptions } from 'angular-in-memory-web-api';
-import { HttpErrorResponse, HttpRequest } from '@angular/common/http';
+import { RequestInfo } from 'angular-in-memory-web-api';
+import { HttpRequest } from '@angular/common/http';
 import { Patient, CreateUpdatePatientDto } from './patient.dto';
 
 export function generatePatientId(patients: Patient[]): number {
@@ -9,18 +9,15 @@ export function generatePatientId(patients: Patient[]): number {
 }
 
 export class PatientController {
-
-  // --------------------------
-  // GET ALL (ONLY searchTerm)
-  // --------------------------
+  // ---------------------------------------------------
+  // GET ALL
+  // ---------------------------------------------------
   static getAll(reqInfo: RequestInfo) {
     try {
       let patients = reqInfo.collection as Patient[];
-      const query = reqInfo.query;
-
-      // only use searchTerm
-      const rawSearch = query.get('searchTerm')?.[0] ?? '';
-      const searchTerm = rawSearch.trim().toLowerCase();
+      const searchTerm = (reqInfo.query.get('searchTerm')?.[0] ?? '')
+        .trim()
+        .toLowerCase();
 
       if (searchTerm !== '') {
         patients = patients.filter(
@@ -33,61 +30,79 @@ export class PatientController {
 
       return reqInfo.utils.createResponse$(() => ({
         status: 200,
-        statusText: 'OK',
         body: patients,
       }));
-
     } catch (error) {
-      return PatientController.mockError(
-        reqInfo,
-        404,
-        'Failed to load patients.'
-      );
+      return this.serverError(reqInfo, 'Failed to load patients.');
     }
   }
 
-  // --------------------------
+  // ---------------------------------------------------
   // GET BY ID
-  // --------------------------
+  // ---------------------------------------------------
   static getById(reqInfo: RequestInfo) {
     try {
-      const id = parseInt(reqInfo.id as string, 10);
+      const id = Number(reqInfo.id);
       const collection = reqInfo.collection as Patient[];
 
       const patient = collection.find((p) => p.patientId === id);
 
       if (!patient) {
-        return PatientController.mockError(reqInfo, 404, 'Patient not found.');
+        return this.notFound(reqInfo, 'Patient not found.');
       }
 
       return reqInfo.utils.createResponse$(() => ({
         status: 200,
-        statusText: 'OK',
         body: patient,
       }));
-
     } catch (error) {
-      return PatientController.mockError(reqInfo, 500, 'Failed to load patient.');
+      return this.serverError(reqInfo, 'Failed to load patient.');
     }
   }
 
-  // --------------------------
+  // ---------------------------------------------------
   // CREATE
-  // --------------------------
+  // ---------------------------------------------------
   static create(reqInfo: RequestInfo) {
     try {
       const req = reqInfo.req as HttpRequest<CreateUpdatePatientDto>;
       const body = req.body;
 
       if (!body) {
-        return PatientController.mockError(
-          reqInfo,
-          400,
-          'Request body is missing.'
-        );
+        return this.validationError(reqInfo, {
+          body: ['Request body is missing.'],
+        });
       }
 
+      // VALIDATION
+      const validationErrors: Record<string, string[]> = {};
+
+      if (!body.fullname)
+        validationErrors['fullname'] = ['Name is required.'];
+
+      if (!body.nationalNo)
+        validationErrors['nationalNo'] = ['National number is required.'];
+      else if (!/^[0-9]+$/.test(body.nationalNo))
+        validationErrors['nationalNo'] = ['National number must be numeric.'];
+     if (!body.phone)
+        validationErrors['phone'] = ['phone number is required.'];
+      else if (!/^[0-9]+$/.test(body.phone))
+        validationErrors['phone'] = ['phone number must be numeric.'];
+
+
+
+      if (Object.keys(validationErrors).length > 0)
+        return this.validationError(reqInfo, validationErrors);
+
+      // BUSINESS RULE
       const collection = reqInfo.collection as Patient[];
+      if (collection.some((p) => p.nationalNo === body.nationalNo)) {     
+        
+        return this.businessError(
+          reqInfo,
+          'National number already exists.'
+        );
+      }
 
       const newPatient: Patient = {
         patientId: generatePatientId(collection),
@@ -105,99 +120,157 @@ export class PatientController {
 
       return reqInfo.utils.createResponse$(() => ({
         status: 201,
-        statusText: 'Created',
         body: newPatient,
       }));
-
     } catch (error) {
-      return PatientController.mockError(reqInfo, 500, 'Failed to create patient.');
+      return this.serverError(reqInfo, 'Failed to create patient.');
     }
   }
 
-  // --------------------------
+  // ---------------------------------------------------
   // UPDATE
-  // --------------------------
+  // ---------------------------------------------------
   static update(reqInfo: RequestInfo) {
     try {
       const req = reqInfo.req as HttpRequest<CreateUpdatePatientDto>;
       const body = req.body;
 
-      if (!body) {
-        return PatientController.mockError(
-          reqInfo,
-          400,
-          'Request body is missing.'
-        );
-      }
+      if (!body)
+        return this.validationError(reqInfo, {
+          body: ['Request body is missing.'],
+        });
 
-      const id = parseInt(reqInfo.id as string, 10);
+      const id = Number(reqInfo.id);
       const collection = reqInfo.collection as Patient[];
       const index = collection.findIndex((p) => p.patientId === id);
 
       if (index === -1) {
-        return PatientController.mockError(reqInfo, 404, 'Patient not found.');
+        return this.notFound(reqInfo, 'Patient not found.');
       }
 
-      const updated = { ...collection[index], ...body } as Patient;
+      const validationErrors: Record<string, string[]> = {};
+     if (!body.fullname)
+        validationErrors['fullname'] = ['Name is required.'];
+
+      if (!body.nationalNo)
+        validationErrors['nationalNo'] = ['National number is required.'];
+      else if (!/^[0-9]+$/.test(body.nationalNo))
+        validationErrors['nationalNo'] = ['National number must be numeric.'];
+     if (!body.phone)
+        validationErrors['phone'] = ['phone number is required.'];
+      else if (!/^[0-9]+$/.test(body.phone))
+        validationErrors['phone'] = ['phone number must be numeric.'];
+
+
+
+      if (Object.keys(validationErrors).length > 0)
+        return this.validationError(reqInfo, validationErrors);
+
+      if (
+        collection.some(
+          (p) => p.nationalNo === body.nationalNo && p.patientId !== id
+        )
+      ) {
+        return this.businessError(
+          reqInfo,
+          'National number already exists.'
+        );
+      }
+
+      const updated = { ...collection[index], ...body };
       collection[index] = updated;
 
       return reqInfo.utils.createResponse$(() => ({
         status: 200,
-        statusText: 'OK',
         body: updated,
       }));
-
     } catch (error) {
-      return PatientController.mockError(reqInfo, 500, 'Failed to update patient.');
+      return this.serverError(reqInfo, 'Failed to update patient.');
     }
   }
 
-  // --------------------------
+  // ---------------------------------------------------
   // DELETE
-  // --------------------------
+  // ---------------------------------------------------
   static delete(reqInfo: RequestInfo) {
-    const id = parseInt(reqInfo.id as string, 10);
-    const collection = reqInfo.collection as Patient[];
-    const index = collection.findIndex((p) => p.patientId === id);
+    try {
+      const id = Number(reqInfo.id);
+      const collection = reqInfo.collection as Patient[];
+      const index = collection.findIndex((p) => p.patientId === id);
 
-    return reqInfo.utils.createResponse$(() => {
-      if (index === -1) {
-        return {
-          status: 200, // In-memory API always returns 200
-          body: {
-            isSuccess: false,
-            errorMessage: 'العنصر المطلوب غير موجود.',
-            statusCode: 404,
-          },
-        };
+      if (index === -1)
+        return this.notFound(reqInfo, 'Patient not found.');
+
+      if (id === 1) {
+        return this.businessError(
+          reqInfo,
+          'Cannot delete patient with active tickets.'
+        );
       }
 
       collection.splice(index, 1);
 
-      return {
+      return reqInfo.utils.createResponse$(() => ({
         status: 200,
-        body: {
-          isSuccess: true,
-          data: {},
-        },
-      };
-    });
+        body: {},
+      }));
+    } catch (error) {
+      return this.serverError(reqInfo, 'Failed to delete patient.');
+    }
   }
 
-  // --------------------------
-  // ERROR HELPER
-  // --------------------------
-  private static mockError(
+  // ---------------------------------------------------
+  // PROBLEMDETAIL HELPERS
+  // ---------------------------------------------------
+
+  private static validationError(
     reqInfo: RequestInfo,
-    status: number,
-    detail: string
+    errors: Record<string, string[]>
   ) {
     return reqInfo.utils.createResponse$(() => ({
-      status,
-      statusText: 'Error',
+      status: 400,
       error: {
-        title: status === 404 ? 'Not Found' : 'Mock Error',
-        detail,
+        type: 'https://tools.ietf.org/html/rfc7231#section-6.5.1',
+        title: 'One or more validation errors occurred.',
+        status: 400,
+        detail: 'Validation failed.',
+        errors,
+      },
+    }));
+  }
+
+  private static businessError(reqInfo: RequestInfo, message: string) {
+    return reqInfo.utils.createResponse$(() => ({
+      status: 409,
+      error: {
+        type: 'business-error',
+        title: 'Business rule violation',
+        status: 409,
+        detail: message,
+      },
+    }));
+  }
+
+  private static notFound(reqInfo: RequestInfo, message: string) {
+    return reqInfo.utils.createResponse$(() => ({
+      status: 404,
+      error: {
+        type: 'not-found',
+        title: 'Resource not found',
+        status: 404,
+        detail: message,
+      },
+    }));
+  }
+
+  private static serverError(reqInfo: RequestInfo, message: string) {
+    return reqInfo.utils.createResponse$(() => ({
+      status: 500,
+      error: {
+        type: 'server-error',
+        title: 'Server Error',
+        status: 500,
+        detail: message,
       },
     }));
   }

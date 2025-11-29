@@ -1,13 +1,16 @@
-import { ErrorHandler, Injectable, inject } from '@angular/core';
-import { ToastService } from '../services/toast.service';
-import { ArabicClientErrors } from '../locals/Arabic';
+import { Injectable, ErrorHandler, inject, NgZone } from "@angular/core";
+import { ToastService } from "../services/toast.service";
 
 @Injectable()
 export class GlobalErrorHandler implements ErrorHandler {
   private toast = inject(ToastService);
+  private zone = inject(NgZone);
 
   handleError(error: any): void {
-    console.error('Uncaught Angular Error:', error);
-    this.toast.error(ArabicClientErrors.unknown);
+    console.error('🔥 Global Application Error:', error);
+
+    this.zone.run(() => {
+      this.toast.error("حدث خطأ غير متوقع داخل التطبيق.Angular Error  .");
+    });
   }
 }

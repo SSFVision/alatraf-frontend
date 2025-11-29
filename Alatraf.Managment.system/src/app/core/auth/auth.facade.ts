@@ -35,7 +35,7 @@ export class AuthFacade {
 
       // Step C: attach user to session + navigate by role
       tap((user) => {
-        console.log('info After Sucess Login ', user);
+        // console.log('info After Sucess Login ', user);
         this.sessionStore.setUser(user);
         const primaryRole = user.roles?.[0].toString();
         this.navigation.redirectAfterLogin(primaryRole as AppUserRole);
