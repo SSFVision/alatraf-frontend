@@ -20,7 +20,7 @@ export class PatientAddEditPageComponent {
   patientId = input<string>();
 
   isEditMode = this.facade.isEditMode;
-patientInfo = this.facade.selectedPatient
+  patientInfo = this.facade.selectedPatient;
 
   ngOnInit() {
     const id = Number(this.patientId());
@@ -46,15 +46,14 @@ patientInfo = this.facade.selectedPatient
             return;
           }
 
-          if (result.validation) {
-            this.facade.formValidationErrors.set(result.validation);
+          if (result.validationErrors) {
+            this.facade.formValidationErrors.set(result.validationErrors);
           }
         });
-    } 
-    else {
+    } else {
       // =============== CREATE ===============
       this.facade.createPatient(dto).subscribe((result) => {
-        if (result.success && result.validation==null) {
+        if (result.success && result.validationErrors == null) {
           const newPatientId = this.facade.createdPatientId();
 
           this.dialogService
@@ -70,22 +69,18 @@ patientInfo = this.facade.selectedPatient
         }
 
         // Inline validation
-        if (result.validation) {
-          this.facade.formValidationErrors.set(result.validation);
+        if (result.validationErrors) {
+          this.facade.formValidationErrors.set(result.validationErrors);
         }
       });
     }
   }
 
   onCancel() {
-    
     this.closeModal();
   }
 
   private closeModal() {
     this.navReception.goToPatientsList();
   }
-
-
- 
 }
