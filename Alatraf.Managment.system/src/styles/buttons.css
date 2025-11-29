@@ -66,6 +66,18 @@
   vertical-align: middle;
 }
 
+.btn:disabled,
+.btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn:disabled:hover,
+.btn.disabled:hover {
+  background-color: --gray-color !important;
+  color: --primary-color-50 !important;
+}
+
 .cursor-pointer,
 .close-icon {
   cursor: pointer;
