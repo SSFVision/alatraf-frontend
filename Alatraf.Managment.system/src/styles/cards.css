@@ -20,7 +20,8 @@
 }
 
 .card:active {
-  border: 2px var(--primary-color) solid;
+  outline: 2px solid var(--primary-color);
+  outline-offset: -2px;
 }
 
 .blue-card {
