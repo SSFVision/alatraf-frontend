@@ -55,6 +55,62 @@
 
   <main class="padding-32 row gap-16 padding-24">
 
+    <span class="backdrop"></span>
+
+    <div class="box dialog">
+      <div class="space-between sticky">
+        <div class="row gap-16">
+          <h2 class="title-lg cursor-pointer">
+            إضافة إجازة
+          </h2>
+          <!-- هذا يظهر فقط إذا يوجد اجازات مسجلة في النظام  -->
+          <h2 class="title-lg cursor-pointer primary-color-50">
+            الإجازات
+          </h2>
+        </div>
+        <img src="../../assets/icons/close-icon.svg" alt="إغلاق" class="close-icon" />
+      </div>
+
+      <div>
+        <p class="title-md ">
+          بيانات الإجازة
+        </p>
+
+        <span class="home-line"></span>
+      </div>
+
+      <form class="padding-LR-24 column gap-16">
+
+        <div class="row flex-center">
+          <label class="label-lg">
+            عدد الأيام
+          </label>
+          <input class="label-lg" type="text" placeholder="">
+        </div>
+
+        <div class="row flex-center">
+          <label class="label-lg">
+            تاريخ الإجازة : من
+          </label>
+          <input class="label-lg" type="number" placeholder="">
+          <label class="label-lg">
+            إلى
+          </label>
+          <input class="label-lg" type="number" placeholder="">
+        </div>
+
+        <div class="row gap-32 flex-center">
+
+          <button class="btn primary label-md">
+            حفظ التعديلات
+          </button>
+        </div>
+
+      </form>
+
+    </div>
+
+
     <div class="box max-width-324 culumn gap-24 max-hight-800">
 
       <div class="row space-between">
@@ -77,12 +133,13 @@
 
       <div class="filters-container">
         <button class="filter-btn  active">الكل</button>
-        <button class="filter-btn">الأطراف الصناعية</button>
-        <button class="filter-btn">العلاج الطبيعي </button>
+        <button class="filter-btn"> جديد </button>
+        <button class="filter-btn"> اليوم </button>
+        <button class="filter-btn"> متأخر </button>
       </div>
 
       <div class="max-hight-712 column gap-16">
-        <div class="card primary-card">
+        <div class="card red-card">
           <p class="body-md">
             عبدالحميد مجاهد سعيد الشرجبي
           </p>
@@ -101,7 +158,7 @@
 
         </div>
 
-        <div class="card primary-card">
+        <div class="card green-card">
           <p class="body-md">
             عبدالحميد مجاهد سعيد الشرجبي
           </p>
@@ -120,75 +177,7 @@
 
         </div>
 
-        <div class="card">
-          <p class="body-md">
-            عبدالحميد مجاهد سعيد الشرجبي
-          </p>
-          <p class="body-sm primary-color-50">
-            الرقم المريض : 741789852
-          </p>
-
-          <div class="row gap-16">
-            <p class="body-sm primary-color-50">
-              ذكر
-            </p>
-            <p class="body-sm primary-color-50">
-              28 سنة
-            </p>
-          </div>
-        </div>
-        <div class="card">
-          <p class="body-md">
-            عبدالحميد مجاهد سعيد الشرجبي
-          </p>
-          <p class="body-sm primary-color-50">
-            الرقم المريض : 741789852
-          </p>
-
-          <div class="row gap-16">
-            <p class="body-sm primary-color-50">
-              ذكر
-            </p>
-            <p class="body-sm primary-color-50">
-              28 سنة
-            </p>
-          </div>
-        </div>
-        <div class="card">
-          <p class="body-md">
-            عبدالحميد مجاهد سعيد الشرجبي
-          </p>
-          <p class="body-sm primary-color-50">
-            الرقم المريض : 741789852
-          </p>
-
-          <div class="row gap-16">
-            <p class="body-sm primary-color-50">
-              ذكر
-            </p>
-            <p class="body-sm primary-color-50">
-              28 سنة
-            </p>
-          </div>
-        </div>
-        <div class="card">
-          <p class="body-md">
-            عبدالحميد مجاهد سعيد الشرجبي
-          </p>
-          <p class="body-sm primary-color-50">
-            الرقم المريض : 741789852
-          </p>
-
-          <div class="row gap-16">
-            <p class="body-sm primary-color-50">
-              ذكر
-            </p>
-            <p class="body-sm primary-color-50">
-              28 سنة
-            </p>
-          </div>
-        </div>
-        <div class="card">
+        <div class="card yellow-card">
           <p class="body-md">
             عبدالحميد مجاهد سعيد الشرجبي
           </p>
@@ -208,15 +197,20 @@
       </div>
     </div>
 
-    <div class="box max-hight-800 gap-16 flex-center">
-      <img src="../../assets/images/bro.svg" alt="اضافة تشخيص" width="496.75" height="512" class="padding-32">
-      <p class="title-md primary-color-50">
-        مرحباً بك
-      </p>
+    <div class="column gap-24">
+      <button class="btn big-btn primary lable-lg">
+        إضافة إجازة
+      </button>
+
+      <div class="box hight-600 gap-16 flex-center">
+        <img src="../../assets/images/bro.svg" alt="اضافة تشخيص" width="496.75" height="512" class="padding-32">
+        <p class="title-md primary-color-50">
+          مرحباً بك
+        </p>
+      </div>
     </div>
 
   </main>
-
 </body>
 
 </html>

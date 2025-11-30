@@ -55,6 +55,73 @@
 
   <main class="padding-32 row gap-16 padding-24">
 
+    <span class="backdrop"></span>
+
+    <div class="box dialog">
+      <div class="space-between sticky">
+        <div class="row gap-16">
+          <h2 class="title-lg cursor-pointer primary-color-50">
+            إضافة إجازة
+          </h2>
+          <h2 class="title-lg cursor-pointer ">
+            الإجازات
+          </h2>
+        </div>
+        <img src="../../assets/icons/close-icon.svg" alt="إغلاق" class="close-icon" />
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th class="label-lg">الإجازة</th>
+            <th class="label-lg">المدة</th>
+            <th class="label-lg">تاريخ البداية</th>
+            <th class="label-lg">تاريخ النهاية</th>
+            <th class="label-lg">تبدأ بعد</th>
+            <th class="buttons"></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td class="body-md">ثورة 26 سبتمبر</td>
+            <td class="body-md">يوم واحد</td>
+            <td class="body-md">2025-09-26</td>
+            <td class="body-md">2025-09-26</td>
+            <td class="body-md">من الآن: 8 أشهر (مثال)</td>
+            <td class="row gap-16 body-md">
+              <button class="btn primary icon">
+                <img src="../../assets/icons/pencil-icon.svg" alt="تعديل" />
+              </button>
+              <button class="btn danger icon">
+                <img src="../../assets/icons/trash-icon.svg" alt="حذف" />
+              </button>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="body-md">عيد الأضحى</td>
+            <td class="body-md">4 أيام</td>
+            <td class="body-md">2025-06-06</td>
+            <td class="body-md">2025-06-09</td>
+            <td class="body-md">من الآن: 4 أشهر (مثال)</td>
+            <td class="row gap-16 body-md">
+              <button class="btn primary icon">
+                <img src="../../assets/icons/pencil-icon.svg" alt="تعديل" />
+              </button>
+              <button class="btn danger icon">
+                <img src="../../assets/icons/trash-icon.svg" alt="حذف" />
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+
+
+    </div>
+
+
     <div class="box max-width-324 culumn gap-24 max-hight-800">
 
       <div class="row space-between">
@@ -77,12 +144,13 @@
 
       <div class="filters-container">
         <button class="filter-btn  active">الكل</button>
-        <button class="filter-btn">الأطراف الصناعية</button>
-        <button class="filter-btn">العلاج الطبيعي </button>
+        <button class="filter-btn"> جديد </button>
+        <button class="filter-btn"> اليوم </button>
+        <button class="filter-btn"> متأخر </button>
       </div>
 
       <div class="max-hight-712 column gap-16">
-        <div class="card primary-card">
+        <div class="card red-card">
           <p class="body-md">
             عبدالحميد مجاهد سعيد الشرجبي
           </p>
@@ -101,7 +169,7 @@
 
         </div>
 
-        <div class="card primary-card">
+        <div class="card green-card">
           <p class="body-md">
             عبدالحميد مجاهد سعيد الشرجبي
           </p>
@@ -120,75 +188,7 @@
 
         </div>
 
-        <div class="card">
-          <p class="body-md">
-            عبدالحميد مجاهد سعيد الشرجبي
-          </p>
-          <p class="body-sm primary-color-50">
-            الرقم المريض : 741789852
-          </p>
-
-          <div class="row gap-16">
-            <p class="body-sm primary-color-50">
-              ذكر
-            </p>
-            <p class="body-sm primary-color-50">
-              28 سنة
-            </p>
-          </div>
-        </div>
-        <div class="card">
-          <p class="body-md">
-            عبدالحميد مجاهد سعيد الشرجبي
-          </p>
-          <p class="body-sm primary-color-50">
-            الرقم المريض : 741789852
-          </p>
-
-          <div class="row gap-16">
-            <p class="body-sm primary-color-50">
-              ذكر
-            </p>
-            <p class="body-sm primary-color-50">
-              28 سنة
-            </p>
-          </div>
-        </div>
-        <div class="card">
-          <p class="body-md">
-            عبدالحميد مجاهد سعيد الشرجبي
-          </p>
-          <p class="body-sm primary-color-50">
-            الرقم المريض : 741789852
-          </p>
-
-          <div class="row gap-16">
-            <p class="body-sm primary-color-50">
-              ذكر
-            </p>
-            <p class="body-sm primary-color-50">
-              28 سنة
-            </p>
-          </div>
-        </div>
-        <div class="card">
-          <p class="body-md">
-            عبدالحميد مجاهد سعيد الشرجبي
-          </p>
-          <p class="body-sm primary-color-50">
-            الرقم المريض : 741789852
-          </p>
-
-          <div class="row gap-16">
-            <p class="body-sm primary-color-50">
-              ذكر
-            </p>
-            <p class="body-sm primary-color-50">
-              28 سنة
-            </p>
-          </div>
-        </div>
-        <div class="card">
+        <div class="card yellow-card">
           <p class="body-md">
             عبدالحميد مجاهد سعيد الشرجبي
           </p>
@@ -208,15 +208,20 @@
       </div>
     </div>
 
-    <div class="box max-hight-800 gap-16 flex-center">
-      <img src="../../assets/images/bro.svg" alt="اضافة تشخيص" width="496.75" height="512" class="padding-32">
-      <p class="title-md primary-color-50">
-        مرحباً بك
-      </p>
+    <div class="column gap-24">
+      <button class="btn big-btn primary lable-lg">
+        إضافة إجازة
+      </button>
+
+      <div class="box hight-600 gap-16 flex-center">
+        <img src="../../assets/images/bro.svg" alt="اضافة تشخيص" width="496.75" height="512" class="padding-32">
+        <p class="title-md primary-color-50">
+          مرحباً بك
+        </p>
+      </div>
     </div>
 
   </main>
-
 </body>
 
 </html>

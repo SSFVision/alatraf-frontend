@@ -5,12 +5,7 @@
     <h2 class="title-lg">
       {{ mode() ? "تعديل بيانات المريض" : "إضافة مريض جديد" }}
     </h2>
-    <img
-      src="assets/icons/close-icon.svg"
-      alt="إغلاق"
-      (click)="onClose()"
-      class="close-icon cursor-pointer"
-    />
+    <img src="assets/icons/close-icon.svg" alt="إغلاق" (click)="onClose()" class="close-icon cursor-pointer" />
   </div>
 
   <div>
@@ -18,19 +13,11 @@
     <span class="home-line"></span>
   </div>
 
-  <form
-    class="padding-LR-24 column gap-16"
-    [formGroup]="form"
-    (ngSubmit)="onSave()"
-  >
+  <form class="padding-LR-24 column gap-16" [formGroup]="form" (ngSubmit)="onSave()">
     <!-- رقم المريض -->
     <div class="row flex-center">
       <label class="label-lg">رقم المريض</label>
-      <input
-        class="label-lg"
-        type="text"
-        formControlName="autoRegistrationNumber"
-      />
+      <input class="label-lg" type="text" formControlName="autoRegistrationNumber" />
     </div>
 
     <!-- الاسم -->
@@ -86,7 +73,7 @@
       <input class="label-lg" type="text" formControlName="nationalNo" />
 
       <!-- Backend Validation -->
-     <div class="error-message label-lg" *ngIf="hasBackendError('nationalNo')">
+      <div class="error-message label-lg" *ngIf="hasBackendError('nationalNo')">
         {{ getBackendError("nationalNo") }}
       </div>
 
