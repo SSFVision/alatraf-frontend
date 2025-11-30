@@ -1,9 +1,9 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { Subject,  of } from 'rxjs';
+import { Subject, of } from 'rxjs';
 import {
-  
   debounceTime,
   distinctUntilChanged,
+  map,
   switchMap,
   tap,
 } from 'rxjs/operators';
@@ -18,6 +18,7 @@ import {
 import { ApiResult } from '../../../../core/models/ApiResult';
 import { BaseFacade } from '../../../../core/utils/facades/base-facade';
 import { CacheManager } from '../../../../core/utils/cache-manager';
+import { SearchManager } from '../../../../core/utils/search-manager';
 
 @Injectable({
   providedIn: 'root',
@@ -36,53 +37,32 @@ export class PatientsFacade extends BaseFacade {
   formValidationErrors = signal<Record<string, string[]>>({});
 
   createdPatientId = signal<number | null>(null);
-
-  private cache = new CacheManager<Patient[]>(5);
-
   constructor() {
     super();
-    this.setupSearchSubscription();
   }
 
-
-  private setupSearchSubscription() {
-    this.searchInput$
-      .pipe(
-        debounceTime(300),
-        distinctUntilChanged(),
-
-        switchMap((term) => {
-          const searchTerm = term.trim();
-          this._filters.update((f) => ({ ...f, searchTerm }));
-
-          const key = searchTerm.toLowerCase();
-          const cached = this.cache.get(key);
-          console.log('cached Data', cached);
-          if (cached) {
-            this._patients.set(cached);
-            return of(null);
+  private cache = new CacheManager<Patient[]>(5);
+  private searchManager = new SearchManager<Patient[]>(
+    (term: string) =>
+      this.patientService.getPatients({ searchTerm: term }).pipe(
+        tap((res: ApiResult<Patient[]>) => {
+          if (!res.isSuccess) {
+            this.handleSearchError(res);
           }
+        }),
+        map((res: ApiResult<Patient[]>) =>
+          res.isSuccess && res.data ? res.data : []
+        )
+      ),
 
-          return this.patientService.getPatients(this._filters()).pipe(
-            tap((result: ApiResult<Patient[]>) => {
-              if (result.isSuccess && result.data) {
-                if (result.data.length > 0) {
-                  this.cache.set(key, result.data);
-                }
-                this._patients.set(result.data);
-              } else {
-                this._patients.set([]);
-                this.handleSearchError(result);
-              }
-            })
-          );
-        })
-      )
-      .subscribe();
-  }
+    this.cache,
+
+    (data) => this._patients.set(data)
+  );
 
   search(term: string): void {
-    this.searchInput$.next(term);
+    this._filters.update((f) => ({ ...f, searchTerm: term }));
+    this.searchManager.search(term);
   }
 
   // ---------------------------
@@ -115,9 +95,6 @@ export class PatientsFacade extends BaseFacade {
       .subscribe();
   }
 
-  // ---------------------------
-  // DELETE
-  // ---------------------------
   deletePatient(patient: Patient): void {
     if (!patient?.patientId) return;
 
@@ -145,9 +122,6 @@ export class PatientsFacade extends BaseFacade {
     });
   }
 
-  // ---------------------------
-  // DETAILS (unchanged)
-  // ---------------------------
   private _selectedPatient = signal<Patient | null>(null);
   selectedPatient = this._selectedPatient.asReadonly();
 
@@ -220,9 +194,6 @@ export class PatientsFacade extends BaseFacade {
     );
   }
 
-  // ---------------------------
-  // STILL USING LOCAL ERROR HANDLERS
-  // ---------------------------
   private handleLoadPatientsError(result: ApiResult<any>) {
     const err = this.extractError(result);
 

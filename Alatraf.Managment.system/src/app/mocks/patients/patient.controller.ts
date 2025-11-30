@@ -27,6 +27,9 @@ export class PatientController {
             p.nationalNo?.toLowerCase().includes(searchTerm)
         );
       }
+       if (patients.length === 0) {
+        return this.notFound(reqInfo, 'لايوجد مرضى مطابقين لمعايير البحث.');
+      }
 
       return reqInfo.utils.createResponse$(() => ({
         status: 200,
