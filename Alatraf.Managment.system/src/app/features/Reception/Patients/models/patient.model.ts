@@ -10,6 +10,14 @@ export interface Patient {
   autoRegistrationNumber?: string;
 }
 
+export interface PatientListDto {
+  patientId: number;
+  fullname: string;
+  phone?: string;
+  nationalNo?: string;
+  autoRegistrationNumber?: string;
+}
+
 export enum PatientType {
   Normal = 0,
   Wounded = 1

@@ -5,6 +5,8 @@ import { DialogService } from '../../../../../shared/components/dialog/dialog.se
 import { ArabicSuccessMessages } from '../../../../../core/locals/Arabic';
 import { NavigationReceptionFacade } from '../../../../../core/navigation/navigation-reception.facade';
 import { PatientsFacade } from '../../Services/patients.facade.service';
+import { ActivatedRoute } from '@angular/router';
+import { UiLockService } from '../../../../../core/services/ui-lock.service';
 
 @Component({
   selector: 'app-patient-add-edit-page',
@@ -16,6 +18,7 @@ export class PatientAddEditPageComponent {
   private facade = inject(PatientsFacade);
   private dialogService = inject(DialogService);
   private navReception = inject(NavigationReceptionFacade);
+  private uiLock = inject(UiLockService);
 
   patientId = input<string>();
 
@@ -81,6 +84,7 @@ export class PatientAddEditPageComponent {
   }
 
   private closeModal() {
+    this.uiLock.unlock();
     this.navReception.goToPatientsList();
   }
 }

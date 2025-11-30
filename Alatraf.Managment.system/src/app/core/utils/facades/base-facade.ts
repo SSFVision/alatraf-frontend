@@ -1,4 +1,4 @@
-import { inject } from '@angular/core';
+import { inject, signal } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
@@ -25,7 +25,7 @@ export abstract class BaseFacade {
   protected extractError(result: ApiResult<any>): ExtractedApiErrorType {
     return ApiErrorExtractor.extract(result);
   }
-
+  
   /**
    * Wraps create/update calls with:
    * - success toast

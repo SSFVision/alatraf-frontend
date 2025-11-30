@@ -10,6 +10,7 @@ import { NgIf } from '@angular/common';
 import { Patient } from '../../../Patients/models/patient.model';
 import { ToastService } from '../../../../../core/services/toast.service';
 import { NavigationReceptionFacade } from '../../../../../core/navigation/navigation-reception.facade';
+import { UiLockService } from '../../../../../core/services/ui-lock.service';
 
 @Component({
   selector: 'app-create-ticket',
@@ -26,6 +27,7 @@ export class CreateTicketComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private fb = inject(FormBuilder);
   private navReception = inject(NavigationReceptionFacade);
+  private uiLock = inject(UiLockService);
 
   private toast = inject(ToastService);
   patientService = inject(PatientService);
@@ -71,6 +73,7 @@ export class CreateTicketComponent implements OnInit {
     return !!(control && control.invalid && control.touched);
   }
   onClose() {
+    this.uiLock.unlock();
     this.navReception.goToPatientsList();
   }
 }

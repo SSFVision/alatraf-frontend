@@ -1,5 +1,6 @@
-import { Component, computed, signal } from '@angular/core';
-import { RouterOutlet } from "@angular/router";
+import { Component, computed, inject, signal } from '@angular/core';
+import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router, RouterOutlet } from "@angular/router";
+import { UiLockService } from './core/services/ui-lock.service';
 
 @Component({
   selector: 'app-root',
@@ -10,4 +11,7 @@ import { RouterOutlet } from "@angular/router";
 })
 export class AppComponent {
   title = 'Alatraf.Managment.system';
+
+
+
 }

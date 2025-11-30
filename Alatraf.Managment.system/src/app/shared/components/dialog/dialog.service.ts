@@ -12,6 +12,7 @@ import {
   DialogResult,
   SharedDialogComponent,
 } from './shared-dialog/shared-dialog.component';
+import { UiLockService } from '../../../core/services/ui-lock.service';
 
 @Injectable({
   providedIn: 'root',
@@ -20,11 +21,14 @@ export class DialogService {
   constructor(
     private injector: Injector,
     private appRef: ApplicationRef,
-    private envInjector: EnvironmentInjector // Angular 14+ dynamic creation
+    private envInjector: EnvironmentInjector, // Angular 14+ dynamic creation
+        private uiLock: UiLockService            // 🔥 NEW
+
   ) {}
 
   open(config: DialogConfig): Observable<DialogResult> {
     const subject = new Subject<DialogResult>();
+    this.uiLock.lock();
 
     // create component dynamically
     const compRef = createComponent(SharedDialogComponent, {
@@ -41,6 +45,8 @@ export class DialogService {
       subject.complete();
       sub.unsubscribe();
       this.destroy(compRef);
+       this.uiLock.unlock();
+
     });
 
     // attach to app DOM

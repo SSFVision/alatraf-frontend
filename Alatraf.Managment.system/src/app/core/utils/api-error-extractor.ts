@@ -28,7 +28,8 @@ export class ApiErrorExtractor {
     }
 
     // 2️⃣ Business errors
-    if (result.errorMessage) {
+    if (result.errorDetail  && (result.statusCode === 404 || result.statusCode === 409)) {
+     
       return {
         type: ExtractedApiErrorKind.Business,
         message: result.errorDetail ?? result.errorMessage,

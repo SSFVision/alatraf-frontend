@@ -5,8 +5,6 @@ import { AppRoutes } from '../routing/app.routes.map';
 @Injectable({ providedIn: 'root' })
 export class NavigationReceptionFacade {
   private router = inject(Router);
-
-  // -----------------------
   goToPatientsList(extras?: NavigationExtras): void {
     this.go(AppRoutes.reception.patients.root, { replaceUrl: true });
   }
@@ -31,10 +29,11 @@ export class NavigationReceptionFacade {
   }
 
   goToTicketsPrint(ticketId: number | string, extras?: NavigationExtras): void {
-    this.go(AppRoutes.reception.tickets.print(ticketId), extras);
+    this.go(AppRoutes.reception.tickets.print(ticketId), extras)
   }
 
   private go(path: string | any[], extras?: NavigationExtras): void {
-    this.router.navigate(Array.isArray(path) ? path : [path], extras);
+    this.router
+      .navigate(Array.isArray(path) ? path : [path], extras);
   }
 }
