@@ -75,13 +75,18 @@
 }
 
 .max-hight-712 {
-  max-height: 712px;
+  height: 712px;
   overflow-y: auto;
 }
 
 .max-hight-800 {
   max-height: 680px;
   min-height: 680px;
+  overflow-y: auto;
+}
+
+.hight-600 {
+  height: 600px;
   overflow-y: auto;
 }
 
