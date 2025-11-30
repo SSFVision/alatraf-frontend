@@ -1,3 +1,4 @@
+import { finalize } from 'rxjs';
 import { Component, inject, input, output } from '@angular/core';
 import { Patient } from '../../models/patient.model';
 import { SkeletonComponent } from '../../../../../shared/components/skeleton/skeleton.component';
@@ -7,6 +8,8 @@ import { StopPropagationDirective } from '../../../../../shared/Directives/stop-
 import { AuthFacade } from '../../../../../core/auth/auth.facade';
 import { PERMISSIONS } from '../../../../../core/auth/models/permissions.map';
 import { HasPermissionDirective } from '../../../../../core/auth/directives/has-permission.directive';
+import { PatientsFacade } from '../../Services/patients.facade.service';
+import { UiLockService } from '../../../../../core/services/ui-lock.service';
 
 @Component({
   selector: 'app-patients-list',
@@ -22,22 +25,36 @@ import { HasPermissionDirective } from '../../../../../core/auth/directives/has-
 export class PatientsListComponent {
   patients = input.required<Patient[]>();
   pageLoader = inject(SkeletonsLoadingService);
+  private uiLock = inject(UiLockService);
+
   private navReception = inject(NavigationReceptionFacade);
   permession = PERMISSIONS;
   skeletonRows = Array.from({ length: 8 }).map((_, i) => i);
 
   deletePatient = output<Patient>();
   onDeleteClick(patient: Patient) {
+    if (this.uiLock.isLocked()) return;
+    this.uiLock.lock();
     this.deletePatient.emit(patient);
   }
 
   OnEditPatient(patient: Patient) {
+    if (this.uiLock.isLocked()) return;
+    this.uiLock.lock();
+
     this.navReception.goToPatientsEdit(patient.patientId);
   }
   OnCreateTicket(patient: Patient) {
+    if (this.uiLock.isLocked()) return;
+    this.uiLock.lock();
+
     this.navReception.goToTicketsCreate(patient.patientId);
+
   }
   OnShowPatient(patientId: number) {
+    if (this.uiLock.isLocked()) return;
+    this.uiLock.lock();
+
     this.navReception.goToPatientsView(patientId);
   }
 }

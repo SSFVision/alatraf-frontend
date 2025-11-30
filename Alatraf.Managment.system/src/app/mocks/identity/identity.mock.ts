@@ -29,6 +29,7 @@ export const IDENTITY_USERS_MOCK: IdentityUserMock[] = [
       'delete_patient',
       'update_patient',
       'view_diagnosis',
+      'add_ticket',
     ],
   },
 ];

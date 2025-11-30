@@ -10,6 +10,14 @@ export interface Patient {
   autoRegistrationNumber?: string;
 }
 
+export interface PatientListDto {
+  patientId: number;
+  fullname: string;
+  phone?: string;
+  nationalNo?: string;
+  autoRegistrationNumber?: string;
+}
+
 export enum PatientType {
   Normal = 0,
   Wounded = 1
@@ -29,7 +37,5 @@ export interface CreateUpdatePatientDto {
 
 // Optional: filters for GET
 export interface PatientFilterDto {
-  patientType?: PatientType;
-  gender?: boolean;
   searchTerm?: string;
 }

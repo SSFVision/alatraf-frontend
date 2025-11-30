@@ -11,14 +11,10 @@ export class ApiResult<T = any> {
     Object.assign(this, init);
   }
 
-  // Factory for success responses
-  static success<T>(data: T): ApiResult<T> {
-    return new ApiResult<T>({
-      isSuccess: true,
-      data,
-      statusCode: 200,
-    });
-  }
+  
+static success<T>(data: T, statusCode = 200): ApiResult<T> {
+  return new ApiResult<T>({ isSuccess: true, data, statusCode });
+}
 
   // Factory for failure responses
   static failure<T>(
@@ -45,3 +41,5 @@ export class ApiResult<T = any> {
     return this.errorMessage;
   }
 }
+
+

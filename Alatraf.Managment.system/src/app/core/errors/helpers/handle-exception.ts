@@ -33,7 +33,7 @@ export function handleException<T>(error: any): ApiResult<T> {
 
   return ApiResult.failure<T>(
     message,
-    // error?.message || error?.toString()
+    error?.message || error?.toString(),
     error?.toString()
   );
 }

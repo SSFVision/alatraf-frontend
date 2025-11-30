@@ -24,6 +24,7 @@ export function handleErrorResponse<T>(error: HttpErrorResponse): ApiResult<T> {
   }
 
   if (problem) {
+    console.log("⛔ ProblemDetails from backend:", problem);
     return ApiResult.failure<T>(
       problem.title || getFriendlyErrorMessage(error.status),                 // Arabic
       problem.detail || ArabicClientErrors.errorOccurred || 'حدث خطأ أثناء المعالجة.', // Arabic detail
@@ -31,7 +32,7 @@ export function handleErrorResponse<T>(error: HttpErrorResponse): ApiResult<T> {
       problem.errors
     );
   }
-
+   
   // Fallback when backend sends non-ProblemDetails error
   const detail =
     typeof content === 'string'
