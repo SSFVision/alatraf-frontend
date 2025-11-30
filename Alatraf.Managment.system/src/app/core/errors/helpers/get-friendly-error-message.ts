@@ -3,6 +3,8 @@ import { ArabicHttpErrors } from "../../locals/Arabic";
 
 export function getFriendlyErrorMessage(statusCode?: number): string {
   switch (statusCode) {
+    case HttpStatusCode.Conflict:
+return ArabicHttpErrors[409];
     case HttpStatusCode.BadRequest:
       return ArabicHttpErrors[400];
     case HttpStatusCode.Unauthorized:

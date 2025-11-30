@@ -1,11 +1,16 @@
-<div class="backdrop" (click)="backdropClick()"></div>
+<div class="backdrop" (click)="onClose()"></div>
 
 <div class="box dialog">
   <div class="space-between sticky">
     <h2 class="title-lg">
       {{ mode() ? "تعديل بيانات المريض" : "إضافة مريض جديد" }}
     </h2>
-    <img src="assets/icons/close-icon.svg" alt="إغلاق" (click)="onClose()" class="close-icon cursor-pointer" />
+    <img
+      src="assets/icons/close-icon.svg"
+      alt="إغلاق"
+      (click)="onClose()"
+      class="close-icon cursor-pointer"
+    />
   </div>
 
   <div>
@@ -13,18 +18,51 @@
     <span class="home-line"></span>
   </div>
 
-  <form class="padding-LR-24 column gap-16" [formGroup]="form" (ngSubmit)="onSave()">
+  <form
+    class="padding-LR-24 column gap-16"
+    [formGroup]="form"
+    (ngSubmit)="onSave()"
+  >
+    <!-- رقم المريض -->
     <div class="row flex-center">
       <label class="label-lg">رقم المريض</label>
-      <input class="label-lg" type="text" formControlName="autoRegistrationNumber" />
+      <input
+        class="label-lg"
+        type="text"
+        formControlName="autoRegistrationNumber"
+      />
     </div>
 
+    <!-- الاسم -->
     <div class="row flex-center">
       <label class="label-lg">الاسم</label>
       <input class="label-lg" type="text" formControlName="fullname" />
-      <div *ngIf="isInvalid('fullname')" class="error-message label-lg">الاسم مطلوب</div>
-    </div>
 
+      <!-- Backend Validation -->
+      <div class="error-message label-lg" *ngIf="hasBackendError('fullname')">
+        {{ getBackendError("fullname") }}
+      </div>
+
+      <!-- Frontend Validation -->
+      <div *ngIf="hasFrontendError('fullname')" class="error-message label-lg">
+        الاسم مطلوب
+      </div>
+    </div>
+    <!-- رقم الهاتف -->
+    <div class="row flex-center">
+      <label class="label-lg">رقم الهاتف</label>
+      <input class="label-lg" type="text" formControlName="phone" />
+
+      <!-- Backend Validation -->
+      <div class="error-message label-lg" *ngIf="hasBackendError('phone')">
+        {{ getBackendError("phone") }}
+      </div>
+
+      <div *ngIf="hasFrontendError('phone')" class="error-message label-lg">
+        رقم الهاتف مطلوب
+      </div>
+    </div>
+    <!-- الجنس + تاريخ الميلاد -->
     <div class="row flex-center">
       <label class="label-lg">الجنس</label>
       <select class="label-lg" formControlName="gender">
@@ -36,25 +74,32 @@
       <input class="label-lg" type="date" formControlName="birthdate" />
     </div>
 
-    <div class="row flex-center">
-      <label class="label-lg">رقم الهاتف</label>
-      <input class="label-lg" type="number" formControlName="phone" />
-      <div *ngIf="isInvalid('phone')" class="error-message label-lg">
-        رقم الهاتف مطلوب
-      </div>
-    </div>
+    <!-- العنوان -->
     <div class="row flex-center">
       <label class="label-lg">العنوان</label>
       <input class="label-lg" type="text" formControlName="address" />
     </div>
 
+    <!-- رقم الهوية -->
     <div class="row flex-center">
       <label class="label-lg">رقم الهوية</label>
       <input class="label-lg" type="text" formControlName="nationalNo" />
+
+      <!-- Backend Validation -->
+     <div class="error-message label-lg" *ngIf="hasBackendError('nationalNo')">
+        {{ getBackendError("nationalNo") }}
+      </div>
+
+      <div *ngIf="hasFrontendError('nationalNo')" class="error-message label-lg">
+        رقم الهوية مطلوب
+      </div>
     </div>
 
-    <button class="btn primary label-md" type="submit">
-      {{ mode() ? "حفظ التعديل" : "حفظ" }}
-    </button>
+    <!-- زر الحفظ -->
+    <div class="flex-center">
+      <button class="btn primary label-md" type="submit">
+        {{ mode() ? "حفظ التعديل" : "حفظ" }}
+      </button>
+    </div>
   </form>
 </div>

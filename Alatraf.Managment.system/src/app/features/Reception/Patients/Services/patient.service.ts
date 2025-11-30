@@ -4,12 +4,13 @@ import { BaseApiService } from '../../../../core/services/base-api.service';
 import {
   CreateUpdatePatientDto,
   Patient,
-  PatientFilterDto,
 } from '../models/patient.model';
 import { HttpHandler, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ApiResult } from '../../../../core/models/ApiResult';
-
+export interface PatientFilterDto {
+  searchTerm?: string;
+}
 @Injectable({
   providedIn: 'root',
 })
@@ -22,10 +23,7 @@ export class PatientService extends BaseApiService {
 
   getPatients(filters?: PatientFilterDto): Observable<ApiResult<Patient[]>> {
     let params = new HttpParams();
-    if (filters?.patientType !== undefined)
-      params = params.set('patientType', filters.patientType.toString());
-    if (filters?.gender !== undefined)
-      params = params.set('gender', filters.gender.toString());
+
     if (filters?.searchTerm)
       params = params.set('searchTerm', filters.searchTerm);
 

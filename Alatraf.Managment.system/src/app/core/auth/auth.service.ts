@@ -32,7 +32,6 @@ export class AuthService {
   // 3. Get Current User Info (userId, roles, permissions)
   // ---------------------------------------------------------
   getCurrentUser(): Observable<UserModel> {
-    console.log("Start getting user info ");
     return this.http.get<UserModel>(`${this.baseUrl}/current-user/claims`);
   }
 }

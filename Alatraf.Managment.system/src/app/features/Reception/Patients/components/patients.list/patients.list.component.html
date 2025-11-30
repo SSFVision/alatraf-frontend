@@ -3,39 +3,14 @@
 <table>
   <thead>
     <tr>
-      <th class="title-sm">رقم المريض</th>
-      <th class="title-sm">رقم الهوية</th>
+      <th class="title-sm">رقم المريض الطبي</th>
+      <th class="title-sm">رقم الهاتف</th>
       <th class="th-expand title-sm">اسم المريض</th>
       <th class="buttons"></th>
     </tr>
   </thead>
 
-  <!-- <tbody>
-    @for (patient of patients(); track $index) {
-    <tr>
-      <td class="body-md">{{ patient.phone }}</td>
-      <td class="body-md">{{ patient.nationalNo}}</td> 
-      <td class="body-md">{{ patient.fullname }}</td>
-      <td class="row gap-16">
-        <button class="btn primary icon">
-          <p class="label-md">اصدار كرت خدمة</p>
-        </button>
-        <button
-          class="btn primary icon"
-          [routerLink]="['edit/', patient.patientId]"
-        >
-          <img src="assets/icons/pencil-icon.svg" alt="تعديل" />
-        </button>
-        <button
-          class="btn danger icon"
-          (click)="onDeleteClick(patient)"
-        >
-          <img src="assets/icons/trash-icon.svg" alt="حذف" />
-        </button>
-      </td>
-    </tr>
-    }
-  </tbody> -->
+
 
   <tbody>
     <!-- ⭐ SHOW SKELETON ROWS WHILE LOADING -->
@@ -57,8 +32,8 @@
     patient) {
     <!--   -->
     <tr class="hover-row" (click)="OnShowPatient(patient.patientId)">
+      <td class="body-md">{{ patient.autoRegistrationNumber }}</td>
       <td class="body-md">{{ patient.phone }}</td>
-      <td class="body-md">{{ patient.nationalNo }}</td>
       <td class="body-md">{{ patient.fullname }}</td>
       <td class="row gap-16">
         <button class="btn primary small-btn" (click)="OnCreateTicket(patient)" stopPropagation

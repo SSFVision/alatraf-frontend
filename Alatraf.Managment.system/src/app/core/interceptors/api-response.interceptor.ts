@@ -13,7 +13,6 @@ import { catchError, map, of } from 'rxjs';
 import { handleException } from '../errors/helpers/handle-exception';
 import { handleErrorResponse } from '../errors/helpers/handle-error-response';
 
-
 function isAuthEndpoint(url: string): boolean {
   return (
     url.includes('/identity/token/generate') ||
@@ -22,32 +21,20 @@ function isAuthEndpoint(url: string): boolean {
   );
 }
 export const apiResponseInterceptor: HttpInterceptorFn = (req, next) => {
-  const toast = inject(ToastService);
- if (isAuthEndpoint(req.url)) {
+  // const toast = inject(ToastService);
+  if (isAuthEndpoint(req.url)) {
     return next(req);
   }
   return next(req).pipe(
     map((event: HttpEvent<any>) => {
       if (event instanceof HttpResponse) {
         const body = event.body;
-        // ---------------------------------------------------------
-        // 🔥 1. Handle Mock API Errors (In-Memory Web API)
-        // ---------------------------------------------------------
+        console.log('✅ Correct Response from backend', event);
 
-        if (body && body.isSuccess === false) {
-          if (body.errorMessage) {
-            toast.error(body.errorMessage);
-          }
-
-          // Do NOT wrap again — just return the ApiResult-like body
-          return event.clone({ body });
-        }
-
-        
-        const apiResult = ApiResult.success(event.body);
+        const apiResult = ApiResult.success(event.body, event.status);
         const successMsg = req.headers.get('X-Success-Toast');
         if (successMsg) {
-          toast.success(successMsg);
+          // toast.success(successMsg);
         }
 
         return event.clone({ body: apiResult });
@@ -56,16 +43,17 @@ export const apiResponseInterceptor: HttpInterceptorFn = (req, next) => {
     }),
 
     catchError((error: any) => {
+      error =new HttpErrorResponse(error);
+      console.log('⛔ error from backend ', error);
+
       let apiResult;
-      if (error instanceof HttpErrorResponse) {
+      if (error instanceof HttpErrorResponse && error.status !== 0) {
         apiResult = handleErrorResponse(error);
-        if (apiResult.errorMessage) {
-          toast.error(apiResult.errorMessage);
-        }
       } else {
+        console.log('error called here');
         apiResult = handleException(error);
         if (apiResult.errorMessage) {
-          toast.error(apiResult.errorMessage);
+          // toast.error(apiResult.errorMessage);
         }
       }
 
