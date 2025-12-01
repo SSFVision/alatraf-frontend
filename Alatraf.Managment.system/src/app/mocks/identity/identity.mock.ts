@@ -10,7 +10,10 @@ export const IDENTITY_USERS_MOCK: IdentityUserMock[] = [
     userName: 're',
     password: 're',
     roles: ['Reception'],
-    permissions: ['view_patient', 'add_patient', 'add_ticket'],
+    permissions: [
+      PERMISSIONS.PATIENTS.VIEW,
+      PERMISSIONS.PATIENTS.ADD,    
+    ],
   },
   {
     userId: 4,
@@ -27,8 +30,8 @@ export const IDENTITY_USERS_MOCK: IdentityUserMock[] = [
     permissions: [
       PERMISSIONS.DIAGNOSIS.INDUSTRIAL.VIEW,
       PERMISSIONS.DIAGNOSIS.THERAPY.VIEW,
-      'add_patient',
-      'add_ticket',
+      PERMISSIONS.PATIENTS.ADD,    
+      PERMISSIONS.TICKETS.ADD,    
     ],
   },
   {
@@ -37,12 +40,12 @@ export const IDENTITY_USERS_MOCK: IdentityUserMock[] = [
     password: 'wa',
     roles: ['Reception'],
     permissions: [
-      'view_patient',
-      'add_patient',
-      'delete_patient',
-      'update_patient',
-      'view_diagnosis',
-      'add_ticket',
+      PERMISSIONS.PATIENTS.VIEW,    
+      // PERMISSIONS.PATIENTS.ADD,    
+      // PERMISSIONS.PATIENTS.UPDATE,    
+      PERMISSIONS.PATIENTS.DELETE,    
+      PERMISSIONS.DIAGNOSIS.THERAPY.VIEW,    
+      PERMISSIONS.DIAGNOSIS.INDUSTRIAL.VIEW,    
     ],
   },
 ];

@@ -10,8 +10,6 @@
     </tr>
   </thead>
 
-
-
   <tbody>
     <!-- ⭐ SHOW SKELETON ROWS WHILE LOADING -->
     @if (pageLoader.isLoading()) { @for (i of skeletonRows; track i) {
@@ -36,19 +34,30 @@
       <td class="body-md">{{ patient.phone }}</td>
       <td class="body-md">{{ patient.fullname }}</td>
       <td class="row gap-16">
-        <button class="btn primary small-btn" (click)="OnCreateTicket(patient)" stopPropagation
-          *appHasPermission="permession.TICKETS.ADD">
+        <!-- *appHasPermission="permession.TICKETS.ADD" -->
+        <button
+          class="btn primary small-btn"
+          (click)="OnCreateTicket(patient)"
+          stopPropagation
+        >
           <p class="label-sm">اصدار تذكرة</p>
         </button>
 
         <!-- *appHasPermission="permession.PATIENTS.UPDATE" -->
-        <button class="btn primary icon" (click)="OnEditPatient(patient)" stopPropagation
-          >
+        <button
+          class="btn primary icon"
+          (click)="OnEditPatient(patient)"
+          stopPropagation
+        >
           <img src="assets/icons/pencil-icon.svg" alt="تعديل" />
         </button>
 
-        <button class="btn danger icon" (click)="onDeleteClick(patient)" stopPropagation
-          *appHasPermission="permession.PATIENTS.DELETE">
+        <!-- *appHasPermission="permession.PATIENTS.DELETE" -->
+        <button
+          class="btn danger icon"
+          (click)="onDeleteClick(patient)"
+          stopPropagation
+        >
           <img src="assets/icons/trash-icon.svg" alt="حذف" />
         </button>
       </td>
