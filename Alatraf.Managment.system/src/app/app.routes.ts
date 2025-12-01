@@ -29,16 +29,17 @@ export const APP_ROUTES: Routes = [
     canActivate: [AuthGuard],
     children: [
       {
-        path: AppRoutes.reception.root, // 'reception'
+        path: AppRoutes.reception.root, //
         loadChildren: () =>
           import('./features/Reception/registration.routes').then(
             (m) => m.ReceptionRoutes
           ),
       },
       {
-        path: AppRoutes.doctor.root, // ← 'doctor'
+        path: AppRoutes.diagnosis.root,
         loadChildren: () =>
-          import('./features/Doctor/doctor.routes').then((m) => m.DoctorRoutes),
+          import('./features/Diagnosis/diagnosis.routes').then(
+            (m) => m.DiagnosisRoutes),
       },
     ],
   },

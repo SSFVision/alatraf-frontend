@@ -52,8 +52,7 @@ export class PatientsListComponent {
 
   }
   OnShowPatient(patientId: number) {
-    if (this.uiLock.isLocked()) return;
-    this.uiLock.lock();
+    
 
     this.navReception.goToPatientsView(patientId);
   }

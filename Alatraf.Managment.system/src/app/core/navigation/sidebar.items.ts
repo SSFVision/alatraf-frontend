@@ -74,15 +74,30 @@ export const MENU_CONFIG: MenuCategory[] = [
     ],
   },
   {
-    category: 'التشخيصات',
-    CateRoute: AppRoutes.doctor.root,
+    category: 'قسم العلاج الطبيعي',
+    CateRoute: AppRoutes.diagnosis.root,
     items: [
       {
         label: 'إدارة التشخيصات',
         icon: 'assets/icons/user-icon-w.svg',
         activeIcon: 'assets/icons/user-icon-b.svg',
-        route: AppRoutes.doctor.diagnosis.root,
-        requiredPermissions: [PERMISSIONS.DIAGNOSIS.VIEW],
+        // route: AppRoutes.diagnosis.therapy.root,
+        route: `${AppRoutes.diagnosis.root}/${AppRoutes.diagnosis.therapy.root}`, 
+        requiredPermissions: [PERMISSIONS.DIAGNOSIS.THERAPY.VIEW],
+      },
+    ],
+  },
+
+  {
+    category: 'قسم الاطراف الصناعية ',
+    CateRoute: AppRoutes.diagnosis.root,
+    items: [
+      {
+        label: 'إنشاء وإدارة التشخيصات ',
+        icon: 'assets/icons/user-icon-w.svg',
+        activeIcon: 'assets/icons/user-icon-b.svg',
+        route:  `${AppRoutes.diagnosis.root}/${AppRoutes.diagnosis.industrial.root}`,
+        requiredPermissions: [PERMISSIONS.DIAGNOSIS.INDUSTRIAL.VIEW],
       },
     ],
   },

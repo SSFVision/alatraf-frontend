@@ -15,11 +15,21 @@ export const PERMISSIONS = {
   DELETE: 'delete_ticket',
   UPDATE: 'update_ticket',
 },
- DIAGNOSIS: {
-    VIEW: 'view_diagnosis',
-    ADD: 'add_diagnosis',
-    UPDATE: 'update_diagnosis',
-    DELETE: 'delete_diagnosis',
+DIAGNOSIS: {
+  THERAPY: {
+    VIEW: 'view_therapy_diagnosis',
+    ADD: 'add_therapy_diagnosis',
+    UPDATE: 'update_therapy_diagnosis',
+    DELETE: 'delete_therapy_diagnosis',
   },
+
+  INDUSTRIAL: {
+    VIEW: 'view_industrial_diagnosis',
+    ADD: 'add_industrial_diagnosis',
+    UPDATE: 'update_industrial_diagnosis',
+    DELETE: 'delete_industrial_diagnosis',
+  },
+},
+
 
 } as const;
