@@ -12,8 +12,8 @@ export class NavigationAuthFacade {
     this.router.navigate(Array.isArray(path) ? path : [path], extras);
   }
 
-  goToLogin(extras?: NavigationExtras): void {
-    this.go(AppRoutes.auth.login, extras);
+  goToUnauthorized(extras?: NavigationExtras): void {
+    this.go(AppRoutes.system.unauthorized, extras);
   }
 
   goToLogout(extras?: NavigationExtras): void {
@@ -25,6 +25,11 @@ export class NavigationAuthFacade {
       replaceUrl: true,
       queryParams: { reason: 'expired' },
     });
+  }
+
+
+  goToLogin(extras?: NavigationExtras): void {
+    this.go(AppRoutes.auth.login, extras);
   }
 
   private getHomeRouteForRole(role: AppUserRole): string {

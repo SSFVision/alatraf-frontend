@@ -41,6 +41,13 @@ export const APP_ROUTES: Routes = [
           import('./features/Diagnosis/diagnosis.routes').then(
             (m) => m.DiagnosisRoutes),
       },
+
+      {
+      path: AppRoutes.system.unauthorized,
+      loadComponent: () =>
+        import('./features/System/Pages/unauthorized/unauthorized.component')
+          .then(m => m.UnauthorizedComponent),
+    }
     ],
   },
 
