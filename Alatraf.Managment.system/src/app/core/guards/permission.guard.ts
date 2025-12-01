@@ -1,3 +1,4 @@
+import { UnauthorizedComponent } from './../../features/System/Pages/unauthorized/unauthorized.component';
 import { inject } from '@angular/core';
 import { CanActivateFn } from '@angular/router';
 import { AuthFacade } from '../auth/auth.facade';
@@ -24,8 +25,8 @@ export const PermissionGuard: CanActivateFn = (route) => {
     return true;
   }
 
-  // 3. User does not have permission → redirect safely
-  toast.error('لا تملك صلاحية الوصول إلى هذه الصفحة');
+  // i can use the toast service to show a message or Unauthorized page
+  // toast.error('لا تملك صلاحية الوصول إلى هذه الصفحة');
 
   navigation.goToUnauthorized({ replaceUrl: true });
 

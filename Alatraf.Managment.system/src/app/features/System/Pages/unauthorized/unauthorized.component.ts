@@ -11,6 +11,7 @@ import { NavigationAuthFacade } from '../../../../core/navigation/navigation-aut
 export class UnauthorizedComponent {
   private auth = inject(AuthFacade);
   private navigation = inject(NavigationAuthFacade);
+
   goHome() {
     const role = this.auth.getUser()?.roles?.[0] as any;
     this.navigation.goToRoleHome(role);
