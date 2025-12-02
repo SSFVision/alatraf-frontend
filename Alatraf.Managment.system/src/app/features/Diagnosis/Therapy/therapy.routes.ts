@@ -11,3 +11,5 @@ export const TherapyRoutes: Routes = [
       ).then((m) => m.TherapyDiagnosisWorkspaceComponent),
   },
 ];
+
+

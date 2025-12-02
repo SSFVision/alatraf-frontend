@@ -13,20 +13,17 @@ import { NavigationDiagnosisFacade } from '../../../../../core/navigation/naviga
   styleUrl: './therapy-waiting-list.component.css',
 })
 export class TherapyWaitingListComponent implements OnInit {
-
   selectedPatient = signal<any>(null);
   private patientsService = inject(PatientsFacade);
   patients = this.patientsService.patients;
-private navDiagnos=inject(NavigationDiagnosisFacade)
+  private navDiagnos = inject(NavigationDiagnosisFacade);
   ngOnInit() {
     this.patientsService.loadPatients();
   }
 
   selectPatient(patient: Patient) {
-    console.log('selected : ',patient);
+    console.log('selected : ', patient);
     this.selectedPatient.set(patient);
-this.navDiagnos.goToTherapyCreate(patient.patientId)
+    this.navDiagnos.goToTherapyCreate(patient.patientId);
   }
-
-  
 }

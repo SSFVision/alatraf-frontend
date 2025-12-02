@@ -3,6 +3,7 @@ import { AppUserRole } from '../../core/auth/models/app.user.roles.enum';
 import { PERMISSIONS } from '../../core/auth/models/permissions.map';
 import { PermissionGuard } from '../../core/guards/permission.guard';
 import { TherapyRoutes } from './Therapy/therapy.routes';
+import { IndustrialRoutes } from './Industrial/Industrial.routes';
 
 export const DiagnosisRoutes: Routes = [
   {
@@ -33,6 +34,7 @@ export const DiagnosisRoutes: Routes = [
           import(
             './Industrial/pages/industrial-waiting-list/industrial-waiting-list.component'
           ).then((m) => m.IndustrialWaitingListComponent),
+        children: IndustrialRoutes,
       },
     ],
   },
