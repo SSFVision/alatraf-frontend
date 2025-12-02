@@ -89,7 +89,7 @@ export const MENU_CONFIG: MenuCategory[] = [
   },
 
   {
-    category: 'قسم الاطراف الصناعية ',
+    category: 'قسم الأطراف الصناعية ',
     CateRoute: AppRoutes.diagnosis.root,
     items: [
       {
