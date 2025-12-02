@@ -79,24 +79,24 @@ export const MENU_CONFIG: MenuCategory[] = [
     items: [
       {
         label: 'إدارة التشخيصات',
-        icon: 'assets/icons/user-icon-w.svg',
-        activeIcon: 'assets/icons/user-icon-b.svg',
+        icon: 'assets/icons/dumbbell-w.svg',
+        activeIcon: 'assets/icons/dumbbell-b.svg',
         // route: AppRoutes.diagnosis.therapy.root,
-        route: `${AppRoutes.diagnosis.root}/${AppRoutes.diagnosis.therapy.root}`, 
+        route: `${AppRoutes.diagnosis.root}/${AppRoutes.diagnosis.therapy.root}`,
         requiredPermissions: [PERMISSIONS.DIAGNOSIS.THERAPY.VIEW],
       },
     ],
   },
 
   {
-    category: 'قسم الاطراف الصناعية ',
+    category: 'قسم الأطراف الصناعية ',
     CateRoute: AppRoutes.diagnosis.root,
     items: [
       {
-        label: 'إنشاء وإدارة التشخيصات ',
-        icon: 'assets/icons/user-icon-w.svg',
-        activeIcon: 'assets/icons/user-icon-b.svg',
-        route:  `${AppRoutes.diagnosis.root}/${AppRoutes.diagnosis.industrial.root}`,
+        label: 'إدارة التشخيصات',
+        icon: 'assets/icons/prosthetic-foot-w.svg',
+        activeIcon: 'assets/icons/prosthetic-foot-b.svg',
+        route: `${AppRoutes.diagnosis.root}/${AppRoutes.diagnosis.industrial.root}`,
         requiredPermissions: [PERMISSIONS.DIAGNOSIS.INDUSTRIAL.VIEW],
       },
     ],
