@@ -1,6 +1,10 @@
 <main class="padding-80 column gap-32">
   <div class="row space-between">
-    <button class="btn primary label-lg big-btn" (click)="onAddPatient()">
+    <button
+      class="btn primary label-lg big-btn"
+      (click)="onAddPatient()"
+      >
+      <!-- *appHasPermission="permession.PATIENTS.ADD" -->
       إضافة مريض
     </button>
     <button class="btn primary label-lg big-btn">إستشارة طبيبة</button>
@@ -9,17 +13,35 @@
     <h1 class="title-lg">البحث عن مريض</h1>
 
     <div class="search-box">
-      <img src="assets/icons/search-icon.svg" class="search-icon" alt="search" />
-      <input #searchBox type="text" placeholder="بحث: اسم المريض أو الرقم" (input)="onSearch(searchBox.value)" />
+      <img
+        src="assets/icons/search-icon.svg"
+        class="search-icon"
+        alt="search"
+      />
+      <input
+        #searchBox
+        type="text"
+        placeholder="بحث: اسم المريض أو الرقم"
+        (input)="onSearch(searchBox.value)"
+      />
     </div>
     @if (patients().length>0) {
     <div class="max-hight-460">
-      <app-patients-list [patients]="patients()" (deletePatient)="onDeletePatient($event)">
-        ></app-patients-list>
+      <app-patients-list
+        [patients]="patients()"
+        (deletePatient)="onDeletePatient($event)"
+      >
+        ></app-patients-list
+      >
     </div>
     } @else {
-    <img src="assets/images/amico.svg" width="439" height="355.98" alt="البحث عن مريض"
-      class="center-content padding-24" />
+    <img
+      src="assets/images/amico.svg"
+      width="439"
+      height="355.98"
+      alt="البحث عن مريض"
+      class="center-content padding-24"
+    />
 
     <p class="title-md primary-color-50 center-content">
       ابحث عن المريض بواسطة اسمه

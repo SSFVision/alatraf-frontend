@@ -1,0 +1,30 @@
+@if (!loading && (!patients || patients.length === 0)) {
+<div class="empty-state">
+  <img src="assets/images/amico.svg" alt="no patients" class="empty-icon" />
+  <p class="body-md primary-color-50">لا يوجد مرضى في قائمة الانتظار حالياً</p>
+</div>
+} @for (patient of patients; track $index) {
+
+<div
+  class="card primary-card cursor-pointer"
+  [class.selected]="selectedPatientId() === patient.patientId"
+  (click)="onSelect(patient)"
+>
+  <p class="body-md">{{ patient.fullname }}</p>
+
+  <p class="body-sm primary-color-50">
+    الرقم المريض : {{ patient.autoRegistrationNumber }}
+  </p>
+
+  <div class="row gap-16">
+    <p class="body-sm primary-color-50">
+      {{ patient.gender ? "ذكر" : "أنثى" }}
+    </p>
+
+    <p class="body-sm primary-color-50">
+      {{ getAgeFromBirthdate(patient.birthdate) }} سنة
+    </p>
+  </div>
+</div>
+
+}

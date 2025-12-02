@@ -12,8 +12,8 @@ export class NavigationAuthFacade {
     this.router.navigate(Array.isArray(path) ? path : [path], extras);
   }
 
-  goToLogin(extras?: NavigationExtras): void {
-    this.go(AppRoutes.auth.login, extras);
+  goToUnauthorized(extras?: NavigationExtras): void {
+    this.go(AppRoutes.system.unauthorized, extras);
   }
 
   goToLogout(extras?: NavigationExtras): void {
@@ -27,13 +27,20 @@ export class NavigationAuthFacade {
     });
   }
 
+
+  goToLogin(extras?: NavigationExtras): void {
+    this.go(AppRoutes.auth.login, extras);
+  }
+
   private getHomeRouteForRole(role: AppUserRole): string {
     switch (role) {
       case 'Reception':
         return AppRoutes.reception.root;
 
-      case 'Doctor':
-        return AppRoutes.doctor.root;
+      case 'Doctor_Therapy':
+        return `${AppRoutes.diagnosis.root}/${AppRoutes.diagnosis.therapy.root}`;
+        case 'Doctor_Industrial':
+        return `${AppRoutes.diagnosis.root}/${AppRoutes.diagnosis.industrial.root}`;
 
       case 'Admin':
         return AppRoutes.admin.dashboard;

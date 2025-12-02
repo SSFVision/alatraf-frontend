@@ -16,7 +16,7 @@ import { UiLockService } from '../../../../../core/services/ui-lock.service';
   imports: [
     SkeletonComponent,
     StopPropagationDirective,
-    HasPermissionDirective,
+    // HasPermissionDirective,
   ],
   standalone: true,
   templateUrl: './patients.list.component.html',
@@ -33,27 +33,27 @@ export class PatientsListComponent {
 
   deletePatient = output<Patient>();
   onDeleteClick(patient: Patient) {
-    if (this.uiLock.isLocked()) return;
-    this.uiLock.lock();
+    // if (this.uiLock.isLocked()) return;
+    // this.uiLock.lock();
+    
     this.deletePatient.emit(patient);
   }
 
   OnEditPatient(patient: Patient) {
-    if (this.uiLock.isLocked()) return;
-    this.uiLock.lock();
+    // if (this.uiLock.isLocked()) return;
+    // this.uiLock.lock();
 
     this.navReception.goToPatientsEdit(patient.patientId);
   }
   OnCreateTicket(patient: Patient) {
-    if (this.uiLock.isLocked()) return;
-    this.uiLock.lock();
+    // if (this.uiLock.isLocked()) return;
+    // this.uiLock.lock();
 
     this.navReception.goToTicketsCreate(patient.patientId);
 
   }
   OnShowPatient(patientId: number) {
-    if (this.uiLock.isLocked()) return;
-    this.uiLock.lock();
+    
 
     this.navReception.goToPatientsView(patientId);
   }

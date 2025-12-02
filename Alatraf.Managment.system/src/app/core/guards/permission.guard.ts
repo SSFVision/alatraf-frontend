@@ -1,11 +1,14 @@
+import { UnauthorizedComponent } from './../../features/System/Pages/unauthorized/unauthorized.component';
 import { inject } from '@angular/core';
 import { CanActivateFn } from '@angular/router';
 import { AuthFacade } from '../auth/auth.facade';
 import { NavigationAuthFacade } from '../navigation/navigation-auth.facade';
+import { ToastService } from '../services/toast.service';
 
 export const PermissionGuard: CanActivateFn = (route) => {
   const auth = inject(AuthFacade);
   const navigation = inject(NavigationAuthFacade);
+  const toast = inject(ToastService);
 
   // 1. Required permission from route metadata
   const requiredPermission = route.data?.['permission'] as string;
@@ -22,16 +25,10 @@ export const PermissionGuard: CanActivateFn = (route) => {
     return true;
   }
 
-  // 3. User does not have permission → redirect safely
-  const user = auth.getUser();
-  const role = user?.roles?.[0] as any;
+  // i can use the toast service to show a message or Unauthorized page
+  // toast.error('لا تملك صلاحية الوصول إلى هذه الصفحة');
 
-  if (role) {
-    console.log('Redirect To the Login page if not have permission');
-    navigation.goToLogin({ replaceUrl: true });
-  } else {
-    navigation.goToLogin({ replaceUrl: true });
-  }
+  navigation.goToUnauthorized({ replaceUrl: true });
 
   return false;
 };

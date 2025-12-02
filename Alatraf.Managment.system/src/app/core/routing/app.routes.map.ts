@@ -28,13 +28,31 @@ export const AppRoutes = {
     },
   },
 
-  doctor: {
-    root: 'doctor',
-    diagnosis: {
-      root: 'doctor/diagnosis',
-      create: (patientId: number | string) =>
-        `doctor/diagnosis/create/${patientId}`,
-      view: (id: number | string) => `doctor/diagnosis/view/${id}`,
+  // doctor: {
+  //   root: 'doctor',
+  //   diagnosis: {
+  //     root: 'doctor/diagnosis',
+  //     create: (patientId: number | string) =>
+  //       `doctor/diagnosis/create/${patientId}`,
+  //     view: (id: number | string) => `doctor/diagnosis/view/${id}`,
+  //   },
+  // },
+
+  diagnosis: {
+    root: 'diagnosis',
+
+    therapy: {
+      root: 'therapy',
+      create: (patientId: number | string) => `therapy/create/${patientId}`,
+      view: (diagnosisId: number | string) => `therapy/view/${diagnosisId}`,
+      edit: (diagnosisId: number | string) => `therapy/edit/${diagnosisId}`,
+    },
+
+    industrial: {
+      root: 'industrial',
+      create: (patientId: number | string) => `industrial/create/${patientId}`,
+      view: (diagnosisId: number | string) => `industrial/view/${diagnosisId}`,
+      edit: (diagnosisId: number | string) => `industrial/edit/${diagnosisId}`,
     },
   },
   admin: {

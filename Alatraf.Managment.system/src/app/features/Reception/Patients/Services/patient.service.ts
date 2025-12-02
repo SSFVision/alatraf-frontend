@@ -38,6 +38,7 @@ export class PatientService extends BaseApiService {
   }
 
   getPatientById(id: number): Observable<ApiResult<Patient>> {
+    
     return this.get<Patient>(`${this.endpoint}/${id}`);
   }
 
