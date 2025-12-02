@@ -1,5 +1,3 @@
-
-
 <main class="padding-32 row gap-16 padding-24">
   <div class="box max-width-324 culumn gap-24 max-hight-800">
     <div class="row space-between">
@@ -23,11 +21,14 @@
       <button class="filter-btn">عظام</button>
     </div>
 
-    <div class="max-hight-712 column gap-16">
-      <app-patient-card></app-patient-card>
-    </div>
+    <app-patient-card
+      class="max-hight-712 column gap-16"
+      [patients]="patients()"
+      (select)="selectPatient($event)"
+    ></app-patient-card>
   </div>
  
+
   @if (selectedPatient()) {
 
   <router-outlet></router-outlet>

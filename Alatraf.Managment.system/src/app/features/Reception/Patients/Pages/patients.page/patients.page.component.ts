@@ -17,7 +17,7 @@ import { ToastService } from '../../../../../core/services/toast.service';
     PatientsListComponent,
     RouterOutlet,
     FormsModule,
-    HasPermissionDirective,
+    // HasPermissionDirective,
   ],
   templateUrl: './patients.page.component.html',
   styleUrl: './patients.page.component.css',

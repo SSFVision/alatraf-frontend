@@ -11,10 +11,11 @@ export class PatientCardComponent {
   @Input() patients!: Patient[];
   @Output() select = new EventEmitter<Patient>();
   selectedPatientId = signal<number | null>(null);
-@Input() loading = false;
+  @Input() loading = false;
 
   onSelect(patient: Patient): void {
     this.selectedPatientId.set(patient.patientId); // you must have 'id' in your model
+    console.log("selected patient id in card:",this.selectedPatientId());
     this.select.emit(patient);
   }
 
