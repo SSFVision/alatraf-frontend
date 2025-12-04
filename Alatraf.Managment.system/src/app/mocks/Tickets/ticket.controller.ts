@@ -270,12 +270,17 @@ export class TicketController {
 // ---------------------------------------------------
 // WAITING PATIENTS (SEARCH ONLY - RETURNS WaitingPatientDto[] ONLY)
 // ---------------------------------------------------
+// ---------------------------------------------------
+// WAITING PATIENTS (SEARCH ONLY - RETURNS WaitingPatientDto[] ONLY)
+// ---------------------------------------------------
 static getWaitingPatients(reqInfo: RequestInfo) {
   try {
     const req = reqInfo.req as HttpRequest<any>;
     const body = req.body as { diagnosisType: DiagnosisType; searchTerm?: string };
 
-    // Validate diagnosisType
+    // -----------------------------
+    // VALIDATION
+    // -----------------------------
     if (!body || !body.diagnosisType) {
       return this.validationError(reqInfo, {
         diagnosisType: ['diagnosisType is required.'],
@@ -286,10 +291,14 @@ static getWaitingPatients(reqInfo: RequestInfo) {
 
     const tickets = reqInfo.collection as TicketDto[];
 
-    // Only NEW tickets are considered waiting
+    // -----------------------------
+    // LOAD ONLY NEW TICKETS
+    // -----------------------------
     let waiting = tickets.filter(t => t.status === TicketStatus.New);
 
-    // SEARCH ONLY (no filtering by department)
+    // -----------------------------
+    // SEARCH FILTER
+    // -----------------------------
     if (search !== '') {
       waiting = waiting.filter(t => {
         const p = t.patient;
@@ -303,11 +312,16 @@ static getWaitingPatients(reqInfo: RequestInfo) {
       });
     }
 
+    // -----------------------------
+    // RETURN ERROR IF EMPTY
+    // -----------------------------
     if (waiting.length === 0) {
       return this.notFound(reqInfo, 'لا يوجد مرضى انتظار حسب نتائج البحث.');
     }
 
-    // Map to WaitingPatientDto[]
+    // -----------------------------
+    // MAP TO WaitingPatientDto[]
+    // -----------------------------
     const result = waiting.map(t => ({
       TicketId: t.id,
       PatientId: t.patient!.patientId,
@@ -319,13 +333,13 @@ static getWaitingPatients(reqInfo: RequestInfo) {
 
     return reqInfo.utils.createResponse$(() => ({
       status: 200,
-      body: result, // 🔥 ONLY WaitingPatientDto[]
+      body: result, // ALWAYS WaitingPatientDto[]
     }));
-
   } catch (error) {
-    return this.serverError(reqInfo, 'Failed to load waiting patients.');
+    return this.serverError(reqInfo, ' Failed to load waiting patients.');
   }
 }
+
 
 
   // ---------------------------------------------------

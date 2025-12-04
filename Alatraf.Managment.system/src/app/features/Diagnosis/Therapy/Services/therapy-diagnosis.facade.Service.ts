@@ -3,56 +3,55 @@ import { map, tap } from 'rxjs/operators';
 
 import { BaseFacade } from '../../../../core/utils/facades/base-facade';
 import { ApiResult } from '../../../../core/models/ApiResult';
+
 import { TherapyDiagnosisService } from './therapy-diagnosis.service';
 import { SearchManager } from '../../../../core/utils/search-manager';
+
 import { WaitingPatientDto } from '../../Shared/Models/WaitingPatientDto';
-import { TherapyDepartment } from '../Models/therapy-department.enum';
-import { TherapyWaitingFilterDto } from '../Models/TherapyWaitingFilterDto ';
+import { CreateTherapyCardRequest } from '../Models/create-therapy-card.request';
+import { TherapyDiagnosisDto } from '../Models/therapy-diagnosis.dto';
 
 
 @Injectable({
   providedIn: 'root',
 })
 export class TherapyDiagnosisFacade extends BaseFacade {
+
   private therapyService = inject(TherapyDiagnosisService);
 
   private _waitingPatients = signal<WaitingPatientDto[]>([]);
   waitingPatients = this._waitingPatients.asReadonly();
 
-  private _filters = signal<TherapyWaitingFilterDto>({
+  private _selectedPatient = signal<WaitingPatientDto | null>(null);
+  selectedPatient = this._selectedPatient.asReadonly();
+
+  private _filters = signal<{ diagnosisType: 'therapy'; searchTerm: string }>({
+    diagnosisType: 'therapy',
     searchTerm: '',
-    department: TherapyDepartment.All,
   });
   filters = this._filters.asReadonly();
 
-  private _selectedWaitingPatient = signal<WaitingPatientDto | null>(null);
-  selectedWaitingPatient = this._selectedWaitingPatient.asReadonly();
-
   isLoadingWaitingList = signal<boolean>(false);
-
   formValidationErrors = signal<Record<string, string[]>>({});
+  createdDiagnosis = signal<TherapyDiagnosisDto | null>(null);
 
-
+  /** -----------------------------
+   * SEARCH MANAGER
+   * ------------------------------*/
   private searchManager = new SearchManager<WaitingPatientDto[]>(
     (term: string) =>
       this.therapyService
         .getWaitingPatients({
-          ...this._filters(),
+          diagnosisType: 'therapy',
           searchTerm: term,
         })
         .pipe(
           tap((res: ApiResult<WaitingPatientDto[]>) => {
-            if (!res.isSuccess) {
-              this.handleSearchError(res);
-            }
+            if (!res.isSuccess) this.handleSearchError(res);
           }),
-          map((res: ApiResult<WaitingPatientDto[]>) =>
-            res.isSuccess && res.data ? res.data : []
-          )
+          map((res) => (res.isSuccess && res.data ? res.data : []))
         ),
-
-    null, // no cache for now
-
+    null,
     (data) => this._waitingPatients.set(data)
   );
 
@@ -60,8 +59,13 @@ export class TherapyDiagnosisFacade extends BaseFacade {
     super();
   }
 
+  /** -----------------------------
+   * LOAD WAITING PATIENTS
+   * ------------------------------*/
   loadWaitingPatients(): void {
+    console.log("Loading waiting patients...");
     this.isLoadingWaitingList.set(true);
+
     this.therapyService
       .getWaitingPatients(this._filters())
       .pipe(
@@ -80,51 +84,61 @@ export class TherapyDiagnosisFacade extends BaseFacade {
       });
   }
 
-  /** ---------------------------
+  /** -----------------------------
    * SEARCH
-   * ---------------------------- */
+   * ------------------------------*/
   search(term: string): void {
     this._filters.update((f) => ({ ...f, searchTerm: term }));
     this.searchManager.search(term);
   }
 
-  /** ---------------------------
-   * FILTER BY DEPARTMENT
-   * ---------------------------- */
-  setDepartment(dept: TherapyDepartment): void {
-    this._filters.update((f) => ({ ...f, department: dept }));
-    this.loadWaitingPatients(); // refresh list
-  }
-
-  /** ---------------------------
-   * SELECT PATIENT
-   * ---------------------------- */
+  /** -----------------------------
+   * SELECT WAITING PATIENT
+   * ------------------------------*/
   selectWaitingPatient(patient: WaitingPatientDto | null): void {
-    this._selectedWaitingPatient.set(patient);
+    this._selectedPatient.set(patient);
   }
 
-  /** ---------------------------
+  /** -----------------------------
+   * CREATE THERAPY DIAGNOSIS
+   * ------------------------------*/
+  createTherapyDiagnosis(dto: CreateTherapyCardRequest) {
+    return this.handleCreateOrUpdate(
+      this.therapyService.createTherapyDiagnosis(dto),
+      {
+        successMessage: 'تم إنشاء التشخيص بنجاح',
+        defaultErrorMessage: 'فشل إنشاء التشخيص. حاول لاحقاً.',
+      }
+    ).pipe(
+      tap((res) => {
+        if (res.success && res.data) {
+          this.createdDiagnosis.set(res.data);
+          this.formValidationErrors.set({});
+        } else if (res.validationErrors) {
+          this.formValidationErrors.set(res.validationErrors);
+        }
+      })
+    );
+  }
+
+  /** -----------------------------
    * ERROR HANDLERS
-   * ---------------------------- */
+   * ------------------------------*/
   private handleLoadWaitingPatientsError(result: ApiResult<any>) {
     const err = this.extractError(result);
-
     if (err.type === 'validation' || err.type === 'business') {
       this.toast.error(err.message);
-      return;
+    } else {
+      this.toast.error('تعذر تحميل قائمة المرضى المنتظرين.');
     }
-
-    this.toast.error('تعذر تحميل قائمة المرضى المنتظرين. يرجى المحاولة لاحقاً.');
   }
 
   private handleSearchError(result: ApiResult<any>) {
     const err = this.extractError(result);
-
     if (err.type === 'validation' || err.type === 'business') {
       this.toast.info(err.message);
-      return;
+    } else {
+      this.toast.error('حدث خطأ أثناء تنفيذ عملية البحث.');
     }
-
-    this.toast.error('حدث خطأ أثناء البحث عن المرضى المنتظرين.');
   }
 }

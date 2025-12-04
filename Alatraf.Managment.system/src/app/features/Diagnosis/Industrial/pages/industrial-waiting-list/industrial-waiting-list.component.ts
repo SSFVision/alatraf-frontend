@@ -7,7 +7,7 @@ import { PatientsFacade } from '../../../../Reception/Patients/Services/patients
 
 @Component({
   selector: 'app-industrial-waiting-list',
-  imports: [PatientCardComponent, RouterOutlet],
+  imports: [RouterOutlet, PatientCardComponent],
   templateUrl: './industrial-waiting-list.component.html',
   styleUrl: './industrial-waiting-list.component.css',
 })

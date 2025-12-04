@@ -9,6 +9,7 @@ import {
   signal,
 } from '@angular/core';
 import { CalcAgeFromBirthdateHelper } from '../../Util/patient-helpers';
+import { WaitingPatientDto } from '../../Models/WaitingPatientDto';
 
 @Component({
   selector: 'app-waiting-patient-card',

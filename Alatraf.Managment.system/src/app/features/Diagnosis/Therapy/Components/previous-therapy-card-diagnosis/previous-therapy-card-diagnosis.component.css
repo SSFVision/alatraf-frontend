@@ -1,0 +1,32 @@
+/* Scroll container */
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
+  padding-bottom: 8px;
+}
+
+/* Minimum width to avoid cramped text */
+.table-wrapper table {
+  min-width: 1200px; /* You can adjust this */
+}
+
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 12px;
+  color: white;
+  font-size: 12px;
+  display: inline-block;
+}
+
+/* Colors for status badges */
+.completed { background-color: #4CAF50; }
+.active    { background-color: #2196F3; }
+.stopped   { background-color: #FFC107; }
+.cancelled { background-color: #F44336; }
+
+.notes {
+  font-size: 11px;
+  color: #777;
+  margin-top: 4px;
+}

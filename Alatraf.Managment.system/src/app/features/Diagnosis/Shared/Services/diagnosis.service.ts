@@ -9,19 +9,19 @@ import { InjuryDto } from '../Models/injury.dto';
 })
 export class DiagnosisService extends BaseApiService {
 
+ 
+  /** Load injury reasons */
   getInjuryReasons(): Observable<ApiResult<InjuryDto[]>> {
-    return this.get<InjuryDto[]>('/lookup/injury-reasons');
-    // TODO: replace endpoint later
+    return this.get<InjuryDto[]>('/injuries/reasons');
   }
 
+  /** Load injury types */
   getInjuryTypes(): Observable<ApiResult<InjuryDto[]>> {
-    return this.get<InjuryDto[]>('/lookup/injury-types');
-    // TODO: replace endpoint later
+    return this.get<InjuryDto[]>('/injuries/types');
   }
 
-
+  /** Load injury sides */
   getInjurySides(): Observable<ApiResult<InjuryDto[]>> {
-    return this.get<InjuryDto[]>('/lookup/injury-sides');
-    // TODO: replace endpoint later
+    return this.get<InjuryDto[]>('/injuries/sides');
   }
 }
