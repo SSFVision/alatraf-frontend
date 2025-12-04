@@ -35,7 +35,7 @@
 
 } @if (viewMode() === 'history') {
 <app-previous-therapy-card-diagnosis
-  [items]="MOCK_THERAPY_CARD_HISTORY"
+  [items]="pevDiagnosis"
   (viewDetails)="onViewHistoryCard($event)"
 ></app-previous-therapy-card-diagnosis>
 } }
