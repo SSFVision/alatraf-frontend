@@ -1,323 +1,241 @@
-<div class="box max-hight-800 gap-16">
-  <div class="row gap-16 sticky">
-    <h1
-      class="title-lg cursor-pointer"
-      (click)="switchToAdd()"
-      [class.primary-color-50]="viewMode() !== 'add'"
-    >
-      إضافة تشخيص
-    </h1>
+<!-- <div class="row gap-16 sticky">
+  <h1
+    class="title-lg cursor-pointer"
+    (click)="switchToAdd()"
+    [class.primary-color-50]="viewMode() !== 'add'"
+  >
+    إضافة تشخيص
+  </h1>
 
-    <h1
-      [class.primary-color-50]="viewMode() !== 'history'"
-      class="title-lg cursor-pointer"
-      (click)="switchToHistory()"
-    >
-      التشخيصات السابقة
-    </h1>
+  <h1
+    [class.primary-color-50]="viewMode() !== 'history'"
+    class="title-lg cursor-pointer"
+    (click)="switchToHistory()"
+  >
+    التشخيصات السابقة
+  </h1>
+</div>
+
+@if (patient()) {
+
+<app-header-patient-info [patient]="patient()!"></app-header-patient-info>
+} @else if (!patient()) {
+  <div class=" flex-center">
+
+    <span class="loader "></span>
   </div>
+  <p class="flex-center">جاري تحميل بيانات المريض...</p>
+} 
+@if(viewMode() === 'add') {
 
+<form class="padding-LR-24 column gap-16">
   <div class="width-100">
-    <p class="title-md">بيانات المريض</p>
+    <p class="title-md">بيانات التشخيص</p>
 
     <span class="home-line"></span>
   </div>
 
   <div class="row flex-center">
-    <label class="label-lg"> الاسم </label>
+    <label class="label-lg"> جهة الاصابة </label>
+    <select class="label-lg">
+      <option value=""></option>
+      <option value="علوي ايمن ">علوي ايمن</option>
+      <option value=" علوي ايسر">علوي ايسر</option>
+      <option value=" سفلي ايمن">سفلي ايمن</option>
+      <option value=" سفلي ايسر">سفلي ايسر</option>
+    </select>
+
+    <label class="label-lg"> نوع الإصابة </label>
+    <select class="label-lg">
+      <option value=""></option>
+      <option value="مرفق">مرفق</option>
+      <option value="ساعد">ساعد</option>
+    </select>
+  </div>
+
+  <div class="row flex-center">
+    <label class="label-lg"> تاريخ الإصابة </label>
+    <input class="label-lg" type="date" placeholder="" />
+
+    <label class="label-lg"> عمر الإصابة </label>
     <input class="label-lg" type="text" placeholder="" />
   </div>
 
   <div class="row flex-center">
-    <label class="label-lg"> رقم المريض </label>
-    <input class="label-lg" type="text" placeholder="" />
-
-    <label class="label-lg"> الجنس </label>
-    <input class="label-lg" type="text" placeholder="" />
-
-    <label class="label-lg"> العمر </label>
-    <input class="label-lg" type="text" placeholder="" />
+    <label class="label-lg"> القسم </label>
+    <select class="label-lg">
+      <option value=""></option>
+      <option value="العلاج الطبيعي">العلاج الطبيعي</option>
+      <option value="الأطراف الصناعية">الأطراف الصناعية</option>
+    </select>
   </div>
 
+  <div class="roe flex-center width-100">
+    <label class="label-lg"> التشخيص </label>
+    <textarea rows="2" placeholder=""></textarea>
+  </div>
+
+  <div class="roe flex-center width-100">
+    <label class="label-lg"> تاريخ الانتهاء </label>
+    <input class="label-lg" type="date" placeholder="" />
+    <label class="label-lg"> المدة </label>
+    <div class="row flex-center">
+      <input class="label-lg" type="text" placeholder="" />
+      <label class="label-lg"> يوم </label>
+    </div>
+  </div>
   <div class="width-100">
-    <span class="home-line"></span>
-  </div>
-  @if(viewMode() === 'add') {
-
-  <form class="padding-LR-24 column gap-16">
-    <!-- <div class="width-100">
-      <p class="title-md">بيانات المريض</p>
-
-      <span class="home-line"></span>
-    </div>
-
-    <div class="row flex-center">
-      <label class="label-lg"> الاسم </label>
-      <input class="label-lg" type="text" placeholder="" />
-    </div>
-
-    <div class="row flex-center">
-      <label class="label-lg"> رقم المريض </label>
-      <input class="label-lg" type="text" placeholder="" />
-
-      <label class="label-lg"> الجنس </label>
-      <input class="label-lg" type="text" placeholder="" />
-
-      <label class="label-lg"> العمر </label>
-      <input class="label-lg" type="text" placeholder="" />
-    </div> -->
-
-    <div class="width-100">
-      <p class="title-md">بيانات التشخيص</p>
-
-      <span class="home-line"></span>
-    </div>
-
-    <div class="row flex-center">
-      <label class="label-lg"> جهة الاصابة </label>
-      <select class="label-lg">
-        <option value=""></option>
-        <option value="علوي ايمن ">علوي ايمن</option>
-        <option value=" علوي ايسر">علوي ايسر</option>
-        <option value=" سفلي ايمن">سفلي ايمن</option>
-        <option value=" سفلي ايسر">سفلي ايسر</option>
-      </select>
-
-      <label class="label-lg"> نوع الإصابة </label>
-      <select class="label-lg">
-        <option value=""></option>
-        <option value="مرفق">مرفق</option>
-        <option value="ساعد">ساعد</option>
-      </select>
-    </div>
-
-    <div class="row flex-center">
-      <label class="label-lg"> تاريخ الإصابة </label>
-      <input class="label-lg" type="date" placeholder="" />
-
-      <label class="label-lg"> عمر الإصابة </label>
-      <input class="label-lg" type="text" placeholder="" />
-    </div>
-
-    <div class="row flex-center">
-      <label class="label-lg"> القسم </label>
-      <select class="label-lg">
-        <option value=""></option>
-        <option value="العلاج الطبيعي">العلاج الطبيعي</option>
-        <option value="الأطراف الصناعية">الأطراف الصناعية</option>
-      </select>
-    </div>
-
-    <div class="roe flex-center width-100">
-      <label class="label-lg"> التشخيص </label>
-      <textarea rows="2" placeholder=""></textarea>
-    </div>
-
-    <div class="roe flex-center width-100">
-      <label class="label-lg"> تاريخ الانتهاء </label>
-      <input class="label-lg" type="date" placeholder="" />
-      <label class="label-lg"> المدة </label>
-      <div class="row flex-center">
-        <input class="label-lg" type="text" placeholder="" />
-        <label class="label-lg"> يوم </label>
-      </div>
-    </div>
-    <!-- علاج طبيعي -->
-    <div class="width-100">
-      <p class="title-md">البرامج العلاجية</p>
-
-      <span class="home-line"></span>
-    </div>
-    <table class="no-shadow">
-      <thead>
-        <tr>
-          <th class="label-lg">اسم البرنامج</th>
-          <th class="label-lg">الزمن</th>
-          <th class="label-lg">الملاحظات</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <select class="label-lg">
-              <option value=""></option>
-              <option value=" ">تدليك</option>
-              <option value=" ">كهرباء</option>
-            </select>
-          </td>
-          <td><input class="label-lg" type="number" placeholder="" /></td>
-          <td><input class="label-lg" type="text" placeholder="" /></td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="flex-center">
-      <button class="btn primary label-md">حفظ</button>
-    </div>
-  </form>
-
-  } @if (viewMode() === 'history') {
-
-  <!-- <div class="width-100">
-    <p class="title-md">بيانات المريض</p>
+    <p class="title-md">البرامج العلاجية</p>
 
     <span class="home-line"></span>
   </div>
-
-  <div class="row flex-center">
-    <label class="label-lg"> الاسم </label>
-    <input class="label-lg" type="text" placeholder="" />
-  </div>
-
-  <div class="row flex-center">
-    <label class="label-lg"> رقم المريض </label>
-    <input class="label-lg" type="text" placeholder="" />
-
-    <label class="label-lg"> الجنس </label>
-    <input class="label-lg" type="text" placeholder="" />
-
-    <label class="label-lg"> العمر </label>
-    <input class="label-lg" type="text" placeholder="" />
-  </div>
-
-  <div class="width-100">
-    <span class="home-line"></span>
-  </div> -->
-
-  <div class="width-100">
-    <p class="title-md">التشخيصات السابقة</p>
-
-    <span class="home-line"></span>
-  </div>
-  <table>
+  <table class="no-shadow">
     <thead>
-      <th class="title-sm">رقم الكرت</th>
-      <th class="title-sm">التاريخ</th>
-      <th class="title-sm">البرامح العلاجية</th>
-      <th class="buttons"></th>
+      <tr>
+        <th class="label-lg">اسم البرنامج</th>
+        <th class="label-lg">الزمن</th>
+        <th class="label-lg">الملاحظات</th>
+      </tr>
     </thead>
-
     <tbody>
-      <!-- 1 -->
       <tr>
-        <td class="body-md" rowspan="2">784512369</td>
-        <td class="body-md" rowspan="2">05-02-2023</td>
-        <td class="body-md">تدليك (3)</td>
-        <td rowspan="2">
-          <button class="btn primary icon">
-            <img src="../../assets/icons/eye-icon.svg" alt="عرض التفاصيل" />
-          </button>
+        <td>
+          <select class="label-lg">
+            <option value=""></option>
+            <option value=" ">تدليك</option>
+            <option value=" ">كهرباء</option>
+          </select>
         </td>
-      </tr>
-      <tr>
-        <td class="body-md">كهرباء</td>
-      </tr>
-
-      <!-- 2 -->
-      <tr>
-        <td class="body-md" rowspan="2">995412887</td>
-        <td class="body-md" rowspan="2">18-03-2023</td>
-        <td class="body-md">تدليك (3)</td>
-        <td rowspan="2">
-          <button class="btn primary icon">
-            <img src="../../assets/icons/eye-icon.svg" alt="عرض التفاصيل" />
-          </button>
-        </td>
-      </tr>
-      <tr>
-        <td class="body-md">كهرباء</td>
-      </tr>
-
-      <!-- 3 -->
-      <tr>
-        <td class="body-md" rowspan="2">664187223</td>
-        <td class="body-md" rowspan="2">09-04-2023</td>
-        <td class="body-md">تدليك (2)</td>
-        <td rowspan="2">
-          <button class="btn primary icon">
-            <img src="../../assets/icons/eye-icon.svg" alt="عرض التفاصيل" />
-          </button>
-        </td>
-      </tr>
-      <tr>
-        <td class="body-md">كهرباء</td>
-      </tr>
-
-      <!-- 4 -->
-      <tr>
-        <td class="body-md" rowspan="2">552314789</td>
-        <td class="body-md" rowspan="2">27-05-2023</td>
-        <td class="body-md">تدليك (3)</td>
-        <td rowspan="2">
-          <button class="btn primary icon">
-            <img src="../../assets/icons/eye-icon.svg" alt="عرض التفاصيل" />
-          </button>
-        </td>
-      </tr>
-      <tr>
-        <td class="body-md">كهرباء</td>
-      </tr>
-
-      <!-- 5 -->
-      <tr>
-        <td class="body-md" rowspan="2">113478900</td>
-        <td class="body-md" rowspan="2">03-06-2023</td>
-        <td class="body-md">تدليك (4)</td>
-        <td rowspan="2">
-          <button class="btn primary icon">
-            <img src="../../assets/icons/eye-icon.svg" alt="عرض التفاصيل" />
-          </button>
-        </td>
-      </tr>
-      <tr>
-        <td class="body-md">كهرباء</td>
-      </tr>
-
-      <!-- 6 -->
-      <tr>
-        <td class="body-md" rowspan="2">784001456</td>
-        <td class="body-md" rowspan="2">14-07-2023</td>
-        <td class="body-md">تدليك (3)</td>
-        <td rowspan="2">
-          <button class="btn primary icon">
-            <img src="../../assets/icons/eye-icon.svg" alt="عرض التفاصيل" />
-          </button>
-        </td>
-      </tr>
-      <tr>
-        <td class="body-md">كهرباء</td>
-      </tr>
-
-      <!-- 7 -->
-      <tr>
-        <td class="body-md" rowspan="2">990054321</td>
-        <td class="body-md" rowspan="2">22-07-2023</td>
-        <td class="body-md">تدليك (1)</td>
-        <td rowspan="2">
-          <button class="btn primary icon">
-            <img src="../../assets/icons/eye-icon.svg" alt="عرض التفاصيل" />
-          </button>
-        </td>
-      </tr>
-      <tr>
-        <td class="body-md">كهرباء</td>
-      </tr>
-
-      <!-- 8 -->
-      <tr>
-        <td class="body-md" rowspan="2">440198765</td>
-        <td class="body-md" rowspan="2">12-08-2023</td>
-        <td class="body-md">تدليك (3)</td>
-        <td rowspan="2">
-          <button class="btn primary icon">
-            <img src="../../assets/icons/eye-icon.svg" alt="عرض التفاصيل" />
-          </button>
-        </td>
-      </tr>
-      <tr>
-        <td class="body-md">كهرباء</td>
+        <td><input class="label-lg" type="number" placeholder="" /></td>
+        <td><input class="label-lg" type="text" placeholder="" /></td>
       </tr>
     </tbody>
   </table>
+  <div class="flex-center">
+    <button class="btn primary label-md">حفظ</button>
+  </div>
+</form>
 
-  }
+} @if (viewMode() === 'history') {
+<div class="width-100">
+  <p class="title-md">التشخيصات السابقة</p>
+
+  <span class="home-line"></span>
 </div>
+<table>
+  <thead>
+    <th class="title-sm">رقم الكرت</th>
+    <th class="title-sm">التاريخ</th>
+    <th class="title-sm">البرامح العلاجية</th>
+    <th class="buttons"></th>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td class="body-md" rowspan="2">784512369</td>
+      <td class="body-md" rowspan="2">05-02-2023</td>
+      <td class="body-md">تدليك (3)</td>
+      <td rowspan="2">
+        <button class="btn primary icon">
+          <img src="../../assets/icons/eye-icon.svg" alt="عرض التفاصيل" />
+        </button>
+      </td>
+    </tr>
+    <tr>
+      <td class="body-md">كهرباء</td>
+    </tr>
+
+    <tr>
+      <td class="body-md" rowspan="2">995412887</td>
+      <td class="body-md" rowspan="2">18-03-2023</td>
+      <td class="body-md">تدليك (3)</td>
+      <td rowspan="2">
+        <button class="btn primary icon">
+          <img src="../../assets/icons/eye-icon.svg" alt="عرض التفاصيل" />
+        </button>
+      </td>
+    </tr>
+    <tr>
+      <td class="body-md">كهرباء</td>
+    </tr>
+  </tbody>
+</table>
+} -->
+<form class="padding-LR-24 column gap-16" [formGroup]="form" (ngSubmit)="onSubmit()">
+
+  <div class="width-100">
+    <p class="title-md">بيانات التشخيص</p>
+    <span class="home-line"></span>
+  </div>
+
+  <!-- جهة الإصابة -->
+  <div class="row flex-center">
+    <label class="label-lg"> جهة الاصابة </label>
+    <select class="label-lg" formControlName="InjurySides">
+      <option [ngValue]="[]"></option>
+      <option [ngValue]="[1]">علوي ايمن</option>
+      <option [ngValue]="[2]">علوي ايسر</option>
+      <option [ngValue]="[3]">سفلي ايمن</option>
+      <option [ngValue]="[4]">سفلي ايسر</option>
+    </select>
+
+    <label class="label-lg"> نوع الإصابة </label>
+    <select class="label-lg" formControlName="InjuryTypes">
+      <option [ngValue]="[]"></option>
+      <option [ngValue]="[1]">مرفق</option>
+      <option [ngValue]="[2]">ساعد</option>
+    </select>
+  </div>
+
+  <!-- تاريخ الإصابة + السبب -->
+  <div class="row flex-center">
+    <label class="label-lg"> تاريخ الإصابة </label>
+    <input class="label-lg" type="date" formControlName="InjuryDate" />
+
+    <label class="label-lg"> السبب </label>
+    <input class="label-lg" type="text" formControlName="InjuryReasons" />
+  </div>
+
+  <!-- القسم -->
+  <div class="row flex-center">
+    <label class="label-lg"> القسم </label>
+    <select class="label-lg" formControlName="TherapyCardType">
+      <option [ngValue]="null"></option>
+      <option [ngValue]="1">العلاج الطبيعي</option>
+      <option [ngValue]="2">الأطراف الصناعية</option>
+    </select>
+  </div>
+
+  <!-- التشخيص -->
+  <div class="roe flex-center width-100">
+    <label class="label-lg"> التشخيص </label>
+    <textarea rows="2" formControlName="DiagnosisText"></textarea>
+  </div>
+
+  <!-- برنامج المريض -->
+  <div class="roe flex-center width-100">
+    <label class="label-lg"> تاريخ البدء </label>
+    <input class="label-lg" type="date" formControlName="ProgramStartDate" />
+
+    <label class="label-lg"> تاريخ الانتهاء </label>
+    <input class="label-lg" type="date" formControlName="ProgramEndDate" />
+  </div>
+
+  <!-- البرامج العلاجية -->
+  <div class="width-100">
+    <p class="title-md">البرامج العلاجية</p>
+    <span class="home-line"></span>
+  </div>
+
+  <app-select-therapy-programs
+    [programs]="programs"
+    [medicalPrograms]="medicalPrograms">
+  </app-select-therapy-programs>
+
+  <div class="flex-center">
+    <button class="btn primary label-md" type="submit" [disabled]="form.invalid">
+      حفظ
+    </button>
+  </div>
+
+</form>

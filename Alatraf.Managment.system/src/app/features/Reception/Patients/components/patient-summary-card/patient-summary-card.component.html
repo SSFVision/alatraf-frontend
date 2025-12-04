@@ -1,21 +1,5 @@
-<!-- <div class="backdrop" (click)="onClose()"></div> -->
 
 @if (patient()) {
-<!-- <div class="box dialog">
-  <div class="space-between sticky">
-    <h2 class="title-lg">اصدار تذكرة خدمة</h2>
-    <img
-      src="assets/icons/close-icon.svg"
-      alt="إغلاق"
-      class="close-icon"
-      (click)="onClose()"
-    />
-  </div>
-
-  <div>
-    <p class="title-md">بيانات المريض</p>
-    <span class="home-line"></span>
-  </div> -->
 
   <div class="padding-LR-24 column gap-16">
     <div class="row flex-center">
@@ -56,5 +40,4 @@
       <input class="label-lg" [value]="patient()?.phone" disabled />
     </div>
   </div>
-<!-- </div> -->
 }

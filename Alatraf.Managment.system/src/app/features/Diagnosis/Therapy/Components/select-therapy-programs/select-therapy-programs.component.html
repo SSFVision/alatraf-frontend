@@ -1,0 +1,55 @@
+<table class="no-shadow">
+  <thead>
+    <tr>
+      <th class="label-lg">اسم البرنامج</th>
+      <th class="label-lg">الزمن</th>
+      <th class="label-lg">الملاحظات</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr
+      *ngFor="let ctrl of programs.controls; let i = index"
+      [formGroup]="ctrl"
+    >
+      <td>
+        <select class="label-lg" formControlName="MedicalProgramId">
+          <option [ngValue]="null"></option>
+          <option *ngFor="let p of medicalPrograms" [ngValue]="p.id">
+            {{ p.name }}
+          </option>
+        </select>
+      </td>
+
+      <td>
+        <input class="label-lg" type="number" formControlName="Duration" />
+      </td>
+
+      <td>
+        <input class="label-lg" type="text" formControlName="Notes" />
+      </td>
+
+      <td>
+        <div class="row gap-16">
+          <button
+            class="btn primary icon"
+            (click)="addRowBelow(i)"
+            stopPropagation
+          >
+            +
+          </button>
+          <button class="btn danger icon" (click)="removeRow(i)">
+            <img src="assets/icons/trash-icon.svg" alt="حذف" />
+          </button>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="flex-center margin-top-8">
+  <button type="button" class="btn secondary label-md" (click)="addRowAtEnd()">
+    + إضافة برنامج علاجي
+  </button>
+</div>

@@ -1,0 +1,47 @@
+<div class="width-100">
+  <p class="title-md">بيانات المريض</p>
+  <span class="home-line"></span>
+</div>
+<div class="row flex-center">
+  <label class="label-lg"> الاسم </label>
+  <input
+    class="label-lg"
+    type="text"
+    [value]="patient()!.fullname"
+    disabled
+    readonly
+  />
+</div>
+
+<div class="row flex-center margin_top">
+  <label class="label-lg"> رقم المريض </label>
+  <input
+    class="label-lg"
+    type="text"
+    [value]="patient()!.phone"
+    disabled
+    readonly
+  />
+
+  <label class="label-lg"> الجنس </label>
+  <input
+    class="label-lg"
+    type="text"
+    [value]="patient()!.gender ? 'ذكر' : ' انثى'"
+    disabled
+    readonly
+  />
+
+  <label class="label-lg"> العمر </label>
+  <input
+    class="label-lg"
+    type="text"
+    [value]="getAgeFromBirthdate(patient()!.birthdate) + '   سنة'  "
+    disabled
+    readonly
+  />
+</div>
+
+<div class="width-100">
+  <span class="home-line"></span>
+</div>

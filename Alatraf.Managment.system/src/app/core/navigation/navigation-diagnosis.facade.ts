@@ -11,7 +11,6 @@ export class NavigationDiagnosisFacade {
   }
 
   goToTherapyList(extras?: NavigationExtras): void {
-    // /diagnosis/therapy
     this.go(
       `${AppRoutes.diagnosis.root}/${AppRoutes.diagnosis.therapy.root}`,
       extras
