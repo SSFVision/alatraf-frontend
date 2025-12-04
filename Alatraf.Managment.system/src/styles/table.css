@@ -2,7 +2,6 @@ table {
   width: 100%;
   border-collapse: collapse;
   border-radius: 16px;
-  /* تبقى كما طلبت */
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
   background-color: var(--white-color);
 }
@@ -38,7 +37,6 @@ td:last-child {
   border-bottom: none;
 }
 
-td:first-child,
 th:first-child {
   border-right: none;
 }
