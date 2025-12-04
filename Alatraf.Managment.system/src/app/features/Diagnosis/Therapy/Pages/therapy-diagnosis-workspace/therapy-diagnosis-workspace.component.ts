@@ -1,8 +1,5 @@
-import { DiagnosisDepartments } from './../../../../../mocks/Tickets/ticket.model';
 import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { SelectTherapyProgramsComponent } from '../../Components/select-therapy-programs/select-therapy-programs.component';
-import { CreateTherapyCardMedicalProgramRequest, CreateTherapyCardRequest } from '../../Models/create-therapy-card.request';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Patient } from '../../../../../mocks/patients/patient.dto';
 import { PatientService } from '../../../../Reception/Patients/Services/patient.service';
@@ -10,15 +7,17 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HeaderPatientInfoComponent } from "../../../Shared/Components/header-patient-info/header-patient-info.component";
 import { TherapyCardHistoryDto } from '../../Models/therapy-card-history.dto';
 import { PreviousTherapyCardDiagnosisComponent } from "../../Components/previous-therapy-card-diagnosis/previous-therapy-card-diagnosis.component";
+import { TherapyDiagnosisFormDto } from '../../Models/therapy-diagnosis-form.dto';
+import { AddTherapyDiagnosisFormComponent } from "../../Components/add-therapy-diagnosis-form/add-therapy-diagnosis-form.component";
 
 @Component({
   selector: 'app-therapy-diagnosis-workspace',
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    SelectTherapyProgramsComponent,
     HeaderPatientInfoComponent,
-    PreviousTherapyCardDiagnosisComponent
+    PreviousTherapyCardDiagnosisComponent,
+    AddTherapyDiagnosisFormComponent
 ],
   templateUrl: './therapy-diagnosis-workspace.component.html',
   styleUrls: ['./therapy-diagnosis-workspace.component.css'],
@@ -34,31 +33,10 @@ export class TherapyDiagnosisWorkspaceComponent implements OnInit {
   patient = signal<Patient | null>(null);
   viewMode = signal<'add' | 'history'>('add');
 
-  form: FormGroup = this.buildForm();
-
-  private buildForm(): FormGroup {
-    return this.fb.group({
-      InjurySides: this.fb.control([], Validators.required),
-      InjuryTypes: this.fb.control([], Validators.required),
-      InjuryDate: this.fb.control(null, Validators.required),
-      InjuryReasons: this.fb.control([], Validators.required),
-      DiagnosisText: this.fb.control('', Validators.required),
-
-      ProgramStartDate: this.fb.control('', Validators.required),
-      ProgramEndDate: this.fb.control('', Validators.required),
-
-      TherapyCardType: this.fb.control(null, Validators.required),
-      Notes: this.fb.control(''),
-
-      Programs: this.fb.array<FormGroup>([]),
-    });
-  }
+ 
 isLoading = signal(true);
 
-  get programs(): FormArray<FormGroup> {
-    return this.form.get('Programs') as FormArray<FormGroup>;
-  }
-
+ 
   private createProgram(): FormGroup {
     return this.fb.group({
       MedicalProgramId: this.fb.control(null, Validators.required),
@@ -67,15 +45,8 @@ isLoading = signal(true);
     });
   }
 
-  private ensureInitialRow(): void {
-    if (this.programs.length === 0) {
-      this.programs.push(this.createProgram());
-    }
-  }
+ 
 
-  // ------------------
-  // LIFECYCLE
-  // ------------------
   ngOnInit(): void {
     this.listenToRouteChanges();
   }
@@ -98,7 +69,6 @@ private listenToRouteChanges() {
 
       // Reset UI
       this.isLoading.set(true);
-      this.resetFormForNewPatient();
 
       this.patientService.getPatientById(id).subscribe((res) => {
         if (res.isSuccess && res.data) {
@@ -112,17 +82,8 @@ private listenToRouteChanges() {
     });
 }
 
-  medicalPrograms = [
-    { id: 1, name: 'تدليك' },
-    { id: 2, name: 'كهرباء' },
-    { id: 3, name: 'wa' },
-  ];
-  private resetFormForNewPatient() {
-    this.form = this.buildForm(); // Recreate form from scratch
-    this.programs.clear();        // Clear FormArray
-    this.ensureInitialRow();      // Add initial empty program row
-  }
-
+ 
+ 
 
   switchToAdd() {
     this.viewMode.set('add');
@@ -132,43 +93,11 @@ private listenToRouteChanges() {
     this.viewMode.set('history');
   }
 
-
-  onSubmit(): void {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      console.error('❌ Form invalid:', this.form);
-      return;
-    }
-
-    const formValue = this.form.value;
-
-    const payload: CreateTherapyCardRequest = {
-      TicketId: 0,
-      DiagnosisText: formValue.DiagnosisText,
-      InjuryDate: formValue.InjuryDate,
-      InjuryReasons: formValue.InjuryReasons,
-      InjurySides: formValue.InjurySides,
-      InjuryTypes: formValue.InjuryTypes,
-      PatientId: 0, // You will fill this later
-      ProgramStartDate: formValue.ProgramStartDate,
-      ProgramEndDate: formValue.ProgramEndDate,
-      TherapyCardType: formValue.TherapyCardType,
-      Notes: formValue.Notes ?? null,
-      Programs: formValue.Programs as CreateTherapyCardMedicalProgramRequest[],
-    };
-
-    console.log('🔥 FINAL DIAGNOSIS PAYLOAD:', payload);
-  }
-
-// for previous Diagnosis
-
-
   MOCK_THERAPY_CARD_HISTORY: TherapyCardHistoryDto[] = [
   {
     therapyCardId: 1,
     cardNumber: '784512369',
     cardDate: '2023-02-05',
-
     diagnosisSummary: 'تمزق عضلي في الكتف الأيمن',
     departmentName: 'العلاج الطبيعي',
     status: 'completed',
@@ -241,5 +170,10 @@ onViewHistoryCard(card: TherapyCardHistoryDto) {
   // later: open dialog, navigate to details, etc.
 }
 
+// for the form 
+
+saveTherapyDiagnosis(formValue: TherapyDiagnosisFormDto) {
+  console.log("Therapy Diagnosis Payload:", formValue);
+}
 
 }

@@ -1,0 +1,76 @@
+<div class="width-100">
+  <p class="title-md">التشخيصات السابقة</p>
+  <span class="home-line"></span>
+</div>
+
+@if (items.length === 0) {
+  <p class="body-md padding-16">لا توجد تشخيصات سابقة لهذا المريض.</p>
+} @else {
+
+<table>
+  <thead>
+    <tr>
+      <th class="title-sm">رقم الكرت</th>
+      <th class="title-sm">التاريخ</th>
+      <th class="title-sm">القطع الصناعية</th>
+      <th class="buttons"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    @for (item of items; track item.diagnosisId) {
+
+      @for (part of item.parts; track part.partName; let i = $index) {
+        <tr>
+
+          @if (i === 0) {
+            <!-- رقم الكرت -->
+            <td
+              class="body-md"
+              [attr.rowspan]="item.parts.length"
+            >
+              {{ item.cardNumber }}
+            </td>
+
+            <!-- التاريخ -->
+            <td
+              class="body-md"
+              [attr.rowspan]="item.parts.length"
+            >
+              {{ item.date | date: 'dd-MM-YYYY' }}
+            </td>
+          }
+
+          <!-- اسم القطعة -->
+          <td class="body-md">
+            {{ part.partName }}
+            @if (part.quantity) {
+              ({{ part.quantity }})
+            }
+            @if (part.unitName) {
+              {{ part.unitName }}
+            }
+          </td>
+
+          @if (i === 0) {
+            <td
+              [attr.rowspan]="item.parts.length"
+            >
+              <button
+                class="btn primary icon"
+                type="button"
+                (click)="onView(item)"
+              >
+                <img src="assets/icons/eye-icon.svg" alt="عرض التفاصيل" />
+              </button>
+            </td>
+          }
+
+        </tr>
+      }
+
+    }
+  </tbody>
+</table>
+
+}

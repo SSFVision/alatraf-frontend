@@ -31,8 +31,9 @@
 
   @if (selectedPatient()) {
 
-  <router-outlet></router-outlet>
-  }@else {
+  <div class="box max-hight-800 gap-16">
+    <router-outlet></router-outlet>
+  </div>  }@else {
   <div class="box max-hight-800 gap-16 flex-center">
     <img
       src="assets/images/bro.svg"

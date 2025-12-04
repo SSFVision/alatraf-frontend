@@ -13,11 +13,14 @@ import { NavigationDiagnosisFacade } from '../../../../../core/navigation/naviga
 })
 export class TherapyWaitingListComponent implements OnInit {
   selectedPatient = signal<Patient |null>(null);
-  private patientsService = inject(PatientsFacade);
-  patients = this.patientsService.patients;
+  private facade = inject(PatientsFacade);
+  patients = this.facade.patients;
   private navDiagnos = inject(NavigationDiagnosisFacade);
   ngOnInit() {
-    this.patientsService.loadPatients();
+    this.facade.loadPatients();
+  }
+ onSearch(term: string) {
+    this.facade.search(term);
   }
 
   selectPatient(patient: Patient) {

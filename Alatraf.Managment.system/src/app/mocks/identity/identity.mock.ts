@@ -38,7 +38,7 @@ export const IDENTITY_USERS_MOCK: IdentityUserMock[] = [
     userId: 3,
     userName: 'wa',
     password: 'wa',
-    roles: ['Doctor_Therapy'],
+    roles: ['Doctor_Industrial'],
     permissions: [
       PERMISSIONS.PATIENTS.VIEW,    
       PERMISSIONS.PATIENTS.ADD,    

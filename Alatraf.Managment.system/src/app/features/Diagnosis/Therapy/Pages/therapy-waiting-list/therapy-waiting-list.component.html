@@ -14,7 +14,12 @@
         class="search-icon"
         alt="search"
       />
-      <input type="text" placeholder="بحث: اسم المريض أو الرقم" />
+      <input
+        type="text"
+        placeholder="بحث: اسم المريض أو الرقم"
+        #searchBox
+        (input)="onSearch(searchBox.value)"
+      />
     </div>
     <div class="filters-container">
       <button class="filter-btn active">الكل</button>
@@ -48,9 +53,3 @@
   </div>
   }
 </main>
-
-
-
-
-
-
