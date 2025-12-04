@@ -27,13 +27,20 @@ import { InjuryTypeController } from './injuries/injury-type.controller';
 // -------------------------
 // MEDICAL PROGRAM IMPORTS
 // -------------------------
+import { MEDICAL_PROGRAMS_MOCK_DATA } from './medicalPrograms/medical-program.mock';
+import { MedicalProgramController } from './medicalPrograms/medical-program.mock-controller';
+
+// -------------------------
+// THERAPY DIAGNOSIS IMPORTS
+// -------------------------
+import { THERAPY_DIAGNOSIS_MOCK } from './TherapyDiagnosis/therapy-diagnosis.mock';
+import { TherapyDiagnosisController } from './TherapyDiagnosis/therapy-diagnosis.controller';
 
 // -------------------------
 // INDUSTRIAL PART IMPORTS
 // -------------------------
 import { IndustrialPartController } from './industrial-parts/industrial-part.controller';
-import { MedicalProgramController } from './medicalPrograms/medical-program.mock-controller';
-import { MEDICAL_PROGRAMS_MOCK_DATA } from './medicalPrograms/medical-program.mock';
+
 
 export class InMemoryDataService implements InMemoryDbService {
 
@@ -41,16 +48,12 @@ export class InMemoryDataService implements InMemoryDbService {
   private readonly SERVICES = 'services';
   private readonly TICKETS = 'tickets';
   private readonly IDENTITY = 'identity';
-
-  // injury collections
-  private readonly INJURY_REASONS = 'injuryReasons';
-  private readonly INJURY_SIDES = 'injurySides';
-  private readonly INJURY_TYPES = 'injuryTypes';
-
-  // NEW
   private readonly MEDICAL_PROGRAMS = 'medicalPrograms';
-  private readonly INDUSTRIAL_PARTS = 'industrialParts';
+  private readonly THERAPY_DIAGNOSIS = 'therapyDiagnosis';
 
+  // -----------------------------------------------------
+  // DATABASE
+  // -----------------------------------------------------
   createDb() {
     return {
       [this.PATIENTS]: PATIENTS_MOCK_DATA,
@@ -58,25 +61,47 @@ export class InMemoryDataService implements InMemoryDbService {
       [this.TICKETS]: MOCK_TICKETS,
       [this.IDENTITY]: IDENTITY_USERS_MOCK,
 
-      // injuries
-      [this.INJURY_REASONS]: INJURY_REASONS_MOCK,
-      [this.INJURY_SIDES]: INJURY_SIDES_MOCK,
-      [this.INJURY_TYPES]: INJURY_TYPES_MOCK,
+      // INJURIES LOOKUPS
+      injuryReasons: INJURY_REASONS_MOCK,
+      injurySides: INJURY_SIDES_MOCK,
+      injuryTypes: INJURY_TYPES_MOCK,
 
-      // NEW collections
+      // MEDICAL PROGRAMS
       [this.MEDICAL_PROGRAMS]: MEDICAL_PROGRAMS_MOCK_DATA,
-      [this.INDUSTRIAL_PARTS]: INDUSTRIAL_PARTS_MOCK,
+
+      // THERAPY DIAGNOSIS MOCK STORAGE
+      [this.THERAPY_DIAGNOSIS]: THERAPY_DIAGNOSIS_MOCK,
+
+      // Industrial
+      industrialParts: INDUSTRIAL_PARTS_MOCK,
     };
   }
 
-  // -------------------------
+  // -----------------------------------------------------
   // GET
-  // -------------------------
+  // -----------------------------------------------------
   get(reqInfo: RequestInfo) {
+    const url = reqInfo.req.url;
 
-    // IDENTITY CLAIMS
-    if (reqInfo.req.url.includes('/identity/current-user/claims')) {
+    // AUTH
+    if (url.includes('/identity/current-user/claims')) {
       return IdentityController.getCurrentUser(reqInfo);
+    }
+
+    // INJURY LOOKUPS
+    if (url.includes('/injuries/reasons')) {
+      return InjuryReasonController.getAll(reqInfo);
+    }
+    if (url.includes('/injuries/sides')) {
+      return InjurySideController.getAll(reqInfo);
+    }
+    if (url.includes('/injuries/types')) {
+      return InjuryTypeController.getAll(reqInfo);
+    }
+
+    // MEDICAL PROGRAMS
+    if (url.includes('/doctor/therapy/medical-programs')) {
+      return MedicalProgramController.getAll(reqInfo);
     }
 
     const entity = reqInfo.collectionName;
@@ -98,49 +123,31 @@ export class InMemoryDataService implements InMemoryDbService {
           ? TicketController.getById(reqInfo)
           : TicketController.getAll(reqInfo);
 
-      // injury GET handlers
-      case this.INJURY_REASONS:
+      case this.THERAPY_DIAGNOSIS:
         return reqInfo.id
-          ? InjuryReasonController.getById(reqInfo)
-          : InjuryReasonController.getAll(reqInfo);
+          ? TherapyDiagnosisController.getById(reqInfo)
+          : TherapyDiagnosisController.getAll(reqInfo);
 
-      case this.INJURY_SIDES:
-        return reqInfo.id
-          ? InjurySideController.getById(reqInfo)
-          : InjurySideController.getAll(reqInfo);
-
-      case this.INJURY_TYPES:
-        return reqInfo.id
-          ? InjuryTypeController.getById(reqInfo)
-          : InjuryTypeController.getAll(reqInfo);
-
-      // NEW medical programs GET
-      case this.MEDICAL_PROGRAMS:
-        return reqInfo.id
-          ? MedicalProgramController.getById(reqInfo)
-          : MedicalProgramController.getAll(reqInfo);
-
-      // NEW industrial parts GET
-      case this.INDUSTRIAL_PARTS:
-        return reqInfo.id
-          ? IndustrialPartController.getById(reqInfo)
-          : IndustrialPartController.getAll(reqInfo);
+      case 'industrialParts':
+        return IndustrialPartController.getAll(reqInfo);
 
       default:
         return undefined;
     }
   }
 
-  // -------------------------
+  // -----------------------------------------------------
   // POST
-  // -------------------------
+  // -----------------------------------------------------
   post(reqInfo: RequestInfo) {
+    const url = reqInfo.req.url;
 
-    if (reqInfo.req.url.includes('/identity/token/generate')) {
+    // AUTH
+    if (url.includes('/identity/token/generate')) {
       return IdentityController.login(reqInfo);
     }
 
-    if (reqInfo.req.url.includes('/identity/token/refresh-token')) {
+    if (url.includes('/identity/token/refresh-token')) {
       return IdentityController.refresh(reqInfo);
     }
 
@@ -157,14 +164,17 @@ export class InMemoryDataService implements InMemoryDbService {
       case this.TICKETS:
         return TicketController.create(reqInfo);
 
+      case this.THERAPY_DIAGNOSIS:
+        return TherapyDiagnosisController.create(reqInfo);
+
       default:
         return undefined;
     }
   }
 
-  // -------------------------
+  // -----------------------------------------------------
   // PUT
-  // -------------------------
+  // -----------------------------------------------------
   put(reqInfo: RequestInfo) {
     const entity = reqInfo.collectionName;
 
@@ -180,9 +190,9 @@ export class InMemoryDataService implements InMemoryDbService {
     }
   }
 
-  // -------------------------
+  // -----------------------------------------------------
   // DELETE
-  // -------------------------
+  // -----------------------------------------------------
   delete(reqInfo: RequestInfo) {
     const entity = reqInfo.collectionName;
 

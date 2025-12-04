@@ -43,4 +43,11 @@ export const MOCK_SERVICES: ServiceDto[] = [
     department: 'المبيعات',
     price:null,
   },
+  {
+    serviceId: 10,
+    name: 'أطراف صناعية',
+    departmentId: 9,
+    department: 'قسم الأطراف الصناعية',
+    price: null,
+  }
 ];

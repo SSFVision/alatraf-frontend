@@ -1,28 +1,35 @@
-import { MockMedicalProgramDto } from "./medical-program.model";
+// src/app/mocks/medicalPrograms/medical-program.mock.ts
 
-export const MEDICAL_PROGRAMS_MOCK_DATA: MockMedicalProgramDto[] = [
+export interface MedicalProgramDto {
+  Id: number;
+  Name: string;
+  Description?: string | null;
+}
+
+export const MEDICAL_PROGRAMS_MOCK_DATA: MedicalProgramDto[] = [
   {
-    MedicalProgramId: 1,
-    Name: 'علاج كهربائي – TENS',
-    Duration: 20,
-    Price: 30
+    Id: 1,
+    Name: 'برنامج تقوية العضلات',
+    Description: 'تمارين موجهة لزيادة قوة العضلات وتحسين القدرة الوظيفية.',
   },
   {
-    MedicalProgramId: 2,
-    Name: 'علاج حراري – Hot Pack',
-    Duration: 15,
-    Price: 20
+    Id: 2,
+    Name: 'برنامج تمارين الإطالة',
+    Description: 'برنامج لتحسين المرونة ونطاق الحركة للمفاصل والعضلات.',
   },
   {
-    MedicalProgramId: 3,
-    Name: 'تمارين علاجية – Exercise Therapy',
-    Duration: 30,
-    Price: 35
+    Id: 3,
+    Name: 'برنامج التأهيل بعد العمليات',
+    Description: 'برنامج لإعادة التأهيل بعد العمليات الجراحية (ركبة، كتف، عمود فقري...).',
   },
   {
-    MedicalProgramId: 4,
-    Name: 'علاج موجات فوق صوتية – Ultrasound',
-    Duration: 10,
-    Price: 25
-  }
+    Id: 4,
+    Name: 'برنامج علاج آلام أسفل الظهر',
+    Description: 'برنامج مخصص لعلاج آلام أسفل الظهر المزمنة والحادة.',
+  },
+  {
+    Id: 5,
+    Name: 'برنامج تأهيل إصابات الرياضيين',
+    Description: 'برنامج مخصص للعلاج والعودة الآمنة للرياضة بعد الإصابات.',
+  },
 ];

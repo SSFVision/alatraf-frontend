@@ -1,13 +1,6 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { Subject, of } from 'rxjs';
-import {
-  debounceTime,
-  distinctUntilChanged,
-  finalize,
-  map,
-  switchMap,
-  tap,
-} from 'rxjs/operators';
+import { Subject} from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 
 import { PatientService } from '../Services/patient.service';
 import {
@@ -97,7 +90,6 @@ export class PatientsFacade extends BaseFacade {
   }
 
   deletePatient(patient: Patient): void {
-    
     if (!patient?.patientId) return;
 
     const config = {
@@ -116,8 +108,7 @@ export class PatientsFacade extends BaseFacade {
         successMessage: 'تم حذف بيانات المريض بنجاح',
         defaultErrorMessage: 'فشل حذف بيانات المريض. حاول لاحقاً.',
       }
-    )
-    .subscribe((success) => {
+    ).subscribe((success) => {
       if (success) {
         this.cache.clear();
         this.loadPatients();
@@ -131,13 +122,11 @@ export class PatientsFacade extends BaseFacade {
   isEditMode = signal<boolean>(false);
 
   enterCreateMode() {
- 
     this.isEditMode.set(false);
     this._selectedPatient.set(null);
   }
 
   loadPatientForEdit(id: number) {
-  
     this.isEditMode.set(true);
     this._selectedPatient.set(null);
 
@@ -161,7 +150,6 @@ export class PatientsFacade extends BaseFacade {
   // CREATE
   // ---------------------------
   createPatient(dto: CreateUpdatePatientDto) {
-    
     return this.handleCreateOrUpdate(this.patientService.createPatient(dto), {
       successMessage: 'تم حفظ بيانات المريض بنجاح',
       defaultErrorMessage: 'فشل حفظ بيانات المريض. يرجى المحاولة لاحقاً.',
