@@ -1,0 +1,141 @@
+<form class="column gap-16" [formGroup]="form">
+  <!-- TITLE -->
+  <div class="width-100">
+    <p class="title-md">بيانات التشخيص</p>
+    <span class="home-line"></span>
+  </div>
+
+  <!-- جهة الاصابة + نوع الاصابة -->
+  <div class="row flex-center">
+    <label class="label-lg">جهة الإصابة</label>
+    <select class="label-lg" formControlName="injurySide">
+      <option value=""></option>
+      <option value="علوي ايمن">علوي أيمن</option>
+      <option value="علوي ايسر">علوي أيسر</option>
+      <option value="سفلي ايمن">سفلي أيمن</option>
+      <option value="سفلي ايسر">سفلي أيسر</option>
+    </select>
+
+    <label class="label-lg">نوع الإصابة</label>
+    <select class="label-lg" formControlName="injuryType">
+      <option value=""></option>
+      <option value="مرفق">مرفق</option>
+      <option value="ساعد">ساعد</option>
+    </select>
+  </div>
+
+  <!-- تاريخ الإصابة + عمر الإصابة -->
+  <div class="row flex-center">
+    <label class="label-lg">تاريخ الإصابة</label>
+    <input class="label-lg" type="date" formControlName="injuryDate" />
+
+    <label class="label-lg">عمر الإصابة</label>
+    <input class="label-lg" type="text" formControlName="injuryAge" />
+  </div>
+
+  <!-- قسم -->
+  <div class="row flex-center">
+    <label class="label-lg">القسم</label>
+    <select class="label-lg" formControlName="department">
+      <option value=""></option>
+      <option value="العلاج الطبيعي">العلاج الطبيعي</option>
+      <option value="الأطراف الصناعية">الأطراف الصناعية</option>
+    </select>
+  </div>
+
+  <!-- التشخيص -->
+  <div class="row flex-center width-100">
+    <label class="label-lg">التشخيص</label>
+    <textarea rows="2" formControlName="diagnosis"></textarea>
+  </div>
+
+  <!-- تاريخ الانتهاء والمدة -->
+  <div class="row flex-center width-100">
+    <label class="label-lg">تاريخ الانتهاء</label>
+    <input class="label-lg" type="date" formControlName="endDate" />
+
+    <label class="label-lg">المدة</label>
+    <div class="row flex-center">
+      <input class="label-lg" type="text" formControlName="duration" />
+      <label class="label-lg">يوم</label>
+    </div>
+  </div>
+
+  <!-- industrial parts -->
+  <div class="width-100">
+    <p class="title-md">قطع الأطراف الصناعية</p>
+    <span class="home-line"></span>
+  </div>
+
+  <table class="no-shadow">
+    <thead>
+      <tr>
+        <th class="label-lg">القطعة</th>
+        <th class="label-lg">الكمية</th>
+        <th class="label-lg">الوحدة</th>
+        <th class="label-lg">القسم</th>
+        <th class="label-lg">ملاحظات</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (row of industrialParts.controls; track $index; let i = $index) {
+      <tr [formGroup]="row">
+        <td>
+          <select class="label-lg" formControlName="partId">
+            <option value=""></option>
+            <option value="1">قدم</option>
+            <option value="2">ركبة</option>
+          </select>
+        </td>
+
+        <td>
+          <input class="label-lg" type="number" formControlName="quantity" />
+        </td>
+
+        <td>
+          <select class="label-lg" formControlName="unitId">
+            <option value=""></option>
+            <option value="1">حبة</option>
+            <option value="2">زوج</option>
+          </select>
+        </td>
+
+        <td>
+          <select class="label-lg" formControlName="sectionId">
+            <option value=""></option>
+            <option value="1">الحديد</option>
+            <option value="2">الجبس</option>
+          </select>
+        </td>
+
+        <td><input class="label-lg" type="text" formControlName="notes" /></td>
+
+        <td>
+          <button
+            *ngIf="industrialParts.length > 1"
+            class="btn danger icon"
+            type="button"
+            (click)="removePartRow(i)"
+          >
+            ✕
+          </button>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+
+  <div class="flex-end">
+    <button class="btn primary" type="button" (click)="addPartRow()">
+      + إضافة قطعة
+    </button>
+  </div>
+
+  <div class="flex-center">
+    <button class="btn primary label-md" type="button" (click)="onSubmit()">
+      حفظ
+    </button>
+  </div>
+</form>

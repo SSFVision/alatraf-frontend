@@ -1,5 +1,4 @@
 import { DiagnosisIndustrialPartDto } from "../../Industrial/Models/diagnosis-industrial-part.dto";
-import { DiagnosisProgramDto } from "../../Therapy/Models/diagnosis-program.dto";
 import { InjuryDto } from "./injury.dto";
 
 export interface DiagnosisDto {
@@ -10,14 +9,12 @@ export interface DiagnosisDto {
   TicketId: number;
   PatientId: number;
   PatientName: string;
-
   DiagnosisType: number;
-
   InjuryReasons: InjuryDto[];
   InjurySides: InjuryDto[];
   InjuryTypes: InjuryDto[];
 
-  Programs?: DiagnosisProgramDto[];
+  // Programs?: DiagnosisProgramDto[];
   IndustrialParts?: DiagnosisIndustrialPartDto[];
   HasTherapyCards: boolean;
   HasRepairCard: boolean;

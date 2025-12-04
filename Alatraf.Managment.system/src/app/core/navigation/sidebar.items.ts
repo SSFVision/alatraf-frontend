@@ -14,29 +14,6 @@ export interface MenuCategory {
   CateRoute?: string; // Optional icon
   items: MenuItem[]; // Array of items in this category
 }
-
-// export const MENU_CONFIG: MenuCategory[] = [
-//   {
-//     category: 'الاستقبال',
-//     CateRoute: AppRoutes.reception.root,
-//     items: [
-//       {
-//         label: 'إدارة المرضى',
-//         icon: 'assets/icons/user-icon-w.svg',
-//         activeIcon: 'assets/icons/user-icon-b.svg',
-//         route: AppRoutes.reception.patients.root,
-//         requiredPermissions: [PERMISSIONS.PATIENTS.ADD],
-//       },
-//       {
-//         label: 'إضافة مريض',
-//         icon: 'assets/icons/user-icon-w.svg',
-//         activeIcon: 'assets/icons/user-icon-b.svg',
-//         route: AppRoutes.reception.patients.add,
-//         requiredPermissions: [PERMISSIONS.PATIENTS.VIEW],
-//       },
-//     ],
-//   },
-// ];
 export const MENU_CONFIG: MenuCategory[] = [
   {
     category: 'الاستقبال',
@@ -81,7 +58,6 @@ export const MENU_CONFIG: MenuCategory[] = [
         label: 'إدارة التشخيصات',
         icon: 'assets/icons/dumbbell-w.svg',
         activeIcon: 'assets/icons/dumbbell-b.svg',
-        // route: AppRoutes.diagnosis.therapy.root,
         route: `${AppRoutes.diagnosis.root}/${AppRoutes.diagnosis.therapy.root}`,
         requiredPermissions: [PERMISSIONS.DIAGNOSIS.THERAPY.VIEW],
       },

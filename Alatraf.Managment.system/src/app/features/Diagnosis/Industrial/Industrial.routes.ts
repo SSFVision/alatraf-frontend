@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 
 export const IndustrialRoutes: Routes = [
   {
-    path: 'create/:patientId',
+    path: 'Patient/:patientId/create',
 
     loadComponent: () =>
       import(

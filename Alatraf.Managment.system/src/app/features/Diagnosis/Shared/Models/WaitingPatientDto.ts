@@ -1,4 +1,4 @@
-export interface TherapyWaitingPatientVM {
+export interface WaitingPatientDto{
   TicketId: number;
   PatientId: number;
   Fullname: string;

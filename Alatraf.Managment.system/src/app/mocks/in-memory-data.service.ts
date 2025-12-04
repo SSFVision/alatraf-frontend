@@ -13,9 +13,7 @@ import { TicketController } from './Tickets/ticket.controller';
 import { IdentityController } from './identity/identity.controller';
 import { IDENTITY_USERS_MOCK } from './identity/identity.mock';
 
-// -------------------------
-// INJURY IMPORTS
-// -------------------------
+// Injuriy lookups
 import { INJURY_REASONS_MOCK } from './injuries/injury-reasons.mock';
 import { INJURY_SIDES_MOCK } from './injuries/injury-sides.mock';
 import { INJURY_TYPES_MOCK } from './injuries/injury-types.mock';
@@ -24,16 +22,17 @@ import { InjuryReasonController } from './injuries/injury-reason.controller';
 import { InjurySideController } from './injuries/injury-side.controller';
 import { InjuryTypeController } from './injuries/injury-type.controller';
 
-// -------------------------
-// MEDICAL PROGRAM IMPORTS
-// -------------------------
-
-// -------------------------
-// INDUSTRIAL PART IMPORTS
-// -------------------------
-import { IndustrialPartController } from './industrial-parts/industrial-part.controller';
-import { MedicalProgramController } from './medicalPrograms/medical-program.mock-controller';
+// Medical programs
 import { MEDICAL_PROGRAMS_MOCK_DATA } from './medicalPrograms/medical-program.mock';
+import { MedicalProgramController } from './medicalPrograms/medical-program.mock-controller';
+
+// Therapy diagnosis
+import { THERAPY_DIAGNOSIS_MOCK } from './TherapyDiagnosis/therapy-diagnosis.mock';
+import { TherapyDiagnosisController } from './TherapyDiagnosis/therapy-diagnosis.controller';
+
+// Industrial parts
+import { IndustrialPartController } from './industrial-parts/industrial-part.controller';
+
 
 export class InMemoryDataService implements InMemoryDbService {
 
@@ -41,16 +40,12 @@ export class InMemoryDataService implements InMemoryDbService {
   private readonly SERVICES = 'services';
   private readonly TICKETS = 'tickets';
   private readonly IDENTITY = 'identity';
-
-  // injury collections
-  private readonly INJURY_REASONS = 'injuryReasons';
-  private readonly INJURY_SIDES = 'injurySides';
-  private readonly INJURY_TYPES = 'injuryTypes';
-
-  // NEW
   private readonly MEDICAL_PROGRAMS = 'medicalPrograms';
-  private readonly INDUSTRIAL_PARTS = 'industrialParts';
+  private readonly THERAPY_DIAGNOSIS = 'therapyDiagnosis';
 
+  // -----------------------------------------------------
+  // DATABASE
+  // -----------------------------------------------------
   createDb() {
     return {
       [this.PATIENTS]: PATIENTS_MOCK_DATA,
@@ -58,96 +53,91 @@ export class InMemoryDataService implements InMemoryDbService {
       [this.TICKETS]: MOCK_TICKETS,
       [this.IDENTITY]: IDENTITY_USERS_MOCK,
 
-      // injuries
-      [this.INJURY_REASONS]: INJURY_REASONS_MOCK,
-      [this.INJURY_SIDES]: INJURY_SIDES_MOCK,
-      [this.INJURY_TYPES]: INJURY_TYPES_MOCK,
+      // lookup tables
+      injuryReasons: INJURY_REASONS_MOCK,
+      injurySides: INJURY_SIDES_MOCK,
+      injuryTypes: INJURY_TYPES_MOCK,
 
-      // NEW collections
+      // medical programs
       [this.MEDICAL_PROGRAMS]: MEDICAL_PROGRAMS_MOCK_DATA,
-      [this.INDUSTRIAL_PARTS]: INDUSTRIAL_PARTS_MOCK,
+
+      // therapy diagnosis records
+      [this.THERAPY_DIAGNOSIS]: THERAPY_DIAGNOSIS_MOCK,
+
+      // industrial parts
+      industrialParts: INDUSTRIAL_PARTS_MOCK,
     };
   }
 
-  // -------------------------
-  // GET
-  // -------------------------
+  // -----------------------------------------------------
+  // GET ROUTER
+  // -----------------------------------------------------
   get(reqInfo: RequestInfo) {
+    const url = reqInfo.req.url;
 
-    // IDENTITY CLAIMS
-    if (reqInfo.req.url.includes('/identity/current-user/claims')) {
+    // auth
+    if (url.includes('/identity/current-user/claims')) {
       return IdentityController.getCurrentUser(reqInfo);
     }
 
+    // injury lookups
+    if (url.includes('/injuries/reasons')) return InjuryReasonController.getAll(reqInfo);
+    if (url.includes('/injuries/sides')) return InjurySideController.getAll(reqInfo);
+    if (url.includes('/injuries/types')) return InjuryTypeController.getAll(reqInfo);
+
+    // medical programs
+    if (url.includes('/doctor/therapy/medical-programs')) {
+      return MedicalProgramController.getAll(reqInfo);
+    }
+
+    // standard routes
     const entity = reqInfo.collectionName;
 
     switch (entity) {
-
       case this.PATIENTS:
-        return reqInfo.id
-          ? PatientController.getById(reqInfo)
-          : PatientController.getAll(reqInfo);
+        return reqInfo.id ? PatientController.getById(reqInfo) : PatientController.getAll(reqInfo);
 
       case this.SERVICES:
-        return reqInfo.id
-          ? ServiceController.getById(reqInfo)
-          : ServiceController.getAll(reqInfo);
+        return reqInfo.id ? ServiceController.getById(reqInfo) : ServiceController.getAll(reqInfo);
 
       case this.TICKETS:
-        return reqInfo.id
-          ? TicketController.getById(reqInfo)
-          : TicketController.getAll(reqInfo);
+        return reqInfo.id ? TicketController.getById(reqInfo) : TicketController.getAll(reqInfo);
 
-      // injury GET handlers
-      case this.INJURY_REASONS:
+      case this.THERAPY_DIAGNOSIS:
         return reqInfo.id
-          ? InjuryReasonController.getById(reqInfo)
-          : InjuryReasonController.getAll(reqInfo);
+          ? TherapyDiagnosisController.getById(reqInfo)
+          : TherapyDiagnosisController.getAll(reqInfo);
 
-      case this.INJURY_SIDES:
-        return reqInfo.id
-          ? InjurySideController.getById(reqInfo)
-          : InjurySideController.getAll(reqInfo);
-
-      case this.INJURY_TYPES:
-        return reqInfo.id
-          ? InjuryTypeController.getById(reqInfo)
-          : InjuryTypeController.getAll(reqInfo);
-
-      // NEW medical programs GET
-      case this.MEDICAL_PROGRAMS:
-        return reqInfo.id
-          ? MedicalProgramController.getById(reqInfo)
-          : MedicalProgramController.getAll(reqInfo);
-
-      // NEW industrial parts GET
-      case this.INDUSTRIAL_PARTS:
-        return reqInfo.id
-          ? IndustrialPartController.getById(reqInfo)
-          : IndustrialPartController.getAll(reqInfo);
-
-      default:
-        return undefined;
+      case 'industrialParts':
+        return IndustrialPartController.getAll(reqInfo);
     }
+
+    return undefined;
   }
 
-  // -------------------------
-  // POST
-  // -------------------------
+  // -----------------------------------------------------
+  // POST ROUTER
+  // -----------------------------------------------------
   post(reqInfo: RequestInfo) {
+    const url = reqInfo.req.url;
 
-    if (reqInfo.req.url.includes('/identity/token/generate')) {
-      return IdentityController.login(reqInfo);
+    // auth
+    if (url.includes('/identity/token/generate')) return IdentityController.login(reqInfo);
+    if (url.includes('/identity/token/refresh-token')) return IdentityController.refresh(reqInfo);
+
+    // 🔥 therapy waiting patients — FIXED
+    if (url.includes('/doctor/therapy/waiting')) {
+      return TicketController.getWaitingPatients(reqInfo);
     }
 
-    if (reqInfo.req.url.includes('/identity/token/refresh-token')) {
-      return IdentityController.refresh(reqInfo);
+    // 🔥 create therapy diagnosis
+    if (url.includes('/doctor/therapy/create')) {
+      return TherapyDiagnosisController.create(reqInfo);
     }
 
     const entity = reqInfo.collectionName;
 
     switch (entity) {
-
       case this.PATIENTS:
         return PatientController.create(reqInfo);
 
@@ -157,14 +147,16 @@ export class InMemoryDataService implements InMemoryDbService {
       case this.TICKETS:
         return TicketController.create(reqInfo);
 
-      default:
-        return undefined;
+      case this.THERAPY_DIAGNOSIS:
+        return TherapyDiagnosisController.create(reqInfo);
     }
+
+    return undefined;
   }
 
-  // -------------------------
-  // PUT
-  // -------------------------
+  // -----------------------------------------------------
+  // PUT ROUTER
+  // -----------------------------------------------------
   put(reqInfo: RequestInfo) {
     const entity = reqInfo.collectionName;
 
@@ -174,20 +166,18 @@ export class InMemoryDataService implements InMemoryDbService {
 
       case this.SERVICES:
         return ServiceController.update(reqInfo);
-
-      default:
-        return undefined;
     }
+
+    return undefined;
   }
 
-  // -------------------------
-  // DELETE
-  // -------------------------
+  // -----------------------------------------------------
+  // DELETE ROUTER
+  // -----------------------------------------------------
   delete(reqInfo: RequestInfo) {
     const entity = reqInfo.collectionName;
 
     switch (entity) {
-
       case this.PATIENTS:
         return PatientController.delete(reqInfo);
 
@@ -196,9 +186,8 @@ export class InMemoryDataService implements InMemoryDbService {
 
       case this.TICKETS:
         return TicketController.delete(reqInfo);
-
-      default:
-        return undefined;
     }
+
+    return undefined;
   }
 }

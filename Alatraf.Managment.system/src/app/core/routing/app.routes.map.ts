@@ -1,3 +1,4 @@
+import { Patient } from './../../mocks/patients/patient.dto';
 export const AppRoutes = {
   auth: {
     root: 'auth',
@@ -50,7 +51,7 @@ export const AppRoutes = {
 
     industrial: {
       root: 'industrial',
-      create: (patientId: number | string) => `industrial/create/${patientId}`,
+      create: (patientId: number | string) => `industrial/Patient/${patientId}/create`,
       view: (diagnosisId: number | string) => `industrial/view/${diagnosisId}`,
       edit: (diagnosisId: number | string) => `industrial/edit/${diagnosisId}`,
     },

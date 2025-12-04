@@ -20,3 +20,9 @@ export interface CreateTicketDto {
   serviceId: number;
   patientId: number;
 }
+export type DiagnosisType = 'therapy' | 'industrial';
+
+export const DiagnosisDepartments: Record<DiagnosisType, number[]> = {
+  therapy: [4, 6, 7],
+  industrial: [9],
+};
