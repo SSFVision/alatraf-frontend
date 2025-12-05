@@ -1,0 +1,87 @@
+@if (isLoading()) {
+<div class="flex-center">
+  <span class="loader"></span>
+</div>
+<p class="flex-center">جاري تحميل بيانات المريض...</p>
+
+} @else {
+
+<div class="row space-between sticky">
+        <h1 class="title-lg">
+          الحسابات
+        </h1>
+
+        <button class="btn primary">
+          طباعة
+        </button>
+
+      </div>
+<app-header-patient-info [patient]="patient()!"></app-header-patient-info>
+
+      <form class="padding-LR-24 column gap-16">
+
+
+        <div class="width-100">
+          <p class="title-md">
+            بيانات الدفع
+          </p>
+
+          <span class="home-line"></span>
+        </div>
+
+        <div class="row flex-center">
+          <label class="label-lg">
+            نوع الحساب
+          </label>
+          <select class="label-lg">
+            <option value=""></option>
+            <option value=" "> نقدي </option>
+            <option value=" "> صندوق المعاقين </option>
+            <option value=" "> صندوق الجرحى </option>
+          </select>
+
+          <!-- إذا إختار صندوق المعاقين -->
+          <label class="label-lg">
+            رقم البطاقة
+          </label>
+          <input class="label-lg" type="text" placeholder="">
+
+          <!-- إذا إختار صندوق الجرحى -->
+          <label class="label-lg">
+            رقم البلاغ
+          </label>
+          <input class="label-lg" type="text" placeholder="">
+
+        </div>
+
+        <div class="row flex-center">
+          <label class="label-lg">
+            المبلغ الكلي
+          </label>
+          <input class="label-lg" type="text" placeholder="">
+          <label class="label-lg">
+            التخفيض
+          </label>
+          <input class="label-lg" type="text" placeholder="">
+        </div>
+
+        <div class="row flex-center">
+          <label class="label-lg">
+            الإجمالي
+          </label>
+          <input class="label-lg" type="text" placeholder="">
+          <label class="label-lg">
+            رقم السند
+          </label>
+          <input class="label-lg" type="text" placeholder="">
+        </div>
+
+        <div class="flex-center">
+          <button class="btn primary label-md">
+            حفظ
+          </button>
+        </div>
+
+      </form>
+
+}

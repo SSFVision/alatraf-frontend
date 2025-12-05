@@ -9,7 +9,7 @@ export const DiagnosisRoutes: Routes = [
     path: 'therapy',
     canActivate: [PermissionGuard],
     data: { permission: PERMISSIONS.DIAGNOSIS.THERAPY.VIEW },
-    children: [
+     children: [
       {
         path: '',
         loadComponent: () =>

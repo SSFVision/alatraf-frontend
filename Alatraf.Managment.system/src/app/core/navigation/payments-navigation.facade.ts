@@ -10,8 +10,11 @@ export class PaymentsNavigationFacade {
     this.go(AppRoutes.payment.root, extras);
   }
 
-  goToPaiedPage(extras?: NavigationExtras): void {
-    this.go(AppRoutes.payment.root, extras);
+  goToPaiedPage(patientId: number | string, extras?: NavigationExtras): void {
+    this.go(
+      `${AppRoutes.payment.root}/${AppRoutes.payment.paied(patientId)}`,
+      extras
+    );
   }
 
   private go(path: string | any[], extras?: NavigationExtras): void {

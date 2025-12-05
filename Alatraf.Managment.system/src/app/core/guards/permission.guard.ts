@@ -17,11 +17,12 @@ export const PermissionGuard: CanActivateFn = (route) => {
     console.warn('PermissionGuard: No permission specified in route data.');
     return true; // default allow when no permission provided
   }
-
   // 2. Check permission
   const hasPermission = auth.hasPermission(requiredPermission);
 
   if (hasPermission) {
+console.log("Has PermissionGuard");
+
     return true;
   }
 

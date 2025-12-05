@@ -4,21 +4,29 @@ import { PermissionGuard } from '../../core/guards/permission.guard';
 
 export const PaymentsRoutes: Routes = [
   {
-    path: 'payments',
+    path: '',
     canActivate: [PermissionGuard],
     data: { permission: PERMISSIONS.PAYMENTS.VIEW },
-    children: [
+    loadComponent: () =>
+      import(
+        './Pages/main-payment-waiting-list/main-payment-waiting-list.component'
+      ).then((m) => m.MainPaymentWaitingListComponent),
+     children: [
       {
-        path: '',
+        path: 'paied/:patientId',
+        canActivate: [PermissionGuard],
+        data: { permission: PERMISSIONS.PAYMENTS.ADD },
         loadComponent: () =>
-          import(
-            './Pages/main-payment-waiting-list/main-payment-waiting-list.component'
-          ).then((m) => m.MainPaymentWaitingListComponent)
-
-        // children: TherapyRoutes,
+          import('./Pages/paied-page/paied-page.component').then(
+            (m) => m.PaiedPageComponent
+          ),
       },
     ],
   },
 
- 
+  {
+    path: '',
+    redirectTo: 'payments',
+    pathMatch: 'full',
+  },
 ];

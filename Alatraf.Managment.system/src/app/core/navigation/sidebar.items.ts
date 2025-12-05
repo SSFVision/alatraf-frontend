@@ -83,7 +83,7 @@ export const MENU_CONFIG: MenuCategory[] = [
     CateRoute: AppRoutes.payment.root,
     items: [
       {
-        label: 'إدارة  الحاسابات',
+        label: 'إدارة الحاسابات',
         icon: 'assets/icons/prosthetic-foot-w.svg',
         activeIcon: 'assets/icons/prosthetic-foot-b.svg',
         route: AppRoutes.payment.root,

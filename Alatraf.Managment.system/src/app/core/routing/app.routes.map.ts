@@ -29,16 +29,6 @@ export const AppRoutes = {
     },
   },
 
-  // doctor: {
-  //   root: 'doctor',
-  //   diagnosis: {
-  //     root: 'doctor/diagnosis',
-  //     create: (patientId: number | string) =>
-  //       `doctor/diagnosis/create/${patientId}`,
-  //     view: (id: number | string) => `doctor/diagnosis/view/${id}`,
-  //   },
-  // },
-
   diagnosis: {
     root: 'diagnosis',
 
@@ -50,7 +40,7 @@ export const AppRoutes = {
     },
 
     industrial: {
-      root: 'induspaymentstrial',
+      root: 'industrial',
       create: (patientId: number | string) =>
         `industrial/Patient/${patientId}/create`,
       view: (diagnosisId: number | string) => `industrial/view/${diagnosisId}`,
@@ -58,8 +48,9 @@ export const AppRoutes = {
     },
   },
   payment: {
-    root: '',
-    paied: 'payments/paied',
+    root: 'payments',
+    paied: (patientId: number | string) => `paied/${patientId}`,
+
   },
   admin: {
     root: 'admin',
