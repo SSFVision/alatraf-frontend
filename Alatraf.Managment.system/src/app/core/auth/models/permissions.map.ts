@@ -30,6 +30,10 @@ DIAGNOSIS: {
     DELETE: 'delete_industrial_diagnosis',
   },
 },
-
+  PAYMENTS: {
+    VIEW: 'view_payment',
+    ADD: 'add_paied',
+ 
+  },
 
 } as const;

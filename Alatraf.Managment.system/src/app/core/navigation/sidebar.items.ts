@@ -77,4 +77,18 @@ export const MENU_CONFIG: MenuCategory[] = [
       },
     ],
   },
+
+  {
+    category: 'قسم  الحسابات والدفع ',
+    CateRoute: AppRoutes.payment.root,
+    items: [
+      {
+        label: 'إدارة  الحاسابات',
+        icon: 'assets/icons/prosthetic-foot-w.svg',
+        activeIcon: 'assets/icons/prosthetic-foot-b.svg',
+        route: AppRoutes.payment.root,
+        requiredPermissions: [PERMISSIONS.PAYMENTS.VIEW],
+      },
+    ],
+  },
 ];

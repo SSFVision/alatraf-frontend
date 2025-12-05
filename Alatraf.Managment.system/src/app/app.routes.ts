@@ -41,6 +41,13 @@ export const APP_ROUTES: Routes = [
             (m) => m.DiagnosisRoutes
           ),
       },
+      {
+        path: AppRoutes.payment.root,
+        loadChildren: () =>
+          import('./features/Pyments/payments.route').then(
+            (m) => m.PaymentsRoutes
+          ),
+      },
     ],
   },
   {

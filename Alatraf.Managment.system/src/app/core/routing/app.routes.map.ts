@@ -50,11 +50,16 @@ export const AppRoutes = {
     },
 
     industrial: {
-      root: 'industrial',
-      create: (patientId: number | string) => `industrial/Patient/${patientId}/create`,
+      root: 'induspaymentstrial',
+      create: (patientId: number | string) =>
+        `industrial/Patient/${patientId}/create`,
       view: (diagnosisId: number | string) => `industrial/view/${diagnosisId}`,
       edit: (diagnosisId: number | string) => `industrial/edit/${diagnosisId}`,
     },
+  },
+  payment: {
+    root: '',
+    paied: 'payments/paied',
   },
   admin: {
     root: 'admin',

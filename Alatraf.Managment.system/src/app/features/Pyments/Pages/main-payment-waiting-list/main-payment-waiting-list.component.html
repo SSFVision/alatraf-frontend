@@ -1,0 +1,55 @@
+<main class="padding-32 row gap-16 padding-24">
+  <div class="box max-width-324 culumn gap-24 max-hight-800">
+    <div class="row space-between">
+      <h2 class="title-md flex-center">قائمة الإنتظار</h2>
+      <div class="primary-color-background WH-40 flex-center border-radius-20">
+        <h2 class="title-md white-color margin-auto">
+          {{ patients().length }}
+        </h2>
+      </div>
+    </div>
+    <div class="search-box">
+      <img
+        src="assets/icons/search-icon.svg"
+        class="search-icon"
+        alt="search"
+      />
+      <input
+        type="text"
+        placeholder="بحث: اسم المريض أو الرقم"
+        #searchBox
+        (input)="onSearch(searchBox.value)"
+      />
+    </div>
+    <div class="filters-container">
+      <button class="filter-btn active">الكل</button>
+      <button class="filter-btn">علاج طبيعي</button>
+      <button class="filter-btn">أعصاب</button>
+      <button class="filter-btn">عظام</button>
+    </div>
+
+    <app-waiting-patient-card
+      class="max-hight-712 column gap-16"
+      [patients]="patients()"
+      (select)="selectPatient($event)"
+    ></app-waiting-patient-card>
+  </div>
+
+  @if (selectedPatient()) {
+
+  <div class="box max-hight-800 gap-16">
+    <router-outlet></router-outlet>
+  </div>
+  }@else {
+  <div class="box max-hight-800 gap-16 flex-center">
+    <img
+      src="assets/images/bro.svg"
+      alt="اضافة تشخيص"
+      width="496.75"
+      height="512"
+      class="padding-32"
+    />
+    <p class="title-md primary-color-50">مرحباً بك</p>
+  </div>
+  }
+</main>
