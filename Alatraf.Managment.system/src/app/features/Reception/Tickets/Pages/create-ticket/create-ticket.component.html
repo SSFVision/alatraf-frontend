@@ -1,7 +1,16 @@
 <div class="backdrop" (click)="onClose()"></div>
 
 <div class="box dialog">
-  <!-- Header (always visible instantly) -->
+ 
+  @if (isLoading()) {
+<div class="flex-center">
+  <span class="loader"></span>
+</div>
+<p class="flex-center">جاري تحميل بيانات المريض...</p>
+
+} @else {
+  
+  
   <div class="space-between sticky">
     <h2 class="title-lg">اصدار تذكرة خدمة</h2>
     <img
@@ -14,12 +23,7 @@
     <p class="title-md">بيانات المريض</p>
     <span class="home-line"></span>
   </div>
-  <div class="padding-LR-24 mt-12" *ngIf="loading">
-    <p class="label-lg">جاري تحميل بيانات المريض...</p>
-  </div>
-
   <app-patient-summary-card
-    *ngIf="!loading"
     [patient]="patient"
   ></app-patient-summary-card>
 
@@ -47,4 +51,5 @@
     <!--  -->
     <button class="btn primary label-md" type="submit" [disabled]="isInvalid('serviceId') || isSaved"  >حفظ و طباعة</button>
   </form>
+}
 </div>

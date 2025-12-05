@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { PatientSummaryCardComponent } from '../../../Patients/components/patient-summary-card/patient-summary-card.component';
 import { ServiceSelectComponent } from '../../../../../shared/components/service-select/service-select.component';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -28,14 +28,13 @@ export class CreateTicketComponent implements OnInit {
   private fb = inject(FormBuilder);
   private navReception = inject(NavigationReceptionFacade);
   private uiLock = inject(UiLockService);
+  isLoading = signal(true);
 
   private toast = inject(ToastService);
   patientService = inject(PatientService);
   ticketService = inject(TicketService);
 
   patient!: Patient;
-  loading = true;
-
   form = this.fb.group({
     serviceId: [null, Validators.required],
   });
@@ -45,8 +44,8 @@ export class CreateTicketComponent implements OnInit {
     this.patientService.getPatientById(id).subscribe((res) => {
       if (res.isSuccess && res.data) {
         this.patient = res.data;
+        this.isLoading.set(false);
       }
-      this.loading = false;
     });
   }
   isSaved = false;

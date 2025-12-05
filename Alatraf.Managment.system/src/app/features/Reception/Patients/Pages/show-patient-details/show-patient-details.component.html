@@ -1,8 +1,21 @@
 <div class="backdrop" (click)="onClose()"></div>
-<div class="box dialog ">
+<div class="box dialog">
+  @if (isLoading()) {
+  <div class="flex-center">
+    <span class="loader"></span>
+  </div>
+  <p class="flex-center">جاري تحميل بيانات المريض...</p>
+
+  } @else {
+
   <div class="space-between sticky">
     <h2 class="title-lg">بيانات المريض</h2>
-    <img src="assets/icons/close-icon.svg" alt="إغلاق" class="close-icon" (click)="onClose()" />
+    <img
+      src="assets/icons/close-icon.svg"
+      alt="إغلاق"
+      class="close-icon"
+      (click)="onClose()"
+    />
   </div>
 
   <div>
@@ -15,4 +28,5 @@
       إغلاق
     </button>
   </div>
+  }
 </div>
