@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <style>
+    .multi-select {
+      width: 100%;
+      min-height: 50px;
+      border: 1px solid var(--gray-color);
+      border-radius: 16px;
+      padding: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      position: relative;
+      cursor: pointer;
+      background: var(--white-color);
+      box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.08);
+      transition: border 0.2s, box-shadow 0.2s;
+    }
+
+    .multi-select:hover {
+      border-color: var(--primary-color);
+    }
+
+    .selected-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      flex: 1;
+    }
+
+    /* --- TAG STYLE --- */
+    .tag {
+      background: var(--white-color);
+      padding: 6px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--gray-color);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      color: var(--primary-color);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .tag span {
+      cursor: pointer;
+      font-size: 16px;
+      color: var(--red-color);
+    }
+
+    /* --- ARROW --- */
+    .arrow {
+      width: 20px;
+      height: 20px;
+      background: url('data:image/svg+xml;utf8,<svg fill="%23003366" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat center;
+      cursor: pointer;
+    }
+
+    /* --- OPTIONS LIST --- */
+    .options-container {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      max-height: 200px;
+      background: var(--white-color);
+      border-radius: 14px;
+      border: 1px solid var(--gray-color);
+      margin-top: 6px;
+      overflow-y: auto;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+      z-index: 999;
+    }
+
+    .option {
+      padding: 12px;
+      cursor: pointer;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      transition: background 0.2s;
+      color: var(--primary-color);
+    }
+
+    .option:hover {
+      background: var(--primary-color-50);
+      color: var(--white-color);
+    }
+
+    .option.selected {
+      background: var(--primary-color);
+      color: var(--white-color);
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div class="multi-select">
+    <div class="selected-tags" id="selectedTags"></div>
+
+    <div class="arrow"></div>
+
+    <div class="options-container" id="optionsList">
+      <div class="option" data-value="CSS">CSS</div>
+      <div class="option" data-value="HTML">HTML</div>
+      <div class="option" data-value="JavaScript">JavaScript</div>
+      <div class="option" data-value="ReactJS">ReactJS</div>
+      <div class="option" data-value="Figma">Figma</div>
+    </div>
+  </div>
+
+  <!-- JavaScript الضروري لعمل المكون -->
+  <script>
+    const selectedTagsContainer = document.getElementById("selectedTags");
+    const optionsList = document.getElementById("optionsList");
+    const multiSelect = document.querySelector(".multi-select");
+
+    // فتح/إغلاق القائمة
+    multiSelect.addEventListener("click", () => {
+      optionsList.style.display =
+        optionsList.style.display === "block" ? "none" : "block";
+    });
+
+    // عند اختيار عنصر
+    document.querySelectorAll(".option").forEach(option => {
+      option.addEventListener("click", (e) => {
+        e.stopPropagation();
+
+        const value = option.getAttribute("data-value");
+
+        if (!option.classList.contains("selected")) {
+          addTag(value);
+          option.classList.add("selected");
+        } else {
+          removeTag(value);
+          option.classList.remove("selected");
+        }
+      });
+    });
+
+    function addTag(text) {
+      const tag = document.createElement("div");
+      tag.classList.add("tag");
+      tag.innerHTML = `${text} <span data-value="${text}">×</span>`;
+      selectedTagsContainer.appendChild(tag);
+
+      // حدث حذف التاج
+      tag.querySelector("span").addEventListener("click", (e) => {
+        removeTag(text);
+        document.querySelector(`.option[data-value="${text}"]`)
+          .classList.remove("selected");
+      });
+    }
+
+    function removeTag(value) {
+      const tags = document.querySelectorAll(".tag");
+      tags.forEach(tag => {
+        if (tag.textContent.includes(value)) tag.remove();
+      });
+    }
+  </script>
+
+</body>
+
+</html>
