@@ -42,14 +42,14 @@ export class NavigationAuthFacade {
         case 'Doctor_Industrial':
         return `${AppRoutes.diagnosis.root}/${AppRoutes.diagnosis.industrial.root}`;
 
-      case 'Admin':
-        return AppRoutes.admin.dashboard;
-
-      case 'Manager':
-        return AppRoutes.management.dashboard;
-
       case 'Finance':
-        return AppRoutes.finance.transactions;
+        return AppRoutes.finance.root;
+
+      // case 'Admin':
+      //   return AppRoutes.admin.dashboard;
+
+      // case 'Manager':
+      //   return AppRoutes.management.dashboard;
 
       default:
         return AppRoutes.auth.login;

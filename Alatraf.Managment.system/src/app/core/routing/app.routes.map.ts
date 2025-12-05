@@ -47,10 +47,10 @@ export const AppRoutes = {
       edit: (diagnosisId: number | string) => `industrial/edit/${diagnosisId}`,
     },
   },
-  payment: {
-    root: 'payments',
-    paied: (patientId: number | string) => `paied/${patientId}`,
 
+  finance: {
+    root: 'finance',
+    paied: (patientId: number | string) => `paied/${patientId}`,
   },
   admin: {
     root: 'admin',
@@ -60,11 +60,6 @@ export const AppRoutes = {
   management: {
     root: 'management',
     dashboard: 'management/dashboard',
-  },
-
-  finance: {
-    root: 'finance',
-    transactions: 'finance/transactions',
   },
 
   system: {

@@ -7,12 +7,12 @@ export class PaymentsNavigationFacade {
   private router = inject(Router);
 
   goToPaymentMainPage(extras?: NavigationExtras): void {
-    this.go(AppRoutes.payment.root, extras);
+    this.go(AppRoutes.finance.root, extras);
   }
 
   goToPaiedPage(patientId: number | string, extras?: NavigationExtras): void {
     this.go(
-      `${AppRoutes.payment.root}/${AppRoutes.payment.paied(patientId)}`,
+      `${AppRoutes.finance.root}/${AppRoutes.finance.paied(patientId)}`,
       extras
     );
   }

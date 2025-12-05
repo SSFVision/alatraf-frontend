@@ -42,7 +42,7 @@ export const APP_ROUTES: Routes = [
           ),
       },
       {
-        path: AppRoutes.payment.root,
+        path: AppRoutes.finance.root,
         loadChildren: () =>
           import('./features/Pyments/payments.route').then(
             (m) => m.PaymentsRoutes
