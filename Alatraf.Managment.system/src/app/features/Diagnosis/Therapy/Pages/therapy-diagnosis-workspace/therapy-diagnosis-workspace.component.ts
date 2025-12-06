@@ -12,9 +12,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HeaderPatientInfoComponent } from '../../../Shared/Components/header-patient-info/header-patient-info.component';
 import { MOCK_THERAPY_CARD_HISTORY, TherapyCardHistoryDto } from '../../Models/therapy-card-history.dto';
 import { PreviousTherapyCardDiagnosisComponent } from '../../Components/previous-therapy-card-diagnosis/previous-therapy-card-diagnosis.component';
-import { TherapyDiagnosisFormDto } from '../../Models/therapy-diagnosis-form.dto';
 import { AddTherapyDiagnosisFormComponent } from '../../Components/add-therapy-diagnosis-form/add-therapy-diagnosis-form.component';
 import { ToastService } from '../../../../../core/services/toast.service';
+import { CreateTherapyCardRequest } from '../../Models/create-therapy-card.request';
 
 @Component({
   selector: 'app-therapy-diagnosis-workspace',
@@ -41,21 +41,13 @@ export class TherapyDiagnosisWorkspaceComponent implements OnInit {
 
   isLoading = signal(true);
 
-  private createProgram(): FormGroup {
-    return this.fb.group({
-      MedicalProgramId: this.fb.control(null, Validators.required),
-      Duration: this.fb.control(null, [Validators.required, Validators.min(1)]),
-      Notes: this.fb.control(''),
-    });
-  }
+ 
 
   ngOnInit(): void {
     this.listenToRouteChanges();
   }
 
-  // ------------------
-  // ROUTE PARAM CHANGE HANDLER
-  // ------------------
+ 
   private listenToRouteChanges() {
     this.route.paramMap
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -100,9 +92,9 @@ export class TherapyDiagnosisWorkspaceComponent implements OnInit {
 
   // for the form
 
-  saveTherapyDiagnosis(formValue: TherapyDiagnosisFormDto) {
+  saveTherapyDiagnosis(formValue: CreateTherapyCardRequest) {
 
-    this.toast.success("Saved Sucess"+formValue.diagnosis)
+    this.toast.success("Saved Sucess"+formValue.DiagnosisText)
     console.log('Therapy Diagnosis Payload:', formValue);
   }
 }
