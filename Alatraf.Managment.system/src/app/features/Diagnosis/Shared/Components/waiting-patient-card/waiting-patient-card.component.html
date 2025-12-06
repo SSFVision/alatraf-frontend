@@ -5,8 +5,13 @@
 </div>
 } @for (patient of patients(); track patient.patientId) {
 
+  <!-- temp until the real patient status come from the backend -->
 <div
-  class="card primary-card cursor-pointer"
+  class="card cursor-pointer primary"
+  
+  [class.yellow-card]="patient.patientId%2==0" 
+  [class.green-card]="patient.patientId%2==1"
+  [class.red-card]="selectedPatientId() === patient.patientId"
   [class.selected]="selectedPatientId() === patient.patientId"
   (click)="onSelect(patient)"
 >

@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { AppUserRole } from '../../core/auth/models/app.user.roles.enum';
 import { PERMISSIONS } from '../../core/auth/models/permissions.map';
 import { PermissionGuard } from '../../core/guards/permission.guard';
 import { TherapyRoutes } from './Therapy/therapy.routes';
@@ -10,7 +9,7 @@ export const DiagnosisRoutes: Routes = [
     path: 'therapy',
     canActivate: [PermissionGuard],
     data: { permission: PERMISSIONS.DIAGNOSIS.THERAPY.VIEW },
-    children: [
+     children: [
       {
         path: '',
         loadComponent: () =>

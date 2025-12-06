@@ -6,5 +6,5 @@ export enum AppUserRole {
   Finance = 'Finance',
   Doctor_Therapy = 'Doctor_Therapy',
   Doctor_Industrial = 'Doctor_Industrial',
-
+  Appointment='Appointment'
 }

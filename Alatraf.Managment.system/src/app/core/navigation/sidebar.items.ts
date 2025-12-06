@@ -33,21 +33,6 @@ export const MENU_CONFIG: MenuCategory[] = [
         route: AppRoutes.reception.patients.add,
         requiredPermissions: [PERMISSIONS.PATIENTS.ADD],
       },
-
-      {
-        label: 'تعديل مريض',
-        icon: 'assets/icons/user-icon-w.svg',
-        activeIcon: 'assets/icons/user-icon-b.svg',
-        route: AppRoutes.reception.patients.edit(1),
-        requiredPermissions: [PERMISSIONS.PATIENTS.UPDATE],
-      },
-      {
-        label: 'حذف مريض',
-        icon: 'assets/icons/user-icon-w.svg',
-        activeIcon: 'assets/icons/user-icon-b.svg',
-        route: AppRoutes.reception.patients.edit(3),
-        requiredPermissions: [PERMISSIONS.PATIENTS.DELETE],
-      },
     ],
   },
   {
@@ -74,6 +59,34 @@ export const MENU_CONFIG: MenuCategory[] = [
         activeIcon: 'assets/icons/prosthetic-foot-b.svg',
         route: `${AppRoutes.diagnosis.root}/${AppRoutes.diagnosis.industrial.root}`,
         requiredPermissions: [PERMISSIONS.DIAGNOSIS.INDUSTRIAL.VIEW],
+      },
+    ],
+  },
+
+  {
+    category: 'قسم  الحسابات والدفع ',
+    CateRoute: AppRoutes.finance.root,
+    items: [
+      {
+        label: 'إدارة الحاسابات',
+        icon: 'assets/icons/prosthetic-foot-w.svg',
+        activeIcon: 'assets/icons/prosthetic-foot-b.svg',
+        route: AppRoutes.finance.root,
+        requiredPermissions: [PERMISSIONS.PAYMENTS.VIEW],
+      },
+    ],
+  },
+
+   {
+    category: 'قسم   المواعيد ',
+    CateRoute: AppRoutes.Appointment.root,
+    items: [
+      {
+        label: 'إدارة المواعيد',
+        icon: 'assets/icons/prosthetic-foot-w.svg',
+        activeIcon: 'assets/icons/prosthetic-foot-b.svg',
+        route: AppRoutes.Appointment.root,
+        requiredPermissions: [PERMISSIONS.Appointment.VIEW],
       },
     ],
   },

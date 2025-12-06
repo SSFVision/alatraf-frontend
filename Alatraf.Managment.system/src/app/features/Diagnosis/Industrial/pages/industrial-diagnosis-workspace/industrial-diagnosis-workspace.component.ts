@@ -1,4 +1,3 @@
-import { DiagnosisDepartments } from './../../../../../mocks/Tickets/ticket.model';
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { HeaderPatientInfoComponent } from '../../../Shared/Components/header-patient-info/header-patient-info.component';
 import { ActivatedRoute } from '@angular/router';

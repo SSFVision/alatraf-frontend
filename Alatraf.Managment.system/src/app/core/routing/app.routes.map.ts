@@ -29,16 +29,6 @@ export const AppRoutes = {
     },
   },
 
-  // doctor: {
-  //   root: 'doctor',
-  //   diagnosis: {
-  //     root: 'doctor/diagnosis',
-  //     create: (patientId: number | string) =>
-  //       `doctor/diagnosis/create/${patientId}`,
-  //     view: (id: number | string) => `doctor/diagnosis/view/${id}`,
-  //   },
-  // },
-
   diagnosis: {
     root: 'diagnosis',
 
@@ -51,10 +41,22 @@ export const AppRoutes = {
 
     industrial: {
       root: 'industrial',
-      create: (patientId: number | string) => `industrial/Patient/${patientId}/create`,
+      create: (patientId: number | string) =>
+        `industrial/Patient/${patientId}/create`,
       view: (diagnosisId: number | string) => `industrial/view/${diagnosisId}`,
       edit: (diagnosisId: number | string) => `industrial/edit/${diagnosisId}`,
     },
+  },
+
+  finance: {
+    root: 'finance',
+    paied: (patientId: number | string) => `paied/${patientId}`,
+  },
+  Appointment: {
+    root: 'appointments',
+    addHoliday: 'new/holiday',
+    schedule: (patientId: number | string) => `schedule/${patientId}`,
+    reschedule: (patientId: number | string) => `reschedule/${patientId}`,
   },
   admin: {
     root: 'admin',
@@ -64,11 +66,6 @@ export const AppRoutes = {
   management: {
     root: 'management',
     dashboard: 'management/dashboard',
-  },
-
-  finance: {
-    root: 'finance',
-    transactions: 'finance/transactions',
   },
 
   system: {

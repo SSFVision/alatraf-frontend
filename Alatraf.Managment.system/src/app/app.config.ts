@@ -42,7 +42,7 @@ export const appConfig: ApplicationConfig = {
     ),
     importProvidersFrom(
       HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService, {
-        delay:900,
+        delay: 500,
         // passThruUnknownUrl: true,
         dataEncapsulation: false,
         put204: false, // return body instead of empty

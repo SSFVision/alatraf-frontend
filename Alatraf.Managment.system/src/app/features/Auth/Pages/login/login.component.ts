@@ -1,4 +1,10 @@
-import { Component, ElementRef, Inject, inject, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Inject,
+  inject,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NavigationAuthFacade } from '../../../../core/navigation/navigation-auth.facade';
 import { AppUserRole } from '../../../../core/auth/models/app.user.roles.enum';
@@ -14,7 +20,7 @@ import { LoginRequest } from '../../../../core/auth/models/login-request.model';
   styleUrl: './login.component.css',
 })
 export class LoginComponent {
-   private fb = inject(FormBuilder);
+  private fb = inject(FormBuilder);
   private auth = inject(AuthFacade);
 
   @ViewChild('usernameInput') usernameInput!: ElementRef;
@@ -25,8 +31,8 @@ export class LoginComponent {
   shake = false;
 
   loginForm = this.fb.group({
-    userName: ['wa', Validators.required],
-    password: ['wa', Validators.required],
+    userName: ['ad', Validators.required],
+    password: ['fc', Validators.required],
   });
 
   ngOnInit(): void {
