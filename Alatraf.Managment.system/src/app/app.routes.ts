@@ -48,6 +48,13 @@ export const APP_ROUTES: Routes = [
             (m) => m.PaymentsRoutes
           ),
       },
+        {
+        path: AppRoutes.Appointment.root,
+        loadChildren: () =>
+          import('./features/Appointments/appointments.route').then(
+            (m) => m.AppointmentRoutes
+          ),
+      },
     ],
   },
   {

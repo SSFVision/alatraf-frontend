@@ -22,28 +22,10 @@
       />
     </div>
     <div class="filters-container">
-      `
-      <button
-        class="filter-btn"
-        (click)="SelectFilter(0)"
-        [class.active]="currentActiveFilter === 0"
-      >
-        الكل
-      </button>
-      <button
-        class="filter-btn"
-        (click)="SelectFilter(1)"
-        [class.active]="currentActiveFilter === 1"
-      >
-        الأطراف الصناعية
-      </button>
-      <button
-        class="filter-btn"
-        (click)="SelectFilter(2)"
-        [class.active]="currentActiveFilter === 2"
-      >
-        العلاج الطبيعي
-      </button>
+      <button class="filter-btn active">الكل</button>
+      <button class="filter-btn">جديد</button>
+      <button class="filter-btn">اليوم</button>
+      <button class="filter-btn">متأخر</button>
     </div>
 
     <app-waiting-patient-card
@@ -52,21 +34,25 @@
       (select)="selectPatient($event)"
     ></app-waiting-patient-card>
   </div>
-  @if (selectedPatient()) {
+  <div class="column gap-24">
+    <button class="btn big-btn primary lable-lg" type="button" (click)="OnAddHoliday()">إضافة إجازة</button>
 
-  <div class="box max-hight-800 gap-16">
-    <router-outlet></router-outlet>
+    @if (selectedPatient()) {
+
+    <div class="box max-hight-800 gap-16">
+      <router-outlet></router-outlet>
+    </div>
+    }@else {
+    <div class="box max-hight-800 gap-16 flex-center">
+      <img
+        src="assets/images/bro.svg"
+        alt="اضافة تشخيص"
+        width="496.75"
+        height="512"
+        class="padding-32"
+      />
+      <p class="title-md primary-color-50">مرحباً بك</p>
+    </div>
+    }
   </div>
-  }@else {
-  <div class="box max-hight-800 gap-16 flex-center">
-    <img
-      src="assets/images/bro.svg"
-      alt="اضافة تشخيص"
-      width="496.75"
-      height="512"
-      class="padding-32"
-    />
-    <p class="title-md primary-color-50">مرحباً بك</p>
-  </div>
-  }
 </main>

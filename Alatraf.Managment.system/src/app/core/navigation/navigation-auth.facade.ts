@@ -3,7 +3,6 @@ import { Router, NavigationExtras } from '@angular/router';
 import { AppRoutes } from '../routing/app.routes.map';
 import { AppUserRole } from '../auth/models/app.user.roles.enum';
 
-
 @Injectable({ providedIn: 'root' })
 export class NavigationAuthFacade {
   private router = inject(Router);
@@ -27,7 +26,6 @@ export class NavigationAuthFacade {
     });
   }
 
-
   goToLogin(extras?: NavigationExtras): void {
     this.go(AppRoutes.auth.login, extras);
   }
@@ -39,14 +37,15 @@ export class NavigationAuthFacade {
 
       case 'Doctor_Therapy':
         return `${AppRoutes.diagnosis.root}/${AppRoutes.diagnosis.therapy.root}`;
-        case 'Doctor_Industrial':
+      case 'Doctor_Industrial':
         return `${AppRoutes.diagnosis.root}/${AppRoutes.diagnosis.industrial.root}`;
 
       case 'Finance':
         return AppRoutes.finance.root;
-
-      // case 'Admin':
-      //   return AppRoutes.admin.dashboard;
+      case 'Appointment':
+        return AppRoutes.Appointment.root;
+        case 'Admin':
+        return AppRoutes.reception.root;
 
       // case 'Manager':
       //   return AppRoutes.management.dashboard;

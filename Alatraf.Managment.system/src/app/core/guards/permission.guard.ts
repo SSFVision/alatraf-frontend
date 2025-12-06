@@ -21,8 +21,6 @@ export const PermissionGuard: CanActivateFn = (route) => {
   const hasPermission = auth.hasPermission(requiredPermission);
 
   if (hasPermission) {
-console.log("Has PermissionGuard");
-
     return true;
   }
 

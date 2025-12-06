@@ -1,0 +1,41 @@
+
+<!-- <div class="backdrop" (click)="onClose()"></div> -->
+
+<!-- <div class="box dialog"> -->
+  <div class="space-between sticky">
+    <div class="row gap-16">
+      <h2 class="title-lg cursor-pointer">إضافة إجازة</h2>
+      <!-- هذا يظهر فقط إذا يوجد اجازات مسجلة في النظام  -->
+      <h2 class="title-lg cursor-pointer primary-color-50">الإجازات</h2>
+    </div>
+    <img
+      src="assets/icons/close-icon.svg"
+      alt="إغلاق"
+      class="close-icon"
+    />
+  </div>
+
+  <div>
+    <p class="title-md">بيانات الإجازة</p>
+
+    <span class="home-line"></span>
+  </div>
+
+  <form class="padding-LR-24 column gap-16">
+    <div class="row flex-center">
+      <label class="label-lg"> عدد الأيام </label>
+      <input class="label-lg" type="text" placeholder="" />
+    </div>
+
+    <div class="row flex-center">
+      <label class="label-lg"> تاريخ الإجازة : من </label>
+      <input class="label-lg" type="number" placeholder="" />
+      <label class="label-lg"> إلى </label>
+      <input class="label-lg" type="number" placeholder="" />
+    </div>
+
+    <div class="row gap-32 flex-center">
+      <button class="btn primary label-md" type="button">حفظ التعديلات</button>
+    </div>
+  </form>
+<!-- </div> -->

@@ -34,4 +34,11 @@ export const PERMISSIONS = {
     VIEW: 'view_payment',
     ADD: 'add_paied',
   },
+
+  Appointment: {
+    VIEW: 'appointment:read',
+    Schedule: 'appointment:schedule',
+    ReSchedule: 'appointment:reschedule',
+    AddHoliday: 'holiday:create',
+  },
 } as const;

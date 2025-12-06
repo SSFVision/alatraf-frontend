@@ -23,7 +23,7 @@ export const IDENTITY_USERS_MOCK: IdentityUserMock[] = [
   {
     userId: 3,
     userName: 'ff',
-    password: 'ff',
+    password: 'fc',
     roles: ['Doctor_Industrial'],
     permissions: [
       PERMISSIONS.DIAGNOSIS.INDUSTRIAL.VIEW,
@@ -35,8 +35,8 @@ export const IDENTITY_USERS_MOCK: IdentityUserMock[] = [
   {
     userId: 4,
     userName: 'wa',
-    password: 'wa',
-    roles: ['Doctor_Industrial'],
+    password: 'fc',
+    roles: [AppUserRole.Admin],
     permissions: [
       PERMISSIONS.PATIENTS.VIEW,
       PERMISSIONS.PATIENTS.ADD,
@@ -58,7 +58,23 @@ export const IDENTITY_USERS_MOCK: IdentityUserMock[] = [
       PERMISSIONS.PAYMENTS.VIEW,
       PERMISSIONS.PAYMENTS.ADD,
       PERMISSIONS.PATIENTS.ADD,
+      PERMISSIONS.Appointment.VIEW,
+      PERMISSIONS.Appointment.Schedule,
+      PERMISSIONS.Appointment.ReSchedule,
+    ],
+  },
 
+  {
+    userId: 6,
+    userName: 'ad',
+    password: 'fc',
+    roles: [AppUserRole.Appointment],
+    permissions: [
+
+      PERMISSIONS.Appointment.VIEW,
+      PERMISSIONS.Appointment.Schedule,
+      PERMISSIONS.Appointment.ReSchedule,
+      PERMISSIONS.Appointment.AddHoliday,
     ],
   },
 ];

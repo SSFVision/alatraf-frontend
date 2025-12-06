@@ -52,6 +52,12 @@ export const AppRoutes = {
     root: 'finance',
     paied: (patientId: number | string) => `paied/${patientId}`,
   },
+  Appointment: {
+    root: 'appointments',
+    addHoliday: 'new/holiday',
+    schedule: (patientId: number | string) => `schedule/${patientId}`,
+    reschedule: (patientId: number | string) => `reschedule/${patientId}`,
+  },
   admin: {
     root: 'admin',
     dashboard: 'admin/dashboard',
