@@ -9,9 +9,7 @@ import { AuthFacade } from '../../core/auth/auth.facade';
 })
 export class HeaderComponent {
   auth = inject(AuthFacade);
-  userName = this.auth.getUser()?.name!;
-  // fu = this.auth.!;
-
+  user = this.auth.getUser()!;
 
 
 }
