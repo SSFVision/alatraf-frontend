@@ -31,7 +31,7 @@ export class LoginComponent {
   shake = false;
 
   loginForm = this.fb.group({
-    userName: ['ad', Validators.required],
+    userName: ['wa', Validators.required],
     password: ['fc', Validators.required],
   });
 

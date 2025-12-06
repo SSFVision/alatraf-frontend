@@ -1,15 +1,21 @@
+
+
 <div class="ms-container" [class.ms-disabled]="disabled">
   <!-- منطقة التشيبس / العرض -->
   <div class="ms-display" (click)="toggleDropdown($event)">
     <div class="ms-chips-wrapper">
       <!-- لو في عناصر مختارة نظهرها كـ chips -->
-      <ng-container *ngIf="selectedValues.length; else msPlaceholder">
-        <div class="ms-chip" *ngFor="let option of options" [class.ms-chip-hidden]="!isSelected(option)">
+      <ng-container *ngIf="value.length; else msPlaceholder">
+        <div class="ms-chip" *ngFor="let option of selectedOptions">
           <span class="ms-chip-label">
             {{ option.label }}
           </span>
 
-          <button type="button" class="ms-chip-remove" (click)="clearOne(option, $event)">
+          <button
+            type="button"
+            class="ms-chip-remove"
+            (click)="clearOne(option, $event)"
+          >
             ✕
           </button>
         </div>
@@ -22,7 +28,12 @@
     </div>
 
     <div class="ms-actions">
-      <button type="button" class="ms-clear-all" *ngIf="selectedValues.length" (click)="clearAll($event)">
+      <button
+        type="button"
+        class="ms-clear-all"
+        *ngIf="value.length"
+        (click)="clearAll($event)"
+      >
         مسح الكل
       </button>
 
@@ -32,8 +43,12 @@
 
   <!-- قائمة الخيارات (dropdown) -->
   <div class="ms-dropdown" *ngIf="isOpen">
-    <div class="ms-option" *ngFor="let option of options" [class.ms-option-selected]="isSelected(option)"
-      (click)="toggleOption(option)">
+    <div
+      class="ms-option"
+      *ngFor="let option of options"
+      [class.ms-option-selected]="isSelected(option)"
+      (click)="toggleOption(option)"
+    >
       <div class="ms-option-label">
         {{ option.label }}
       </div>
