@@ -1,5 +1,3 @@
-<!-- <div class="row flex-center"> -->
-
 <label class="label-lg"> نوع الخدمة </label>
 <select
   class="label-lg"
@@ -11,16 +9,11 @@
 
   <option *ngFor="let s of services()" [value]="s.serviceId">
     {{ s.name }}
-    &nbsp;←&nbsp;
-
     {{
-      s.price === null
-        ? "بدون سعر"
-        : s.price === 0
-        ? "مجاني"
-        : (s.price | number : "1.0-0") + " ريال"
+      s.price == null
+        ? ""
+        : " ← " +
+          (s.price === 0 ? "مجاني" : (s.price | number : "1.0-0") + " ريال")
     }}
   </option>
 </select>
-
-<!-- </div> -->
