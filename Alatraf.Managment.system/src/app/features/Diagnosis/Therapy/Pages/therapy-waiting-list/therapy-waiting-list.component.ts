@@ -62,7 +62,7 @@ export class TherapyWaitingListComponent implements OnInit {
   }
 
   filterByDepartment(departmentId: number | null) {
-    this.ticketFacade.updateFilters({ serviceId: departmentId ?? undefined });
+    // this.ticketFacade.updateFilters({ serviceId: departmentId ?? undefined });
     this.ticketFacade.loadTickets();
   }
 

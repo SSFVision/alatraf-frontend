@@ -9,6 +9,7 @@ import { SearchManager } from '../../../core/utils/search-manager';
 import { TicketFilterRequest } from './models/ticket-filter.model';
 import { TicketDto } from './models/ticket.model';
 import { TicketService } from './ticket.service';
+import { PageRequest } from '../../../core/models/Shared/page-request.model';
 
 @Injectable({
   providedIn: 'root',
@@ -27,6 +28,7 @@ export class TicketFacade extends BaseFacade {
     serviceId: undefined,
     status: undefined,
     createdFrom: undefined,
+    
   });
   filters = this._filters.asReadonly();
 
@@ -37,13 +39,15 @@ export class TicketFacade extends BaseFacade {
     super();
   }
 
+pagerequet:PageRequest={ page: 1, pageSize: 20 }
+
   // =============================================
   // SEARCH MANAGER (NO CACHE)
   // =============================================
   private searchManager = new SearchManager<TicketDto[]>(
     (term: string) =>
       this.ticketService
-        .getTickets({ ...this._filters(), searchTerm: term })
+        .getTickets({ ...this._filters(), searchTerm: term },this.pagerequet)
         .pipe(
           tap((res: ApiResult<any>) => {
             if (!res.isSuccess) this.handleSearchError(res);
@@ -76,7 +80,7 @@ export class TicketFacade extends BaseFacade {
   // =============================================
   loadTickets(): void {
     this.ticketService
-      .getTickets(this._filters())
+      .getTickets(this._filters(),this.pagerequet)
       .pipe(
         tap((result: ApiResult<any>) => {
           if (result.isSuccess && result.data?.items) {

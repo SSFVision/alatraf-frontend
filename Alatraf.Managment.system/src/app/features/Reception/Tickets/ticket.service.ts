@@ -10,6 +10,7 @@ import {
 } from './models/ticket.model';
 import { TicketFilterRequest } from './models/ticket-filter.model';
 import { PaginatedList } from '../../../core/models/Shared/paginated-list.model';
+import { PageRequest } from '../../../core/models/Shared/page-request.model';
 
 @Injectable({
   providedIn: 'root',
@@ -21,9 +22,21 @@ export class TicketService extends BaseApiService {
     super(http);
   }
 
- getTickets(filter?: TicketFilterRequest): Observable<ApiResult<PaginatedList<TicketDto>>> {
+getTickets(
+  filter?: TicketFilterRequest,
+  pageRequest?: PageRequest
+): Observable<ApiResult<PaginatedList<TicketDto>>> {
   let params = new HttpParams();
 
+  // ---- PageRequest → page & pageSize ----
+  const page = pageRequest?.page ?? 1;
+  const pageSize = pageRequest?.pageSize ?? 10;
+
+  params = params
+    .set('page', page)
+    .set('pageSize', pageSize);
+
+  // ---- TicketFilterRequest → rest of filters ----
   if (filter) {
     Object.entries(filter).forEach(([key, value]) => {
       if (value !== undefined && value !== null && value !== '') {
@@ -34,6 +47,7 @@ export class TicketService extends BaseApiService {
 
   return this.get<PaginatedList<TicketDto>>(this.endpoint, params);
 }
+
 
   getTicketById(id: number): Observable<ApiResult<TicketDto>> {
     return this.get<TicketDto>(`${this.endpoint}/${id}`);
