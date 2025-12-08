@@ -121,3 +121,10 @@
     margin-top: 12px;
   }
 }
+.dots {
+  padding: 0 8px;
+  font-size: 18px;
+  color: var(--text-muted, #888);
+  user-select: none;
+}
+

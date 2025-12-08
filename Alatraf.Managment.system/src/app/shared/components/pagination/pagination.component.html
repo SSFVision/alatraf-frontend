@@ -1,29 +1,8 @@
 <div class="pagination-wrapper">
 
-  <!-- Info -->
-  <div class="pagination-info">
-    <div class="info-line">
-      الصفحة <span class="value">{{ page }}</span>
-      من <span class="value">{{ totalPages }}</span>
-    </div>
-    <div class="info-line">
-      إجمالي السجلات:
-      <span class="value">{{ totalCount }}</span>
-    </div>
-  </div>
+  <div class="page-controls">
 
-  <!-- Controls -->
-  <div class="page-controls ">
-
-    <!-- <button
-      class="base-btn nav-btn"
-      [disabled]="page <= 1"
-      (click)="goToPage(1)"
-      title="الصفحة الأولى"
-    >
-      «
-    </button> -->
-
+    <!-- Previous Button -->
     <button
       class="base-btn nav-btn"
       [disabled]="page <= 1"
@@ -33,17 +12,27 @@
       ‹
     </button>
 
+    <!-- Dynamic pages + dots -->
     <div class="pages-container">
-      <button
-        class="base-btn page-btn"
-        *ngFor="let p of range(1, totalPages)"
-        [class.active]="p === page"
-        (click)="goToPage(p)"
-      >
-        {{ p }}
-      </button>
+      <ng-container *ngFor="let p of getPagesToShow()">
+
+        <!-- Dots -->
+        <span *ngIf="p === 'dots'" class="dots">...</span>
+
+        <!-- Page button -->
+        <button
+          *ngIf="p !== 'dots'"
+          class="base-btn page-btn"
+          [class.active]="p === page"
+          (click)="onPageClick(p)"
+        >
+          {{ p }}
+        </button>
+
+      </ng-container>
     </div>
 
+    <!-- Next Button -->
     <button
       class="base-btn nav-btn"
       [disabled]="page >= totalPages"
@@ -53,18 +42,9 @@
       ›
     </button>
 
-    <!-- <button
-      class="base-btn nav-btn"
-      [disabled]="page >= totalPages"
-      (click)="goToPage(totalPages)"
-      title="الصفحة الأخيرة"
-    >
-      »
-    </button> -->
-
   </div>
 
-  <!-- Page size -->
+  <!-- Page size selector -->
   <div class="page-size">
     <label>لكل صفحة:</label>
     <select
@@ -76,4 +56,5 @@
       </option>
     </select>
   </div>
+
 </div>
