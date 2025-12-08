@@ -1,144 +1,98 @@
-import { Injectable, inject, signal } from '@angular/core';
-import { map, tap } from 'rxjs/operators';
+import { inject, Injectable, signal } from '@angular/core';
 
 import { BaseFacade } from '../../../../core/utils/facades/base-facade';
-import { ApiResult } from '../../../../core/models/ApiResult';
-
+import { TherapyCardDiagnosisDto } from '../Models/therapy-card-diagnosis.dto';
 import { TherapyDiagnosisService } from './therapy-diagnosis.service';
-import { SearchManager } from '../../../../core/utils/search-manager';
-
-import { WaitingPatientDto } from '../../Shared/Models/WaitingPatientDto';
 import { CreateTherapyCardRequest } from '../Models/create-therapy-card.request';
-import { TherapyDiagnosisDto } from '../Models/therapy-diagnosis.dto';
-
+import { UpdateTherapyCardRequest } from '../Models/update-therapy-card.request';
+import { tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TherapyDiagnosisFacade extends BaseFacade {
-
   private therapyService = inject(TherapyDiagnosisService);
+  private _selectedTherapyCard = signal<TherapyCardDiagnosisDto | null>(null);
+  selectedTherapyCard = this._selectedTherapyCard.asReadonly();
+  isEditMode = signal<boolean>(false);
 
-  private _waitingPatients = signal<WaitingPatientDto[]>([]);
-  waitingPatients = this._waitingPatients.asReadonly();
+  createdTherapyCard = signal<TherapyCardDiagnosisDto | null>(null);
 
-  private _selectedPatient = signal<WaitingPatientDto | null>(null);
-  selectedPatient = this._selectedPatient.asReadonly();
-
-  private _filters = signal<{ diagnosisType: 'therapy'; searchTerm: string }>({
-    diagnosisType: 'therapy',
-    searchTerm: '',
-  });
-  filters = this._filters.asReadonly();
-
-  isLoadingWaitingList = signal<boolean>(false);
   formValidationErrors = signal<Record<string, string[]>>({});
-  createdDiagnosis = signal<TherapyDiagnosisDto | null>(null);
-
-  /** -----------------------------
-   * SEARCH MANAGER
-   * ------------------------------*/
-  private searchManager = new SearchManager<WaitingPatientDto[]>(
-    (term: string) =>
-      this.therapyService
-        .getWaitingPatients({
-          diagnosisType: 'therapy',
-          searchTerm: term,
-        })
-        .pipe(
-          tap((res: ApiResult<WaitingPatientDto[]>) => {
-            if (!res.isSuccess) this.handleSearchError(res);
-          }),
-          map((res) => (res.isSuccess && res.data ? res.data : []))
-        ),
-    null,
-    (data) => this._waitingPatients.set(data)
-  );
 
   constructor() {
     super();
   }
+  enterCreateMode() {
+    this.isEditMode.set(false);
+    this._selectedTherapyCard.set(null);
+    this.formValidationErrors.set({});
+  }
 
-  /** -----------------------------
-   * LOAD WAITING PATIENTS
-   * ------------------------------*/
-  loadWaitingPatients(): void {
-    console.log("Loading waiting patients...");
-    this.isLoadingWaitingList.set(true);
+  loadTherapyCardForEdit(therapyCardId: number) {
+    this.isEditMode.set(true);
+    this._selectedTherapyCard.set(null);
+    this.formValidationErrors.set({});
 
     this.therapyService
-      .getWaitingPatients(this._filters())
+      .getTherapyCardById(therapyCardId)
       .pipe(
-        tap((result: ApiResult<WaitingPatientDto[]>) => {
+        tap((result) => {
           if (result.isSuccess && result.data) {
-            this._waitingPatients.set(result.data);
+            this._selectedTherapyCard.set(result.data);
           } else {
-            this._waitingPatients.set([]);
-            this.handleLoadWaitingPatientsError(result);
+            this.toast.error(
+              result.errorDetail ?? 'لم يتم العثور على بطاقة العلاج'
+            );
+            this.isEditMode.set(false);
+            this._selectedTherapyCard.set(null);
           }
         })
       )
-      .subscribe({
-        complete: () => this.isLoadingWaitingList.set(false),
-        error: () => this.isLoadingWaitingList.set(false),
-      });
+      .subscribe();
   }
 
-  /** -----------------------------
-   * SEARCH
-   * ------------------------------*/
-  search(term: string): void {
-    this._filters.update((f) => ({ ...f, searchTerm: term }));
-    this.searchManager.search(term);
-  }
-
-  /** -----------------------------
-   * SELECT WAITING PATIENT
-   * ------------------------------*/
-  selectWaitingPatient(patient: WaitingPatientDto | null): void {
-    this._selectedPatient.set(patient);
-  }
-
-  /** -----------------------------
-   * CREATE THERAPY DIAGNOSIS
-   * ------------------------------*/
-  createTherapyDiagnosis(dto: CreateTherapyCardRequest) {
+  createTherapyCard(dto: CreateTherapyCardRequest) {
     return this.handleCreateOrUpdate(
-      this.therapyService.createTherapyDiagnosis(dto),
+      this.therapyService.createTherapyCard(dto),
       {
-        successMessage: 'تم إنشاء التشخيص بنجاح',
-        defaultErrorMessage: 'فشل إنشاء التشخيص. حاول لاحقاً.',
+        successMessage: 'تم حفظ بطاقة العلاج بنجاح',
+        defaultErrorMessage: 'فشل حفظ بطاقة العلاج. يرجى المحاولة لاحقاً.',
       }
-    ).pipe(
-      tap((res) => {
+    ).pipe((tapResult) => {
+      tapResult.subscribe((res) => {
         if (res.success && res.data) {
-          this.createdDiagnosis.set(res.data);
+          this.createdTherapyCard.set(res.data);
           this.formValidationErrors.set({});
         } else if (res.validationErrors) {
           this.formValidationErrors.set(res.validationErrors);
         }
-      })
-    );
+      });
+
+      return tapResult;
+    });
   }
 
-  /** -----------------------------
-   * ERROR HANDLERS
-   * ------------------------------*/
-  private handleLoadWaitingPatientsError(result: ApiResult<any>) {
-    const err = this.extractError(result);
-    if (err.type === 'validation' || err.type === 'business') {
-      this.toast.error(err.message);
-    } else {
-      this.toast.error('تعذر تحميل قائمة المرضى المنتظرين.');
-    }
-  }
+  updateTherapyCard(therapyCardId: number, dto: UpdateTherapyCardRequest) {
+    return this.handleCreateOrUpdate(
+      this.therapyService.updateTherapyCard(therapyCardId, dto),
+      {
+        successMessage: 'تم تعديل بطاقة العلاج بنجاح',
+        defaultErrorMessage: 'فشل تعديل بطاقة العلاج. حاول لاحقاً.',
+      }
+    ).pipe((tapResult) => {
+      tapResult.subscribe((res) => {
+        if (res.success) {
+          // Backend returns void → nothing to store
+          this.formValidationErrors.set({});
+        }
 
-  private handleSearchError(result: ApiResult<any>) {
-    const err = this.extractError(result);
-    if (err.type === 'validation' || err.type === 'business') {
-      this.toast.info(err.message);
-    } else {
-      this.toast.error('حدث خطأ أثناء تنفيذ عملية البحث.');
-    }
+        if (res.validationErrors) {
+          this.formValidationErrors.set(res.validationErrors);
+        }
+      });
+
+      return tapResult;
+    });
   }
 }

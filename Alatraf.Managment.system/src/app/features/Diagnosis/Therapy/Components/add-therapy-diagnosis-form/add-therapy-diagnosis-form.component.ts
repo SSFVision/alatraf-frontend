@@ -15,7 +15,7 @@ import {
 } from '../../../../../shared/components/multi-select/multi-select.component';
 import {
   CreateTherapyCardRequest,
-  CreateTherapyCardMedicalProgramRequest,
+  
 } from '../../Models/create-therapy-card.request';
 import {
   THERAPY_CARD_TYPE_OPTIONS,
@@ -124,55 +124,4 @@ export class AddTherapyDiagnosisFormComponent {
 
     const f = this.form.value;
 
-    const dto: CreateTherapyCardRequest = {
-      TicketId: this.patient!.patientId,
-      PatientId: this.patient!.patientId,
-
-      Notes: f.Notes ?? null,
-      DiagnosisText: f.DiagnosisText,
-      InjuryDate: f.InjuryDate,
-
-      InjuryReasons: f.InjuryReasons,
-      InjurySides: f.InjurySides,
-      InjuryTypes: f.InjuryTypes,
-
-      ProgramStartDate: f.ProgramStartDate,
-      ProgramEndDate: f.ProgramEndDate,
-
-      TherapyCardType: f.TherapyCardType,
-
-      Programs: f.Programs.map((p: CreateTherapyCardMedicalProgramRequest) => ({
-        MedicalProgramId: p.MedicalProgramId,
-        Duration: p.Duration,
-        Notes: p.Notes ?? null,
-      })),
-    };
-
-    this.submitForm.emit(dto);
-  }
-
-  // --------------------------
-  // INIT
-  // --------------------------
-  ngOnInit() {
-    this.injuryReasonsOptions = INJURY_REASONS.map((r) => ({
-      label: r.Name,
-      value: r.Id,
-    }));
-    this.injurySidesOptions = INJURY_SIDES.map((s) => ({
-      label: s.Name,
-      value: s.Id,
-    }));
-    this.injuryTypesOptions = INJURY_TYPES.map((t) => ({
-      label: t.Name,
-      value: t.Id,
-    }));
-
-    this.programDropdown = MEDICAL_PROGRAMS_MOCK.map((p) => ({
-      label: p.Name,
-      value: p.Id,
-    }));
-
-    this.addProgramRow(); // add first row
-  }
-}
+}}

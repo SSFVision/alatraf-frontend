@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { TherapyCardHistoryDto } from '../../Models/therapy-card-history.dto';
 import { DatePipe } from '@angular/common';
 
 @Component({
@@ -9,11 +8,11 @@ import { DatePipe } from '@angular/common';
   styleUrl: './previous-therapy-card-diagnosis.component.css'
 })
 export class PreviousTherapyCardDiagnosisComponent {
- @Input({ required: true }) items: TherapyCardHistoryDto[] = [];
+//  @Input({ required: true }) items: [] = [];
 
-  @Output() viewDetails = new EventEmitter<TherapyCardHistoryDto>();
+//   @Output() viewDetails = new EventEmitter<>();
 
-  onView(card: TherapyCardHistoryDto) {
-    this.viewDetails.emit(card);
-  }
+//   onView(card: ) {
+//     this.viewDetails.emit(card);
+//   }
 }

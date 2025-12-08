@@ -9,8 +9,6 @@ import { ActivatedRoute } from '@angular/router';
 import { PatientService } from '../../../../Reception/Patients/Services/patient.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HeaderPatientInfoComponent } from '../../../Shared/Components/header-patient-info/header-patient-info.component';
-import { MOCK_THERAPY_CARD_HISTORY, TherapyCardHistoryDto } from '../../Models/therapy-card-history.dto';
-import { PreviousTherapyCardDiagnosisComponent } from '../../Components/previous-therapy-card-diagnosis/previous-therapy-card-diagnosis.component';
 import { AddTherapyDiagnosisFormComponent } from '../../Components/add-therapy-diagnosis-form/add-therapy-diagnosis-form.component';
 import { ToastService } from '../../../../../core/services/toast.service';
 import { CreateTherapyCardRequest } from '../../Models/create-therapy-card.request';
@@ -22,7 +20,6 @@ import { PatientDto } from '../../../../../core/models/Shared/patient.model';
   imports: [
     ReactiveFormsModule,
     HeaderPatientInfoComponent,
-    PreviousTherapyCardDiagnosisComponent,
     AddTherapyDiagnosisFormComponent,
   ],
   templateUrl: './therapy-diagnosis-workspace.component.html',
@@ -82,12 +79,6 @@ export class TherapyDiagnosisWorkspaceComponent implements OnInit {
 
   switchToHistory() {
     this.viewMode.set('history');
-  }
-
-  pevDiagnosis= MOCK_THERAPY_CARD_HISTORY;
-  onViewHistoryCard(card: TherapyCardHistoryDto) {
-    console.log('View history card details:', card);
-    // later: open dialog, navigate to details, etc.
   }
 
   // for the form
