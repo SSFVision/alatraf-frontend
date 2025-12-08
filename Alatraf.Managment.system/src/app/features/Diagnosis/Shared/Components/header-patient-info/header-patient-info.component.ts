@@ -1,6 +1,6 @@
-import { Component, Input, input, signal, OnInit } from '@angular/core';
-import { CalcAgeFromBirthdateHelper } from '../../Util/patient-helpers';
+import { Component, input, signal, OnInit } from '@angular/core';
 import { Patient } from '../../../../Reception/Patients/models/patient.model';
+import { calculateAge } from '../../Util/patient-ticket.helpers';
 
 @Component({
   selector: 'app-header-patient-info',
@@ -9,10 +9,9 @@ import { Patient } from '../../../../Reception/Patients/models/patient.model';
   styleUrl: './header-patient-info.component.css',
 })
 export class HeaderPatientInfoComponent {
-  // @Input() patient!: Patient;
   patient = input<Patient>();
 
   getAgeFromBirthdate(date: string | undefined): number {
-    return CalcAgeFromBirthdateHelper(date);
+  return calculateAge(date);
   }
 }

@@ -9,7 +9,7 @@ import { ToastService } from '../../../../core/services/toast.service';
 
 @Component({
   selector: 'app-main-apointment-waiting-patient',
-  imports: [RouterOutlet, PatientCardComponent],
+  imports: [RouterOutlet],
   templateUrl: './main-apointment-waiting-patient.component.html',
   styleUrl: './main-apointment-waiting-patient.component.css'
 })

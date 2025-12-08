@@ -12,7 +12,7 @@ export enum FilterEnum {
 }
 @Component({
   selector: 'app-main-payment-waiting-list',
-  imports: [PatientCardComponent, RouterOutlet],
+  imports: [ RouterOutlet],
   templateUrl: './main-payment-waiting-list.component.html',
   styleUrl: './main-payment-waiting-list.component.css',
 })

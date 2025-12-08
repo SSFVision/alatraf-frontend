@@ -29,7 +29,7 @@ export const apiResponseInterceptor: HttpInterceptorFn = (req, next) => {
     map((event: HttpEvent<any>) => {
       if (event instanceof HttpResponse) {
         const body = event.body;
-        // console.log('✅ Correct Response from backend', event);
+        console.log('✅ Correct Response from backend', event);
 
         const apiResult = ApiResult.success(event.body, event.status);
         const successMsg = req.headers.get('X-Success-Toast');
@@ -44,7 +44,7 @@ export const apiResponseInterceptor: HttpInterceptorFn = (req, next) => {
 
     catchError((error: any) => {
       error =new HttpErrorResponse(error);
-      // console.log('⛔ error from backend ', error);
+      console.log('⛔ error from backend ', error);
 
       let apiResult;
       if (error instanceof HttpErrorResponse && error.status !== 0) {

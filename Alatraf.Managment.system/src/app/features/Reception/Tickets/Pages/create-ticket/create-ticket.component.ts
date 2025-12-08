@@ -4,13 +4,13 @@ import { ServiceSelectComponent } from '../../../../../shared/components/service
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { PatientService } from '../../../Patients/Services/patient.service';
-import { CreateTicketDto } from '../../models/create-ticket.dto';
 import { TicketService } from '../../ticket.service';
 import { NgIf } from '@angular/common';
 import { Patient } from '../../../Patients/models/patient.model';
 import { ToastService } from '../../../../../core/services/toast.service';
 import { NavigationReceptionFacade } from '../../../../../core/navigation/navigation-reception.facade';
 import { UiLockService } from '../../../../../core/services/ui-lock.service';
+import { CreateTicketRequest } from '../../models/ticket.model';
 
 @Component({
   selector: 'app-create-ticket',
@@ -52,7 +52,7 @@ export class CreateTicketComponent implements OnInit {
   onCreateTicket() {
     if (this.form.valid) {
       this.isSaved = true;
-      const dto: CreateTicketDto = {
+      const dto: CreateTicketRequest = {
         patientId: this.patient.patientId,
         serviceId: this.form.value.serviceId!,
       };
