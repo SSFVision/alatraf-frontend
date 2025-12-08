@@ -6,4 +6,6 @@ export interface PersonDto {
   nationalNo?: string ;
   address?: string ;
   gender: boolean;
+  autoRegistrationNumber?: string | null;
+
 }

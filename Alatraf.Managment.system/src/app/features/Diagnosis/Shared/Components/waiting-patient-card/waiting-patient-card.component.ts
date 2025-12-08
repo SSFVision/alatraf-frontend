@@ -1,4 +1,3 @@
-import { Patient } from '../../../../Reception/Patients/models/patient.model';
 import {
   Component,
   EventEmitter,

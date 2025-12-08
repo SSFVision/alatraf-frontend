@@ -4,7 +4,7 @@ import { NavigationDiagnosisFacade } from '../../../../core/navigation/navigatio
 import { PatientsFacade } from '../../../Reception/Patients/Services/patients.facade.service';
 import { PatientCardComponent } from '../../../Diagnosis/Shared/Components/waiting-patient-card/waiting-patient-card.component';
 import { RouterOutlet } from '@angular/router';
-import { Patient } from '../../../Reception/Patients/models/patient.model';
+import { PatientDto } from '../../../../core/models/Shared/patient.model';
 export enum FilterEnum {
   All = 0,
   Therapy = 1, // علاج طبيعي
@@ -17,7 +17,7 @@ export enum FilterEnum {
   styleUrl: './main-payment-waiting-list.component.css',
 })
 export class MainPaymentWaitingListComponent {
-  selectedPatient = signal<Patient | null>(null);
+  selectedPatient = signal<PatientDto | null>(null);
   private facade = inject(PatientsFacade);
   patients = this.facade.patients;
   private navPyment = inject(PaymentsNavigationFacade);
@@ -31,7 +31,7 @@ export class MainPaymentWaitingListComponent {
     this.ResetSelectedPatient();
   }
 
-  selectPatient(patient: Patient) {
+  selectPatient(patient: PatientDto) {
     this.selectedPatient.set(patient);
     this.navPyment.goToPaiedPage(patient.patientId);
   }

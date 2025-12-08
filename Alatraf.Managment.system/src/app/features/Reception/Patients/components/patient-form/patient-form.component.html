@@ -14,12 +14,7 @@
   </div>
 
   <form class="padding-LR-24 column gap-16" [formGroup]="form" (ngSubmit)="onSave()">
-    <!-- رقم المريض -->
-    <div class="row flex-center">
-      <label class="label-lg">رقم المريض</label>
-      <input class="label-lg" type="text" formControlName="autoRegistrationNumber" />
-    </div>
-
+  
     <!-- الاسم -->
     <div class="row flex-center">
       <label class="label-lg">الاسم</label>
@@ -59,12 +54,27 @@
 
       <label class="label-lg">تاريخ الميلاد</label>
       <input class="label-lg" type="date" formControlName="birthdate" />
+    
+     <div class="error-message label-lg" *ngIf="hasBackendError('birthdate')">
+        {{ getBackendError("birthdate") }}
+      </div>
+
+      <div *ngIf="hasFrontendError('birthdate')" class="error-message label-lg">
+تاريخ الميلاد مطلوب       </div>
+    
     </div>
 
     <!-- العنوان -->
     <div class="row flex-center">
       <label class="label-lg">العنوان</label>
       <input class="label-lg" type="text" formControlName="address" />
+        <!-- Backend Validation -->
+      <div class="error-message label-lg" *ngIf="hasBackendError('address')">
+        {{ getBackendError("address") }}
+      </div>
+
+      <div *ngIf="hasFrontendError('address')" class="error-message label-lg">
+العنوان مطلوب      </div>
     </div>
 
     <!-- رقم الهوية -->

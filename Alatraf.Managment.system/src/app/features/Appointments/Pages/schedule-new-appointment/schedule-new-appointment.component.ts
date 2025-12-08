@@ -2,9 +2,9 @@ import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { ToastService } from '../../../../core/services/toast.service';
-import { Patient } from '../../../../mocks/patients/patient.dto';
 import { PatientService } from '../../../Reception/Patients/Services/patient.service';
 import { HeaderPatientInfoComponent } from "../../../Diagnosis/Shared/Components/header-patient-info/header-patient-info.component";
+import { PatientDto } from '../../../../core/models/Shared/patient.model';
 
 @Component({
   selector: 'app-schedule-new-appointment',
@@ -18,7 +18,7 @@ export class ScheduleNewAppointmentComponent {
   private patientService = inject(PatientService);
 
   private toast = inject(ToastService);
-  patient = signal<Patient | null>(null);
+  patient = signal<PatientDto | null>(null);
 
   isLoading = signal(true);
 

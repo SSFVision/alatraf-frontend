@@ -2,8 +2,8 @@ import { Component, inject, signal } from '@angular/core';
 import { PatientCardComponent } from '../../../Shared/Components/waiting-patient-card/waiting-patient-card.component';
 import { RouterOutlet } from '@angular/router';
 import { NavigationDiagnosisFacade } from '../../../../../core/navigation/navigation-diagnosis.facade';
-import { Patient } from '../../../../Reception/Patients/models/patient.model';
 import { PatientsFacade } from '../../../../Reception/Patients/Services/patients.facade.service';
+import { PatientDto } from '../../../../../core/models/Shared/patient.model';
 
 @Component({
   selector: 'app-industrial-waiting-list',
@@ -20,7 +20,7 @@ export class IndustrialWaitingListComponent {
     this.patientsService.loadPatients();
   }
 
-  selectPatient(patient: Patient) {
+  selectPatient(patient: PatientDto) {
     console.log('selected : ', patient);
     this.selectedPatient.set(patient);
     this.navDiagnos.goToIndustrialCreate(patient.patientId);

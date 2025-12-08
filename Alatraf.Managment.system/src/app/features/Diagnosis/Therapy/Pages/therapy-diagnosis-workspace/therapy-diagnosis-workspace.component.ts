@@ -6,7 +6,6 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Patient } from '../../../../../mocks/patients/patient.dto';
 import { PatientService } from '../../../../Reception/Patients/Services/patient.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HeaderPatientInfoComponent } from '../../../Shared/Components/header-patient-info/header-patient-info.component';
@@ -15,6 +14,7 @@ import { PreviousTherapyCardDiagnosisComponent } from '../../Components/previous
 import { AddTherapyDiagnosisFormComponent } from '../../Components/add-therapy-diagnosis-form/add-therapy-diagnosis-form.component';
 import { ToastService } from '../../../../../core/services/toast.service';
 import { CreateTherapyCardRequest } from '../../Models/create-therapy-card.request';
+import { PatientDto } from '../../../../../core/models/Shared/patient.model';
 
 @Component({
   selector: 'app-therapy-diagnosis-workspace',
@@ -36,7 +36,7 @@ export class TherapyDiagnosisWorkspaceComponent implements OnInit {
 
 
   private toast=inject(ToastService);
-  patient = signal<Patient | null>(null);
+  patient = signal<PatientDto | null>(null);
   viewMode = signal<'add' | 'history'>('add');
 
   isLoading = signal(true);

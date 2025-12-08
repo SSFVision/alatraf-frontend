@@ -5,7 +5,6 @@ export interface PatientDto {
   personId: number;
   personDto?: PersonDto | null;
   patientType: PatientType;
-  autoRegistrationNumber?: string | null;
 }
 
 export enum PatientType {

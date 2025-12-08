@@ -7,7 +7,7 @@
   <input
     class="label-lg"
     type="text"
-    [value]="patient()!.fullname"
+    [value]="patient()!.personDto?.fullname"
     disabled
     readonly
   />
@@ -18,7 +18,7 @@
   <input
     class="label-lg"
     type="text"
-    [value]="patient()!.phone"
+    [value]="patient()!.personDto?.phone"
     disabled
     readonly
   />
@@ -27,16 +27,17 @@
   <input
     class="label-lg"
     type="text"
-    [value]="patient()!.gender ? 'ذكر' : ' انثى'"
+    [value]="patient()!.personDto?.gender"
     disabled
     readonly
   />
+    <!-- [value]="patient()!.gender ? 'ذكر' : ' انثى'" -->
 
   <label class="label-lg"> العمر </label>
   <input
     class="label-lg"
     type="text"
-    [value]="getAgeFromBirthdate(patient()!.birthdate) + '   سنة'  "
+    [value]="getAgeFromBirthdate(patient()!.personDto?.birthdate) + '   سنة'  "
     disabled
     readonly
   />

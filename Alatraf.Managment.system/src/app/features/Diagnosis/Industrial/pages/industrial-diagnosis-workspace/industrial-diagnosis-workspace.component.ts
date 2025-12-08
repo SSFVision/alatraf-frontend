@@ -2,7 +2,6 @@ import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { HeaderPatientInfoComponent } from '../../../Shared/Components/header-patient-info/header-patient-info.component';
 import { ActivatedRoute } from '@angular/router';
 import { PatientService } from '../../../../Reception/Patients/Services/patient.service';
-import { Patient } from '../../../../Reception/Patients/models/patient.model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AddIndustrialDiagnosisFormComponent } from '../../Components/add-industrial-diagnosis-form/add-industrial-diagnosis-form.component';
 import { PreviousIndustrialDiagnosisComponent } from '../../Components/previous-industrial-diagnosis/previous-industrial-diagnosis.component';
@@ -11,6 +10,7 @@ import {
   IndustrialDiagnosisHistoryDto,
 } from '../../Models/industrial-diagnosis-history.dto';
 import { ToastService } from '../../../../../core/services/toast.service';
+import { PatientDto } from '../../../../../core/models/Shared/patient.model';
 
 @Component({
   selector: 'app-industrial-diagnosis-workspace',
@@ -28,7 +28,7 @@ export class IndustrialDiagnosisWorkspaceComponent {
   private destroyRef = inject(DestroyRef);
   private patientService = inject(PatientService);
   private toast = inject(ToastService);
-  patient = signal<Patient | null>(null);
+  patient = signal<PatientDto | null>(null);
   viewMode = signal<'add' | 'history'>('add');
   ngOnInit(): void {
     this.listenToRouteChanges();

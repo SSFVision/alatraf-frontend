@@ -85,12 +85,12 @@ import { ActivatedRoute } from '@angular/router';
 import { PatientService } from '../../../Patients/Services/patient.service';
 import { TicketService } from '../../ticket.service';
 import { NgIf } from '@angular/common';
-import { Patient } from '../../../Patients/models/patient.model';
 import { ToastService } from '../../../../../core/services/toast.service';
 import { NavigationReceptionFacade } from '../../../../../core/navigation/navigation-reception.facade';
 import { UiLockService } from '../../../../../core/services/ui-lock.service';
 import { CreateTicketRequest } from '../../models/ticket.model';
 import { TicketFacade } from '../../tickets.facade.service';
+import { PatientDto } from '../../../../../core/models/Shared/patient.model';
 
 @Component({
   selector: 'app-create-ticket',
@@ -116,7 +116,7 @@ private route = inject(ActivatedRoute);
   isLoading = signal(true);
   isSaved = false;
 
-  patient!: Patient;
+  patient!: PatientDto;
 
   form = this.fb.group({
     serviceId: [null, Validators.required],

@@ -7,6 +7,12 @@ export class FormValidationState {
     private backendErrors: Signal<Record<string, string[]>>
   ) {}
 
+  /** Simple PascalCase -> camelCase mapper */
+  private mapBackendFieldToControlName(field: string): string {
+    if (!field) return field;
+    return field.charAt(0).toLowerCase() + field.slice(1);
+  }
+
   /** Apply backend validation errors to form controls */
   apply() {
     const errors = this.backendErrors();
@@ -22,7 +28,15 @@ export class FormValidationState {
     // 2️⃣ Apply new backend errors
     if (errors && Object.keys(errors).length > 0) {
       for (const field in errors) {
-        const control = this.form.get(field);
+        // Try exact name first (in case they already match)
+        let control = this.form.get(field);
+
+        // If not found, try camelCase version
+        if (!control) {
+          const mapped = this.mapBackendFieldToControlName(field);
+          control = this.form.get(mapped);
+        }
+
         if (control) {
           control.setErrors({ backend: errors[field][0] });
           control.markAsTouched();
@@ -53,7 +67,6 @@ export class FormValidationState {
   /** Clear backend errors when user edits any field */
   clearOnEdit() {
     this.form.valueChanges.subscribe(() => {
-      // Clear by setting empty object
       (this.backendErrors as any).set({});
     });
   }

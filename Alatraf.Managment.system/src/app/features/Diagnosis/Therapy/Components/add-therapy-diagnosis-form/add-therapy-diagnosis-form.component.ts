@@ -24,7 +24,7 @@ import {
   INJURY_TYPES,
   MEDICAL_PROGRAMS_MOCK,
 } from '../../Models/medical-program.dto';
-import { Patient } from '../../../../Reception/Patients/models/patient.model';
+import { PatientDto } from '../../../../../core/models/Shared/patient.model';
 
 @Component({
   selector: 'app-add-therapy-diagnosis-form',
@@ -34,7 +34,7 @@ import { Patient } from '../../../../Reception/Patients/models/patient.model';
   styleUrl: './add-therapy-diagnosis-form.component.css',
 })
 export class AddTherapyDiagnosisFormComponent {
-  @Input() patient: Patient | null = null; // must contain ticketId + id
+  @Input() patient: PatientDto | null = null; // must contain ticketId + id
   @Output() submitForm = new EventEmitter<CreateTherapyCardRequest>();
 
   private fb = inject(FormBuilder);

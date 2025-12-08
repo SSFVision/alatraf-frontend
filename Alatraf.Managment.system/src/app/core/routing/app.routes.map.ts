@@ -1,4 +1,3 @@
-import { Patient } from './../../mocks/patients/patient.dto';
 export const AppRoutes = {
   auth: {
     root: 'auth',

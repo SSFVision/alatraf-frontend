@@ -1,7 +1,7 @@
 import { InMemoryDbService, RequestInfo } from 'angular-in-memory-web-api';
 
-import { PATIENTS_MOCK_DATA } from './patients/patient.mock';
-import { PatientController } from './patients/patient.controller';
+// import { PATIENTS_MOCK_DATA } from './patients/patient.mock';
+// import { PatientController } from './patients/patient.controller';
 
 import { MOCK_SERVICES } from './services/mock-services.data';
 import { ServiceController } from './services/service.controller';
@@ -21,7 +21,6 @@ export class InMemoryDataService implements InMemoryDbService {
   // -----------------------------------------------------
   createDb() {
     return {
-      [this.PATIENTS]: PATIENTS_MOCK_DATA,
       [this.SERVICES]: MOCK_SERVICES,
       [this.IDENTITY]: IDENTITY_USERS_MOCK,
 
@@ -45,9 +44,7 @@ export class InMemoryDataService implements InMemoryDbService {
     const entity = reqInfo.collectionName;
 
     switch (entity) {
-      case this.PATIENTS:
-        return reqInfo.id ? PatientController.getById(reqInfo) : PatientController.getAll(reqInfo);
-
+  
       case this.SERVICES:
         return reqInfo.id ? ServiceController.getById(reqInfo) : ServiceController.getAll(reqInfo);
 
@@ -72,9 +69,7 @@ export class InMemoryDataService implements InMemoryDbService {
     const entity = reqInfo.collectionName;
 
     switch (entity) {
-      case this.PATIENTS:
-        return PatientController.create(reqInfo);
-
+   
       case this.SERVICES:
         return ServiceController.create(reqInfo);
 }
@@ -89,9 +84,7 @@ export class InMemoryDataService implements InMemoryDbService {
     const entity = reqInfo.collectionName;
 
     switch (entity) {
-      case this.PATIENTS:
-        return PatientController.update(reqInfo);
-
+   
       case this.SERVICES:
         return ServiceController.update(reqInfo);
     }
@@ -106,9 +99,7 @@ export class InMemoryDataService implements InMemoryDbService {
     const entity = reqInfo.collectionName;
 
     switch (entity) {
-      case this.PATIENTS:
-        return PatientController.delete(reqInfo);
-
+    
       case this.SERVICES:
         return ServiceController.delete(reqInfo);
 }
