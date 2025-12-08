@@ -28,7 +28,6 @@ getTickets(
 ): Observable<ApiResult<PaginatedList<TicketDto>>> {
   let params = new HttpParams();
 
-  // ---- PageRequest → page & pageSize ----
   const page = pageRequest?.page ?? 1;
   const pageSize = pageRequest?.pageSize ?? 10;
 
@@ -36,7 +35,6 @@ getTickets(
     .set('page', page)
     .set('pageSize', pageSize);
 
-  // ---- TicketFilterRequest → rest of filters ----
   if (filter) {
     Object.entries(filter).forEach(([key, value]) => {
       if (value !== undefined && value !== null && value !== '') {

@@ -21,7 +21,7 @@ function isAuthEndpoint(url: string): boolean {
   );
 }
 export const apiResponseInterceptor: HttpInterceptorFn = (req, next) => {
-  // const toast = inject(ToastService);
+  const toast = inject(ToastService);
   if (isAuthEndpoint(req.url)) {
     return next(req);
   }
@@ -53,7 +53,7 @@ export const apiResponseInterceptor: HttpInterceptorFn = (req, next) => {
         console.log('error called here');
         apiResult = handleException(error);
         if (apiResult.errorMessage) {
-          // toast.error(apiResult.errorMessage);
+          toast.error(apiResult.errorMessage);
         }
       }
 

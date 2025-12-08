@@ -1,0 +1,79 @@
+<div class="pagination-wrapper">
+
+  <!-- Info -->
+  <div class="pagination-info">
+    <div class="info-line">
+      الصفحة <span class="value">{{ page }}</span>
+      من <span class="value">{{ totalPages }}</span>
+    </div>
+    <div class="info-line">
+      إجمالي السجلات:
+      <span class="value">{{ totalCount }}</span>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="page-controls ">
+
+    <!-- <button
+      class="base-btn nav-btn"
+      [disabled]="page <= 1"
+      (click)="goToPage(1)"
+      title="الصفحة الأولى"
+    >
+      «
+    </button> -->
+
+    <button
+      class="base-btn nav-btn"
+      [disabled]="page <= 1"
+      (click)="prev()"
+      title="السابق"
+    >
+      ‹
+    </button>
+
+    <div class="pages-container">
+      <button
+        class="base-btn page-btn"
+        *ngFor="let p of range(1, totalPages)"
+        [class.active]="p === page"
+        (click)="goToPage(p)"
+      >
+        {{ p }}
+      </button>
+    </div>
+
+    <button
+      class="base-btn nav-btn"
+      [disabled]="page >= totalPages"
+      (click)="next()"
+      title="التالي"
+    >
+      ›
+    </button>
+
+    <!-- <button
+      class="base-btn nav-btn"
+      [disabled]="page >= totalPages"
+      (click)="goToPage(totalPages)"
+      title="الصفحة الأخيرة"
+    >
+      »
+    </button> -->
+
+  </div>
+
+  <!-- Page size -->
+  <div class="page-size">
+    <label>لكل صفحة:</label>
+    <select
+      [value]="pageSize"
+      (change)="onPageSizeChange($any($event.target).value)"
+    >
+      <option *ngFor="let size of pageSizes" [value]="size">
+        {{ size }}
+      </option>
+    </select>
+  </div>
+</div>
