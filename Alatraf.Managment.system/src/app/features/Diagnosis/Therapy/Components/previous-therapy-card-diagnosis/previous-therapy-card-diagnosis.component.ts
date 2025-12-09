@@ -3,7 +3,7 @@ import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-previous-therapy-card-diagnosis',
-  imports: [DatePipe],
+  imports: [],
   templateUrl: './previous-therapy-card-diagnosis.component.html',
   styleUrl: './previous-therapy-card-diagnosis.component.css'
 })

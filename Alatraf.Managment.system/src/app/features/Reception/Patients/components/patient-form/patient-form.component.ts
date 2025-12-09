@@ -15,6 +15,8 @@ import {
   Validators,
   ReactiveFormsModule,
   FormGroup,
+  MaxLengthValidator,
+  MaxValidator,
 } from '@angular/forms';
 import { NgIf } from '@angular/common';
 
@@ -26,6 +28,7 @@ import {
   PatientType,
 } from '../../../../../core/models/Shared/patient.model';
 import { CreatePatientRequest } from '../../models/create-patient.request';
+import { max } from 'rxjs';
 
 @Component({
   selector: 'app-patient-form',
@@ -54,8 +57,16 @@ export class PatientFormComponent implements OnChanges, OnInit {
     this.form = this.fb.group({
       fullname: ['', Validators.required],
       gender: [true, Validators.required],
-      birthdate: [null,Validators.required],
-      phone: ['', Validators.required],
+      birthdate: [null, Validators.required],
+      phone: [
+        '',
+        [
+          Validators.required,
+          Validators.maxLength(9),
+          Validators.pattern(/^\d{9}$/),
+          Validators.pattern(/^(77|78|73|71|70)\d{7}$/),
+        ],
+      ],
       address: ['', Validators.required],
       nationalNo: [''],
       patientType: [PatientType.Normal, Validators.required],
@@ -74,6 +85,20 @@ export class PatientFormComponent implements OnChanges, OnInit {
 
     // 4️⃣ Remove backend errors on edit
     this.validationState.clearOnEdit();
+  }
+  allowOnlyNumbers(event: KeyboardEvent) {
+    const char = event.key;
+
+    // Allow only digits
+    if (!/^\d$/.test(char)) {
+      event.preventDefault();
+    }
+  }
+  onPhoneInput() {
+    const control = this.form.controls['phone'];
+    control.setValue(control.value.replace(/\D/g, '').slice(0, 9), {
+      emitEvent: false,
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {

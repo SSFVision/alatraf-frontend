@@ -32,7 +32,7 @@ export class ApiErrorExtractor {
      
       return {
         type: ExtractedApiErrorKind.Business,
-        message: result.errorDetail ?? result.errorMessage,
+        message: result.errorMessage ?? result.errorDetail,
       };
     }
 
