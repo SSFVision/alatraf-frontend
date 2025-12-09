@@ -113,7 +113,7 @@ export class PatientFormComponent implements OnChanges, OnInit {
         phone: p.personDto?.phone ?? '',
         address: p.personDto?.address ?? '',
         nationalNo: p.personDto?.nationalNo ?? '',
-        patientType: p.patientType,
+        patientType: PatientType.Normal,
       });
     }
   }

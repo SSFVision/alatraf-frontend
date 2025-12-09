@@ -22,9 +22,7 @@
   <p class="body-sm primary-color-50">
     رقم المريض : {{ ticket.patient?.personDto?.nationalNo }}
   </p>
- <p class="body-sm primary-color-50">
-  Ticket Number  : {{ ticket.ticketId}}
-  </p>
+  <p class="body-sm primary-color-50">Ticket Number : {{ ticket.ticketId }}</p>
   <!-- Service Name (NEW DATA) -->
   <p class="body-sm primary-color-50">الخدمة : {{ ticket.service?.name }}</p>
 
@@ -34,12 +32,8 @@
       {{ ticket.patient?.personDto?.gender ? "ذكر" : "أنثى" }}
     </p>
 
-    <!-- Birthdate → formatted -->
-    <!-- <p class="body-sm primary-color-50">
-      {{ formatBirthdate(ticket.patient?.personDto?.birthdate) }}
-    </p> -->
     <p class="body-sm primary-color-50">
-      {{ getAgeFromBirthdate(ticket.patient?.personDto?.birthdate) }} سنة
+      {{ getAgeFromBirthdate(ticket.patient!.personDto!.birthdate) }} سنة
     </p>
   </div>
 

@@ -33,7 +33,10 @@ export class PatientCardComponent {
   }
 
   getAgeFromBirthdate(date: string | undefined): number {
-    return calculateAge(date);
+    
+    const age=calculateAge(date);
+    // console.log(" age for this patient : ",age);
+  return age;
   }
 
   getTicketStatusLabel(status: string) {

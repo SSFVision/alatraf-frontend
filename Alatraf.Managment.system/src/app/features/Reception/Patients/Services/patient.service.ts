@@ -61,8 +61,7 @@ export class PatientService extends BaseApiService {
   ): Observable<ApiResult<void>> {
         const headers = new HttpHeaders().set('X-Enable-Loader', 'true');
 
-    console.log(' request for Update patient : ', patientId);
-    console.log(' request for Update patient : ', dto);
+    
     return this.put<void>(`${this.endpoint}/${patientId}`, dto,headers);
   }
 

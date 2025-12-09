@@ -181,13 +181,7 @@ isLoading = this.ticketFacade.loadingTicket;
   isEditMode = this.therapyFacade.isEditMode;
   existingCard = signal<any | null>(null);
 
-  constructor() {
-    // Debug effect
-    effect(() => {
-      console.log('Loaded medical programs:', this.medicalPrograms());
-      console.log('Loaded ticket:', this.ticket());
-    });
-  }
+  
 
   // ------------------------------
   // INIT
@@ -195,6 +189,7 @@ isLoading = this.ticketFacade.loadingTicket;
   ngOnInit(): void {
     // Load dropdowns (injuries & medical programs)
     this.therapyFacade.loadLookups();
+    console.log("loaded...........");
 
     // Load ticket based on route param
     this.listenToRouteChanges();
