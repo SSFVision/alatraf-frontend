@@ -9,11 +9,13 @@
     <label class="label-lg">التشخيص</label>
     <textarea rows="2" class="label-lg" formControlName="DiagnosisText"></textarea>
 
+    <!-- Backend validation -->
+    <div class="error-message label-lg" *ngIf="hasBackendError('DiagnosisText')">
+      {{ getBackendError('DiagnosisText') }}
+    </div>
+
     <!-- Frontend Validation -->
-    <div
-      class="error-message label-lg"
-      *ngIf="FrontendError('DiagnosisText')"
-    >
+    <div class="error-message label-lg" *ngIf="hasFrontendError('DiagnosisText')">
       التشخيص مطلوب
     </div>
   </div>
@@ -27,11 +29,14 @@
       [options]="injuryReasonsOptions"
       placeholder="اختر الأسباب"
     ></app-multi-select>
-    <!-- Frontend Validation -->
-    <div
-      class="error-message label-lg"
-      *ngIf="FrontendError('InjuryReasons')"
-    >
+
+    <!-- Backend error -->
+    <div class="error-message label-lg" *ngIf="hasBackendError('InjuryReasons')">
+      {{ getBackendError('InjuryReasons') }}
+    </div>
+
+    <!-- Frontend -->
+    <div class="error-message label-lg" *ngIf="hasFrontendError('InjuryReasons')">
       أسباب الإصابة مطلوبة
     </div>
 
@@ -41,11 +46,14 @@
       [options]="injurySidesOptions"
       placeholder="اختر الجهة"
     ></app-multi-select>
-    <!-- Frontend Validation -->
-    <div
-      class="error-message label-lg"
-      *ngIf="FrontendError('InjurySides')"
-    >
+
+    <!-- Backend -->
+    <div class="error-message label-lg" *ngIf="hasBackendError('InjurySides')">
+      {{ getBackendError('InjurySides') }}
+    </div>
+
+    <!-- Frontend -->
+    <div class="error-message label-lg" *ngIf="hasFrontendError('InjurySides')">
       جهة الإصابة مطلوبة
     </div>
 
@@ -61,49 +69,60 @@
       placeholder="اختر النوع"
     ></app-multi-select>
 
-    <!-- Frontend Validation -->
-    <div
-      class="error-message label-lg"
-      *ngIf="FrontendError('InjuryTypes')"
-    >
+    <!-- Backend -->
+    <div class="error-message label-lg" *ngIf="hasBackendError('InjuryTypes')">
+      {{ getBackendError('InjuryTypes') }}
+    </div>
+
+    <!-- Frontend -->
+    <div class="error-message label-lg" *ngIf="hasFrontendError('InjuryTypes')">
       نوع الإصابة مطلوب
     </div>
 
   </div>
 
-  <!-- Dates -->
+  <!-- Injury Date -->
   <div class="row flex-center">
     <label class="label-lg">تاريخ الإصابة</label>
     <input class="label-lg" type="date" formControlName="InjuryDate" />
 
-    <!-- Frontend Validation -->
-    <div
-      class="error-message label-lg"
-      *ngIf="FrontendError('InjuryDate')"
-    >
+    <!-- Backend -->
+    <div class="error-message label-lg" *ngIf="hasBackendError('InjuryDate')">
+      {{ getBackendError('InjuryDate') }}
+    </div>
+
+    <!-- Frontend -->
+    <div class="error-message label-lg" *ngIf="hasFrontendError('InjuryDate')">
       تاريخ الإصابة مطلوب
     </div>
   </div>
 
+  <!-- Program dates -->
   <div class="row flex-center">
 
     <label class="label-lg">تاريخ بداية البرنامج</label>
     <input class="label-lg" type="date" formControlName="ProgramStartDate" />
-    <!-- Frontend Validation -->
-    <div
-      class="error-message label-lg"
-      *ngIf="FrontendError('ProgramStartDate')"
-    >
+
+    <!-- Backend -->
+    <div class="error-message label-lg" *ngIf="hasBackendError('ProgramStartDate')">
+      {{ getBackendError('ProgramStartDate') }}
+    </div>
+
+    <!-- Frontend -->
+    <div class="error-message label-lg" *ngIf="hasFrontendError('ProgramStartDate')">
       تاريخ البداية مطلوب
     </div>
 
     <label class="label-lg">تاريخ نهاية البرنامج</label>
     <input class="label-lg" type="date" formControlName="ProgramEndDate" />
-    <!-- Frontend Validation -->
-    <div
-      class="error-message label-lg"
-      *ngIf="FrontendError('ProgramEndDate')"
-    >
+
+    <!-- Backend -->
+    <div class="error-message label-lg" *ngIf="hasBackendError('ProgramEndDate')">
+      {{ getBackendError('ProgramEndDate') }}
+    </div>
+
+    <!-- Frontend -->
+    <div class="error-message label-lg" *ngIf="hasFrontendError('ProgramEndDate')">
       تاريخ النهاية مطلوب
     </div>
   </div>
@@ -111,7 +130,9 @@
   <!-- Date Range Error -->
   <div
     class="error-message label-lg flex-center"
-    *ngIf="form.errors?.['dateRange'] && form.get('ProgramStartDate')?.touched && form.get('ProgramEndDate')?.touched"
+    *ngIf="form.errors?.['dateRange'] &&
+           form.get('ProgramStartDate')?.touched &&
+           form.get('ProgramEndDate')?.touched"
   >
     تاريخ النهاية يجب أن يكون بعد تاريخ البداية
   </div>
@@ -119,18 +140,19 @@
   <!-- TherapyCardType -->
   <div class="row flex-center">
     <label class="label-lg">نوع بطاقة العلاج</label>
+
     <select class="label-lg" formControlName="TherapyCardType">
       <option value="">اختر النوع</option>
-      <option *ngFor="let t of therapyTypes" [value]="t.value">
-        {{ t.label }}
-      </option>
+      <option *ngFor="let t of therapyTypes" [value]="t.value">{{ t.label }}</option>
     </select>
 
-    <!-- Frontend Validation -->
-    <div
-      class="error-message label-lg"
-      *ngIf="FrontendError('TherapyCardType')"
-    >
+    <!-- Backend -->
+    <div class="error-message label-lg" *ngIf="hasBackendError('TherapyCardType')">
+      {{ getBackendError('TherapyCardType') }}
+    </div>
+
+    <!-- Frontend -->
+    <div class="error-message label-lg" *ngIf="hasFrontendError('TherapyCardType')">
       نوع البطاقة مطلوب
     </div>
   </div>
@@ -139,6 +161,11 @@
   <div class="row flex-center width-100">
     <label class="label-lg">الملاحظات</label>
     <textarea rows="1" class="label-lg" formControlName="Notes"></textarea>
+
+    <!-- Backend -->
+    <div class="error-message label-lg" *ngIf="hasBackendError('Notes')">
+      {{ getBackendError('Notes') }}
+    </div>
   </div>
 
   <!-- Programs section -->
@@ -161,46 +188,40 @@
       @for (row of programs.controls; track $index; let i = $index) {
       <tr [formGroup]="row">
 
+        <!-- Program -->
         <td>
           <select class="label-lg" formControlName="MedicalProgramId">
             <option value="">اختر البرنامج</option>
-            <option *ngFor="let p of programDropdown" [value]="p.value">
-              {{ p.label }}
-            </option>
+            <option *ngFor="let p of programDropdown" [value]="p.value">{{ p.label }}</option>
           </select>
 
-          <!-- Frontend Validation -->
-          <div
-            class="error-message label-lg"
-            *ngIf="row.get('MedicalProgramId')?.invalid && row.get('MedicalProgramId')?.touched"
-          >
+          <div class="error-message label-lg"
+               *ngIf="row.get('MedicalProgramId')?.invalid && row.get('MedicalProgramId')?.touched">
             البرنامج مطلوب
           </div>
         </td>
 
+        <!-- Duration -->
         <td>
           <input class="label-lg" type="number" min="1" formControlName="Duration" />
 
-          <!-- Frontend Validation -->
-          <div
-            class="error-message label-lg"
-            *ngIf="row.get('Duration')?.invalid && row.get('Duration')?.touched"
-          >
+          <div class="error-message label-lg"
+               *ngIf="row.get('Duration')?.invalid && row.get('Duration')?.touched">
             المدة مطلوبة ويجب أن تكون رقمًا أكبر من 0
           </div>
         </td>
 
+        <!-- Notes -->
         <td>
           <input class="label-lg" type="text" formControlName="Notes" />
         </td>
 
+        <!-- Remove -->
         <td>
-          <button
-            *ngIf="programs.length > 1"
-            type="button"
-            class="btn danger icon"
-            (click)="removeProgramRow(i)"
-          >
+          <button *ngIf="programs.length > 1"
+                  type="button"
+                  class="btn danger icon"
+                  (click)="removeProgramRow(i)">
             ✕
           </button>
         </td>
@@ -209,22 +230,25 @@
       }
     </tbody>
   </table>
-<div
-  *ngIf="programs.errors?.['duplicateProgram']"
-  class="error-message label-lg flex-center"
->
-  لا يمكن اختيار نفس البرنامج العلاجي أكثر من مرة
-</div>
 
+  <!-- Duplicate Program Error -->
+  <div *ngIf="programs.errors?.['duplicateProgram']"
+       class="error-message label-lg flex-center">
+    لا يمكن اختيار نفس البرنامج العلاجي أكثر من مرة
+  </div>
+
+  <!-- Add program -->
   <div class="flex-end">
     <button class="btn primary" type="button" (click)="addProgramRow()">
       + إضافة برنامج
     </button>
   </div>
 
+  <!-- Submit -->
   <div class="flex-center">
     <button class="btn primary label-md" type="button" (click)="onSubmit()">
       حفظ
     </button>
   </div>
+
 </form>

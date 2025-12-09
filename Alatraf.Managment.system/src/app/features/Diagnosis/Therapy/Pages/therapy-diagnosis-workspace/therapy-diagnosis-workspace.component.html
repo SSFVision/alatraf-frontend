@@ -29,9 +29,16 @@
 
 @if(viewMode() === 'add') {
 <app-add-therapy-diagnosis-form
-  [patient]="patient()!"
+  [ticketId]="patient()?.patientId!"
+  [injuryReasons]="injuryReasons()"
+  [injurySides]="injurySides()"
+  [injuryTypes]="injuryTypes()"
+  [medicalPrograms]="medicalPrograms()"
+  [editMode]="isEditMode()"
+  [existingTherapyCard]="existingCard()"
   (submitForm)="saveTherapyDiagnosis($event)"
 ></app-add-therapy-diagnosis-form>
+
 
 } @if (viewMode() === 'history') {
 <!-- <app-previous-therapy-card-diagnosis

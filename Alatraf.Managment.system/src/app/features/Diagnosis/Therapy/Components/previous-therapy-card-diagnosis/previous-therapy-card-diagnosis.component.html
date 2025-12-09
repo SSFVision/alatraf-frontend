@@ -7,82 +7,6 @@
 @if (items.length === 0) {
   <p class="body-md padding-16">لا توجد تشخيصات سابقة لهذا المريض.</p>
 } @else {
-
-<table>
-  <thead>
-    <tr>
-      <th class="title-sm">رقم الكرت</th>
-      <th class="title-sm">التاريخ</th>
-      <th class="title-sm">البرامح العلاجية</th>
-      <th class="buttons"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    @for (card of items; track card.therapyCardId) {
-
-      @for (program of card.programs; track program.programName; let i = $index) {
-        <tr>
-          @if (i === 0) {
-            <td
-              class="body-md"
-              [attr.rowspan]="card.programs.length"
-            >
-              {{ card.cardNumber }}
-            </td>
-
-            <td
-              class="body-md"
-              [attr.rowspan]="card.programs.length"
-            >
-              {{ card.cardDate | date: 'dd-MM-YYYY' }}
-            </td>
-          }
-
-          <td class="body-md">
-            {{ program.programName }}
-            @if (program.totalSessions != null) {
-              ({{ program.totalSessions }})
-            }
-          </td>
-
-          @if (i === 0) {
-            <td
-              [attr.rowspan]="card.programs.length"
-            >
-              <button
-                class="btn primary icon"
-                type="button"
-                (click)="onView(card)"
-              >
-                <img
-                  src="assets/icons/eye-icon.svg"
-                  alt="عرض التفاصيل"
-                />
-              </button>
-            </td>
-          }
-        </tr>
-      }
-
-    }
-  </tbody>
-</table>
-
-} -->
-
-
-
-<!-- src/app/features/Diagnosis/Therapy/Components/therapy-card-history-table/therapy-card-history-table.component.html -->
-
-<div class="width-100">
-  <p class="title-md">التشخيصات السابقة</p>
-  <span class="home-line"></span>
-</div>
-
-@if (items.length === 0) {
-  <p class="body-md padding-16">لا توجد تشخيصات سابقة لهذا المريض.</p>
-} @else {
 <div class="table-wrapper">
 
 
@@ -115,7 +39,6 @@
               {{ card.cardNumber }}
             </td>
 
-            <!-- تاريخ الكرت -->
             <td
               class="body-md"
               [attr.rowspan]="card.programs.length"
@@ -123,7 +46,6 @@
               {{ card.cardDate | date: 'dd-MM-YYYY' }}
             </td>
 
-            <!-- القسم -->
             <td
               class="body-md"
               [attr.rowspan]="card.programs.length"
@@ -131,7 +53,6 @@
               {{ card.departmentName }}
             </td>
 
-            <!-- ملخص التشخيص -->
             <td
               class="body-md"
               [attr.rowspan]="card.programs.length"
@@ -142,7 +63,6 @@
               }
             </td>
 
-            <!-- المدة (من → إلى) -->
             <td
               class="body-md"
               [attr.rowspan]="card.programs.length"
@@ -154,7 +74,6 @@
             </td>
           }
 
-          <!-- البرامج -->
           <td class="body-md">
             {{ program.programName }}
             @if (program.totalSessions != null) {
@@ -162,7 +81,6 @@
             }
           </td>
 
-          <!-- الحالة -->
           @if (i === 0) {
             <td
               class="body-md"
@@ -178,7 +96,6 @@
               </span>
             </td>
 
-            <!-- الطبيب -->
             <td
               class="body-md"
               [attr.rowspan]="card.programs.length"
@@ -186,7 +103,6 @@
               {{ card.createdBy }}
             </td>
 
-            <!-- زر عرض التفاصيل -->
             <td
               [attr.rowspan]="card.programs.length"
             >
@@ -210,4 +126,4 @@
 </table>
 </div>  
 }
-
+ -->

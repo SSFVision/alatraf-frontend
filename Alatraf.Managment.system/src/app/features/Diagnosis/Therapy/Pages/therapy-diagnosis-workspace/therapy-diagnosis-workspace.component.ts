@@ -13,6 +13,10 @@ import { AddTherapyDiagnosisFormComponent } from '../../Components/add-therapy-d
 import { ToastService } from '../../../../../core/services/toast.service';
 import { CreateTherapyCardRequest } from '../../Models/create-therapy-card.request';
 import { PatientDto } from '../../../../../core/models/Shared/patient.model';
+import { InjuryDto } from '../../../Shared/Models/injury.dto';
+import { MedicalProgramDto } from '../../Models/medical-program.dto';
+import { TherapyDiagnosisFacade } from '../../Services/therapy-diagnosis.facade.Service';
+import { UpdateTherapyCardRequest } from '../../Models/update-therapy-card.request';
 
 @Component({
   selector: 'app-therapy-diagnosis-workspace',
@@ -30,6 +34,7 @@ export class TherapyDiagnosisWorkspaceComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private destroyRef = inject(DestroyRef);
   private patientService = inject(PatientService);
+  private facade = inject(TherapyDiagnosisFacade);
 
 
   private toast=inject(ToastService);
@@ -38,7 +43,12 @@ export class TherapyDiagnosisWorkspaceComponent implements OnInit {
 
   isLoading = signal(true);
 
- 
+  injuryReasons = signal<InjuryDto[]>([]);
+  injurySides = signal<InjuryDto[]>([]);
+  injuryTypes = signal<InjuryDto[]>([]);
+  medicalPrograms = signal<MedicalProgramDto[]>([]);
+  existingCard = signal<any | null>(null);
+  isEditMode = signal(false);
 
   ngOnInit(): void {
     this.listenToRouteChanges();
@@ -83,9 +93,25 @@ export class TherapyDiagnosisWorkspaceComponent implements OnInit {
 
   // for the form
 
-  saveTherapyDiagnosis(formValue: CreateTherapyCardRequest) {
+  saveTherapyDiagnosis(dto: CreateTherapyCardRequest | UpdateTherapyCardRequest) {
 
-    this.toast.success("Saved Sucess"+formValue.DiagnosisText)
-    console.log('Therapy Diagnosis Payload:', formValue);
+
+    console.log("this request for creat therapy diagnoss",dto);
+    if (this.isEditMode()) {
+      this.facade.updateTherapyCard(this.existingCard()!.TherapyCardId, dto as UpdateTherapyCardRequest)
+        .subscribe((result) => {
+          if (result.success) {
+            this.toast.success("تم تعديل التشخيص بنجاح");
+          }
+        });
+
+    } else {
+      this.facade.createTherapyCard(dto as CreateTherapyCardRequest)
+        .subscribe((result) => {
+          if (result.success) {
+            this.toast.success("تم إضافة التشخيص بنجاح");
+          }
+        });
+    }
   }
 }
