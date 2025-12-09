@@ -33,10 +33,10 @@ import {
 
 import { UpdateTherapyCardRequest } from '../../Models/update-therapy-card.request';
 import { TherapyCardDiagnosisDto } from '../../Models/therapy-card-diagnosis.dto';
-import { MedicalProgramDto } from '../../Models/medical-program.dto';
+import { MedicalProgramDto } from '../../../../../core/models/medical-programs/medical-program.dto';
 
 import { FormValidationState } from '../../../../../core/utils/form-validation-state';
-import { InjuryDto } from '../../../Shared/Models/injury.dto';
+import { InjuryDto } from '../../../../../core/models/injuries/injury.dto';
 import { TherapyDiagnosisFacade } from '../../Services/therapy-diagnosis.facade.Service';
 
 @Component({
@@ -79,9 +79,9 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
 
   // Backend already returns Arabic strings → we use those directly
   therapyTypes = [
-    { label: 'عام', value: 'عام' },
-    { label: 'خاص', value: 'خاص' },
-    { label: 'أعصاب أطفال', value: 'أعصاب أطفال' },
+    { label: 'عام', value: TherapyCardType.General },
+    { label: 'خاص', value: TherapyCardType.Special },
+    { label: 'أعصاب أطفال', value: TherapyCardType.NerveKids },
   ];
 
   // --------------------------
@@ -92,14 +92,14 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
       DiagnosisText: ['', [Validators.required, Validators.maxLength(1000)]],
       InjuryDate: ['', Validators.required],
 
-      InjuryReasons: [[], ],
-      InjurySides: [[], ],
-      InjuryTypes: [[], ],
+      InjuryReasons: [[]],
+      InjurySides: [[]],
+      InjuryTypes: [[]],
 
       ProgramStartDate: ['', Validators.required],
       ProgramEndDate: ['', Validators.required],
 
-      TherapyCardType: [TherapyCardType.General], // Arabic string
+      TherapyCardType: [TherapyCardType.General, Validators.required],
       Notes: [''],
 
       Programs: this.fb.array<FormGroup>([], {
@@ -112,13 +112,14 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
   get programs(): FormArray<FormGroup> {
     return this.form.get('Programs') as FormArray<FormGroup>;
   }
- private createProgramRow(): FormGroup {
-    return this.fb.group({
-      MedicalProgramId: [null, [, Validators.min(1)]],
-      Duration: [null, [Validators.required, Validators.min(1)]],
-      Notes: [''],
-    });
-  }
+private createProgramRow(): FormGroup {
+  return this.fb.group({
+    MedicalProgramId: [null, Validators.required],
+    Duration: [null, [Validators.required, Validators.min(1)]],
+    Notes: [''],
+  });
+}
+
   // --------------------------
   // Backend Validation Handler
   // --------------------------
@@ -135,52 +136,61 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
       this.validationState.apply();
       this.validationState.clearOnEdit();
     });
+    if (!this.editMode) {
+    this.addProgramRow();
+  }
   }
 
-  // --------------------------
-  // Input Changes
-  // --------------------------
   ngOnChanges(changes: SimpleChanges): void {
     this.injuryReasonsOptions = this.injuryReasons.map((r) => ({
-      label: r.Name,
-      value: r.Id,
+      label: r.name,
+      value: r.id,
     }));
 
     this.injurySidesOptions = this.injurySides.map((s) => ({
-      label: s.Name,
-      value: s.Id,
+      label: s.name,
+      value: s.id,
     }));
 
     this.injuryTypesOptions = this.injuryTypes.map((t) => ({
-      label: t.Name,
-      value: t.Id,
+      label: t.name,
+      value: t.id,
     }));
 
     this.programDropdown = this.medicalPrograms.map((p) => ({
-      label: p.Name,
-      value: p.Id,
+      label: p.name,
+      value: p.id,
     }));
 
     if (this.editMode && this.existingTherapyCard) {
       this.patchEditForm(this.existingTherapyCard);
     }
   }
+  private mapArabicTypeToEnum(arabic: string): TherapyCardType {
+    switch (arabic) {
+      case 'عام':
+        return TherapyCardType.General;
+      case 'خاص':
+        return TherapyCardType.Special;
+      case 'أعصاب أطفال':
+        return TherapyCardType.NerveKids;
+      default:
+        return TherapyCardType.General;
+    }
+  }
 
-  // --------------------------
-  // Patch Form (Edit Mode)
-  // --------------------------
   private patchEditForm(card: TherapyCardDiagnosisDto) {
     this.form.patchValue({
       DiagnosisText: card.DiagnosisText,
       InjuryDate: card.InjuryDate,
-      InjuryReasons: card.InjuryReasons.map((x) => x.Id),
-      InjurySides: card.InjurySides.map((x) => x.Id),
-      InjuryTypes: card.InjuryTypes.map((x) => x.Id),
+      InjuryReasons: card.InjuryReasons.map((x) => x.id),
+      InjurySides: card.InjurySides.map((x) => x.id),
+      InjuryTypes: card.InjuryTypes.map((x) => x.id),
       ProgramStartDate: card.ProgramStartDate,
       ProgramEndDate: card.ProgramEndDate,
 
       // 🔥 FIX: backend returns Arabic string (e.g., "عام")
-      TherapyCardType: card.TherapyCardType,
+      TherapyCardType: this.mapArabicTypeToEnum(card.TherapyCardType),
 
       Notes: card.Notes ?? '',
     });
@@ -198,9 +208,6 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
     });
   }
 
-  // --------------------------
-  // Validators
-  // --------------------------
   dateRangeValidator(control: AbstractControl): ValidationErrors | null {
     const start = control.get('ProgramStartDate')?.value;
     const end = control.get('ProgramEndDate')?.value;
@@ -234,7 +241,7 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
   hasFrontendError(field: string): boolean {
     return this.validationState.hasFrontendError(field);
   }
-    addProgramRow() {
+  addProgramRow() {
     this.programs.push(this.createProgramRow());
   }
 

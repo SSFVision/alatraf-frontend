@@ -1,4 +1,4 @@
-import { InjuryDto } from "../../Shared/Models/injury.dto";
+import { InjuryDto } from '../../../../core/models/injuries/injury.dto';
 
 export interface TherapyCardDiagnosisDto {
   TicketId: number;

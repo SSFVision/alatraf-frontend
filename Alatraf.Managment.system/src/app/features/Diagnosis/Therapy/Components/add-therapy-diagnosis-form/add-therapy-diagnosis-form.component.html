@@ -138,24 +138,26 @@
   </div>
 
   <!-- TherapyCardType -->
-  <div class="row flex-center">
-    <label class="label-lg">نوع بطاقة العلاج</label>
+<div class="row flex-center">
+  <label class="label-lg">نوع بطاقة العلاج</label>
 
-    <select class="label-lg" formControlName="TherapyCardType">
-      <option value="">اختر النوع</option>
-      <option *ngFor="let t of therapyTypes" [value]="t.value">{{ t.label }}</option>
-    </select>
+  <select class="label-lg" formControlName="TherapyCardType">
+    <option *ngFor="let t of therapyTypes" [value]="t.value">
+      {{ t.label }}
+    </option>
+  </select>
 
-    <!-- Backend -->
-    <div class="error-message label-lg" *ngIf="hasBackendError('TherapyCardType')">
-      {{ getBackendError('TherapyCardType') }}
-    </div>
-
-    <!-- Frontend -->
-    <div class="error-message label-lg" *ngIf="hasFrontendError('TherapyCardType')">
-      نوع البطاقة مطلوب
-    </div>
+  <!-- Backend -->
+  <div class="error-message label-lg" *ngIf="hasBackendError('TherapyCardType')">
+    {{ getBackendError('TherapyCardType') }}
   </div>
+
+  <!-- Frontend -->
+  <div class="error-message label-lg" *ngIf="hasFrontendError('TherapyCardType')">
+    نوع البطاقة مطلوب
+  </div>
+</div>
+
 
   <!-- Notes -->
   <div class="row flex-center width-100">
@@ -174,62 +176,76 @@
     <span class="home-line"></span>
   </div>
 
-  <table class="no-shadow">
-    <thead>
-      <tr>
-        <th class="label-lg">اسم البرنامج</th>
-        <th class="label-lg">المدة</th>
-        <th class="label-lg">الملاحظات</th>
-        <th></th>
-      </tr>
-    </thead>
+ <table class="no-shadow">
+  <thead>
+    <tr>
+      <th class="label-lg">اسم البرنامج</th>
+      <th class="label-lg">المدة</th>
+      <th class="label-lg">الملاحظات</th>
+      <th></th>
+    </tr>
+  </thead>
 
-    <tbody>
-      @for (row of programs.controls; track $index; let i = $index) {
-      <tr [formGroup]="row">
+  <tbody>
+    @for (row of programs.controls; track $index; let i = $index) {
+    <tr [formGroup]="row">
 
-        <!-- Program -->
-        <td>
-          <select class="label-lg" formControlName="MedicalProgramId">
-            <option value="">اختر البرنامج</option>
-            <option *ngFor="let p of programDropdown" [value]="p.value">{{ p.label }}</option>
-          </select>
+      <!-- Program -->
+      <td>
+        <select class="label-lg" formControlName="MedicalProgramId">
+          <option [ngValue]="null">اختر البرنامج</option>
+          <option *ngFor="let p of programDropdown" [ngValue]="p.value">
+            {{ p.label }}
+          </option>
+        </select>
 
-          <div class="error-message label-lg"
-               *ngIf="row.get('MedicalProgramId')?.invalid && row.get('MedicalProgramId')?.touched">
-            البرنامج مطلوب
-          </div>
-        </td>
+        <!-- Frontend Error -->
+        <div class="error-message label-lg"
+             *ngIf="row.get('MedicalProgramId')?.invalid && row.get('MedicalProgramId')?.touched">
+          البرنامج مطلوب
+        </div>
 
-        <!-- Duration -->
-        <td>
-          <input class="label-lg" type="number" min="1" formControlName="Duration" />
+        <!-- Backend Error -->
+        <div class="error-message label-lg"
+             *ngIf="hasBackendError('Programs[' + i + '].MedicalProgramId')">
+          {{ getBackendError('Programs[' + i + '].MedicalProgramId') }}
+        </div>
+      </td>
 
-          <div class="error-message label-lg"
-               *ngIf="row.get('Duration')?.invalid && row.get('Duration')?.touched">
-            المدة مطلوبة ويجب أن تكون رقمًا أكبر من 0
-          </div>
-        </td>
+      <!-- Duration -->
+      <td>
+        <input class="label-lg" type="number" min="1" formControlName="Duration" />
 
-        <!-- Notes -->
-        <td>
-          <input class="label-lg" type="text" formControlName="Notes" />
-        </td>
+        <div class="error-message label-lg"
+             *ngIf="row.get('Duration')?.invalid && row.get('Duration')?.touched">
+          المدة مطلوبة ويجب أن تكون رقمًا أكبر من 0
+        </div>
 
-        <!-- Remove -->
-        <td>
-          <button *ngIf="programs.length > 1"
-                  type="button"
-                  class="btn danger icon"
-                  (click)="removeProgramRow(i)">
-            ✕
-          </button>
-        </td>
+        <div class="error-message label-lg"
+             *ngIf="hasBackendError('Programs[' + i + '].Duration')">
+          {{ getBackendError('Programs[' + i + '].Duration') }}
+        </div>
+      </td>
 
-      </tr>
-      }
-    </tbody>
-  </table>
+      <!-- Notes -->
+      <td>
+        <input class="label-lg" type="text" formControlName="Notes" />
+      </td>
+
+      <!-- Remove -->
+      <td>
+        <button *ngIf="programs.length > 1"
+                type="button"
+                class="btn danger icon"
+                (click)="removeProgramRow(i)">
+          ✕
+        </button>
+      </td>
+
+    </tr>
+    }
+  </tbody>
+</table>
 
   <!-- Duplicate Program Error -->
   <div *ngIf="programs.errors?.['duplicateProgram']"

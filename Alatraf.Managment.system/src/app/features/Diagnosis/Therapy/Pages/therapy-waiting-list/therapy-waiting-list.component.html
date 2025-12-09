@@ -1,4 +1,3 @@
-
 <main class="padding-32 row gap-16 padding-24">
   <div class="box max-width-324 culumn gap-24 max-hight-800">
     <!-- Header -->
@@ -27,42 +26,60 @@
       />
     </div>
 
-    <!-- Filters -->
+    <!-- Service Filters -->
     <div class="filters-container">
+      <!-- ALL services in therapy -->
       <button
         class="filter-btn"
         [class.active]="activeDepartment() === null"
-        [disabled]="activeDepartment() === null"
-        (click)="filterByDepartment(null)"
+        (click)="filterByService(null)"
       >
         الكل
       </button>
 
+      <!-- علاج طبيعي -->
       <button
         class="filter-btn"
-        [class.active]="activeDepartment() === 1"
-        [disabled]="activeDepartment() === 1"
-        (click)="filterByDepartment(1)"
+        [class.active]="activeDepartment() === ServiceType.Therapy"
+        (click)="filterByService(ServiceType.Therapy)"
       >
         علاج طبيعي
       </button>
 
+      <!-- أعصاب -->
       <button
         class="filter-btn"
-        [class.active]="activeDepartment() === 2"
-        [disabled]="activeDepartment() === 2"
-        (click)="filterByDepartment(2)"
+        [class.active]="activeDepartment() === ServiceType.Nerves"
+        (click)="filterByService(ServiceType.Nerves)"
       >
         أعصاب
       </button>
 
+      <!-- عظام -->
       <button
         class="filter-btn"
-        [class.active]="activeDepartment() === 3"
-        [disabled]="activeDepartment() === 3"
-        (click)="filterByDepartment(3)"
+        [class.active]="activeDepartment() === ServiceType.Orthopedics"
+        (click)="filterByService(ServiceType.Orthopedics)"
       >
         عظام
+      </button>
+
+      <!-- تجديد كروت -->
+      <button
+        class="filter-btn"
+        [class.active]="activeDepartment() === ServiceType.TherapyCardRenew"
+        (click)="filterByService(ServiceType.TherapyCardRenew)"
+      >
+        تجديد كروت
+      </button>
+
+      <!-- بدل فاقد -->
+      <button
+        class="filter-btn"
+        [class.active]="activeDepartment() === ServiceType.TherapyLostCard"
+        (click)="filterByService(ServiceType.TherapyLostCard)"
+      >
+        بدل فاقد
       </button>
     </div>
 
@@ -74,7 +91,6 @@
     ></app-waiting-patient-card>
 
     <!-- Pagination Component -->
-
     <app-pagination
       [page]="pageRequest().page"
       [pageSize]="pageRequest().pageSize"
@@ -84,6 +100,7 @@
     ></app-pagination>
   </div>
 
+  <!-- Right section -->
   @if (selectedTicket()) {
   <div class="box max-hight-800 gap-16">
     <router-outlet></router-outlet>

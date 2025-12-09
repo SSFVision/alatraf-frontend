@@ -2,14 +2,12 @@ import { Injectable } from '@angular/core';
 import { BaseApiService } from '../../../../core/services/base-api.service';
 import { Observable } from 'rxjs';
 import { ApiResult } from '../../../../core/models/ApiResult';
-import { InjuryDto } from '../Models/injury.dto';
+import { InjuryDto } from '../../../../core/models/injuries/injury.dto';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DiagnosisService extends BaseApiService {
-
- 
   /** Load injury reasons */
   getInjuryReasons(): Observable<ApiResult<InjuryDto[]>> {
     return this.get<InjuryDto[]>('/injuries/reasons');

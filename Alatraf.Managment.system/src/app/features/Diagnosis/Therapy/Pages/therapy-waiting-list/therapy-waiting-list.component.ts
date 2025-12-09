@@ -4,7 +4,8 @@ import { PatientCardComponent } from '../../../Shared/Components/waiting-patient
 import { NavigationDiagnosisFacade } from '../../../../../core/navigation/navigation-diagnosis.facade';
 import { TicketDto } from '../../../../Reception/Tickets/models/ticket.model';
 import { TicketFacade } from '../../../../Reception/Tickets/tickets.facade.service';
-import { PaginationComponent } from "../../../../../shared/components/pagination/pagination.component";
+import { PaginationComponent } from '../../../../../shared/components/pagination/pagination.component';
+import { Department, ServiceType } from '../../../Shared/enums/department.enum';
 
 @Component({
   selector: 'app-therapy-waiting-list',
@@ -13,40 +14,45 @@ import { PaginationComponent } from "../../../../../shared/components/pagination
   styleUrl: './therapy-waiting-list.component.css',
 })
 export class TherapyWaitingListComponent implements OnInit {
- activeDepartment = signal<number | null>(null); // null = "الكل"
+  activeDepartment = signal<number | null>(null); // null = "الكل"
 
- 
-    ticketFacade = inject(TicketFacade);
+  ticketFacade = inject(TicketFacade);
   private navDiagnos = inject(NavigationDiagnosisFacade);
 
+  // Signals
   tickets = this.ticketFacade.tickets;
   selectedTicket = signal<TicketDto | null>(null);
+  ServiceType = ServiceType;  // 👈 expose enum to HTML
+
+  pageRequest = this.ticketFacade.pageRequest;
+  totalCount = this.ticketFacade.totalCount;
 
   ngOnInit() {
+    // Load only therapy department tickets
+    this.ticketFacade.updateDepartment(Department.Therapy);
     this.ticketFacade.loadTickets();
   }
 
+  // SEARCH
   onSearch(term: string) {
     this.ticketFacade.search(term);
   }
 
- 
-filterByDepartment(departmentId: number | null) {
-  this.activeDepartment.set(departmentId);
+  // Optional: If the therapist chooses a service inside therapy department
+  filterByService(serviceId: number | null) {
+    this.activeDepartment.set(serviceId);
 
-  this.ticketFacade.updateFilters({
-    departmentId: departmentId ?? undefined,
-  });
+    this.ticketFacade.updateFilters({
+      departmentId: 1, // always therapy department
+      serviceId: serviceId ?? undefined,
+    });
 
-  this.ticketFacade.setPage(1);
-}
+    this.ticketFacade.setPage(1);
+    this.ticketFacade.loadTickets();
+  }
 
   select(ticket: TicketDto) {
     this.selectedTicket.set(ticket);
     this.navDiagnos.goToTherapyCreate(ticket.patient?.patientId!);
   }
-
-  pageRequest = this.ticketFacade.pageRequest;
-  totalCount = this.ticketFacade.totalCount;
 }
-

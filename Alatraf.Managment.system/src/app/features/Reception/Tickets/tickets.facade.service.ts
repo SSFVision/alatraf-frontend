@@ -1,34 +1,36 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { map, tap } from 'rxjs/operators';
+import { tap, map } from 'rxjs/operators';
 
-import { ApiResult } from '../../../core/models/ApiResult';
 import { BaseFacade } from '../../../core/utils/facades/base-facade';
-import { SearchManager } from '../../../core/utils/search-manager';
+import { ApiResult } from '../../../core/models/ApiResult';
 
-import { TicketFilterRequest } from './models/ticket-filter.model';
-import { TicketDto } from './models/ticket.model';
 import { TicketService } from './ticket.service';
+import { TicketDto, TicketStatus } from './models/ticket.model';
+import { TicketFilterRequest } from './models/ticket-filter.model';
 import { PageRequest } from '../../../core/models/Shared/page-request.model';
 
-@Injectable({
-  providedIn: 'root',
-})
+import { SearchManager } from '../../../core/utils/search-manager';
+
+@Injectable({ providedIn: 'root' })
 export class TicketFacade extends BaseFacade {
-  private ticketService = inject(TicketService);
+  private service = inject(TicketService);
 
-  // ================================
-  // Signals
-  // ================================
-
+  // ---------------------------------------------
+  // SIGNALS
+  // ---------------------------------------------
   private _tickets = signal<TicketDto[]>([]);
   tickets = this._tickets.asReadonly();
 
   private _filters = signal<TicketFilterRequest>({
     searchTerm: '',
+    sortBy: 'createdAt',
+    sortDirection: 'desc',
     serviceId: undefined,
+    departmentId: undefined,
+    patientId: undefined,
     status: undefined,
-    createdFrom: undefined,
-    createdTo: undefined,
+    createdFrom: null,
+    createdTo: null,
   });
   filters = this._filters.asReadonly();
 
@@ -38,72 +40,88 @@ export class TicketFacade extends BaseFacade {
   });
   pageRequest = this._pageRequest.asReadonly();
 
-  totalCount = signal<number>(0); // total items for pagination
-
+  totalCount = signal<number>(0);
   createdTicketId = signal<number | null>(null);
   formValidationErrors = signal<Record<string, string[]>>({});
+
 
   constructor() {
     super();
   }
 
-  // ================================
-  // Search Manager (Debounced Search)
-  // ================================
   private searchManager = new SearchManager<TicketDto[]>(
     (term: string) =>
-      this.ticketService
+      this.service
         .getTickets(
           { ...this._filters(), searchTerm: term },
-          this._pageRequest(),
+          this._pageRequest()
         )
         .pipe(
-          tap((res: ApiResult<any>) => {
-            if (!res.isSuccess) this.handleSearchError(res);
+          tap(result => {
+            if (!result.isSuccess) this.handleLoadTicketsError(result);
           }),
-          map((res: ApiResult<any>) =>
-            res.isSuccess && res.data?.items ? res.data.items : [],
-          ),
+          map(result =>
+            result.isSuccess && result.data?.items
+              ? result.data.items
+              : []
+          )
         ),
-    null, // no caching
-    (data) => this._tickets.set(data),
+    null,
+    (items: TicketDto[]) => this._tickets.set(items)
   );
 
-  // ================================
-  // Filter Operations
-  // ================================
-  updateFilters(newFilters: Partial<TicketFilterRequest>) {
-    this._filters.update((f) => ({ ...f, ...newFilters }));
-  }
 
-  search(term: string): void {
-    this._pageRequest.update((p) => ({ ...p, page: 1 })); // reset page on search
-    this.updateFilters({ searchTerm: term });
+  search(term: string) {
+    this._filters.update(f => ({ ...f, searchTerm: term }));
+    this._pageRequest.update(p => ({ ...p, page: 1 }));
+
     this.searchManager.search(term);
   }
 
-  // ================================
-  // Pagination Operations
-  // ================================
+
+  updateFilters(newFilters: Partial<TicketFilterRequest>) {
+    this._filters.update(f => ({ ...f, ...newFilters }));
+  }
+
+  updateDepartment(deptId: number | null) {
+    this._filters.update(f => ({
+      ...f,
+      departmentId: deptId ?? undefined,
+    }));
+
+    this._pageRequest.update(p => ({ ...p, page: 1 }));
+    this.loadTickets();
+  }
+
+  updateService(serviceId: number | null) {
+    this._filters.update(f => ({
+      ...f,
+      serviceId: serviceId ?? undefined,
+    }));
+
+    this._pageRequest.update(p => ({ ...p, page: 1 }));
+    this.loadTickets();
+  }
+
+
   setPage(page: number) {
-    this._pageRequest.update((p) => ({ ...p, page }));
+    this._pageRequest.update(p => ({ ...p, page }));
     this.loadTickets();
   }
 
   setPageSize(size: number) {
-    this._pageRequest.update((p) => ({
+    this._pageRequest.update(p => ({
       ...p,
       pageSize: size,
-      page: 1, // always reset page
+      page: 1
     }));
+
     this.loadTickets();
   }
 
-  // ================================
-  // Load Tickets
-  // ================================
-  loadTickets(): void {
-    this.ticketService
+
+  loadTickets() {
+    this.service
       .getTickets(this._filters(), this._pageRequest())
       .pipe(
         tap((result: ApiResult<any>) => {
@@ -115,49 +133,37 @@ export class TicketFacade extends BaseFacade {
             this.totalCount.set(0);
             this.handleLoadTicketsError(result);
           }
-        }),
+        })
       )
       .subscribe();
   }
 
-  // ================================
-  // Create Ticket
-  // ================================
   createTicket(dto: any) {
-    return this.handleCreateOrUpdate(this.ticketService.createTicket(dto), {
+    return this.handleCreateOrUpdate(this.service.createTicket(dto), {
       successMessage: 'تم إنشاء التذكرة بنجاح',
       defaultErrorMessage: 'فشل إنشاء التذكرة. حاول لاحقاً.',
     }).pipe(
-      tap((res) => {
+      tap(res => {
         if (res.success && res.data) {
           this.createdTicketId.set(res.data.ticketId);
           this.formValidationErrors.set({});
-          this.loadTickets(); // reload list
+          this.loadTickets();
         } else if (res.validationErrors) {
           this.formValidationErrors.set(res.validationErrors);
         }
-      }),
+      })
     );
   }
 
-  // ================================
-  // Error Handling
-  // ================================
+
   private handleLoadTicketsError(result: ApiResult<any>) {
     const err = this.extractError(result);
+
     if (err.type === 'validation' || err.type === 'business') {
       this.toast.error(err.message);
       return;
     }
-    this.toast.error('تعذر تحميل قائمة التذاكر. يرجى المحاولة لاحقاً.');
-  }
 
-  private handleSearchError(result: ApiResult<any>) {
-    const err = this.extractError(result);
-    if (err.type === 'validation' || err.type === 'business') {
-      this.toast.info(err.message);
-      return;
-    }
-    this.toast.error('حدث خطأ أثناء عملية البحث.');
+    this.toast.error('تعذر تحميل قائمة التذاكر. يرجى المحاولة لاحقاً.');
   }
 }
