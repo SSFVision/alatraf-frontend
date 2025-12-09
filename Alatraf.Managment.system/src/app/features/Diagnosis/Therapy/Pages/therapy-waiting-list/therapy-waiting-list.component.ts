@@ -28,7 +28,6 @@ export class TherapyWaitingListComponent implements OnInit {
   totalCount = this.ticketFacade.totalCount;
 
   ngOnInit() {
-    // Load only therapy department tickets
     this.ticketFacade.updateDepartment(Department.Therapy);
     this.ticketFacade.loadTickets();
   }
@@ -48,11 +47,11 @@ export class TherapyWaitingListComponent implements OnInit {
     });
 
     this.ticketFacade.setPage(1);
-    this.ticketFacade.loadTickets();
+    // this.ticketFacade.loadTickets();
   }
 
   select(ticket: TicketDto) {
     this.selectedTicket.set(ticket);
-    this.navDiagnos.goToTherapyCreate(ticket.patient?.patientId!);
+    this.navDiagnos.goToTherapyCreate(ticket.ticketId);
   }
 }

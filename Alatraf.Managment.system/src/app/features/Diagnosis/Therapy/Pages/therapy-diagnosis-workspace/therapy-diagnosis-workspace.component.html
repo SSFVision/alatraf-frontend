@@ -25,11 +25,11 @@
     التشخيصات السابقة
   </h1>
 </div>
-<app-header-patient-info [patient]="patient()!"></app-header-patient-info>
+<app-header-patient-info [patient]="ticket()?.patient!"></app-header-patient-info>
 
 @if(viewMode() === 'add') {
 <app-add-therapy-diagnosis-form
-  [ticketId]="26"
+  [ticketId]="ticket()?.ticketId!"
   [injuryReasons]="injuryReasons()"
   [injurySides]="injurySides()"
   [injuryTypes]="injuryTypes()"

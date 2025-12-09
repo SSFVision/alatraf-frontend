@@ -1,4 +1,5 @@
 export function calculateAge(date: string | undefined): number  {
+  // console.log("patient brithdate :", date);
   if (!date) return 0;
     const birth = new Date(date);
     if (isNaN(birth.getTime())) return 0;
@@ -11,6 +12,7 @@ export function calculateAge(date: string | undefined): number  {
     if (m < 0 || (m === 0 && d < 0)) {
       age--;
     }
+    console.log("age after convertion : ",age);
     return age;
 }
 

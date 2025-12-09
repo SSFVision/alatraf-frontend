@@ -44,7 +44,6 @@ export class TicketFacade extends BaseFacade {
   createdTicketId = signal<number | null>(null);
   formValidationErrors = signal<Record<string, string[]>>({});
 
-
   constructor() {
     super();
   }
@@ -57,68 +56,60 @@ export class TicketFacade extends BaseFacade {
           this._pageRequest()
         )
         .pipe(
-          tap(result => {
+          tap((result) => {
             if (!result.isSuccess) this.handleLoadTicketsError(result);
           }),
-          map(result =>
-            result.isSuccess && result.data?.items
-              ? result.data.items
-              : []
+          map((result) =>
+            result.isSuccess && result.data?.items ? result.data.items : []
           )
         ),
     null,
     (items: TicketDto[]) => this._tickets.set(items)
   );
 
-
   search(term: string) {
-    this._filters.update(f => ({ ...f, searchTerm: term }));
-    this._pageRequest.update(p => ({ ...p, page: 1 }));
+    this._filters.update((f) => ({ ...f, searchTerm: term }));
+    this._pageRequest.update((p) => ({ ...p, page: 1 }));
 
     this.searchManager.search(term);
   }
 
-
   updateFilters(newFilters: Partial<TicketFilterRequest>) {
-    this._filters.update(f => ({ ...f, ...newFilters }));
+    this._filters.update((f) => ({ ...f, ...newFilters }));
   }
 
   updateDepartment(deptId: number | null) {
-    this._filters.update(f => ({
+    this._filters.update((f) => ({
       ...f,
       departmentId: deptId ?? undefined,
     }));
 
-    this._pageRequest.update(p => ({ ...p, page: 1 }));
-    this.loadTickets();
+    this._pageRequest.update((p) => ({ ...p, page: 1 }));
   }
 
   updateService(serviceId: number | null) {
-    this._filters.update(f => ({
+    this._filters.update((f) => ({
       ...f,
       serviceId: serviceId ?? undefined,
     }));
 
-    this._pageRequest.update(p => ({ ...p, page: 1 }));
-    this.loadTickets();
+    this._pageRequest.update((p) => ({ ...p, page: 1 }));
   }
 
-
   setPage(page: number) {
-    this._pageRequest.update(p => ({ ...p, page }));
+    this._pageRequest.update((p) => ({ ...p, page }));
     this.loadTickets();
   }
 
   setPageSize(size: number) {
-    this._pageRequest.update(p => ({
+    this._pageRequest.update((p) => ({
       ...p,
       pageSize: size,
-      page: 1
+      page: 1,
     }));
 
     this.loadTickets();
   }
-
 
   loadTickets() {
     this.service
@@ -143,7 +134,7 @@ export class TicketFacade extends BaseFacade {
       successMessage: 'تم إنشاء التذكرة بنجاح',
       defaultErrorMessage: 'فشل إنشاء التذكرة. حاول لاحقاً.',
     }).pipe(
-      tap(res => {
+      tap((res) => {
         if (res.success && res.data) {
           this.createdTicketId.set(res.data.ticketId);
           this.formValidationErrors.set({});
@@ -154,6 +145,24 @@ export class TicketFacade extends BaseFacade {
       })
     );
   }
+  private _selectedTicket = signal<TicketDto | null>(null);
+  selectedTicket = this._selectedTicket.asReadonly();
+
+ loadingTicket = signal(false);
+
+loadTicketById(ticketId: number) {
+  this.loadingTicket.set(true);
+
+  this.service.getTicketById(ticketId).subscribe(res => {
+    if (res.isSuccess && res.data) {
+      this._selectedTicket.set(res.data);
+    } else {
+      this._selectedTicket.set(null);
+    }
+
+    this.loadingTicket.set(false);
+  });
+}
 
 
   private handleLoadTicketsError(result: ApiResult<any>) {

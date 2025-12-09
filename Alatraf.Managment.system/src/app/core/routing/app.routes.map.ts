@@ -33,7 +33,7 @@ export const AppRoutes = {
 
     therapy: {
       root: 'therapy',
-      create: (patientId: number | string) => `therapy/create/${patientId}`,
+      create: (ticketId: number | string) => `therapy/create/${ticketId}`,
       view: (diagnosisId: number | string) => `therapy/view/${diagnosisId}`,
       edit: (diagnosisId: number | string) => `therapy/edit/${diagnosisId}`,
     },
