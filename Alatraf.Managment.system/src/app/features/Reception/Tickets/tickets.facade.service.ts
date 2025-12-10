@@ -36,7 +36,7 @@ export class TicketFacade extends BaseFacade {
 
   private _pageRequest = signal<PageRequest>({
     page: 1,
-    pageSize: 5,
+    pageSize: 10,
   });
   pageRequest = this._pageRequest.asReadonly();
 

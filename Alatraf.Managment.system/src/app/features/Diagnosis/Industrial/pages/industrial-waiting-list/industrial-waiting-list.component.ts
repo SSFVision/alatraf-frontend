@@ -3,7 +3,7 @@ import { PatientCardComponent } from '../../../Shared/Components/waiting-patient
 import { RouterOutlet } from '@angular/router';
 import { NavigationDiagnosisFacade } from '../../../../../core/navigation/navigation-diagnosis.facade';
 import { PaginationComponent } from '../../../../../shared/components/pagination/pagination.component';
-import { TicketDto } from '../../../../Reception/Tickets/models/ticket.model';
+import { TicketDto, TicketStatus } from '../../../../Reception/Tickets/models/ticket.model';
 import { TicketFacade } from '../../../../Reception/Tickets/tickets.facade.service';
 import { ServiceType, Department } from '../../../Shared/enums/department.enum';
 
@@ -27,7 +27,7 @@ export class IndustrialWaitingListComponent implements OnInit, OnDestroy {
   totalCount = this.ticketFacade.totalCount;
 
   ngOnInit() {
-    this.ticketFacade.updateDepartment(Department.Industrial);
+    this.ticketFacade.updateFilters({departmentId:Department.Industrial,status:TicketStatus.New});
     this.ticketFacade.loadTickets();
   }
   ngOnDestroy() {

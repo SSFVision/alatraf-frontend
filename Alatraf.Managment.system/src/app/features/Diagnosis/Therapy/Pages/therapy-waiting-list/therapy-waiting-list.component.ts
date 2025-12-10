@@ -2,7 +2,7 @@ import { Component, inject, signal, OnInit, effect, OnDestroy } from '@angular/c
 import { RouterOutlet } from '@angular/router';
 import { PatientCardComponent } from '../../../Shared/Components/waiting-patient-card/waiting-patient-card.component';
 import { NavigationDiagnosisFacade } from '../../../../../core/navigation/navigation-diagnosis.facade';
-import { TicketDto } from '../../../../Reception/Tickets/models/ticket.model';
+import { TicketDto, TicketStatus } from '../../../../Reception/Tickets/models/ticket.model';
 import { TicketFacade } from '../../../../Reception/Tickets/tickets.facade.service';
 import { PaginationComponent } from '../../../../../shared/components/pagination/pagination.component';
 import { Department, ServiceType } from '../../../Shared/enums/department.enum';
@@ -28,7 +28,7 @@ export class TherapyWaitingListComponent  implements OnInit, OnDestroy  {
   totalCount = this.ticketFacade.totalCount;
 
   ngOnInit() {
-    this.ticketFacade.updateDepartment(Department.Therapy);
+    this.ticketFacade.updateFilters({departmentId:Department.Therapy,status:TicketStatus.New});
     this.ticketFacade.loadTickets();
   }
   ngOnDestroy() {
