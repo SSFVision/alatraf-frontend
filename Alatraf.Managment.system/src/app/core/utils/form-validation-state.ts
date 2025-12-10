@@ -7,8 +7,8 @@ export class FormValidationState {
     private backendErrors: Signal<Record<string, string[]>>
   ) {}
 
-  /** Simple PascalCase -> camelCase mapper */
-  private mapBackendFieldToControlName(field: string): string {
+  /** Convert PascalCase to camelCase */
+  private normalizeField(field: string): string {
     if (!field) return field;
     return field.charAt(0).toLowerCase() + field.slice(1);
   }
@@ -25,17 +25,14 @@ export class FormValidationState {
       }
     });
 
-    // 2️⃣ Apply new backend errors
+    // 2️⃣ Apply backend errors
     if (errors && Object.keys(errors).length > 0) {
       for (const field in errors) {
-        // Try exact name first (in case they already match)
-        let control = this.form.get(field);
+        const normalized = this.normalizeField(field);
 
-        // If not found, try camelCase version
-        if (!control) {
-          const mapped = this.mapBackendFieldToControlName(field);
-          control = this.form.get(mapped);
-        }
+        let control =
+          this.form.get(normalized) ??
+          this.form.get(field); // fallback (if names already match)
 
         if (control) {
           control.setErrors({ backend: errors[field][0] });
@@ -45,26 +42,35 @@ export class FormValidationState {
     }
   }
 
-  /** Utility for components to read backend error text */
+  /** Read backend error */
   getBackendError(field: string): string | null {
-    const control = this.form.get(field);
+    const normalized = this.normalizeField(field);
+    const control =
+      this.form.get(normalized) ??
+      this.form.get(field); // fallback
+
     return control?.errors?.['backend'] ?? null;
   }
 
-  /** Whether the field has a backend validation error */
+  /** Check if backend has error */
   hasBackendError(field: string): boolean {
     return this.getBackendError(field) !== null;
   }
 
-  /** Hide frontend errors when backend exists */
+  /** Show frontend error only when backend is clean */
   hasFrontendError(field: string): boolean {
-    if (this.hasBackendError(field)) return false;
+    const normalized = this.normalizeField(field);
 
-    const control = this.form.get(field);
-    return control?.invalid && control?.touched ? true : false;
+    if (this.hasBackendError(normalized)) return false;
+
+    const control =
+      this.form.get(normalized) ??
+      this.form.get(field);
+
+    return !!(control?.invalid && control?.touched);
   }
 
-  /** Clear backend errors when user edits any field */
+  /** Clear backend errors on user edit */
   clearOnEdit() {
     this.form.valueChanges.subscribe(() => {
       (this.backendErrors as any).set({});

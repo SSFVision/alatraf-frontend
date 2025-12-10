@@ -6,6 +6,9 @@ import {
   OnChanges,
   SimpleChanges,
   inject,
+  effect,
+  runInInjectionContext,
+  EnvironmentInjector,
 } from '@angular/core';
 
 import {
@@ -50,6 +53,7 @@ import { RepairCardDiagnosisFacade } from '../../Services/repair-card-diagnosis.
 export class AddIndustrialDiagnosisFormComponent implements OnChanges {
   private fb = inject(FormBuilder);
   private facade = inject(RepairCardDiagnosisFacade);
+  private env = inject(EnvironmentInjector);
 
   // --------------------------
   // Inputs
@@ -85,7 +89,7 @@ export class AddIndustrialDiagnosisFormComponent implements OnChanges {
   // Form
   // --------------------------
   form: FormGroup = this.fb.group({
-    diagnosisText: ['', [Validators.required, Validators.maxLength(2000)]],
+    diagnosisText: ['', [ Validators.maxLength(2000)]],
     injuryDate: ['', Validators.required],
 
     injuryReasons: [[] as number[]],
@@ -122,9 +126,6 @@ export class AddIndustrialDiagnosisFormComponent implements OnChanges {
     this.industrialPartsForm.removeAt(i);
   }
 
-  // --------------------------
-  // Backend Validation Handler
-  // --------------------------
   private validationState!: FormValidationState;
 
   ngOnInit(): void {
@@ -133,11 +134,14 @@ export class AddIndustrialDiagnosisFormComponent implements OnChanges {
       this.facade.formValidationErrors
     );
 
-    // تطبيق أخطاء الباك + تنظيفها عند التعديل
-    Promise.resolve().then(() => {
-      this.validationState.apply();
-      this.validationState.clearOnEdit();
+   runInInjectionContext(this.env, () => {
+      effect(() => {
+        this.validationState.apply();
+      });
     });
+
+    this.validationState.clearOnEdit();
+
 
     // في وضع الإنشاء نضمن وجود صف واحد على الأقل
     if (!this.editMode) {
@@ -260,7 +264,7 @@ export class AddIndustrialDiagnosisFormComponent implements OnChanges {
 
   getBackendError(field: string): string | null {
     // keys في الـ FormValidationState مخزنة lowercase
-    return this.validationState.getBackendError(field.toLowerCase());
+    return this.validationState.getBackendError(field);
   }
 
   hasBackendError(field: string): boolean {

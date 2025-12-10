@@ -188,7 +188,6 @@ export class TherapyDiagnosisWorkspaceComponent implements OnInit {
   ngOnInit(): void {
     // Load dropdowns (injuries & medical programs)
     this.therapyFacade.loadLookups();
-    console.log('loaded...........');
 
     // Load ticket based on route param
     this.listenToRouteChanges();
@@ -227,11 +226,23 @@ export class TherapyDiagnosisWorkspaceComponent implements OnInit {
           this.existingCard()?.TherapyCardId,
           dto as UpdateTherapyCardRequest
         )
-        .subscribe();
+        .subscribe((result) => {
+          if (result.validationErrors) {
+            this.therapyFacade.formValidationErrors.set(
+              result.validationErrors
+            );
+          }
+        });
     } else {
       this.therapyFacade
         .createTherapyCard(dto as CreateTherapyCardRequest)
-        .subscribe();
+        .subscribe((result) => {
+          if (result.validationErrors) {
+            this.therapyFacade.formValidationErrors.set(
+              result.validationErrors
+            );
+          }
+        });
     }
   }
 }

@@ -55,7 +55,7 @@ export class PatientFormComponent implements OnChanges, OnInit {
   ngOnInit(): void {
     // 1️⃣ Create the form — autoRegistrationNumber removed
     this.form = this.fb.group({
-      fullname: ['', Validators.required],
+      fullname: ['',],
       gender: [true, Validators.required],
       birthdate: [null, Validators.required],
       phone: [

@@ -7,6 +7,8 @@ import {
   SimpleChanges,
   inject,
   EnvironmentInjector,
+  effect,
+  runInInjectionContext,
 } from '@angular/core';
 
 import {
@@ -69,7 +71,9 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
     CreateTherapyCardRequest | UpdateTherapyCardRequest
   >();
 
-
+  // --------------------------
+  // Options
+  // --------------------------
   injuryReasonsOptions: MultiSelectOption[] = [];
   injurySidesOptions: MultiSelectOption[] = [];
   injuryTypesOptions: MultiSelectOption[] = [];
@@ -81,23 +85,25 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
     { label: 'أعصاب أطفال', value: TherapyCardType.NerveKids },
   ];
 
- 
+  // --------------------------
+  // Form (all controls in lowerCamelCase)
+  // --------------------------
   form: FormGroup = this.fb.group(
     {
-      DiagnosisText: ['', [Validators.required, Validators.maxLength(1000)]],
-      InjuryDate: ['', Validators.required],
+      diagnosisText: ['', [Validators.maxLength(1000)]],
+      injuryDate: ['', Validators.required],
 
-      InjuryReasons: [[]],
-      InjurySides: [[]],
-      InjuryTypes: [[]],
+      injuryReasons: [[]],
+      injurySides: [[]],
+      injuryTypes: [[]],
 
-      ProgramStartDate: ['', Validators.required],
-      ProgramEndDate: ['', Validators.required],
+      programStartDate: ['', Validators.required],
+      programEndDate: ['', Validators.required],
 
-      TherapyCardType: [TherapyCardType.General, Validators.required],
-      Notes: [''],
+      therapyCardType: [TherapyCardType.General, Validators.required],
+      notes: [''],
 
-      Programs: this.fb.array<FormGroup>([], {
+      programs: this.fb.array<FormGroup>([], {
         validators: [this.noDuplicateProgramsValidator.bind(this)],
       }),
     },
@@ -105,17 +111,20 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
   );
 
   get programs(): FormArray<FormGroup> {
-    return this.form.get('Programs') as FormArray<FormGroup>;
+    return this.form.get('programs') as FormArray<FormGroup>;
   }
-private createProgramRow(): FormGroup {
-  return this.fb.group({
-    MedicalProgramId: [null, Validators.required],
-    Duration: [null, [Validators.required, Validators.min(1)]],
-    Notes: [''],
-  });
-}
 
+  private createProgramRow(): FormGroup {
+    return this.fb.group({
+      medicalProgramId: [null, Validators.required],
+      duration: [null, [Validators.required, Validators.min(1)]],
+      notes: [''],
+    });
+  }
 
+  // --------------------------
+  // Backend validation handler
+  // --------------------------
   private validationState!: FormValidationState;
 
   ngOnInit(): void {
@@ -124,14 +133,18 @@ private createProgramRow(): FormGroup {
       this.facade.formValidationErrors
     );
 
-    // Delay to ensure form exists
-    Promise.resolve().then(() => {
-      this.validationState.apply();
-      this.validationState.clearOnEdit();
+    // ربط الـ signal بالـ form
+    runInInjectionContext(this.env, () => {
+      effect(() => {
+        this.validationState.apply();
+      });
     });
+
+    this.validationState.clearOnEdit();
+
     if (!this.editMode) {
-    this.addProgramRow();
-  }
+      this.addProgramRow();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -159,6 +172,7 @@ private createProgramRow(): FormGroup {
       this.patchEditForm(this.existingTherapyCard);
     }
   }
+
   private mapArabicTypeToEnum(arabic: string): TherapyCardType {
     switch (arabic) {
       case 'عام':
@@ -174,18 +188,16 @@ private createProgramRow(): FormGroup {
 
   private patchEditForm(card: TherapyCardDiagnosisDto) {
     this.form.patchValue({
-      DiagnosisText: card.DiagnosisText,
-      InjuryDate: card.InjuryDate,
-      InjuryReasons: card.InjuryReasons.map((x) => x.id),
-      InjurySides: card.InjurySides.map((x) => x.id),
-      InjuryTypes: card.InjuryTypes.map((x) => x.id),
-      ProgramStartDate: card.ProgramStartDate,
-      ProgramEndDate: card.ProgramEndDate,
+      diagnosisText: card.DiagnosisText,
+      injuryDate: card.InjuryDate,
+      injuryReasons: card.InjuryReasons.map((x) => x.id),
+      injurySides: card.InjurySides.map((x) => x.id),
+      injuryTypes: card.InjuryTypes.map((x) => x.id),
+      programStartDate: card.ProgramStartDate,
+      programEndDate: card.ProgramEndDate,
 
-      // 🔥 FIX: backend returns Arabic string (e.g., "عام")
-      TherapyCardType: this.mapArabicTypeToEnum(card.TherapyCardType),
-
-      Notes: card.Notes ?? '',
+      therapyCardType: this.mapArabicTypeToEnum(card.TherapyCardType),
+      notes: card.Notes ?? '',
     });
 
     this.programs.clear();
@@ -193,17 +205,20 @@ private createProgramRow(): FormGroup {
     (card.Programs ?? []).forEach((p) => {
       this.programs.push(
         this.fb.group({
-          MedicalProgramId: [p.MedicalProgramId, Validators.required],
-          Duration: [p.Duration, Validators.required],
-          Notes: [p.Notes ?? ''],
+          medicalProgramId: [p.MedicalProgramId, Validators.required],
+          duration: [p.Duration, Validators.required],
+          notes: [p.Notes ?? ''],
         })
       );
     });
   }
 
+  // --------------------------
+  // Validators
+  // --------------------------
   dateRangeValidator(control: AbstractControl): ValidationErrors | null {
-    const start = control.get('ProgramStartDate')?.value;
-    const end = control.get('ProgramEndDate')?.value;
+    const start = control.get('programStartDate')?.value;
+    const end = control.get('programEndDate')?.value;
     if (!start || !end) return null;
     return new Date(start) >= new Date(end) ? { dateRange: true } : null;
   }
@@ -211,20 +226,23 @@ private createProgramRow(): FormGroup {
   private noDuplicateProgramsValidator(control: AbstractControl): any {
     const formArray = control as FormArray;
     const ids = formArray.controls
-      .map((c) => c.get('MedicalProgramId')?.value)
+      .map((c) => c.get('medicalProgramId')?.value)
       .filter((v) => v != null && v !== '');
 
     const hasDuplicate = new Set(ids).size !== ids.length;
     return hasDuplicate ? { duplicateProgram: true } : null;
   }
 
+  // --------------------------
+  // Error helpers
+  // --------------------------
   FrontendError(field: string): boolean {
     const c = this.form.get(field);
     return c ? c.invalid && c.touched : false;
   }
 
   getBackendError(field: string): string | null {
-    return this.validationState.getBackendError(field.toLocaleLowerCase());
+    return this.validationState.getBackendError(field);
   }
 
   hasBackendError(field: string): boolean {
@@ -234,6 +252,10 @@ private createProgramRow(): FormGroup {
   hasFrontendError(field: string): boolean {
     return this.validationState.hasFrontendError(field);
   }
+
+  // --------------------------
+  // Programs table actions
+  // --------------------------
   addProgramRow() {
     this.programs.push(this.createProgramRow());
   }
@@ -256,32 +278,32 @@ private createProgramRow(): FormGroup {
     if (this.editMode) {
       const dto: UpdateTherapyCardRequest = {
         TicketId: this.ticketId,
-        DiagnosisText: v.DiagnosisText,
-        InjuryDate: v.InjuryDate,
-        InjuryReasons: v.InjuryReasons,
-        InjurySides: v.InjurySides,
-        InjuryTypes: v.InjuryTypes,
-        ProgramStartDate: v.ProgramStartDate,
-        ProgramEndDate: v.ProgramEndDate,
-        TherapyCardType: v.TherapyCardType,
-        Programs: v.Programs,
-        Notes: v.Notes ?? null,
+        DiagnosisText: v.diagnosisText,
+        InjuryDate: v.injuryDate,
+        InjuryReasons: v.injuryReasons,
+        InjurySides: v.injurySides,
+        InjuryTypes: v.injuryTypes,
+        ProgramStartDate: v.programStartDate,
+        ProgramEndDate: v.programEndDate,
+        TherapyCardType: v.therapyCardType,
+        Programs: v.programs,
+        Notes: v.notes ?? null,
       };
 
       this.submitForm.emit(dto);
     } else {
       const dto: CreateTherapyCardRequest = {
         TicketId: this.ticketId,
-        DiagnosisText: v.DiagnosisText,
-        InjuryDate: v.InjuryDate,
-        InjuryReasons: v.InjuryReasons,
-        InjurySides: v.InjurySides,
-        InjuryTypes: v.InjuryTypes,
-        ProgramStartDate: v.ProgramStartDate,
-        ProgramEndDate: v.ProgramEndDate,
-        TherapyCardType: v.TherapyCardType,
-        Programs: v.Programs,
-        Notes: v.Notes ?? null,
+        DiagnosisText: v.diagnosisText,
+        InjuryDate: v.injuryDate,
+        InjuryReasons: v.injuryReasons,
+        InjurySides: v.injurySides,
+        InjuryTypes: v.injuryTypes,
+        ProgramStartDate: v.programStartDate,
+        ProgramEndDate: v.programEndDate,
+        TherapyCardType: v.therapyCardType,
+        Programs: v.programs,
+        Notes: v.notes ?? null,
       };
 
       this.submitForm.emit(dto);
