@@ -89,17 +89,17 @@ export class AddIndustrialDiagnosisFormComponent implements OnChanges {
   // Form
   // --------------------------
   form: FormGroup = this.fb.group({
-    diagnosisText: ['', [ Validators.maxLength(2000)]],
-    injuryDate: ['', Validators.required],
+    diagnosisText: ['', [ Validators.required,Validators.maxLength(2000)]],
+    injuryDate: ['',  Validators.required],
 
-    injuryReasons: [[] as number[]],
-    injurySides: [[] as number[]],
-    injuryTypes: [[] as number[]],
+    injuryReasons: [[] as number[],Validators.required],
+    injurySides: [[] as number[],Validators.required],
+    injuryTypes: [[] as number[],Validators.required],
 
     notes: [''],
 
     industrialParts: this.fb.array<FormGroup>([], {
-      validators: [this.noDuplicatePartsValidator.bind(this)],
+      validators: [this.noDuplicatePartsValidator.bind(this),Validators.required],
     }),
   });
 

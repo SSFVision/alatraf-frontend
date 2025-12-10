@@ -85,17 +85,15 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
     { label: 'أعصاب أطفال', value: TherapyCardType.NerveKids },
   ];
 
-  // --------------------------
-  // Form (all controls in lowerCamelCase)
-  // --------------------------
+  
   form: FormGroup = this.fb.group(
     {
-      diagnosisText: ['', [Validators.maxLength(1000)]],
+      diagnosisText: ['', [Validators.required,Validators.maxLength(1000)]],
       injuryDate: ['', Validators.required],
 
-      injuryReasons: [[]],
-      injurySides: [[]],
-      injuryTypes: [[]],
+      injuryReasons: [[] as number[],Validators.required],
+      injurySides: [[] as number[],Validators.required],
+      injuryTypes: [[]as number[],Validators.required],
 
       programStartDate: ['', Validators.required],
       programEndDate: ['', Validators.required],
@@ -122,9 +120,7 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
     });
   }
 
-  // --------------------------
-  // Backend validation handler
-  // --------------------------
+ 
   private validationState!: FormValidationState;
 
   ngOnInit(): void {

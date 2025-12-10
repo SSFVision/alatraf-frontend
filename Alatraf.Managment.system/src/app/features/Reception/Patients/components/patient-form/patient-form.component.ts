@@ -55,7 +55,7 @@ export class PatientFormComponent implements OnChanges, OnInit {
   ngOnInit(): void {
     // 1️⃣ Create the form — autoRegistrationNumber removed
     this.form = this.fb.group({
-      fullname: ['',],
+      fullname: ['',Validators.required],
       gender: [true, Validators.required],
       birthdate: [null, Validators.required],
       phone: [
@@ -83,7 +83,6 @@ export class PatientFormComponent implements OnChanges, OnInit {
       });
     });
 
-    // 4️⃣ Remove backend errors on edit
     this.validationState.clearOnEdit();
   }
   allowOnlyNumbers(event: KeyboardEvent) {
