@@ -22,7 +22,7 @@ export class TherapyWaitingListComponent  implements OnInit, OnDestroy  {
   // Signals
   tickets = this.ticketFacade.tickets;
   selectedTicket = signal<TicketDto | null>(null);
-  ServiceType = ServiceType;  // 👈 expose enum to HTML
+  ServiceType = ServiceType;  
 
   pageRequest = this.ticketFacade.pageRequest;
   totalCount = this.ticketFacade.totalCount;
@@ -34,12 +34,10 @@ export class TherapyWaitingListComponent  implements OnInit, OnDestroy  {
   ngOnDestroy() {
     this.ticketFacade.resetFilters();
   }
-  // SEARCH
   onSearch(term: string) {
     this.ticketFacade.search(term);
   }
 
-  // Optional: If the therapist chooses a service inside therapy department
   filterByService(serviceId: number | null) {
     this.activeService.set(serviceId);
 
@@ -49,7 +47,6 @@ export class TherapyWaitingListComponent  implements OnInit, OnDestroy  {
     });
 
     this.ticketFacade.setPage(1);
-    // this.ticketFacade.loadTickets();
   }
 
   select(ticket: TicketDto) {
