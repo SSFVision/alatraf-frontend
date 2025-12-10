@@ -25,10 +25,10 @@ export class TicketFacade extends BaseFacade {
     searchTerm: '',
     sortBy: 'createdAt',
     sortDirection: 'desc',
-    serviceId: undefined,
-    departmentId: undefined,
-    patientId: undefined,
-    status: undefined,
+    serviceId: null,
+    departmentId: null,
+    patientId: null,
+    status: null,
     createdFrom: null,
     createdTo: null,
   });
@@ -128,6 +128,27 @@ export class TicketFacade extends BaseFacade {
       )
       .subscribe();
   }
+resetFilters() {
+  this._filters.set({
+    searchTerm: '',
+    sortBy: 'createdAt',
+    sortDirection: 'desc',
+    departmentId: undefined,
+    serviceId: undefined,
+    patientId: undefined,
+    createdFrom: null,
+    createdTo: null,
+    status: undefined,
+  });
+
+  this._pageRequest.set({
+    page: 1,
+    pageSize: 5
+  });
+
+  this._tickets.set([]);
+  this.totalCount.set(0);
+}
 
   createTicket(dto: any) {
     return this.handleCreateOrUpdate(this.service.createTicket(dto), {

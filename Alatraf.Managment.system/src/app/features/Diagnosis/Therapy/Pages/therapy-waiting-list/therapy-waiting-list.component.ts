@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit, effect } from '@angular/core';
+import { Component, inject, signal, OnInit, effect, OnDestroy } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { PatientCardComponent } from '../../../Shared/Components/waiting-patient-card/waiting-patient-card.component';
 import { NavigationDiagnosisFacade } from '../../../../../core/navigation/navigation-diagnosis.facade';
@@ -13,8 +13,8 @@ import { Department, ServiceType } from '../../../Shared/enums/department.enum';
   templateUrl: './therapy-waiting-list.component.html',
   styleUrl: './therapy-waiting-list.component.css',
 })
-export class TherapyWaitingListComponent implements OnInit {
-  activeDepartment = signal<number | null>(null); // null = "الكل"
+export class TherapyWaitingListComponent  implements OnInit, OnDestroy  {
+  activeService = signal<number | null>(null); // null = "الكل"
 
   ticketFacade = inject(TicketFacade);
   private navDiagnos = inject(NavigationDiagnosisFacade);
@@ -31,7 +31,9 @@ export class TherapyWaitingListComponent implements OnInit {
     this.ticketFacade.updateDepartment(Department.Therapy);
     this.ticketFacade.loadTickets();
   }
-
+  ngOnDestroy() {
+    this.ticketFacade.resetFilters();
+  }
   // SEARCH
   onSearch(term: string) {
     this.ticketFacade.search(term);
@@ -39,10 +41,10 @@ export class TherapyWaitingListComponent implements OnInit {
 
   // Optional: If the therapist chooses a service inside therapy department
   filterByService(serviceId: number | null) {
-    this.activeDepartment.set(serviceId);
+    this.activeService.set(serviceId);
 
     this.ticketFacade.updateFilters({
-      departmentId: 1, // always therapy department
+      departmentId: Department.Therapy, // always therapy department
       serviceId: serviceId ?? undefined,
     });
 

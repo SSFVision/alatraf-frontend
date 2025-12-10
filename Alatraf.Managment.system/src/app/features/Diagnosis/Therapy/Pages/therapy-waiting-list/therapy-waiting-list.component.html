@@ -31,7 +31,7 @@
       <!-- ALL services in therapy -->
       <button
         class="filter-btn"
-        [class.active]="activeDepartment() === null"
+        [class.active]="activeService() === null"
         (click)="filterByService(null)"
       >
         الكل
@@ -40,7 +40,7 @@
       <!-- علاج طبيعي -->
       <button
         class="filter-btn"
-        [class.active]="activeDepartment() === ServiceType.Therapy"
+        [class.active]="activeService() === ServiceType.Therapy"
         (click)="filterByService(ServiceType.Therapy)"
       >
         علاج طبيعي
@@ -49,7 +49,7 @@
       <!-- أعصاب -->
       <button
         class="filter-btn"
-        [class.active]="activeDepartment() === ServiceType.Nerves"
+        [class.active]="activeService() === ServiceType.Nerves"
         (click)="filterByService(ServiceType.Nerves)"
       >
         أعصاب
@@ -58,7 +58,7 @@
       <!-- عظام -->
       <button
         class="filter-btn"
-        [class.active]="activeDepartment() === ServiceType.Orthopedics"
+        [class.active]="activeService() === ServiceType.Orthopedics"
         (click)="filterByService(ServiceType.Orthopedics)"
       >
         عظام
@@ -67,7 +67,7 @@
       <!-- تجديد كروت -->
       <button
         class="filter-btn"
-        [class.active]="activeDepartment() === ServiceType.TherapyCardRenew"
+        [class.active]="activeService() === ServiceType.TherapyCardRenew"
         (click)="filterByService(ServiceType.TherapyCardRenew)"
       >
         تجديد كروت
@@ -76,7 +76,7 @@
       <!-- بدل فاقد -->
       <button
         class="filter-btn"
-        [class.active]="activeDepartment() === ServiceType.TherapyLostCard"
+        [class.active]="activeService() === ServiceType.TherapyLostCard"
         (click)="filterByService(ServiceType.TherapyLostCard)"
       >
         بدل فاقد
@@ -118,3 +118,8 @@
   </div>
   }
 </main>
+ <div class="filters-container">
+      <button class="filter-btn active">الكل</button>
+      <button class="filter-btn">أطراف صناعية</button>
+      <button class="filter-btn">فاتورة مبيعات</button>
+    </div>

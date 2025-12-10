@@ -14,11 +14,11 @@ export interface TicketDto {
 }
 
 export enum TicketStatus {
-  New = 'New',
-  Pause = 'Pause',
-  Continue = 'Continue',
-  Completed = 'Completed',
-  Cancelled = 'Cancelled'
+  New = 'new',
+  Pause = 'pause',
+  Continue = 'continue',
+  Completed = 'completed',
+  Cancelled = 'cancelled'
 }
 
 

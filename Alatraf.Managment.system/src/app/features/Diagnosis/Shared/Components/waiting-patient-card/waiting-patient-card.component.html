@@ -6,10 +6,11 @@
 } @for (ticket of tickets(); track ticket.ticketId) {
 
 <div
-  class="card cursor-pointer primary"
-  [class.yellow-card]="ticket.ticketId % 2 == 0"
-  [class.green-card]="ticket.ticketId % 2 == 1"
-  [class.red-card]="selectedTicketId() === ticket.ticketId"
+  class="card cursor-pointer"
+  [class.primary]="ticket.ticketStatus===titcketStatus.New"
+  [class.yellow-card]="ticket.ticketStatus===titcketStatus.Pause"
+  [class.green-card]="ticket.ticketStatus===titcketStatus.Completed"
+  [class.red-card]="ticket.ticketStatus===titcketStatus.Cancelled"
   [class.selected]="selectedTicketId() === ticket.ticketId"
   (click)="onSelect(ticket)"
 >

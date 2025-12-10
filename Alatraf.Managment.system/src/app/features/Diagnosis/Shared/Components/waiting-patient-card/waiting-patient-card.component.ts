@@ -1,10 +1,9 @@
+import { TicketStatus } from './../../../../Reception/Tickets/models/ticket.model';
 import {
   Component,
-  EventEmitter,
   input,
-  Input,
   output,
-  Output,
+  
   signal,
 } from '@angular/core';
 import { TicketDto } from '../../../../Reception/Tickets/models/ticket.model';
@@ -26,6 +25,8 @@ export class PatientCardComponent {
   select = output<TicketDto>();
 
   selectedTicketId = signal<number | null>(null);
+
+titcketStatus=TicketStatus;
 
   onSelect(ticket: TicketDto): void {
     this.selectedTicketId.set(ticket.ticketId);
