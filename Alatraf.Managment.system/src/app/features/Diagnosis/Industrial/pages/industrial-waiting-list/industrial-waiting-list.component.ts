@@ -47,6 +47,6 @@ export class IndustrialWaitingListComponent implements OnInit, OnDestroy {
   }
   select(ticket: TicketDto) {
     this.selectedTicket.set(ticket);
-    this.navDiagnos.goToIndustrialCreate(ticket.patient!.patientId);
+    this.navDiagnos.goToIndustrialCreate(ticket.ticketId);
   }
 }

@@ -40,8 +40,8 @@ export const AppRoutes = {
 
     industrial: {
       root: 'industrial',
-      create: (patientId: number | string) =>
-        `industrial/Patient/${patientId}/create`,
+      create: (ticketId: number | string) =>
+        `industrial/Patient/${ticketId}/create`,
       view: (diagnosisId: number | string) => `industrial/view/${diagnosisId}`,
       edit: (diagnosisId: number | string) => `industrial/edit/${diagnosisId}`,
     },

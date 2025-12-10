@@ -65,12 +65,12 @@ export class NavigationDiagnosisFacade {
   }
 
   goToIndustrialCreate(
-    patientId: number | string,
+    ticketId: number | string,
     extras?: NavigationExtras
   ): void {
     this.go(
       `${AppRoutes.diagnosis.root}/${AppRoutes.diagnosis.industrial.create(
-        patientId
+        ticketId
       )}`,
       extras
     );
