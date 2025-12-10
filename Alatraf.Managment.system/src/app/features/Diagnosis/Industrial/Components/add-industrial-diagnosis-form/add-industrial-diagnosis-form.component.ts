@@ -275,49 +275,40 @@ export class AddIndustrialDiagnosisFormComponent implements OnChanges {
   // Submit
   // --------------------------
   onSubmit() {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
-    }
-
-    const v = this.form.value;
-console.log("form data: ",v);
-    const industrialPartsDto = (v.industrialParts ?? []).map(
-      (p: any):
-        | RepairCardIndustrialPartRequest
-        | UpdateRepairCardIndustrialPartRequest => ({
-        industrialPartId: p.industrialPartId,
-        unitId: p.unitId,
-        quantity: p.quantity,
-      })
-    );
-
-    if (this.editMode) {
-      const dto: UpdateRepairCardRequest = {
-        ticketId: this.ticketId,
-        diagnosisText: v.diagnosisText,
-        injuryDate: v.injuryDate,
-        injuryReasons: v.injuryReasons,
-        injurySides: v.injurySides,
-        injuryTypes: v.injuryTypes,
-        industrialParts: industrialPartsDto,
-        notes: v.notes ?? null,
-      };
-
-      this.submitForm.emit(dto);
-    } else {
-      const dto: CreateRepairCardRequest = {
-        ticketId: this.ticketId,
-        diagnosisText: v.diagnosisText,
-        injuryDate: v.injuryDate,
-        injuryReasons: v.injuryReasons,
-        injurySides: v.injurySides,
-        injuryTypes: v.injuryTypes,
-        industrialParts: industrialPartsDto,
-        notes: v.notes ?? null,
-      };
-
-      this.submitForm.emit(dto);
-    }
+  if (this.form.invalid) {
+    this.form.markAllAsTouched();
+    return;
   }
+
+  const v = this.form.value;
+
+  if (this.editMode) {
+    const dto: UpdateRepairCardRequest = {
+      ticketId: this.ticketId,
+      diagnosisText: v.diagnosisText,
+      injuryDate: v.injuryDate,
+      injuryReasons: v.injuryReasons,
+      injurySides: v.injurySides,
+      injuryTypes: v.injuryTypes,
+      industrialParts: v.industrialParts,
+      notes: v.notes ?? null,
+    };
+
+    this.submitForm.emit(dto);
+  } else {
+    const dto: CreateRepairCardRequest = {
+      ticketId: this.ticketId,
+      diagnosisText: v.diagnosisText,
+      injuryDate: v.injuryDate,
+      injuryReasons: v.injuryReasons,
+      injurySides: v.injurySides,
+      injuryTypes: v.injuryTypes,
+      industrialParts: v.industrialParts,
+      notes: v.notes ?? null,
+    };
+
+    this.submitForm.emit(dto);
+  }
+}
+
 }

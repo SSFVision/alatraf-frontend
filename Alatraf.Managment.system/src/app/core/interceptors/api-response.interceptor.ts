@@ -43,7 +43,7 @@ export const apiResponseInterceptor: HttpInterceptorFn = (req, next) => {
     }),
 
     catchError((error: any) => {
-      error =new HttpErrorResponse(error);
+      // error =new HttpErrorResponse(error);
       console.log('⛔ error from backend ', error);
 
       let apiResult;

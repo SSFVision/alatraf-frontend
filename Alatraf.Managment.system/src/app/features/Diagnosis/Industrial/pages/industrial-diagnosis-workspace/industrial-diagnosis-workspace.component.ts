@@ -121,19 +121,11 @@ export class IndustrialDiagnosisWorkspaceComponent implements OnInit {
 
       this.repairFacade
         .updateRepairCard(current.repairCardId, dto as UpdateRepairCardRequest)
-        .subscribe((result) => {
-          if (result.success) {
-            this.toast.success('تم تعديل التشخيص الصناعي بنجاح');
-          }
-        });
+        .subscribe();
     } else {
       this.repairFacade
         .createRepairCard(dto as CreateRepairCardRequest)
-        .subscribe((result) => {
-          if (result.success) {
-            this.toast.success('تم إضافة التشخيص الصناعي بنجاح');
-          }
-        });
+        .subscribe();
     }
   }
 

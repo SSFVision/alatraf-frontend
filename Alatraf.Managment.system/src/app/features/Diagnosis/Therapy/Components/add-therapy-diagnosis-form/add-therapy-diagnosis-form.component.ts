@@ -69,24 +69,19 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
     CreateTherapyCardRequest | UpdateTherapyCardRequest
   >();
 
-  // --------------------------
-  // Options
-  // --------------------------
+
   injuryReasonsOptions: MultiSelectOption[] = [];
   injurySidesOptions: MultiSelectOption[] = [];
   injuryTypesOptions: MultiSelectOption[] = [];
   programDropdown: { label: string; value: number }[] = [];
 
-  // Backend already returns Arabic strings → we use those directly
   therapyTypes = [
     { label: 'عام', value: TherapyCardType.General },
     { label: 'خاص', value: TherapyCardType.Special },
     { label: 'أعصاب أطفال', value: TherapyCardType.NerveKids },
   ];
 
-  // --------------------------
-  // Form
-  // --------------------------
+ 
   form: FormGroup = this.fb.group(
     {
       DiagnosisText: ['', [Validators.required, Validators.maxLength(1000)]],
@@ -120,9 +115,7 @@ private createProgramRow(): FormGroup {
   });
 }
 
-  // --------------------------
-  // Backend Validation Handler
-  // --------------------------
+
   private validationState!: FormValidationState;
 
   ngOnInit(): void {

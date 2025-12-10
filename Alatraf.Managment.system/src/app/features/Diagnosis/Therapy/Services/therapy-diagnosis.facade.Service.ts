@@ -16,12 +16,10 @@ import { MedicalProgramsManagementService } from '../../../MedicalPrograms/medic
   providedIn: 'root',
 })
 export class TherapyDiagnosisFacade extends BaseFacade {
-  // ------------------ SERVICES ------------------
   private therapyService = inject(TherapyDiagnosisService);
   private injuriesService = inject(InjuriesManagementService);
   private programsService = inject(MedicalProgramsManagementService);
 
-  // ------------------ SIGNAL STATES ------------------
   private _selectedTherapyCard = signal<TherapyCardDiagnosisDto | null>(null);
   selectedTherapyCard = this._selectedTherapyCard.asReadonly();
 
@@ -30,12 +28,10 @@ export class TherapyDiagnosisFacade extends BaseFacade {
 
   formValidationErrors = signal<Record<string, string[]>>({});
 
-  // LOOKUP SIGNALS
   injuryTypes = signal<InjuryDto[]>([]);
   injurySides = signal<InjuryDto[]>([]);
   injuryReasons = signal<InjuryDto[]>([]);
   medicalPrograms = signal<MedicalProgramDto[]>([]);
-
   loadingLookups = signal<boolean>(true);
 
   constructor() {
@@ -66,7 +62,6 @@ export class TherapyDiagnosisFacade extends BaseFacade {
 
         this.loadingLookups.set(false);
       },
-
       error: () => {
         this.toast.error('فشل تحميل بيانات الاختيارات');
         this.loadingLookups.set(false);
@@ -78,12 +73,14 @@ export class TherapyDiagnosisFacade extends BaseFacade {
     this.isEditMode.set(false);
     this._selectedTherapyCard.set(null);
     this.formValidationErrors.set({});
+    this.createdTherapyCard.set(null);
   }
 
   loadTherapyCardForEdit(therapyCardId: number) {
     this.isEditMode.set(true);
     this._selectedTherapyCard.set(null);
     this.formValidationErrors.set({});
+    this.createdTherapyCard.set(null);
 
     this.therapyService
       .getTherapyCardById(therapyCardId)
@@ -111,18 +108,16 @@ export class TherapyDiagnosisFacade extends BaseFacade {
         successMessage: 'تم حفظ بطاقة العلاج بنجاح',
         defaultErrorMessage: 'فشل حفظ بطاقة العلاج. يرجى المحاولة لاحقاً.',
       }
-    ).pipe((tapResult) => {
-      tapResult.subscribe((res) => {
+    ).pipe(
+      tap((res) => {
         if (res.success && res.data) {
           this.createdTherapyCard.set(res.data);
           this.formValidationErrors.set({});
         } else if (res.validationErrors) {
           this.formValidationErrors.set(res.validationErrors);
         }
-      });
-
-      return tapResult;
-    });
+      })
+    );
   }
 
   // ------------------ UPDATE ------------------
@@ -133,8 +128,8 @@ export class TherapyDiagnosisFacade extends BaseFacade {
         successMessage: 'تم تعديل بطاقة العلاج بنجاح',
         defaultErrorMessage: 'فشل تعديل بطاقة العلاج. حاول لاحقاً.',
       }
-    ).pipe((tapResult) => {
-      tapResult.subscribe((res) => {
+    ).pipe(
+      tap((res) => {
         if (res.success) {
           this.formValidationErrors.set({});
         }
@@ -142,9 +137,7 @@ export class TherapyDiagnosisFacade extends BaseFacade {
         if (res.validationErrors) {
           this.formValidationErrors.set(res.validationErrors);
         }
-      });
-
-      return tapResult;
-    });
+      })
+    );
   }
 }

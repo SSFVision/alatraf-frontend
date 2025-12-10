@@ -1,4 +1,8 @@
-<form class="padding-LR-24 column gap-16" [formGroup]="form">
+<form
+  class="padding-LR-24 column gap-16"
+  [formGroup]="form"
+  (ngSubmit)="onSubmit()"
+>
   <div class="width-100">
     <p class="title-md">بيانات التشخيص</p>
     <span class="home-line"></span>
@@ -18,7 +22,7 @@
       class="error-message label-lg"
       *ngIf="hasBackendError('diagnosisText')"
     >
-      {{ getBackendError('diagnosisText') }}
+      {{ getBackendError("diagnosisText") }}
     </div>
 
     <!-- Frontend Validation -->
@@ -44,7 +48,7 @@
       class="error-message label-lg"
       *ngIf="hasBackendError('injuryReasons')"
     >
-      {{ getBackendError('injuryReasons') }}
+      {{ getBackendError("injuryReasons") }}
     </div>
 
     <!-- Frontend -->
@@ -64,7 +68,7 @@
 
     <!-- Backend -->
     <div class="error-message label-lg" *ngIf="hasBackendError('injurySides')">
-      {{ getBackendError('injurySides') }}
+      {{ getBackendError("injurySides") }}
     </div>
 
     <!-- Frontend -->
@@ -84,7 +88,7 @@
 
     <!-- Backend -->
     <div class="error-message label-lg" *ngIf="hasBackendError('injuryTypes')">
-      {{ getBackendError('injuryTypes') }}
+      {{ getBackendError("injuryTypes") }}
     </div>
 
     <!-- Frontend -->
@@ -100,7 +104,7 @@
 
     <!-- Backend -->
     <div class="error-message label-lg" *ngIf="hasBackendError('injuryDate')">
-      {{ getBackendError('injuryDate') }}
+      {{ getBackendError("injuryDate") }}
     </div>
 
     <!-- Frontend -->
@@ -116,7 +120,7 @@
 
     <!-- Backend -->
     <div class="error-message label-lg" *ngIf="hasBackendError('notes')">
-      {{ getBackendError('notes') }}
+      {{ getBackendError("notes") }}
     </div>
   </div>
 
@@ -173,11 +177,7 @@
               hasBackendError('industrialParts[' + i + '].industrialPartId')
             "
           >
-            {{
-              getBackendError(
-                'industrialParts[' + i + '].industrialPartId'
-              )
-            }}
+            {{ getBackendError("industrialParts[" + i + "].industrialPartId") }}
           </div>
         </td>
 
@@ -196,9 +196,7 @@
           <!-- Frontend Error -->
           <div
             class="error-message label-lg"
-            *ngIf="
-              row.get('unitId')?.invalid && row.get('unitId')?.touched
-            "
+            *ngIf="row.get('unitId')?.invalid && row.get('unitId')?.touched"
           >
             الوحدة مطلوبة
           </div>
@@ -208,7 +206,7 @@
             class="error-message label-lg"
             *ngIf="hasBackendError('industrialParts[' + i + '].unitId')"
           >
-            {{ getBackendError('industrialParts[' + i + '].unitId') }}
+            {{ getBackendError("industrialParts[" + i + "].unitId") }}
           </div>
         </td>
 
@@ -223,10 +221,7 @@
 
           <div
             class="error-message label-lg"
-            *ngIf="
-              row.get('quantity')?.invalid &&
-              row.get('quantity')?.touched
-            "
+            *ngIf="row.get('quantity')?.invalid && row.get('quantity')?.touched"
           >
             الكمية مطلوبة ويجب أن تكون رقمًا أكبر من 0
           </div>
@@ -235,7 +230,7 @@
             class="error-message label-lg"
             *ngIf="hasBackendError('industrialParts[' + i + '].quantity')"
           >
-            {{ getBackendError('industrialParts[' + i + '].quantity') }}
+            {{ getBackendError("industrialParts[" + i + "].quantity") }}
           </div>
         </td>
 
@@ -272,12 +267,9 @@
 
   <!-- Submit -->
   <div class="flex-center">
-    <button
-      class="btn primary label-md"
-      type="button"
-      (click)="onSubmit()"
-    >
-      حفظ
-    </button>
+    <!-- Submit -->
+    <div class="flex-center">
+      <button class="btn primary label-md" type="submit">حفظ</button>
+    </div>
   </div>
 </form>

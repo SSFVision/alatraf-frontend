@@ -19,12 +19,10 @@ import { IndustrialPartDto } from '../../../../core/models/industrial-parts/indu
   providedIn: 'root',
 })
 export class RepairCardDiagnosisFacade extends BaseFacade {
-  // ------------------ SERVICES ------------------
   private repairService = inject(RepairCardDiagnosisService);
   private injuriesService = inject(InjuriesManagementService);
   private industrialPartsService = inject(IndustrialPartsManagementService);
 
-  // ------------------ SIGNAL STATES ------------------
   private _selectedRepairCard = signal<RepairCardDiagnosisDto | null>(null);
   selectedRepairCard = this._selectedRepairCard.asReadonly();
 
@@ -33,7 +31,6 @@ export class RepairCardDiagnosisFacade extends BaseFacade {
 
   formValidationErrors = signal<Record<string, string[]>>({});
 
-  // LOOKUP SIGNALS
   injuryTypes = signal<InjuryDto[]>([]);
   injurySides = signal<InjuryDto[]>([]);
   injuryReasons = signal<InjuryDto[]>([]);
@@ -45,7 +42,6 @@ export class RepairCardDiagnosisFacade extends BaseFacade {
     super();
   }
 
-  // ------------------ LOOKUPS LOADING ------------------
   loadLookups() {
     this.loadingLookups.set(true);
 
@@ -56,21 +52,10 @@ export class RepairCardDiagnosisFacade extends BaseFacade {
       parts: this.industrialPartsService.getIndustrialParts(),
     }).subscribe({
       next: (res) => {
-        if (res.reasons.isSuccess && res.reasons.data) {
-          this.injuryReasons.set(res.reasons.data);
-        }
-
-        if (res.types.isSuccess && res.types.data) {
-          this.injuryTypes.set(res.types.data);
-        }
-
-        if (res.sides.isSuccess && res.sides.data) {
-          this.injurySides.set(res.sides.data);
-        }
-
-        if (res.parts.isSuccess && res.parts.data) {
-          this.industrialParts.set(res.parts.data);
-        }
+        if (res.reasons.isSuccess) this.injuryReasons.set(res.reasons.data ?? []);
+        if (res.types.isSuccess) this.injuryTypes.set(res.types.data ?? []);
+        if (res.sides.isSuccess) this.injurySides.set(res.sides.data ?? []);
+        if (res.parts.isSuccess) this.industrialParts.set(res.parts.data ?? []);
 
         this.loadingLookups.set(false);
       },
@@ -81,7 +66,6 @@ export class RepairCardDiagnosisFacade extends BaseFacade {
     });
   }
 
-  // ------------------ MODE HANDLING ------------------
   enterCreateMode() {
     this.isEditMode.set(false);
     this._selectedRepairCard.set(null);
@@ -102,11 +86,8 @@ export class RepairCardDiagnosisFacade extends BaseFacade {
           if (result.isSuccess && result.data) {
             this._selectedRepairCard.set(result.data);
           } else {
-            this.toast.error(
-              result.errorDetail ?? 'لم يتم العثور على بطاقة الإصلاح'
-            );
+            this.toast.error(result.errorDetail ?? 'لم يتم العثور على بطاقة الإصلاح');
             this.isEditMode.set(false);
-            this._selectedRepairCard.set(null);
           }
         })
       )
@@ -115,21 +96,22 @@ export class RepairCardDiagnosisFacade extends BaseFacade {
 
   // ------------------ CREATE ------------------
   createRepairCard(dto: CreateRepairCardRequest) {
-    return this.handleCreateOrUpdate(this.repairService.createRepairCard(dto), {
-      successMessage: 'تم حفظ بطاقة الإصلاح بنجاح',
-      defaultErrorMessage: 'فشل حفظ بطاقة الإصلاح. يرجى المحاولة لاحقاً.',
-    }).pipe((tapResult) => {
-      tapResult.subscribe((res) => {
+    return this.handleCreateOrUpdate(
+      this.repairService.createRepairCard(dto),
+      {
+        successMessage: 'تم حفظ بطاقة الإصلاح بنجاح',
+        defaultErrorMessage: 'فشل حفظ بطاقة الإصلاح. يرجى المحاولة لاحقاً.',
+      }
+    ).pipe(
+      tap((res) => {
         if (res.success && res.data) {
           this.createdRepairCard.set(res.data);
           this.formValidationErrors.set({});
         } else if (res.validationErrors) {
           this.formValidationErrors.set(res.validationErrors);
         }
-      });
-
-      return tapResult;
-    });
+      })
+    );
   }
 
   // ------------------ UPDATE ------------------
@@ -140,8 +122,8 @@ export class RepairCardDiagnosisFacade extends BaseFacade {
         successMessage: 'تم تعديل بطاقة الإصلاح بنجاح',
         defaultErrorMessage: 'فشل تعديل بطاقة الإصلاح. حاول لاحقاً.',
       }
-    ).pipe((tapResult) => {
-      tapResult.subscribe((res) => {
+    ).pipe(
+      tap((res) => {
         if (res.success) {
           this.formValidationErrors.set({});
         }
@@ -149,9 +131,7 @@ export class RepairCardDiagnosisFacade extends BaseFacade {
         if (res.validationErrors) {
           this.formValidationErrors.set(res.validationErrors);
         }
-      });
-
-      return tapResult;
-    });
+      })
+    );
   }
 }
