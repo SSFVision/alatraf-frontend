@@ -1,3 +1,4 @@
+
 <form
   class="padding-LR-24 column gap-16"
   [formGroup]="form"
@@ -254,7 +255,20 @@
     </button>
   </div>
 
-  <div class="flex-center">
-    <button class="btn primary label-md" type="submit">حفظ</button>
-  </div>
+  <div class="flex-center" *ngIf="!editMode()">
+  <button class="btn primary label-md" type="submit">حفظ</button>
+</div>
+
+
+<div class="flex-center gap-16" *ngIf="editMode()">
+  <!-- غير مفعل إلى أن يتم التعديل -->
+  <button class="btn primary label-md" type="submit">
+    حفظ التعديلات
+  </button>
+
+  <button class="btn danger label-md" disabled>
+    حذف التشخيص
+  </button>
+</div>
+
 </form>

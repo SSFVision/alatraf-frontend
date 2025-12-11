@@ -4,10 +4,7 @@
 </div>
 <p class="flex-center">جاري تحميل بيانات المريض...</p>
 
-} 
-
-@else {
-
+} @else { @if (!isEditMode()) {
 <div class="row gap-16 sticky">
   <h1
     class="title-lg cursor-pointer"
@@ -25,7 +22,16 @@
     التشخيصات السابقة
   </h1>
 </div>
-<app-header-patient-info [patient]="ticket()?.patient!"></app-header-patient-info>
+} @else {
+
+<div class="row space-between sticky">
+  <h1 class="title-lg cursor-pointer">تعديل تشخيص</h1>
+  <img src="assets/icons/close-icon.svg" alt="إغلاق" class="close-icon" (click)="switchToHistory()" />
+</div>
+}
+<app-header-patient-info
+  [patient]="ticket()?.patient!"
+></app-header-patient-info>
 
 @if(viewMode() === 'add') {
 <app-add-therapy-diagnosis-form
@@ -38,7 +44,6 @@
   [existingTherapyCard]="existingCard()"
   (submitForm)="saveTherapyDiagnosis($event)"
 ></app-add-therapy-diagnosis-form>
-
 
 } @if (viewMode() === 'history') {
 <app-previous-therapy-card-diagnosis

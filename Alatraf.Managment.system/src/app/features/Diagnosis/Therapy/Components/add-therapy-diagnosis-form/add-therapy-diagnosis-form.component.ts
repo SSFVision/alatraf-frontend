@@ -9,6 +9,7 @@ import {
   EnvironmentInjector,
   effect,
   runInInjectionContext,
+  input,
 } from '@angular/core';
 
 import {
@@ -64,7 +65,9 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
 
   @Input() medicalPrograms: MedicalProgramDto[] = [];
 
-  @Input() editMode: boolean = false;
+  // @Input() editMode: boolean = false;
+  editMode = input<boolean>(false);
+
   @Input() existingTherapyCard: TherapyCardDiagnosisDto | null = null;
 
   @Output() submitForm = new EventEmitter<
@@ -162,7 +165,7 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
       value: p.id,
     }));
 
-    if (this.editMode && this.existingTherapyCard) {
+    if (this.editMode() && this.existingTherapyCard) {
       this.patchEditForm(this.existingTherapyCard);
     }
   }
@@ -196,7 +199,7 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
 
     this.programs.clear();
 
-    (card.programs?? []).forEach((p) => {
+    (card.programs ?? []).forEach((p) => {
       this.programs.push(
         this.fb.group({
           medicalProgramId: [p.medicalProgramId, Validators.required],
@@ -269,7 +272,7 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
 
     const v = this.form.value;
 
-    if (this.editMode) {
+    if (this.editMode()) {
       const dto: UpdateTherapyCardRequest = {
         TicketId: this.ticketId,
         DiagnosisText: v.diagnosisText,

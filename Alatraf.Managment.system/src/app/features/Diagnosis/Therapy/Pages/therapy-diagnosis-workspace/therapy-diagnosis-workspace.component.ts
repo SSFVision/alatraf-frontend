@@ -18,7 +18,6 @@ import { CreateTherapyCardRequest } from '../../Models/create-therapy-card.reque
 import { TherapyDiagnosisFacade } from '../../Services/therapy-diagnosis.facade.Service';
 import { UpdateTherapyCardRequest } from '../../Models/update-therapy-card.request';
 import { TicketFacade } from '../../../../Reception/Tickets/tickets.facade.service';
-import { TherapyCardDto } from '../../Models/therapy-card.dto';
 import { PreviousTherapyCardDiagnosisComponent } from '../../Components/previous-therapy-card-diagnosis/previous-therapy-card-diagnosis.component';
 import { TherapyCardDiagnosisDto } from '../../Models/therapy-card-diagnosis.dto';
 
@@ -41,14 +40,12 @@ export class TherapyDiagnosisWorkspaceComponent implements OnInit {
   private toast = inject(ToastService);
   private therapyFacade = inject(TherapyDiagnosisFacade);
   private ticketFacade = inject(TicketFacade);
-  private env = inject(EnvironmentInjector);
 
   ticket = this.ticketFacade.selectedTicket;
   viewMode = signal<'add' | 'history'>('add');
 
   isLoading = this.ticketFacade.loadingTicket;
 
-  // Lookup Signals (from therapy facade)
   injuryReasons = this.therapyFacade.injuryReasons;
   injurySides = this.therapyFacade.injurySides;
   injuryTypes = this.therapyFacade.injuryTypes;
@@ -56,7 +53,7 @@ export class TherapyDiagnosisWorkspaceComponent implements OnInit {
   isLookupLoading = this.therapyFacade.loadingLookups;
 
   isEditMode = this.therapyFacade.isEditMode;
-  existingCard = signal<any | null>(null);
+  existingCard = signal<TherapyCardDiagnosisDto | null>(null);
   patientTherapyDiagnoisis = this.therapyFacade.patientTherapyDiagnoisis;
   loadingpatientTherapyDiagnoisis =
     this.therapyFacade.loadingPatientTherapyDiagnoisis;
@@ -95,19 +92,24 @@ export class TherapyDiagnosisWorkspaceComponent implements OnInit {
   }
 
   switchToHistory() {
+    this.isEditMode.set(false);
     this.viewMode.set('history');
   }
+
   onViewCard(patientDiagnosis: TherapyCardDiagnosisDto) {
+    this.existingCard.set(patientDiagnosis);
     console.log('TherapyCardDiagnosisDto:', patientDiagnosis);
+    this.isEditMode.set(true);
+    this.viewMode.set('add');
   }
 
   saveTherapyDiagnosis(
     dto: CreateTherapyCardRequest | UpdateTherapyCardRequest
   ) {
-    if (this.isEditMode()) {
+    if (this.isEditMode() && this.existingCard() !== null) {
       this.therapyFacade
         .updateTherapyCard(
-          this.existingCard()?.TherapyCardId,
+          this.existingCard()!.therapyCardId,
           dto as UpdateTherapyCardRequest
         )
         .subscribe((result) => {
