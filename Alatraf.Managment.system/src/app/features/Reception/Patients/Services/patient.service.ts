@@ -11,6 +11,7 @@ import { PaginatedList } from '../../../../core/models/Shared/paginated-list.mod
 import { PatientDto } from '../../../../core/models/Shared/patient.model';
 import { CreatePatientRequest } from '../models/create-patient.request';
 import { UpdatePatientRequest } from '../models/update-patient.request';
+import { TherapyCardDiagnosisDto } from '../../../Diagnosis/Therapy/Models/therapy-card-diagnosis.dto';
 export interface PatientFilterDto {
   searchTerm?: string;
 }
@@ -42,6 +43,12 @@ export class PatientService extends BaseApiService {
         }
       })
     );
+  }
+  GetPatientTherapyCardsById(id: number): Observable<ApiResult<TherapyCardDiagnosisDto[]>> {
+   
+     const url = `${this.endpoint}/${id}/therapy-cards`;
+
+    return this.get<TherapyCardDiagnosisDto[]>(url);
   }
 
   getPatientById(id: number): Observable<ApiResult<PatientDto>> {

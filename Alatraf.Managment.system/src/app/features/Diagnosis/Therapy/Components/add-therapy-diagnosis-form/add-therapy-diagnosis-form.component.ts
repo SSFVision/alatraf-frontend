@@ -85,15 +85,14 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
     { label: 'أعصاب أطفال', value: TherapyCardType.NerveKids },
   ];
 
-  
   form: FormGroup = this.fb.group(
     {
-      diagnosisText: ['', [Validators.required,Validators.maxLength(1000)]],
+      diagnosisText: ['', [Validators.required, Validators.maxLength(1000)]],
       injuryDate: ['', Validators.required],
 
-      injuryReasons: [[] as number[],Validators.required],
-      injurySides: [[] as number[],Validators.required],
-      injuryTypes: [[]as number[],Validators.required],
+      injuryReasons: [[] as number[], Validators.required],
+      injurySides: [[] as number[], Validators.required],
+      injuryTypes: [[] as number[], Validators.required],
 
       programStartDate: ['', Validators.required],
       programEndDate: ['', Validators.required],
@@ -120,7 +119,6 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
     });
   }
 
- 
   private validationState!: FormValidationState;
 
   ngOnInit(): void {
@@ -184,26 +182,26 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
 
   private patchEditForm(card: TherapyCardDiagnosisDto) {
     this.form.patchValue({
-      diagnosisText: card.DiagnosisText,
-      injuryDate: card.InjuryDate,
-      injuryReasons: card.InjuryReasons.map((x) => x.id),
-      injurySides: card.InjurySides.map((x) => x.id),
-      injuryTypes: card.InjuryTypes.map((x) => x.id),
-      programStartDate: card.ProgramStartDate,
-      programEndDate: card.ProgramEndDate,
+      diagnosisText: card.diagnosisId,
+      injuryDate: card.injuryDate,
+      injuryReasons: card.injuryReasons.map((x) => x.id),
+      injurySides: card.injurySides.map((x) => x.id),
+      injuryTypes: card.injuryTypes.map((x) => x.id),
+      programStartDate: card.programStartDate,
+      programEndDate: card.programEndDate,
 
-      therapyCardType: this.mapArabicTypeToEnum(card.TherapyCardType),
-      notes: card.Notes ?? '',
+      therapyCardType: this.mapArabicTypeToEnum(card.therapyCardType),
+      notes: card.notes ?? '',
     });
 
     this.programs.clear();
 
-    (card.Programs ?? []).forEach((p) => {
+    (card.programs?? []).forEach((p) => {
       this.programs.push(
         this.fb.group({
-          medicalProgramId: [p.MedicalProgramId, Validators.required],
-          duration: [p.Duration, Validators.required],
-          notes: [p.Notes ?? ''],
+          medicalProgramId: [p.medicalProgramId, Validators.required],
+          duration: [p.duration, Validators.required],
+          notes: [p.notes ?? ''],
         })
       );
     });

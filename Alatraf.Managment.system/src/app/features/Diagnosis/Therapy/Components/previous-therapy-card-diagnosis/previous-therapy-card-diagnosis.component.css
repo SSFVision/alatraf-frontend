@@ -30,3 +30,39 @@
   color: #777;
   margin-top: 4px;
 }
+
+
+.status-btn {
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  border: none;
+  cursor: default;
+  color: white;
+  font-weight: bold;
+}
+
+/* For Status: مكتمل */
+.status-btn.completed {
+  background-color: #2ecc71; /* Green */
+}
+
+/* For Status: جارٍ */
+.status-btn.active {
+  background-color: #3498db; /* Blue */
+}
+
+/* For Status: متوقف */
+.status-btn.stopped {
+  background-color: #e67e22; /* Orange */
+}
+
+/* For Status: لأول مرة */
+.status-btn.first {
+  background-color: #9b59b6; /* Purple */
+}
+
+/* For Status: ملغي */
+.status-btn.cancelled {
+  background-color: #e74c3c; /* Red */
+}

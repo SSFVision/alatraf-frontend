@@ -11,6 +11,10 @@ import { InjuryDto } from '../../../../core/models/injuries/injury.dto';
 import { MedicalProgramDto } from '../../../../core/models/medical-programs/medical-program.dto';
 import { InjuriesManagementService } from '../../../Injuries/Services/injuries-management.service';
 import { MedicalProgramsManagementService } from '../../../MedicalPrograms/medical-programs-management.service';
+import { PageRequest } from '../../../../core/models/Shared/page-request.model';
+import { TherapyCardFilterRequest } from '../Models/therapy-card-filter.request';
+import { TherapyCardDto } from '../Models/therapy-card.dto';
+import { PatientService } from '../../../Reception/Patients/Services/patient.service';
 
 @Injectable({
   providedIn: 'root',
@@ -140,4 +144,127 @@ export class TherapyDiagnosisFacade extends BaseFacade {
       })
     );
   }
+
+
+
+   // =====================================================================
+  // 🔥🔥🔥 ADDITION: GET ALL THERAPY CARDS (LIKE TICKET FACADE)
+  // =====================================================================
+
+  private _therapyCards = signal<TherapyCardDto[]>([]);
+  therapyCards = this._therapyCards.asReadonly();
+
+  private _filters = signal<TherapyCardFilterRequest>({
+    searchTerm: '',
+    sortColumn: 'ProgramStartDate',
+    sortDirection: 'desc',
+    isActive: null,
+    therapyCardType: null,
+    therapyCardStatus: null,
+    programStartFrom: null,
+    programStartTo: null,
+    programEndFrom: null,
+    programEndTo: null,
+    diagnosisId: null,
+    patientId: null,
+  });
+  filters = this._filters.asReadonly();
+
+  private _pageRequest = signal<PageRequest>({
+    page: 1,
+    pageSize: 10,
+  });
+  pageRequest = this._pageRequest.asReadonly();
+
+  totalCount = signal<number>(0);
+
+  // ----------------------- Load All Cards -----------------------
+  loadTherapyCards() {
+    this.therapyService
+      .getAllTherapyCardPagenated(this._filters(), this._pageRequest())
+      .pipe(
+        tap((result) => {
+          if (result.isSuccess && result.data?.items) {
+            this._therapyCards.set(result.data.items);
+            this.totalCount.set(result.data.totalCount ?? 0);
+          } else {
+            this._therapyCards.set([]);
+            this.totalCount.set(0);
+            this.toast.error('تعذر تحميل بطاقات العلاج');
+          }
+        })
+      )
+      .subscribe();
+  }
+
+  // ----------------------- Update filters -----------------------
+  updateFilters(newFilters: Partial<TherapyCardFilterRequest>) {
+    this._filters.update((f) => ({ ...f, ...newFilters }));
+  }
+
+  // ----------------------- Pagination -----------------------
+  setPage(page: number) {
+    this._pageRequest.update((p) => ({ ...p, page }));
+    this.loadTherapyCards();
+  }
+
+  setPageSize(size: number) {
+    this._pageRequest.update((p) => ({ page: 1, pageSize: size }));
+    this.loadTherapyCards();
+  }
+
+  // ----------------------- Reset -----------------------
+  resetFilters() {
+    this._filters.set({
+      searchTerm: '',
+      sortColumn: 'ProgramStartDate',
+      sortDirection: 'desc',
+      isActive: null,
+      therapyCardType: null,
+      therapyCardStatus: null,
+      programStartFrom: null,
+      programStartTo: null,
+      programEndFrom: null,
+      programEndTo: null,
+      diagnosisId: null,
+      patientId: null,
+    });
+
+    this._pageRequest.set({ page: 1, pageSize: 10 });
+    this._therapyCards.set([]);
+    this.totalCount.set(0);
+  }
+
+
+  /// Load all patient prevoius therapy diagnosis
+  private _patientTherapyDiagnoisis = signal<TherapyCardDiagnosisDto[]>([]);
+patientTherapyDiagnoisis = this._patientTherapyDiagnoisis.asReadonly();
+
+private patientService=inject(PatientService)
+
+loadingPatientTherapyDiagnoisis = signal<boolean>(false);
+loadPatientTherapyDiagnoisis(patientId: number) {
+  this.loadingPatientTherapyDiagnoisis.set(true);
+  this.patientService
+    .GetPatientTherapyCardsById(patientId)
+    .pipe(
+      tap((result) => {
+        if (result.isSuccess && result.data) {
+          this._patientTherapyDiagnoisis.set(result.data);
+          this.toast.success("✅ previous disgonsed returnd sucess fully ")
+        } else {
+          this._patientTherapyDiagnoisis.set([]);
+          this.toast.error(
+            result.errorMessage ?? 'تعذر تحميل بيانات تشخيصات المريض'
+          );
+        }
+
+        this.loadingPatientTherapyDiagnoisis.set(false);
+      })
+    )
+    .subscribe();
+}
+
+
+
 }

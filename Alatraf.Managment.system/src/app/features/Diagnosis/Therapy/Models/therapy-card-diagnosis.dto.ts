@@ -1,37 +1,37 @@
 import { InjuryDto } from '../../../../core/models/injuries/injury.dto';
 
 export interface TherapyCardDiagnosisDto {
-  TicketId: number;
-  PatientId: number;
-  PatientName: string;
-  Gender: string;
-  Age: number;
+  ticketId: number;
+  patientId: number;
+  patientName: string;
+  gender: string;
+  age: number;
 
-  DiagnosisId: number;
-  DiagnosisText: string;
-  InjuryDate: string;
-  DiagnosisType: string;
+  diagnosisId: number;
+  diagnosisText: string;
+  injuryDate: string;
+  diagnosisType: string;
 
-  InjuryReasons: InjuryDto[];
-  InjurySides: InjuryDto[];
-  InjuryTypes: InjuryDto[];
+  injuryReasons: InjuryDto[];
+  injurySides: InjuryDto[];
+  injuryTypes: InjuryDto[];
 
-  Programs?: DiagnosisProgramDto[] | null;
+  programs?: DiagnosisProgramDto[] | null;
 
-  TherapyCardId: number;
-  ProgramStartDate?: string | null;
-  ProgramEndDate?: string | null;
+  therapyCardId: number;
+  programStartDate?: string | null;
+  programEndDate?: string | null;
 
-  TherapyCardType: string;
-  CardStatus: string;
+  therapyCardType: string;
+  cardStatus: string;
 
-  Notes?: string | null;
+  notes?: string | null;
 }
 
 export interface DiagnosisProgramDto {
-  DiagnosisProgramId: number;
-  MedicalProgramId: number;
-  ProgramName: string;
-  Duration: number;
-  Notes?: string | null;
+  diagnosisProgramId: number;
+  medicalProgramId: number;
+  programName: string;
+  duration: number;
+  notes?: string | null;
 }

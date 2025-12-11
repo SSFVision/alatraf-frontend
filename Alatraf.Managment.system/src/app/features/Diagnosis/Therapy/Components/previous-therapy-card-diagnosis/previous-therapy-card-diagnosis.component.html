@@ -1,129 +1,140 @@
-<!-- 
 <div class="width-100">
   <p class="title-md">التشخيصات السابقة</p>
   <span class="home-line"></span>
 </div>
 
 @if (items.length === 0) {
-  <p class="body-md padding-16">لا توجد تشخيصات سابقة لهذا المريض.</p>
+<p class="body-md padding-16">لا توجد تشخيصات سابقة لهذا المريض.</p>
 } @else {
+
 <div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th class="title-sm">رقم الكرت</th>
 
+        <th class="title-sm">تاريخ الإصابة</th>
+        <th class="title-sm">نوع الإصابة</th>
+        <th class="title-sm">التشخيص</th>
 
-<table>
-  <thead>
-    <tr>
-      <th class="title-sm">رقم الكرت</th>
-      <th class="title-sm">التاريخ</th>
-      <th class="title-sm">القسم</th>
-      <th class="title-sm">ملخص التشخيص</th>
-      <th class="title-sm">مدة العلاج</th>
-      <th class="title-sm">البرامج العلاجية</th>
-      <th class="title-sm">الحالة</th>
-      <th class="title-sm">الطبيب</th>
-      <th class="buttons"></th>
-    </tr>
-  </thead>
+        <th class="title-sm">أسباب الإصابة</th>
+        <th class="title-sm">جهة الإصابة</th>
+        <th class="title-sm">أنواع الإصابة</th>
 
-  <tbody>
-    @for (card of items; track card.therapyCardId) {
+        <th class="title-sm">مدة العلاج</th>
+        <th class="title-sm">البرامج العلاجية</th>
+        <th class="title-sm">نوع البطاقة</th>
+        <th class="title-sm">الحالة</th>
+        <th class="title-sm">عرض</th>
+      </tr>
+    </thead>
 
-      @for (program of card.programs; track program.programName; let i = $index) {
-        <tr>
+    <tbody>
+      @for (card of items; track card.therapyCardId) { @let programs =
+      (card.programs?.length ?? 0) > 0 ? card.programs : [{ programName: '—',
+      duration: null, notes: null }]; @for (program of programs; let i = $index;
+      track i) {
 
-          @if (i === 0) {
-            <td
-              class="body-md"
-              [attr.rowspan]="card.programs.length"
-            >
-              {{ card.cardNumber }}
-            </td>
+      <tr>
+        @if (i === 0) {
 
-            <td
-              class="body-md"
-              [attr.rowspan]="card.programs.length"
-            >
-              {{ card.cardDate | date: 'dd-MM-YYYY' }}
-            </td>
+        <!-- therapyCardId -->
+        <td class="body-md" [attr.rowspan]="programs?.length">
+          {{ card.therapyCardId }}
+        </td>
 
-            <td
-              class="body-md"
-              [attr.rowspan]="card.programs.length"
-            >
-              {{ card.departmentName }}
-            </td>
+        <!-- injuryDate -->
+        <td class="body-md" [attr.rowspan]="programs?.length">
+          {{ card.injuryDate | date : "dd-MM-YYYY" }}
+        </td>
 
-            <td
-              class="body-md"
-              [attr.rowspan]="card.programs.length"
-            >
-              {{ card.diagnosisSummary }}
-              @if (card.notes) {
-                <div class="notes">ملاحظة: {{ card.notes }}</div>
-              }
-            </td>
+        <!-- diagnosisType -->
+        <td class="body-md" [attr.rowspan]="programs?.length">
+          {{ card.diagnosisType }}
+        </td>
 
-            <td
-              class="body-md"
-              [attr.rowspan]="card.programs.length"
-            >
-              {{ card.startDate | date: 'dd-MM-YYYY' }}
-              @if (card.endDate) {
-                → {{ card.endDate | date: 'dd-MM-YYYY' }}
-              }
-            </td>
+        <!-- diagnosisText + notes -->
+        <td class="body-md" [attr.rowspan]="programs?.length">
+          {{ card.diagnosisText }}
+          @if (card.notes) {
+          <div class="notes">ملاحظة: {{ card.notes }}</div>
           }
+        </td>
 
-          <td class="body-md">
-            {{ program.programName }}
-            @if (program.totalSessions != null) {
-              ({{ program.totalSessions }})
-            }
-          </td>
+        <!-- Injury Reasons -->
+        <td class="body-md" [attr.rowspan]="programs?.length">
+          {{ getInjuryNames(card.injuryReasons) }}
+        </td>
 
-          @if (i === 0) {
-            <td
-              class="body-md"
-              [attr.rowspan]="card.programs.length"
-            >
-              <span class="status-badge" [class]="card.status">
-                {{
-                  card.status === 'completed' ? 'مكتمل' :
-                  card.status === 'active' ? 'جارٍ' :
-                  card.status === 'stopped' ? 'متوقف' :
-                  'ملغي'
-                }}
-              </span>
-            </td>
+        <!-- Injury Sides -->
+        <td class="body-md" [attr.rowspan]="programs?.length">
+          {{ getInjuryNames(card.injurySides) }}
+        </td>
 
-            <td
-              class="body-md"
-              [attr.rowspan]="card.programs.length"
-            >
-              {{ card.createdBy }}
-            </td>
+        <!-- Injury Types -->
+        <td class="body-md" [attr.rowspan]="programs?.length">
+          {{ getInjuryNames(card.injuryTypes) }}
+        </td>
 
-            <td
-              [attr.rowspan]="card.programs.length"
-            >
-              <button
-                class="btn primary icon"
-                type="button"
-                (click)="onView(card)"
-              >
-                <img
-                  src="assets/icons/eye-icon.svg"
-                  alt="عرض التفاصيل"
-                />
-              </button>
-            </td>
+        <!-- العلاج: Start → End -->
+        <td class="body-md" [attr.rowspan]="programs?.length">
+          {{ card.programStartDate | date : "dd-MM-YYYY" }}
+          @if (card.programEndDate) { →
+          {{ card.programEndDate | date : "dd-MM-YYYY" }}
           }
-        </tr>
-      }
+        </td>
 
-    }
-  </tbody>
-</table>
-</div>  
+        }
+
+        <td class="body-md">
+          @if(program.programName){
+          {{ program.programName }}} 
+          @if (program.duration) { 
+            ({{
+            program.duration
+          }}
+          يوم) }
+           @if (program.notes) {
+          <div class="notes">ملاحظة: {{ program.notes }}</div>
+          }
+        </td>
+
+        @if (i === 0) {
+
+        <!-- therapyCardType -->
+        <td class="body-md" [attr.rowspan]="programs?.length">
+          {{ card.therapyCardType }}
+        
+        </td>
+
+        <!-- cardStatus -->
+        <td class="body-md" [attr.rowspan]="programs!.length">
+
+  <button class="status-btn"
+          [class.completed]="card.cardStatus === 'مكتمل'"
+          [class.active]="card.cardStatus === 'جارٍ'"
+          [class.stopped]="card.cardStatus === 'متوقف'"
+          [class.first]="card.cardStatus === 'لأول مرة'"
+          [class.cancelled]="card.cardStatus === 'ملغي'">
+    {{ card.cardStatus }}
+  </button>
+
+</td>
+
+
+        <!-- Action -->
+        <td [attr.rowspan]="programs?.length">
+          <button class="btn primary icon" type="button" (click)="onView(card)">
+            <img src="assets/icons/eye-icon.svg" alt="عرض التفاصيل" />
+          </button>
+        </td>
+
+        }
+      </tr>
+
+      } }
+    </tbody>
+  </table>
+</div>
+
 }
- -->

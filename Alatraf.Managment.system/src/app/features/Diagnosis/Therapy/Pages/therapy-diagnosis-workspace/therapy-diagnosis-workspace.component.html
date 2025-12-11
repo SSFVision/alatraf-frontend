@@ -41,8 +41,8 @@
 
 
 } @if (viewMode() === 'history') {
-<!-- <app-previous-therapy-card-diagnosis
-  [items]="pevDiagnosis"
-  (viewDetails)="onViewHistoryCard($event)"
-></app-previous-therapy-card-diagnosis> -->
+<app-previous-therapy-card-diagnosis
+  [items]="patientTherapyDiagnoisis()"
+  (viewDetails)="onViewCard($event)"
+></app-previous-therapy-card-diagnosis>
 } }
