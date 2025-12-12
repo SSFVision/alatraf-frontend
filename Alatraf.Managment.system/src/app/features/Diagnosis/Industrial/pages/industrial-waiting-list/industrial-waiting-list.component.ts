@@ -1,11 +1,11 @@
 import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
-import { PatientCardComponent } from '../../../Shared/Components/waiting-patient-card/waiting-patient-card.component';
 import { RouterOutlet } from '@angular/router';
 import { NavigationDiagnosisFacade } from '../../../../../core/navigation/navigation-diagnosis.facade';
 import { PaginationComponent } from '../../../../../shared/components/pagination/pagination.component';
 import { TicketDto, TicketStatus } from '../../../../Reception/Tickets/models/ticket.model';
 import { TicketFacade } from '../../../../Reception/Tickets/tickets.facade.service';
 import { ServiceType, Department } from '../../../Shared/enums/department.enum';
+import { PatientCardComponent } from "../../../../../shared/components/waiting-patient-card/waiting-patient-card.component";
 
 @Component({
   selector: 'app-industrial-waiting-list',

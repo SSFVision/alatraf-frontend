@@ -41,4 +41,15 @@ export const PERMISSIONS = {
     ReSchedule: 'appointment:reschedule',
     AddHoliday: 'holiday:create',
   },
+  THERAPY_CARDS: {
+    VIEW: 'THERAPY_CARDS:View',
+    ASSIGN_DOCTORS: 'assign_therapy_card_doctors',
+  },
+
+  THERAPY_SESSIONS: {
+    VIEW: 'view_therapy_session',
+    ADD: 'add_therapy_session',
+    UPDATE: 'update_therapy_session',
+    DELETE: 'delete_therapy_session',
+  },
 } as const;

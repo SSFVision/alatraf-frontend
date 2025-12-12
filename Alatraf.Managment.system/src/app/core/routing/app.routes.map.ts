@@ -51,6 +51,26 @@ export const AppRoutes = {
     root: 'finance',
     paied: (patientId: number | string) => `paied/${patientId}`,
   },
+
+  therapyCards: {
+    root: 'therapy-cards',
+    details: (cardId: number | string) => `therapy-cards/${cardId}`,
+    sessions: {
+      list: (therapyCardId: number | string) =>
+        `therapy-cards/${therapyCardId}/sessions`,
+
+      create: (therapyCardId: number | string) =>
+        `therapy-cards/${therapyCardId}/sessions/create`,
+
+      edit: (therapyCardId: number | string, sessionId: number | string) =>
+        `therapy-cards/${therapyCardId}/sessions/edit/${sessionId}`,
+    },
+    // doctors: {
+    //   assign: (cardId: number | string) =>
+    //     `therapy-cards/${cardId}/doctors`,
+    // },
+  },
+
   Appointment: {
     root: 'appointments',
     addHoliday: 'new/holiday',

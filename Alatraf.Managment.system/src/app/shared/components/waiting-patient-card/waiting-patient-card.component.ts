@@ -1,4 +1,5 @@
-import { TicketStatus } from './../../../../Reception/Tickets/models/ticket.model';
+import { calculateAge, formatTicketStatus } from '../../../features/Diagnosis/Shared/Util/patient-ticket.helpers';
+import { TicketDto, TicketStatus } from '../../../features/Reception/Tickets/models/ticket.model';
 import {
   Component,
   input,
@@ -6,11 +7,6 @@ import {
   
   signal,
 } from '@angular/core';
-import { TicketDto } from '../../../../Reception/Tickets/models/ticket.model';
-import {
-  calculateAge,
-  formatTicketStatus,
-} from '../../Util/patient-ticket.helpers';
 
 @Component({
   selector: 'app-waiting-patient-card',

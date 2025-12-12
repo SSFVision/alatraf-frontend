@@ -46,6 +46,13 @@ export const MENU_CONFIG: MenuCategory[] = [
         route: `${AppRoutes.diagnosis.root}/${AppRoutes.diagnosis.therapy.root}`,
         requiredPermissions: [PERMISSIONS.DIAGNOSIS.THERAPY.VIEW],
       },
+      {
+        label: 'إدارة الجلسات',
+        icon: 'assets/icons/dumbbell-w.svg',
+        activeIcon: 'assets/icons/dumbbell-b.svg',
+        route: `${AppRoutes.therapyCards.root}`,
+        requiredPermissions: [PERMISSIONS.THERAPY_CARDS.VIEW],
+      },
     ],
   },
 

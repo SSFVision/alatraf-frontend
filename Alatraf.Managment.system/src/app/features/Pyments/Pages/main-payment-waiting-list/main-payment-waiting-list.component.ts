@@ -2,7 +2,6 @@ import { PaymentsNavigationFacade } from './../../../../core/navigation/payments
 import { Component, inject, signal } from '@angular/core';
 import { NavigationDiagnosisFacade } from '../../../../core/navigation/navigation-diagnosis.facade';
 import { PatientsFacade } from '../../../Reception/Patients/Services/patients.facade.service';
-import { PatientCardComponent } from '../../../Diagnosis/Shared/Components/waiting-patient-card/waiting-patient-card.component';
 import { RouterOutlet } from '@angular/router';
 import { PatientDto } from '../../../../core/models/Shared/patient.model';
 export enum FilterEnum {
@@ -12,7 +11,7 @@ export enum FilterEnum {
 }
 @Component({
   selector: 'app-main-payment-waiting-list',
-  imports: [ RouterOutlet],
+  imports: [RouterOutlet],
   templateUrl: './main-payment-waiting-list.component.html',
   styleUrl: './main-payment-waiting-list.component.css',
 })

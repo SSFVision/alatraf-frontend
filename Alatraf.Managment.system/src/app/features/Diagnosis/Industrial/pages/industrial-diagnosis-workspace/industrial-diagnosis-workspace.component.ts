@@ -1,15 +1,9 @@
-import {
-  Component,
-  DestroyRef,
-  OnInit,
-  inject,
-  signal,
-} from '@angular/core';
+import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import { HeaderPatientInfoComponent } from '../../../Shared/Components/header-patient-info/header-patient-info.component';
+import { HeaderPatientInfoComponent } from '../../../../../shared/components/header-patient-info/header-patient-info.component';
 import { AddIndustrialDiagnosisFormComponent } from '../../Components/add-industrial-diagnosis-form/add-industrial-diagnosis-form.component';
 import { PreviousIndustrialDiagnosisComponent } from '../../Components/previous-industrial-diagnosis/previous-industrial-diagnosis.component';
 
@@ -71,7 +65,6 @@ export class IndustrialDiagnosisWorkspaceComponent implements OnInit {
   // Mock history for now
   industrialHistoryItems = MOCK_INDUSTRIAL_DIAGNOSIS_HISTORY;
 
- 
   ngOnInit(): void {
     this.repairFacade.loadLookups();
 

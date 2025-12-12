@@ -3,7 +3,6 @@ import { RouterOutlet } from "@angular/router";
 import { FilterEnum } from '../../../Pyments/Pages/main-payment-waiting-list/main-payment-waiting-list.component';
 import { PatientsFacade } from '../../../Reception/Patients/Services/patients.facade.service';
 import { AppointmentsNavigationFacade } from '../../../../core/navigation/Appointments-navigation.facade';
-import { PatientCardComponent } from "../../../Diagnosis/Shared/Components/waiting-patient-card/waiting-patient-card.component";
 import { ToastService } from '../../../../core/services/toast.service';
 import { PatientDto } from '../../../../core/models/Shared/patient.model';
 
