@@ -36,6 +36,6 @@ export class MainTherapyPatientsWatingListComponent implements OnDestroy {
   }
   select(ticket: TicketDto) {
     this.selectedTicket.set(ticket);
-    this.navTherapyCard.goToCreateTherapySessionPage(ticket.ticketId);
+    this.navTherapyCard.goToCreateTherapySessionPage(3);
   }
 }

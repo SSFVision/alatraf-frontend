@@ -14,13 +14,13 @@ export const TherapyCardsRoutes: Routes = [
 
     children: [
       {
-        path: ':cardId/sessions/create',
+        path: ':therapyCardId/sessions/create',
         canActivate: [PermissionGuard],
         data: { permission: PERMISSIONS.THERAPY_SESSIONS.ADD },
         loadComponent: () =>
           import(
             './Pages/sessions-mangment/sessions-mangment.component'
-          ).then((m) => m.SessionsMangmentComponent),
+          ).then((m) => m.SessionsManagementComponent),
       },
     ],
   },

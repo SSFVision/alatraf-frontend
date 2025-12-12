@@ -1,3 +1,11 @@
+@if (loadingTherapyCard()) {
+<div class="flex-center">
+  <span class="loader"></span>
+</div>
+<p class="flex-center">جاري تحميل بيانات المريض...</p>
+}
+@else {
+
 <div class="row gap-16">
   <h1
     class="title-lg cursor-pointer"
@@ -18,9 +26,7 @@
 
 <div class="max-hight-712 column gap-16">
   <div class="column gap-16" id="patient-info-container">
-    <!-- <app-header-patient-info
-      [patient]="ticket()?.patient!"
-    ></app-header-patient-info> -->
+    <app-header-patient-info [patient]="patient()!"></app-header-patient-info>
   </div>
 
   <div class="width-100">
@@ -29,7 +35,7 @@
     <span class="home-line"></span>
   </div>
 
-  <table class="no-shadow">
+  <table class="no-shadow" [formGroup]="sessionForm">
     <thead>
       <tr>
         <th class="label-lg">البرنامج العلاجي</th>
@@ -39,27 +45,62 @@
       </tr>
     </thead>
 
-    <tbody>
-      <tr>
+    <tbody formArrayName="sessionPrograms">
+      <tr
+        *ngFor="let group of sessionProgramsArray.controls; let i = index"
+        [formGroupName]="i"
+      >
+        <!-- البرنامج -->
         <td>
-          <input type="text" />
+          <input
+            type="text"
+            class="label-lg"
+            [value]="programs()[i]?.programName"
+            disabled
+          />
         </td>
 
+        <!-- القسم -->
         <td>
-          <select class="label-lg">
+          <select
+            class="label-lg"
+            formControlName="sectionId"
+            (change)="onSectionChange(i)"
+          >
             <option value="" disabled hidden>القسم</option>
+            <option *ngFor="let section of sections()" [value]="section.id">
+              {{ section.name }}
+            </option>
           </select>
         </td>
 
+        <!-- الغرفة -->
         <td>
-          <select class="label-lg">
+          <select
+            class="label-lg"
+            formControlName="roomId"
+            (change)="onRoomChange(i)"
+          >
             <option value="" disabled hidden>الغرفة</option>
+            <option
+              *ngFor="let room of getRoomsForRow(i)"
+              [value]="room.roomId"
+            >
+              {{ room.roomName }}
+            </option>
           </select>
         </td>
 
+        <!-- الطبيب -->
         <td>
-          <select class="label-lg">
+          <select class="label-lg" formControlName="doctorId">
             <option value="" disabled hidden>الطبيب المعالج</option>
+            <option
+              *ngFor="let doctor of getDoctorsForRow(i)"
+              [value]="doctor.id"
+            >
+              {{ doctor.name }}
+            </option>
           </select>
         </td>
       </tr>
@@ -71,160 +112,17 @@
 
 } @if(viewMode()==='history'){
 
-<div class="max-hight-712 column gap-16">
-  <!--  الجسات السابقة -->
-  <div class="width-100">
-    <p class="title-md">الجسات السابقة</p>
+<!-- <div class="max-hight-712 column gap-16"> -->
+<!--  الجسات السابقة -->
+<app-previous-therapy-sessions-history
+  [sessions]="[]"
+  (viewDetails)="onViewSessionDetails($event)"
+></app-previous-therapy-sessions-history>
 
-    <span class="home-line"></span>
-  </div>
-  <table>
-    <thead>
-      <th class="title-sm">رقم الكرت</th>
-      <th class="title-sm">التاريخ</th>
-      <th class="title-sm">البرامج العلاجية</th>
-      <th class="title-sm">الطبيب المعالج</th>
-      <th class="buttons"></th>
-    </thead>
+<!-- </div> -->
 
-    <tbody>
-      <!-- 1 -->
-      <tr>
-        <td class="body-md" rowspan="2">784512369</td>
-        <td class="body-md" rowspan="2">05-02-2023</td>
-        <td class="body-md">تدليك (3)</td>
-        <td class="body-md">د. أحمد يوسف</td>
-        <td rowspan="2">
-          <button class="btn primary icon">
-            <img src="../../assets/icons/eye-icon.svg" alt="عرض التفاصيل" />
-          </button>
-        </td>
-      </tr>
-      <tr>
-        <td class="body-md">كهرباء</td>
-        <td class="body-md">د. محمد علي</td>
-      </tr>
+}
 
-      <!-- 2 -->
-      <tr>
-        <td class="body-md" rowspan="2">995412887</td>
-        <td class="body-md" rowspan="2">18-03-2023</td>
-        <td class="body-md">تدليك (3)</td>
-        <td class="body-md">د. خالد حسن</td>
-        <td rowspan="2">
-          <button class="btn primary icon">
-            <img src="../../assets/icons/eye-icon.svg" alt="عرض التفاصيل" />
-          </button>
-        </td>
-      </tr>
-      <tr>
-        <td class="body-md">كهرباء</td>
-        <td class="body-md">د. سامر محمود</td>
-      </tr>
 
-      <!-- 3 -->
-      <tr>
-        <td class="body-md" rowspan="2">664187223</td>
-        <td class="body-md" rowspan="2">09-04-2023</td>
-        <td class="body-md">تدليك (2)</td>
-        <td class="body-md">د. ليث عبد الله</td>
-        <td rowspan="2">
-          <button class="btn primary icon">
-            <img src="../../assets/icons/eye-icon.svg" alt="عرض التفاصيل" />
-          </button>
-        </td>
-      </tr>
-      <tr>
-        <td class="body-md">كهرباء</td>
-        <td class="body-md">د. رامي فؤاد</td>
-      </tr>
-
-      <!-- 4 -->
-      <tr>
-        <td class="body-md" rowspan="2">552314789</td>
-        <td class="body-md" rowspan="2">27-05-2023</td>
-        <td class="body-md">تدليك (3)</td>
-        <td class="body-md">د. عمر ناصر</td>
-        <td rowspan="2">
-          <button class="btn primary icon">
-            <img src="../../assets/icons/eye-icon.svg" alt="عرض التفاصيل" />
-          </button>
-        </td>
-      </tr>
-      <tr>
-        <td class="body-md">كهرباء</td>
-        <td class="body-md">د. هيثم سعد</td>
-      </tr>
-
-      <!-- 5 -->
-      <tr>
-        <td class="body-md" rowspan="2">113478900</td>
-        <td class="body-md" rowspan="2">03-06-2023</td>
-        <td class="body-md">تدليك (4)</td>
-        <td class="body-md">د. فادي إبراهيم</td>
-        <td rowspan="2">
-          <button class="btn primary icon">
-            <img src="../../assets/icons/eye-icon.svg" alt="عرض التفاصيل" />
-          </button>
-        </td>
-      </tr>
-      <tr>
-        <td class="body-md">كهرباء</td>
-        <td class="body-md">د. أيمن شريف</td>
-      </tr>
-
-      <!-- 6 -->
-      <tr>
-        <td class="body-md" rowspan="2">784001456</td>
-        <td class="body-md" rowspan="2">14-07-2023</td>
-        <td class="body-md">تدليك (3)</td>
-        <td class="body-md">د. حسام منصور</td>
-        <td rowspan="2">
-          <button class="btn primary icon">
-            <img src="../../assets/icons/eye-icon.svg" alt="عرض التفاصيل" />
-          </button>
-        </td>
-      </tr>
-      <tr>
-        <td class="body-md">كهرباء</td>
-        <td class="body-md">د. نادر خليل</td>
-      </tr>
-
-      <!-- 7 -->
-      <tr>
-        <td class="body-md" rowspan="2">990054321</td>
-        <td class="body-md" rowspan="2">22-07-2023</td>
-        <td class="body-md">تدليك (1)</td>
-        <td class="body-md">د. وائل جمال</td>
-        <td rowspan="2">
-          <button class="btn primary icon">
-            <img src="../../assets/icons/eye-icon.svg" alt="عرض التفاصيل" />
-          </button>
-        </td>
-      </tr>
-      <tr>
-        <td class="body-md">كهرباء</td>
-        <td class="body-md">د. طارق سليم</td>
-      </tr>
-
-      <!-- 8 -->
-      <tr>
-        <td class="body-md" rowspan="2">440198765</td>
-        <td class="body-md" rowspan="2">12-08-2023</td>
-        <td class="body-md">تدليك (3)</td>
-        <td class="body-md">د. مازن حمد</td>
-        <td rowspan="2">
-          <button class="btn primary icon">
-            <img src="../../assets/icons/eye-icon.svg" alt="عرض التفاصيل" />
-          </button>
-        </td>
-      </tr>
-      <tr>
-        <td class="body-md">كهرباء</td>
-        <td class="body-md">د. بشار كنعان</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
 
 }

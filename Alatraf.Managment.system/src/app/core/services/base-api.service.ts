@@ -71,6 +71,7 @@ protected buildUrl(endpoint: string): string {
     headers?: HttpHeaders
   ): Observable<ApiResult<T>> {
     const url = this.buildUrl(endpoint);
+    console.log("rwsdfldskjfgbdm");
     return this.http
       .get<ApiResult<T>>(url, this.buildOptions(params, headers))
       .pipe(catchError((err) => this.handleError(err)));

@@ -94,6 +94,7 @@ export class TherapyDiagnosisWorkspaceComponent implements OnInit {
   switchToHistory() {
     this.isEditMode.set(false);
     this.viewMode.set('history');
+    
   }
 
   onViewCard(patientDiagnosis: TherapyCardDiagnosisDto) {

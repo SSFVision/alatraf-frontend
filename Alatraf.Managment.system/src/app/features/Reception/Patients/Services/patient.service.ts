@@ -44,10 +44,10 @@ export class PatientService extends BaseApiService {
       })
     );
   }
+  
   GetPatientTherapyCardsById(id: number): Observable<ApiResult<TherapyCardDiagnosisDto[]>> {
    
      const url = `${this.endpoint}/${id}/therapy-cards`;
-
     return this.get<TherapyCardDiagnosisDto[]>(url);
   }
 
