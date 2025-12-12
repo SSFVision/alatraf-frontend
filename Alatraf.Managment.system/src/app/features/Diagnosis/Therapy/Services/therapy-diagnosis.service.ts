@@ -1,42 +1,74 @@
 import { Injectable } from '@angular/core';
 import { BaseApiService } from '../../../../core/services/base-api.service';
+import { HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ApiResult } from '../../../../core/models/ApiResult';
-
-import { WaitingPatientDto } from '../../Shared/Models/WaitingPatientDto';
 import { CreateTherapyCardRequest } from '../Models/create-therapy-card.request';
-import { MedicalProgramDto } from '../Models/medical-program.dto';
-import { TherapyDiagnosisDto } from '../Models/therapy-diagnosis.dto';
-import { TherapyWaitingFilterDto } from '../Models/TherapyWaitingFilterDto ';
+import { TherapyCardDiagnosisDto } from '../Models/therapy-card-diagnosis.dto';
+import { UpdateTherapyCardRequest } from '../Models/update-therapy-card.request';
+import { PageRequest } from '../../../../core/models/Shared/page-request.model';
+import { PaginatedList } from '../../../../core/models/Shared/paginated-list.model';
+import { TherapyCardFilterRequest } from '../Models/therapy-card-filter.request';
+import { TherapyCardDto } from '../Models/therapy-card.dto';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TherapyDiagnosisService extends BaseApiService {
+  private readonly endpoint = 'http://localhost:2003/api/v1/therapy-cards';
 
-  /** Get waiting patients for therapy diagnosis */
-  getWaitingPatients(
-    filter: TherapyWaitingFilterDto
-  ): Observable<ApiResult<WaitingPatientDto[]>> {
-    return this.post<WaitingPatientDto[]>('/doctor/therapy/waiting', filter);
+
+getAllTherapyCardPagenated(
+  filter?: TherapyCardFilterRequest,
+  pageRequest?: PageRequest
+): Observable<ApiResult<PaginatedList<TherapyCardDto>>> {
+  let params = new HttpParams();
+
+  const page = pageRequest?.page ?? 1;
+  const pageSize = pageRequest?.pageSize ?? 10;
+
+  params = params
+    .set('page', page)
+    .set('pageSize', pageSize);
+
+  if (filter) {
+    Object.entries(filter).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== '') {
+        params = params.set(key, value as any);
+      }
+    });
+  }
+      const headers = new HttpHeaders().set('X-Enable-Loader', 'true');
+
+
+  return this.get<PaginatedList<TherapyCardDto>>(this.endpoint, params,headers);
+}
+
+  getTherapyCardById(
+    therapyCardId: number
+  ): Observable<ApiResult<TherapyCardDiagnosisDto>> {
+    return this.get<TherapyCardDiagnosisDto>(
+      `${this.endpoint}/${therapyCardId}`
+    );
   }
 
-  /** Create new therapy diagnosis */
-  createTherapyDiagnosis(
+  createTherapyCard(
     dto: CreateTherapyCardRequest
-  ): Observable<ApiResult<TherapyDiagnosisDto>> {
-    return this.post<TherapyDiagnosisDto>('/doctor/therapy/create', dto);
+  ): Observable<ApiResult<TherapyCardDiagnosisDto>> {
+    const headers = new HttpHeaders().set('X-Enable-Loader', 'true');
+
+    return this.post<TherapyCardDiagnosisDto>(this.endpoint, dto, headers);
   }
 
-  /** Load previous diagnoses for this ticket */
-  getPreviousDiagnoses(
-    ticketId: number
-  ): Observable<ApiResult<TherapyDiagnosisDto[]>> {
-    return this.get<TherapyDiagnosisDto[]>(`/doctor/therapy/details/${ticketId}`);
-  }
+  updateTherapyCard(
+    therapyCardId: number,
+    dto: UpdateTherapyCardRequest
+  ): Observable<ApiResult<void>> {
+    const headers = new HttpHeaders().set(
+      'X-Success-Toast',
+      'تم تعديل بطاقة العلاج بنجاح'
+    );
 
-  /** Load medical programs list */
-  getMedicalPrograms(): Observable<ApiResult<MedicalProgramDto[]>> {
-    return this.get<MedicalProgramDto[]>('/doctor/therapy/medical-programs');
+    return this.put<void>(`${this.endpoint}/${therapyCardId}`, dto, headers);
   }
 }

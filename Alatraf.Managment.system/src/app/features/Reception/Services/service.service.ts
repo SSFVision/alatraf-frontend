@@ -12,7 +12,7 @@ import { ServiceDto, CreateUpdateServiceDto } from './models/service.model';
 })
 export class ServiceService extends BaseApiService {
   
-  private readonly endpoint = '/services';
+  private readonly endpoint = 'http://localhost:2003/api/v1/services';
 
   constructor(http: HttpClient) {
     super(http);

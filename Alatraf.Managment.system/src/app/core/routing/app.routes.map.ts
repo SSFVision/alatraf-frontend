@@ -1,4 +1,3 @@
-import { Patient } from './../../mocks/patients/patient.dto';
 export const AppRoutes = {
   auth: {
     root: 'auth',
@@ -34,15 +33,15 @@ export const AppRoutes = {
 
     therapy: {
       root: 'therapy',
-      create: (patientId: number | string) => `therapy/create/${patientId}`,
+      create: (ticketId: number | string) => `therapy/create/${ticketId}`,
       view: (diagnosisId: number | string) => `therapy/view/${diagnosisId}`,
       edit: (diagnosisId: number | string) => `therapy/edit/${diagnosisId}`,
     },
 
     industrial: {
       root: 'industrial',
-      create: (patientId: number | string) =>
-        `industrial/Patient/${patientId}/create`,
+      create: (ticketId: number | string) =>
+        `industrial/Patient/${ticketId}/create`,
       view: (diagnosisId: number | string) => `industrial/view/${diagnosisId}`,
       edit: (diagnosisId: number | string) => `industrial/edit/${diagnosisId}`,
     },

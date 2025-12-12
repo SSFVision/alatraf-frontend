@@ -40,15 +40,14 @@ export const appConfig: ApplicationConfig = {
         authInterceptor,
       ])
     ),
-    importProvidersFrom(
-      HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService, {
-        delay: 500,
-        // passThruUnknownUrl: true,
-        dataEncapsulation: false,
-        put204: false, // return body instead of empty
-        post204: false, // return body instead of empty
-        delete404: true,
-      })
-    ),
+ importProvidersFrom(
+ HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService, {
+  delay: 500,
+  dataEncapsulation: false,
+  passThruUnknownUrl: true
+})
+
+)
+
   ],
 };

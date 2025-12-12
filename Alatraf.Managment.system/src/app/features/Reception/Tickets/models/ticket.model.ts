@@ -1,10 +1,29 @@
-import { Patient } from '../../Patients/models/patient.model';
-import { ServiceDto } from '../../Services/models/service.model';
-import { TicketStatus } from './ticket-status.enum';
+import { PatientDto } from "../../../../core/models/Shared/patient.model";
+import { ServiceDto } from "../../../../core/models/Shared/service.model";
+
+export interface CreateTicketRequest {
+  patientId?: number | null;
+  serviceId: number;
+}
 
 export interface TicketDto {
-  id: number;
-  service: ServiceDto | null;
-  patient: Patient | null;
+  ticketId: number;
+  service?: ServiceDto | null;
+  patient?: PatientDto | null;
+  ticketStatus: TicketStatus;
+}
+
+export enum TicketStatus {
+  New = 'new',
+  Pause = 'pause',
+  Continue = 'continue',
+  Completed = 'completed',
+  Cancelled = 'cancelled'
+}
+
+
+export interface UpdateTicketRequest {
+  serviceId: number;
+  patientId?: number | null;
   status: TicketStatus;
 }

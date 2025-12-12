@@ -1,6 +1,5 @@
 import { finalize } from 'rxjs';
 import { Component, inject, input, output } from '@angular/core';
-import { Patient } from '../../models/patient.model';
 import { SkeletonComponent } from '../../../../../shared/components/skeleton/skeleton.component';
 import { SkeletonsLoadingService } from '../../../../../core/services/skeletons-loading.service';
 import { NavigationReceptionFacade } from '../../../../../core/navigation/navigation-reception.facade';
@@ -10,6 +9,7 @@ import { PERMISSIONS } from '../../../../../core/auth/models/permissions.map';
 import { HasPermissionDirective } from '../../../../../core/auth/directives/has-permission.directive';
 import { PatientsFacade } from '../../Services/patients.facade.service';
 import { UiLockService } from '../../../../../core/services/ui-lock.service';
+import { PatientDto } from '../../../../../core/models/Shared/patient.model';
 
 @Component({
   selector: 'app-patients-list',
@@ -23,38 +23,32 @@ import { UiLockService } from '../../../../../core/services/ui-lock.service';
   styleUrl: './patients.list.component.css',
 })
 export class PatientsListComponent {
-  patients = input.required<Patient[]>();
+ patients = input.required<PatientDto[]>();
+
   pageLoader = inject(SkeletonsLoadingService);
   private uiLock = inject(UiLockService);
 
   private navReception = inject(NavigationReceptionFacade);
+
   permession = PERMISSIONS;
   skeletonRows = Array.from({ length: 8 }).map((_, i) => i);
 
-  deletePatient = output<Patient>();
-  onDeleteClick(patient: Patient) {
-    // if (this.uiLock.isLocked()) return;
-    // this.uiLock.lock();
-    
+  // UPDATED OUTPUT TYPE
+  deletePatient = output<PatientDto>();
+
+  onDeleteClick(patient: PatientDto) {
     this.deletePatient.emit(patient);
   }
 
-  OnEditPatient(patient: Patient) {
-    // if (this.uiLock.isLocked()) return;
-    // this.uiLock.lock();
-
+  OnEditPatient(patient: PatientDto) {
     this.navReception.goToPatientsEdit(patient.patientId);
   }
-  OnCreateTicket(patient: Patient) {
-    // if (this.uiLock.isLocked()) return;
-    // this.uiLock.lock();
 
+  OnCreateTicket(patient: PatientDto) {
     this.navReception.goToTicketsCreate(patient.patientId);
-
   }
-  OnShowPatient(patientId: number) {
-    
 
+  OnShowPatient(patientId: number) {
     this.navReception.goToPatientsView(patientId);
   }
 }

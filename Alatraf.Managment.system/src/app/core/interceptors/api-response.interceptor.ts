@@ -21,7 +21,7 @@ function isAuthEndpoint(url: string): boolean {
   );
 }
 export const apiResponseInterceptor: HttpInterceptorFn = (req, next) => {
-  // const toast = inject(ToastService);
+  const toast = inject(ToastService);
   if (isAuthEndpoint(req.url)) {
     return next(req);
   }
@@ -29,7 +29,7 @@ export const apiResponseInterceptor: HttpInterceptorFn = (req, next) => {
     map((event: HttpEvent<any>) => {
       if (event instanceof HttpResponse) {
         const body = event.body;
-        // console.log('✅ Correct Response from backend', event);
+        console.log('✅ Correct Response from backend', event);
 
         const apiResult = ApiResult.success(event.body, event.status);
         const successMsg = req.headers.get('X-Success-Toast');
@@ -43,8 +43,8 @@ export const apiResponseInterceptor: HttpInterceptorFn = (req, next) => {
     }),
 
     catchError((error: any) => {
-      error =new HttpErrorResponse(error);
-      // console.log('⛔ error from backend ', error);
+      // error =new HttpErrorResponse(error);
+      console.log('⛔ error from backend ', error);
 
       let apiResult;
       if (error instanceof HttpErrorResponse && error.status !== 0) {
@@ -53,7 +53,7 @@ export const apiResponseInterceptor: HttpInterceptorFn = (req, next) => {
         console.log('error called here');
         apiResult = handleException(error);
         if (apiResult.errorMessage) {
-          // toast.error(apiResult.errorMessage);
+          toast.error(apiResult.errorMessage);
         }
       }
 

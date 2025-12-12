@@ -6,23 +6,23 @@
       <label class="label-lg">رقم المريض</label>
       <input
         class="label-lg"
-        [value]="patient()?.autoRegistrationNumber"
+        [value]="patient()?.personDto?.autoRegistrationNumber"
         disabled
       />
 
       <label class="label-lg">رقم الهوية</label>
-      <input class="label-lg" [value]="patient()?.nationalNo" disabled />
+      <input class="label-lg" [value]="patient()?.personDto?.nationalNo" disabled />
     </div>
     <div class="row flex-center">
       <label class="label-lg">الاسم</label>
-      <input class="label-lg" [value]="patient()?.fullname" disabled />
+      <input class="label-lg" [value]="patient()?.personDto?.fullname" disabled />
     </div>
 
     <div class="row flex-center">
       <label class="label-lg">الجنس</label>
       <input
         class="label-lg"
-        [value]="patient()?.gender ? 'ذكر' : 'أنثى'"
+        [value]="patient()?.personDto?.gender"
         disabled
       />
 
@@ -30,14 +30,14 @@
       <input
         class="label-lg"
         type="date"
-        [value]="patient()?.birthdate | date : 'yyyy-MM-dd'"
+        [value]="patient()?.personDto?.birthdate| date : 'yyyy-MM-dd'"
         disabled
       />
     </div>
 
     <div class="row flex-center">
       <label class="label-lg">رقم الهاتف</label>
-      <input class="label-lg" [value]="patient()?.phone" disabled />
+      <input class="label-lg" [value]="patient()?.personDto?.phone" disabled />
     </div>
   </div>
 }

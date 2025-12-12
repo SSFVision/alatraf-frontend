@@ -27,12 +27,12 @@
 
     <!-- ⭐ SHOW REAL DATA WHEN NOT LOADING -->
     @else { @if (patients().length > 0) { @for (patient of patients(); track
-    patient) {
+    patient.patientId) {
     <!--   -->
     <tr class="hover-row" (click)="OnShowPatient(patient.patientId)">
-      <td class="body-md">{{ patient.autoRegistrationNumber }}</td>
-      <td class="body-md">{{ patient.phone }}</td>
-      <td class="body-md">{{ patient.fullname }}</td>
+      <td class="body-md">{{ patient.personDto?.autoRegistrationNumber }}</td>
+      <td class="body-md">{{ patient.personDto?.phone }}</td>
+      <td class="body-md">{{ patient.personDto?.fullname }}</td>
       <td class="row gap-16">
         <!-- *appHasPermission="permession.TICKETS.ADD" -->
         <button

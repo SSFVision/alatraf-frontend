@@ -1,15 +1,16 @@
-import { Patient } from '../../../../Reception/Patients/models/patient.model';
+import { TicketStatus } from './../../../../Reception/Tickets/models/ticket.model';
 import {
   Component,
-  EventEmitter,
   input,
-  Input,
   output,
-  Output,
+  
   signal,
 } from '@angular/core';
-import { CalcAgeFromBirthdateHelper } from '../../Util/patient-helpers';
-import { WaitingPatientDto } from '../../Models/WaitingPatientDto';
+import { TicketDto } from '../../../../Reception/Tickets/models/ticket.model';
+import {
+  calculateAge,
+  formatTicketStatus,
+} from '../../Util/patient-ticket.helpers';
 
 @Component({
   selector: 'app-waiting-patient-card',
@@ -18,17 +19,28 @@ import { WaitingPatientDto } from '../../Models/WaitingPatientDto';
   styleUrl: './waiting-patient-card.component.css',
 })
 export class PatientCardComponent {
-  patients = input<Patient[]>([]);
-  select = output<Patient>();
-  selectedPatientId = signal<number | null>(null);
+  tickets = input<TicketDto[]>([]);
   loading = input<boolean>(false);
 
-  onSelect(patient: Patient): void {
-    this.selectedPatientId.set(patient.patientId);
-    this.select.emit(patient);
+  select = output<TicketDto>();
+
+  selectedTicketId = signal<number | null>(null);
+
+titcketStatus=TicketStatus;
+
+  onSelect(ticket: TicketDto): void {
+    this.selectedTicketId.set(ticket.ticketId);
+    this.select.emit(ticket);
   }
 
   getAgeFromBirthdate(date: string | undefined): number {
-    return CalcAgeFromBirthdateHelper(date);
+    
+    const age=calculateAge(date);
+    // console.log(" age for this patient : ",age);
+  return age;
+  }
+
+  getTicketStatusLabel(status: string) {
+    return formatTicketStatus(status);
   }
 }
