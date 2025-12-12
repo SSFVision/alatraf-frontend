@@ -54,9 +54,6 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
   private facade = inject(TherapyDiagnosisFacade);
   private env = inject(EnvironmentInjector);
 
-  // --------------------------
-  // Inputs
-  // --------------------------
   @Input() ticketId!: number;
 
   @Input() injuryReasons: InjuryDto[] = [];
@@ -139,7 +136,7 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
 
     this.validationState.clearOnEdit();
 
-    if (!this.editMode) {
+    if (!this.editMode()) {
       this.addProgramRow();
     }
   }
@@ -169,6 +166,16 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
       this.patchEditForm(this.existingTherapyCard);
     }
   }
+  private toDateOnly(value: string | null | undefined): string | null {
+    if (!value) return null;
+    return value.split('T')[0]; // "2025-12-01T00:00:00" → "2025-12-01"
+  }
+  private formatDate(date: string | null | undefined): string | null {
+    if (!date) return null;
+
+    const d = new Date(date);
+    return isNaN(d.getTime()) ? null : d.toISOString().split('T')[0];
+  }
 
   private mapArabicTypeToEnum(arabic: string): TherapyCardType {
     switch (arabic) {
@@ -183,22 +190,53 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
     }
   }
 
+  // private patchEditForm(card: TherapyCardDiagnosisDto) {
+  //   this.form.patchValue({
+  //     diagnosisText: card.diagnosisId,
+  //     injuryDate: card.injuryDate,
+  //     injuryReasons: card.injuryReasons.map((x) => x.id),
+  //     injurySides: card.injurySides.map((x) => x.id),
+  //     injuryTypes: card.injuryTypes.map((x) => x.id),
+  //     programStartDate: card.programStartDate,
+  //     programEndDate: card.programEndDate,
+
+  //     therapyCardType: this.mapArabicTypeToEnum(card.therapyCardType),
+  //     notes: card.notes ?? '',
+  //   });
+
+  //   this.programs.clear();
+
+  //   (card.programs ?? []).forEach((p) => {
+  //     this.programs.push(
+  //       this.fb.group({
+  //         medicalProgramId: [p.medicalProgramId, Validators.required],
+  //         duration: [p.duration, Validators.required],
+  //         notes: [p.notes ?? ''],
+  //       })
+  //     );
+  //   });
+  // }
+
+  // --------------------------
+  // Validators
+  // --------------------------
+
   private patchEditForm(card: TherapyCardDiagnosisDto) {
     this.form.patchValue({
-      diagnosisText: card.diagnosisId,
-      injuryDate: card.injuryDate,
+      diagnosisText: card.diagnosisText, // FIXED
+
+      injuryDate: this.formatDate(card.injuryDate), // FIXED
       injuryReasons: card.injuryReasons.map((x) => x.id),
       injurySides: card.injurySides.map((x) => x.id),
       injuryTypes: card.injuryTypes.map((x) => x.id),
-      programStartDate: card.programStartDate,
-      programEndDate: card.programEndDate,
+
+      programStartDate: this.formatDate(card.programStartDate), // FIXED
+      programEndDate: this.formatDate(card.programEndDate), // FIXED
 
       therapyCardType: this.mapArabicTypeToEnum(card.therapyCardType),
       notes: card.notes ?? '',
     });
-
     this.programs.clear();
-
     (card.programs ?? []).forEach((p) => {
       this.programs.push(
         this.fb.group({
@@ -210,9 +248,6 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
     });
   }
 
-  // --------------------------
-  // Validators
-  // --------------------------
   dateRangeValidator(control: AbstractControl): ValidationErrors | null {
     const start = control.get('programStartDate')?.value;
     const end = control.get('programEndDate')?.value;

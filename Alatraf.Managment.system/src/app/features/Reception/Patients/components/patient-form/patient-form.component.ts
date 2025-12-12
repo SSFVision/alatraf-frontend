@@ -69,7 +69,7 @@ export class PatientFormComponent implements OnChanges, OnInit {
       ],
       address: ['', Validators.required],
       nationalNo: [''],
-      patientType: [PatientType.Normal, Validators.required],
+      patientType: ['Disabled', Validators.required],
     });
 
     this.validationState = new FormValidationState(
