@@ -63,88 +63,88 @@ export class TherapyCardService extends BaseApiService {
 
 
 
-//   private _therapyCards = signal<TherapyCardDto[]>([]);
-//   therapyCards = this._therapyCards.asReadonly();
+  // private _therapyCards = signal<TherapyCardDto[]>([]);
+  // therapyCards = this._therapyCards.asReadonly();
 
-//   private _filters = signal<TherapyCardFilterRequest>({
-//     searchTerm: '',
-//     sortColumn: 'ProgramStartDate',
-//     sortDirection: 'desc',
-//     isActive: null,
-//     therapyCardType: null,
-//     therapyCardStatus: null,
-//     programStartFrom: null,
-//     programStartTo: null,
-//     programEndFrom: null,
-//     programEndTo: null,
-//     diagnosisId: null,
-//     patientId: null,
-//   });
-//   filters = this._filters.asReadonly();
+  // private _filters = signal<TherapyCardFilterRequest>({
+  //   searchTerm: '',
+  //   sortColumn: 'ProgramStartDate',
+  //   sortDirection: 'desc',
+  //   isActive: null,
+  //   therapyCardType: null,
+  //   therapyCardStatus: null,
+  //   programStartFrom: null,
+  //   programStartTo: null,
+  //   programEndFrom: null,
+  //   programEndTo: null,
+  //   diagnosisId: null,
+  //   patientId: null,
+  // });
+  // filters = this._filters.asReadonly();
 
-//   private _pageRequest = signal<PageRequest>({
-//     page: 1,
-//     pageSize: 10,
-//   });
-//   pageRequest = this._pageRequest.asReadonly();
+  // private _pageRequest = signal<PageRequest>({
+  //   page: 1,
+  //   pageSize: 10,
+  // });
+  // pageRequest = this._pageRequest.asReadonly();
 
-//   totalCount = signal<number>(0);
+  // totalCount = signal<number>(0);
 
-//   // ----------------------- Load All Cards -----------------------
-//   loadTherapyCards() {
-//     this.therapyService
-//       .getAllTherapyCardPagenated(this._filters(), this._pageRequest())
-//       .pipe(
-//         tap((result) => {
-//           if (result.isSuccess && result.data?.items) {
-//             this._therapyCards.set(result.data.items);
-//             this.totalCount.set(result.data.totalCount ?? 0);
-//           } else {
-//             this._therapyCards.set([]);
-//             this.totalCount.set(0);
-//             this.toast.error('تعذر تحميل بطاقات العلاج');
-//           }
-//         })
-//       )
-//       .subscribe();
-//   }
+  // // ----------------------- Load All Cards -----------------------
+  // loadTherapyCards() {
+  //   this.therapyService
+  //     .getAllTherapyCardPagenated(this._filters(), this._pageRequest())
+  //     .pipe(
+  //       tap((result) => {
+  //         if (result.isSuccess && result.data?.items) {
+  //           this._therapyCards.set(result.data.items);
+  //           this.totalCount.set(result.data.totalCount ?? 0);
+  //         } else {
+  //           this._therapyCards.set([]);
+  //           this.totalCount.set(0);
+  //           this.toast.error('تعذر تحميل بطاقات العلاج');
+  //         }
+  //       })
+  //     )
+     
+  // }
 
-//   // ----------------------- Update filters -----------------------
-//   updateFilters(newFilters: Partial<TherapyCardFilterRequest>) {
-//     this._filters.update((f) => ({ ...f, ...newFilters }));
-//   }
+  // // ----------------------- Update filters -----------------------
+  // updateFilters(newFilters: Partial<TherapyCardFilterRequest>) {
+  //   this._filters.update((f) => ({ ...f, ...newFilters }));
+  // }
 
-//   // ----------------------- Pagination -----------------------
-//   setPage(page: number) {
-//     this._pageRequest.update((p) => ({ ...p, page }));
-//     this.loadTherapyCards();
-//   }
+  // // ----------------------- Pagination -----------------------
+  // setPage(page: number) {
+  //   this._pageRequest.update((p) => ({ ...p, page }));
+  //   this.loadTherapyCards();
+  // }
 
-//   setPageSize(size: number) {
-//     this._pageRequest.update((p) => ({ page: 1, pageSize: size }));
-//     this.loadTherapyCards();
-//   }
+  // setPageSize(size: number) {
+  //   this._pageRequest.update((p) => ({ page: 1, pageSize: size }));
+  //   this.loadTherapyCards();
+  // }
 
-//   resetFilters() {
-//     this._filters.set({
-//       searchTerm: '',
-//       sortColumn: 'ProgramStartDate',
-//       sortDirection: 'desc',
-//       isActive: null,
-//       therapyCardType: null,
-//       therapyCardStatus: null,
-//       programStartFrom: null,
-//       programStartTo: null,
-//       programEndFrom: null,
-//       programEndTo: null,
-//       diagnosisId: null,
-//       patientId: null,
-//     });
+  // resetFilters() {
+  //   this._filters.set({
+  //     searchTerm: '',
+  //     sortColumn: 'ProgramStartDate',
+  //     sortDirection: 'desc',
+  //     isActive: null,
+  //     therapyCardType: null,
+  //     therapyCardStatus: null,
+  //     programStartFrom: null,
+  //     programStartTo: null,
+  //     programEndFrom: null,
+  //     programEndTo: null,
+  //     diagnosisId: null,
+  //     patientId: null,
+  //   });
 
-//     this._pageRequest.set({ page: 1, pageSize: 10 });
-//     this._therapyCards.set([]);
-//     this.totalCount.set(0);
-//   }
+  //   this._pageRequest.set({ page: 1, pageSize: 10 });
+  //   this._therapyCards.set([]);
+  //   this.totalCount.set(0);
+  // }
 
 
 

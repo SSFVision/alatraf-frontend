@@ -7,7 +7,7 @@
           class="primary-color-background WH-40 flex-center border-radius-20"
         >
           <h2 class="title-md white-color margin-auto">
-            {{ tickets().length }}
+            {{ paidTherapyCards().length }}
           </h2>
         </div>
       </div>
@@ -34,11 +34,11 @@
         <button class="filter-btn">عظام</button>
       </div>
 
-      <app-waiting-patient-card
+      <!-- <app-waiting-patient-card
         class="max-hight-712 column gap-16"
         [tickets]="tickets()"
         (select)="select($event)"
-      ></app-waiting-patient-card>
+      ></app-waiting-patient-card> -->
     </div>
 
     <div class="box culumn gap-24 max-hight-360">
@@ -64,7 +64,7 @@
     </div>
   </div>
 
-  @if (selectedTicket()) {
+  @if (selectedCard()) {
   <div class="box max-hight-800 gap-16">
     <router-outlet></router-outlet>
   </div>

@@ -1,41 +1,53 @@
 import { Component, inject, OnDestroy, signal } from '@angular/core';
-import { TicketFacade } from '../../../Reception/Tickets/tickets.facade.service';
-import {
-  TicketDto,
-  TicketStatus,
-} from '../../../Reception/Tickets/models/ticket.model';
+
 import { Department } from '../../../Diagnosis/Shared/enums/department.enum';
 import { RouterOutlet } from '@angular/router';
 import { TherapyCardsNavigationFacade } from '../../../../core/navigation/TherapyCards-navigation.facade';
 import { PatientCardComponent } from "../../../../shared/components/waiting-patient-card/waiting-patient-card.component";
 import { DoctorCardComponent } from "../../../../shared/components/doctor-card/doctor-card.component";
+import { TherapyCardDiagnosisDto } from '../../../Diagnosis/Therapy/Models/therapy-card-diagnosis.dto';
+import { TherapySessionsFacade } from '../../services/therapy-sessions.facade.service';
 
 @Component({
   selector: 'app-main-therapy-patients-wating-list',
-  imports: [RouterOutlet, PatientCardComponent, DoctorCardComponent],
+  imports: [RouterOutlet, DoctorCardComponent],
   templateUrl: './main-therapy-patients-wating-list.component.html',
   styleUrl: './main-therapy-patients-wating-list.component.css',
 })
 export class MainTherapyPatientsWatingListComponent implements OnDestroy {
-  ticketFacade = inject(TicketFacade);
-  tickets = this.ticketFacade.tickets;
-  selectedTicket = signal<TicketDto | null>(null);
+ private sessionsFacade = inject(TherapySessionsFacade);
 
+  paidTherapyCards = this.sessionsFacade.paidTherapyCards;
+  loading = this.sessionsFacade.loadingPaidTherapyCards;
+  totalCount = this.sessionsFacade.paidTotalCount;
   private navTherapyCard = inject(TherapyCardsNavigationFacade);
 
-  ngOnInit() {
-    this.ticketFacade.updateFilters({ departmentId: Department.Therapy });
-    this.ticketFacade.loadTickets();
+  selectedCard = signal<TherapyCardDiagnosisDto | null>(null);
+  ngOnInit(): void {
+    this.sessionsFacade.loadPaidTherapyCards();
   }
 
-  ngOnDestroy() {
-    this.ticketFacade.resetFilters();
+  ngOnDestroy(): void {
+    this.sessionsFacade.resetPaidFilters();
   }
-  onSearch(term: string) {
-    this.ticketFacade.search(term);
+
+  // ------------------------------------------------------------------
+  // UI Actions
+  // ------------------------------------------------------------------
+  onSearch(term: string): void {
+    this.sessionsFacade.updatePaidFilters({ searchTerm: term });
+    this.sessionsFacade.loadPaidTherapyCards();
   }
-  select(ticket: TicketDto) {
-    this.selectedTicket.set(ticket);
-    this.navTherapyCard.goToCreateTherapySessionPage(ticket.patient?.patientId!);
+
+  onPageChange(page: number): void {
+    this.sessionsFacade.setPaidPage(page);
   }
-}
+
+  select(card: TherapyCardDiagnosisDto): void {
+    this.selectedCard.set(card);
+
+    // 🔥 التنقل الصحيح: باستخدام therapyCardId
+    this.navTherapyCard.goToCreateTherapySessionPage(
+      card.therapyCardId
+    );
+  }}
