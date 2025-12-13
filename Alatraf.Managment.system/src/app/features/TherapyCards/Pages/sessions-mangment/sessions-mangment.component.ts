@@ -117,13 +117,16 @@ export class SessionsManagementComponent implements OnInit {
 
         this.therapyCardId = therapyCardId;
 
-        this.sessionsFacade.loadTherapyCardById(therapyCardId).subscribe({
-          next: () => {
-            if (this.viewMode() === 'add') {
+        this.sessionsFacade.loadTherapyCardById(therapyCardId).subscribe(
+        (res) => {
+          if (res.isSuccess && res.data) {
+             if (this.viewMode() === 'add') {
               this.buildFormArrayFromPrograms();
               this.loadTherapySections();
             }
-          },
+          }
+           
+          
         });
       });
   }
@@ -199,9 +202,7 @@ export class SessionsManagementComponent implements OnInit {
     });
   }
 
-  // ------------------------------------------------------------------
-  // UI actions
-  // ------------------------------------------------------------------
+  
   switchToAdd(): void {
     this.viewMode.set('add');
   }

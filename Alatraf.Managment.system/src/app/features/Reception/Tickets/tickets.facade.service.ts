@@ -173,7 +173,7 @@ resetFilters() {
 loadTicketById(ticketId: number) {
   this.loadingTicket.set(true);
 
-  this.service.getTicketById(ticketId).subscribe(res => {
+   this.service.getTicketById(ticketId).subscribe(res => {
     if (res.isSuccess && res.data) {
       this._selectedTicket.set(res.data);
     } else {

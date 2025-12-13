@@ -67,6 +67,13 @@ export const MENU_CONFIG: MenuCategory[] = [
         route: `${AppRoutes.diagnosis.root}/${AppRoutes.diagnosis.industrial.root}`,
         requiredPermissions: [PERMISSIONS.DIAGNOSIS.INDUSTRIAL.VIEW],
       },
+      {
+        label: 'كروت الاصلاح الفني ',
+        icon: 'assets/icons/prosthetic-foot-w.svg',
+        activeIcon: 'assets/icons/prosthetic-foot-b.svg',
+        route: `${AppRoutes.repairCards.root}`,
+        requiredPermissions: [PERMISSIONS.THERAPY_CARDS.VIEW],
+      },
     ],
   },
 
@@ -84,7 +91,7 @@ export const MENU_CONFIG: MenuCategory[] = [
     ],
   },
 
-   {
+  {
     category: 'قسم   المواعيد ',
     CateRoute: AppRoutes.Appointment.root,
     items: [

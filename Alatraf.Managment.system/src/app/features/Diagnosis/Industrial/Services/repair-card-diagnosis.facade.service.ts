@@ -91,7 +91,6 @@ export class RepairCardDiagnosisFacade extends BaseFacade {
           }
         })
       )
-      .subscribe();
   }
 
   // ------------------ CREATE ------------------

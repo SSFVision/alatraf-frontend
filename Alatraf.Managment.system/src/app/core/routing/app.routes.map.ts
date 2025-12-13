@@ -70,6 +70,33 @@ export const AppRoutes = {
     //     `therapy-cards/${cardId}/doctors`,
     // },
   },
+repairCards: {
+  root: 'repair-cards',
+
+  details: (cardId: number | string) =>
+    `repair-cards/${cardId}`,
+
+  assignments: {
+    // صفحة إدارة التعيينات (تشبه sessions list)
+    list: (repairCardId: number | string) =>
+      `repair-cards/${repairCardId}/assignments`,
+
+    // تعيين كامل الكرت لطبيب
+    assignCard: (repairCardId: number | string) =>
+      `repair-cards/${repairCardId}/assignments/assign-card`,
+
+    // تعيين قطع صناعية (industrial parts)
+    assignParts: (repairCardId: number | string) =>
+      `repair-cards/${repairCardId}/assignments/assign-parts`,
+  },
+
+  // عمليات سريعة (عادة dialogs أو inline forms)
+  status: (repairCardId: number | string) =>
+    `repair-cards/${repairCardId}/status`,
+
+  deliveryTime: (repairCardId: number | string) =>
+    `repair-cards/${repairCardId}/delivery-time`,
+},
 
   Appointment: {
     root: 'appointments',

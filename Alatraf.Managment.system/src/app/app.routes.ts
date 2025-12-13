@@ -62,6 +62,13 @@ export const APP_ROUTES: Routes = [
             (m) => m.TherapyCardsRoutes
           ),
       },
+      {
+        path: AppRoutes.repairCards.root,
+        loadChildren: () =>
+          import('./features/RepairCards/repairCards.routes').then(
+            (m) => m.RepairCardsRoutes
+          ),
+      },
     ],
   },
   {

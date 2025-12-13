@@ -36,4 +36,12 @@ export class OrganizationService extends BaseApiService {
 
     return this.get<GetDoctorDto[]>(url);
   }
+
+  getDoctorsBySection(
+    sectionId: number
+  ): Observable<ApiResult<GetDoctorDto[]>> {
+    const url = this.endpoint + `sections/${sectionId}/doctors`;
+
+    return this.get<GetDoctorDto[]>(url);
+  }
 }

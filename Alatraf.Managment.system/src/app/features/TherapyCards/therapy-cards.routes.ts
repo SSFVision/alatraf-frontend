@@ -24,7 +24,11 @@ export const TherapyCardsRoutes: Routes = [
       },
     ],
   },
-
+ {
+    path: '',
+    redirectTo: 'therapy-cards',
+    pathMatch: 'full',
+  },
   // {
   //   path: ':cardId',
   //   canActivate: [PermissionGuard],
@@ -75,9 +79,5 @@ export const TherapyCardsRoutes: Routes = [
   //     ).then((m) => m.AssignDoctorsComponent),
   // },
 
-  {
-    path: '',
-    redirectTo: 'therapy-cards',
-    pathMatch: 'full',
-  },
+ 
 ];

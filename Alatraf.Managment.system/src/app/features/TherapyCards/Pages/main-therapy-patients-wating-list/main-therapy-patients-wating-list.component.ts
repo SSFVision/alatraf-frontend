@@ -41,6 +41,7 @@ export class MainTherapyPatientsWatingListComponent implements OnDestroy {
       cardNumber: card.therapyCardId,
       fullName: card.patientName,
       gender: card.gender,
+      extraInfo:card.diagnosisType
     }))
   );
 
