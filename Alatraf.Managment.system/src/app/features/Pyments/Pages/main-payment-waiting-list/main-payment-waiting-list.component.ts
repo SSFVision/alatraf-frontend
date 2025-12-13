@@ -13,26 +13,20 @@ import { PaymentsFacade } from '../../Services/payments.facade.service';
 @Component({
   selector: 'app-main-payment-waiting-list',
   standalone: true,
-  imports: [
-    GeneralWaitingPatientQueueComponent,
-    RouterOutlet,
-  ],
+  imports: [GeneralWaitingPatientQueueComponent, RouterOutlet],
   templateUrl: './main-payment-waiting-list.component.html',
   styleUrl: './main-payment-waiting-list.component.css',
 })
 export class MainPaymentWaitingListComponent {
-  
   private paymentsFacade = inject(PaymentsFacade);
 
   waitingPayments = this.paymentsFacade.waitingList;
   loading = this.paymentsFacade.loadingWaitingList;
   totalCount = this.paymentsFacade.totalCount;
 
- 
   private navPayment = inject(PaymentsNavigationFacade);
 
   selectedPaymentId = signal<number | null>(null);
-
 
   PaymentReference = PaymentReference;
   currentPaymentReference = signal<PaymentReference | null>(null);
@@ -44,12 +38,12 @@ export class MainPaymentWaitingListComponent {
       cardNumber: payment.cardId,
       fullName: payment.patientName,
       gender: payment.gender ?? 'غير محدد',
-    referenceType: payment.paymentReference, // IMPORTANT
-extraInfo:payment.paymentReference
+      referenceType: payment.paymentReference, // IMPORTANT
+      extraInfo: payment.paymentReference,
     }))
   );
-    // extraInfo: PaymentReference[payment.paymentReference],
-    // referenceType: payment.paymentReference, // enum
+  // extraInfo: PaymentReference[payment.paymentReference],
+  // referenceType: payment.paymentReference, // enum
 
   ngOnInit(): void {
     this.paymentsFacade.loadPaymentsWaitingList();
@@ -62,24 +56,16 @@ extraInfo:payment.paymentReference
   // ------------------------------------------------------------------
   // UI Actions
   // ------------------------------------------------------------------
-onSearch(term: string) {
-  this.paymentsFacade.search(term);
-}
+  onSearch(term: string) {
+    this.paymentsFacade.search(term);
+  }
 
+  select(vm: GeneralWaitingPatientVM): void {
+    if (vm.referenceType == null) return;
 
- select(vm: GeneralWaitingPatientVM): void {
-  if (vm.referenceType == null) return;
-
-  this.selectedPaymentId.set(vm.id);
-console.log("selectedPayment : ", vm);
-
-
-  this.navPayment.goToPaiedPage(
-    vm.id,
-    vm.referenceType
-  );
-}
-
+    this.selectedPaymentId.set(vm.id);
+    this.navPayment.goToPaiedPage(vm.id, vm.referenceType);
+  }
 
   selectFilter(reference: PaymentReference | null): void {
     this.currentPaymentReference.set(reference);
@@ -88,14 +74,11 @@ console.log("selectedPayment : ", vm);
     });
   }
 
- setPaymentStatus(isCompleted: boolean): void {
-  this.isCompleted.set(isCompleted);
+  setPaymentStatus(isCompleted: boolean): void {
+    this.isCompleted.set(isCompleted);
 
-  this.paymentsFacade.updateFilters({
-    isCompleted,
-  });
-}
-
-
-
+    this.paymentsFacade.updateFilters({
+      isCompleted,
+    });
+  }
 }
