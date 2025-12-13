@@ -1,4 +1,4 @@
-<div class="max-hight-712 column gap-16">
+<!-- <div class="max-hight-712 column gap-16"> -->
   <!-- Header -->
   <div class="width-100">
     <p class="title-md">الجلسات السابقة</p>
@@ -6,7 +6,7 @@
   </div>
 
   <!-- Table -->
-  <table *ngIf="sessions().length > 0; else noData">
+  <table *ngIf="sessions().length > 0; else noData" ass="no-shadow">
     <thead>
       <tr>
         <th class="title-sm">رقم الجلسة</th>
@@ -18,14 +18,11 @@
     </thead>
 
     <tbody>
-      <!-- Loop sessions -->
       <ng-container *ngFor="let session of sessions()">
-        <!-- Loop programs inside each session -->
         <ng-container
           *ngFor="let program of session.sessionPrograms; let i = index"
         >
           <tr>
-            <!-- Session number -->
             <td
               *ngIf="i === 0"
               class="body-md"
@@ -34,7 +31,6 @@
               {{ session.number }}
             </td>
 
-            <!-- Session date -->
             <td
               *ngIf="i === 0"
               class="body-md"
@@ -43,17 +39,14 @@
               {{ session.sessionDate }}
             </td>
 
-            <!-- Program name -->
             <td class="body-md">
               {{ program.programName }}
             </td>
 
-            <!-- Doctor name -->
             <td class="body-md">
               {{ program.doctorName ?? '-' }}
             </td>
 
-            <!-- Actions -->
             <td
               *ngIf="i === 0"
               class="buttons"
@@ -74,6 +67,9 @@
         </ng-container>
       </ng-container>
     </tbody>
+
+
+
   </table>
 
   <!-- No data -->
@@ -82,4 +78,4 @@
       لا توجد جلسات سابقة.
     </p>
   </ng-template>
-</div>
+<!-- </div> -->

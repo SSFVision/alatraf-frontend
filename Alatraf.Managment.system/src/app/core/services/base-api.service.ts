@@ -18,25 +18,24 @@ export class BaseApiService {
   //   if (!endpoint.startsWith('/')) endpoint = `/${endpoint}`;
   //   return this.normalize(`${this.baseUrl}${endpoint}`);
   // }
-protected buildUrl(endpoint: string): string {
-  // If endpoint is absolute URL => use it directly (real API)
-  if (endpoint.startsWith('http://') || endpoint.startsWith('https://')) {
-    return this.normalize(endpoint);
-  }
+  protected buildUrl(endpoint: string): string {
+    // If endpoint is absolute URL => use it directly (real API)
+    if (endpoint.startsWith('http://') || endpoint.startsWith('https://')) {
+      return this.normalize(endpoint);
+    }
 
-  // Otherwise use baseUrl => this will go to InMemory API
-  if (!endpoint.startsWith('/')) {
-    endpoint = '/' + endpoint;
-  }
+    // Otherwise use baseUrl => this will go to InMemory API
+    if (!endpoint.startsWith('/')) {
+      endpoint = '/' + endpoint;
+    }
 
-  return this.normalize(`${this.baseUrl}${endpoint}`);
-}
+    return this.normalize(`${this.baseUrl}${endpoint}`);
+  }
 
   protected normalize(url: string): string {
     // Remove double slashes except after http:// or https://
     return url.replace(/([^:]\/)\/+/g, '$1');
   }
-
 
   protected createHeaders(custom?: HttpHeaders): HttpHeaders {
     let headers = new HttpHeaders({
@@ -71,7 +70,6 @@ protected buildUrl(endpoint: string): string {
     headers?: HttpHeaders
   ): Observable<ApiResult<T>> {
     const url = this.buildUrl(endpoint);
-    console.log("rwsdfldskjfgbdm");
     return this.http
       .get<ApiResult<T>>(url, this.buildOptions(params, headers))
       .pipe(catchError((err) => this.handleError(err)));

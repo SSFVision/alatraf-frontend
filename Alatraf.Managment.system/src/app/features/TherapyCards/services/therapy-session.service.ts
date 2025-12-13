@@ -17,14 +17,18 @@ export class TherapySessionService extends BaseApiService {
     therapyCardId: number,
     request: CreateSessionRequest
   ): Observable<ApiResult<SessionDto[]>> {
-    const headers = new HttpHeaders()
-      .set('X-Enable-Loader', 'true')
-      .set('X-Success-Toast', 'تم إنشاء الجلسة بنجاح');
-
     return this.post<SessionDto[]>(
       `${this.endpoint}/${therapyCardId}/create-session`,
-      request,
-      headers
+      request
     );
   }
+
+  getAllSessionsByTherapyCardId(
+  therapyCardId: number
+): Observable<ApiResult<SessionDto[]>> {
+  return this.get<SessionDto[]>(
+    `${this.endpoint}/${therapyCardId}/sessions`
+  );
+}
+
 }

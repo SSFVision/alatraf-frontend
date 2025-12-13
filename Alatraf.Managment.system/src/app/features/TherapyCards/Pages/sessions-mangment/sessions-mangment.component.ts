@@ -1,4 +1,12 @@
-import { Component, computed, inject, signal, OnInit } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  signal,
+  OnInit,
+  DestroyRef,
+  effect,
+} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -23,6 +31,7 @@ import { OrganizationService } from '../../../Organization/organization.service'
 import { DepartmentSectionDto } from '../../../Organization/Models/department-section.dto';
 import { Department } from '../../../Diagnosis/Shared/enums/department.enum';
 import { CommonModule, NgFor } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-sessions-mangment',
@@ -45,6 +54,7 @@ export class SessionsManagementComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private sessionsFacade = inject(TherapySessionsFacade);
   private therapyCardId!: number;
+  private destroyRef = inject(DestroyRef);
 
   // ------------------------------------------------------------------
   // Facade state
@@ -58,31 +68,64 @@ export class SessionsManagementComponent implements OnInit {
   // View state
   // ------------------------------------------------------------------
   viewMode = signal<'add' | 'history'>('add');
-  sessions = signal<SessionDto[]>([]);
+  sessions = this.sessionsFacade.sessions;
+  sessionCreated = this.sessionsFacade.sessionCreated;
+  creatingSession = this.sessionsFacade.creatingSession;
+  therapyCardIdSignal = computed<number | null>(() => {
+    return this.therapyCard()?.therapyCardId ?? null;
+  });
 
-  // ------------------------------------------------------------------
-  // Reactive Form
-  // ------------------------------------------------------------------
   sessionForm!: FormGroup;
+  constructor() {
+    effect(() => {
+      const mode = this.viewMode();
+      const therapyCardId = this.therapyCardIdSignal();
+
+      if (mode === 'history' && therapyCardId) {
+        console.log("therapyCardIdSignal = ",this.therapyCardIdSignal());
+        this.loadSessionsHistory(therapyCardId);
+      }
+    });
+  }
+  private loadSessionsHistory(therapyCardId: number): void {
+    this.sessionsFacade.loadSessionsByTherapyCardId(therapyCardId).subscribe();
+  }
 
   // ------------------------------------------------------------------
   // Lifecycle
   // ------------------------------------------------------------------
   ngOnInit(): void {
     this.initForm();
+    this.listenToRouteChanges();
+  }
 
-    this.therapyCardId = Number(
-      this.route.snapshot.paramMap.get('therapyCardId')
-    );
+  private listenToRouteChanges(): void {
+    this.route.paramMap
+      .pipe(takeUntilDestroyed(this.destroyRef))
 
-    if (this.therapyCardId) {
-      this.sessionsFacade.loadTherapyCardById(this.therapyCardId).subscribe({
-        next: () => {
-          this.buildFormArrayFromPrograms();
-          this.loadTherapySections();
-        },
+      .subscribe((params) => {
+        const therapyCardId = Number(params.get('therapyCardId'));
+
+        if (!therapyCardId || Number.isNaN(therapyCardId)) {
+          return;
+        }
+
+        // reset component + facade state
+        this.sessionForm.reset();
+        this.sessionProgramsArray.clear();
+        this.sessionsFacade.clearState();
+
+        this.therapyCardId = therapyCardId;
+
+        this.sessionsFacade.loadTherapyCardById(therapyCardId).subscribe({
+          next: () => {
+            if (this.viewMode() === 'add') {
+              this.buildFormArrayFromPrograms();
+              this.loadTherapySections();
+            }
+          },
+        });
       });
-    }
   }
 
   // ------------------------------------------------------------------
@@ -184,9 +227,13 @@ export class SessionsManagementComponent implements OnInit {
       sessionPrograms: this.sessionForm.value.sessionPrograms,
     };
 
-    console.log('CreateSessionRequest:', request);
-    // لاحقًا:
-    // this.sessionsFacade.createSession(therapyCardId, request).subscribe();
+    this.sessionsFacade
+      .createSession(this.therapyCardId, request)
+      .subscribe((res) => {
+        if (res.success) {
+          this.sessionForm.disable(); // ✅ هنا السحر
+        }
+      });
   }
 
   private organizationService = inject(OrganizationService);
@@ -195,7 +242,6 @@ export class SessionsManagementComponent implements OnInit {
 
   private loadTherapySections(): void {
     this.loadingSections.set(true);
-
     this.organizationService
       .getSectionsByDepartmentId(Department.Therapy)
       .subscribe({

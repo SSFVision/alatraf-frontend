@@ -73,6 +73,8 @@ export class TherapyDiagnosisWorkspaceComponent implements OnInit {
     });
   }
 
+
+
   private listenToRouteChanges() {
     this.route.paramMap
       .pipe(takeUntilDestroyed(this.destroyRef))
