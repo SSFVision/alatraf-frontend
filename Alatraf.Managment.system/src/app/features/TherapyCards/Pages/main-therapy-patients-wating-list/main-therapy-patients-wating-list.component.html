@@ -25,20 +25,13 @@
           (input)="onSearch(searchBox.value)"
         />
       </div>
+      <app-general-waiting-patient-queue
+            class="max-hight-712 column gap-16"
 
-      <div class="filters-container">
-        <button class="filter-btn active">الكل</button>
-        <!-- العلاج الطبيعي -->
-        <button class="filter-btn">علاج طبيعي</button>
-        <button class="filter-btn">أعصاب</button>
-        <button class="filter-btn">عظام</button>
-      </div>
-
-      <!-- <app-waiting-patient-card
-        class="max-hight-712 column gap-16"
-        [tickets]="tickets()"
+        [patients]="patientsVM()"
+        [loading]="loading()"
         (select)="select($event)"
-      ></app-waiting-patient-card> -->
+      ></app-general-waiting-patient-queue>
     </div>
 
     <div class="box culumn gap-24 max-hight-360">
@@ -64,7 +57,7 @@
     </div>
   </div>
 
-  @if (selectedCard()) {
+  @if (selectedCardId()) {
   <div class="box max-hight-800 gap-16">
     <router-outlet></router-outlet>
   </div>

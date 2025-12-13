@@ -70,7 +70,6 @@ export class TicketFacade extends BaseFacade {
   search(term: string) {
     this._filters.update((f) => ({ ...f, searchTerm: term }));
     this._pageRequest.update((p) => ({ ...p, page: 1 }));
-
     this.searchManager.search(term);
   }
 

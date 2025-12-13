@@ -1,5 +1,5 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { tap } from 'rxjs';
+import { map, tap } from 'rxjs';
 
 import { BaseFacade } from '../../../core/utils/facades/base-facade';
 import { TherapyDiagnosisService } from '../../Diagnosis/Therapy/Services/therapy-diagnosis.service';
@@ -10,6 +10,8 @@ import { CreateSessionRequest } from '../Models/create-session.request';
 import { SessionDto } from '../Models/session.dto';
 import { PageRequest } from '../../../core/models/Shared/page-request.model';
 import { GetPaidTherapyCardsFilterRequest } from '../Models/get-paid-therapy-cards-filter.request';
+import { SearchManager } from '../../../core/utils/search-manager';
+import { ApiResult } from '../../../core/models/ApiResult';
 
 @Injectable({
   providedIn: 'root',
@@ -120,71 +122,113 @@ export class TherapySessionsFacade extends BaseFacade {
 
   // ----------------------- Paid Therapy Cards -----------------------
   private _paidTherapyCards = signal<TherapyCardDiagnosisDto[]>([]);
-  paidTherapyCards = this._paidTherapyCards.asReadonly();
+paidTherapyCards = this._paidTherapyCards.asReadonly();
 
-  private _paidFilters = signal<GetPaidTherapyCardsFilterRequest>({
+private _paidFilters = signal<GetPaidTherapyCardsFilterRequest>({
+  searchTerm: '',
+  sortColumn: 'PaymentDate',
+  sortDirection: 'asc',
+});
+paidFilters = this._paidFilters.asReadonly();
+
+private _paidPageRequest = signal<PageRequest>({
+  page: 1,
+  pageSize: 10,
+});
+paidPageRequest = this._paidPageRequest.asReadonly();
+
+paidTotalCount = signal<number>(0);
+loadingPaidTherapyCards = signal<boolean>(false);
+private paidSearchManager = new SearchManager<TherapyCardDiagnosisDto[]>(
+  (term: string) =>
+    this.therapySessionService
+      .getPaidTherapyCards(
+        { ...this._paidFilters(), searchTerm: term },
+        this._paidPageRequest()
+      )
+      .pipe(
+        tap((result) => {
+          if (!result.isSuccess) {
+            this.handleLoadPaidCardsError(result);
+          }
+        }),
+        map((result) =>
+          result.isSuccess && result.data?.items
+            ? result.data.items
+            : []
+        )
+      ),
+  null,
+  (items) => this._paidTherapyCards.set(items)
+);
+searchPaid(term: string): void {
+  this._paidFilters.update((f) => ({ ...f, searchTerm: term }));
+  this._paidPageRequest.update((p) => ({ ...p, page: 1 }));
+  this.paidSearchManager.search(term);
+}
+loadPaidTherapyCards(): void {
+  this.loadingPaidTherapyCards.set(true);
+
+  this.therapySessionService
+    .getPaidTherapyCards(this._paidFilters(), this._paidPageRequest())
+    .pipe(
+      tap((result) => {
+        if (result.isSuccess && result.data?.items) {
+          this._paidTherapyCards.set(result.data.items);
+          this.paidTotalCount.set(result.data.totalCount ?? 0);
+        } else {
+          this._paidTherapyCards.set([]);
+          this.paidTotalCount.set(0);
+          this.handleLoadPaidCardsError(result);
+        }
+
+        this.loadingPaidTherapyCards.set(false);
+      })
+    )
+    .subscribe();
+}
+setPaidPage(page: number): void {
+  this._paidPageRequest.update((p) => ({ ...p, page }));
+  this.loadPaidTherapyCards();
+}
+
+setPaidPageSize(size: number): void {
+  this._paidPageRequest.update(() => ({
+    page: 1,
+    pageSize: size,
+  }));
+  this.loadPaidTherapyCards();
+}
+updatePaidFilters(
+  filters: Partial<GetPaidTherapyCardsFilterRequest>
+): void {
+  this._paidFilters.update((f) => ({ ...f, ...filters }));
+}
+resetPaidFilters(): void {
+  this._paidFilters.set({
     searchTerm: '',
     sortColumn: 'PaymentDate',
     sortDirection: 'asc',
   });
-  paidFilters = this._paidFilters.asReadonly();
 
-  private _paidPageRequest = signal<PageRequest>({
+  this._paidPageRequest.set({
     page: 1,
-    pageSize: 20,
+    pageSize: 10,
   });
-  paidPageRequest = this._paidPageRequest.asReadonly();
 
-  paidTotalCount = signal<number>(0);
-  loadingPaidTherapyCards = signal<boolean>(false);
-  loadPaidTherapyCards() {
-    this.loadingPaidTherapyCards.set(true);
+  this._paidTherapyCards.set([]);
+  this.paidTotalCount.set(0);
+}
+private handleLoadPaidCardsError(result: ApiResult<any>): void {
+  const err = this.extractError(result);
 
-    this.therapySessionService
-      .getPaidTherapyCards(this._paidFilters(), this._paidPageRequest())
-      .pipe(
-        tap((result) => {
-          if (result.isSuccess && result.data?.items) {
-            this._paidTherapyCards.set(result.data.items);
-            this.paidTotalCount.set(result.data.totalCount ?? 0);
-          } else {
-            this._paidTherapyCards.set([]);
-            this.paidTotalCount.set(0);
-            this.toast.error('تعذر تحميل قائمة المرضى المدفوعين');
-          }
-
-          this.loadingPaidTherapyCards.set(false);
-        })
-      );
-  }
-  updatePaidFilters(newFilters: Partial<GetPaidTherapyCardsFilterRequest>) {
-    this._paidFilters.update((f) => ({ ...f, ...newFilters }));
-  }
-  setPaidPage(page: number) {
-    this._paidPageRequest.update((p) => ({ ...p, page }));
-    this.loadPaidTherapyCards();
+  if (err.type === 'validation' || err.type === 'business') {
+    this.toast.error(err.message);
+    return;
   }
 
-  setPaidPageSize(size: number) {
-    this._paidPageRequest.update(() => ({
-      page: 1,
-      pageSize: size,
-    }));
-    this.loadPaidTherapyCards();
-  }
-  resetPaidFilters() {
-    this._paidFilters.set({
-      searchTerm: '',
-      sortColumn: 'PaymentDate',
-      sortDirection: 'asc',
-    });
+  this.toast.error('تعذر تحميل بطاقات العلاج المدفوعة.');
+}
 
-    this._paidPageRequest.set({
-      page: 1,
-      pageSize: 20,
-    });
 
-    this._paidTherapyCards.set([]);
-    this.paidTotalCount.set(0);
-  }
 }

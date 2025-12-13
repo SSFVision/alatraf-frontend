@@ -59,6 +59,7 @@ export class TherapySessionService extends BaseApiService {
         params = params.set('sortDirection', filter.sortDirection);
       }
     }
+    console.log(" endpoint caleed here ");
 
     return this.get<PaginatedList<TherapyCardDiagnosisDto>>(
       `${this.endpoint}/paid`,

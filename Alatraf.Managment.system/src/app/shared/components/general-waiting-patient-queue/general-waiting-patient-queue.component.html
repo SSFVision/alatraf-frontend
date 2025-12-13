@@ -1,0 +1,45 @@
+@if (!loading() && (!patients() || patients().length === 0)) {
+  <div class="empty-state">
+    <img src="assets/images/amico.svg" alt="no patients" class="empty-icon" />
+    <p class="body-md primary-color-50">
+      لا يوجد مرضى في قائمة الانتظار حالياً
+    </p>
+  </div>
+}
+
+@for (patient of patients(); track patient.id) {
+  <div
+    class="card cursor-pointer"
+    [class.selected]="selectedId() === patient.id"
+    (click)="onSelect(patient)"
+  >
+    <!-- Full Name -->
+    <p class="body-md">
+      {{ patient.fullName }}
+    </p>
+
+    <!-- Patient Number -->
+    <p class="body-sm primary-color-50">
+      رقم المريض : {{ patient.patientNumber }}
+    </p>
+
+    <!-- Card Number -->
+    <p class="body-sm primary-color-50">
+      رقم البطاقة : {{ patient.cardNumber }}
+    </p>
+
+    <!-- Gender -->
+    <div class="row gap-16">
+      <p class="body-sm primary-color-50">
+        {{ patient.gender }}
+      </p>
+    </div>
+
+    <!-- Extra info (optional – future ready) -->
+    @if (patient.extraInfo) {
+      <p class="body-sm primary-color-50">
+        {{ patient.extraInfo }}
+      </p>
+    }
+  </div>
+}
