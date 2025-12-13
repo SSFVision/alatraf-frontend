@@ -47,10 +47,14 @@ export const AppRoutes = {
     },
   },
 
-  finance: {
-    root: 'finance',
-    paied: (patientId: number | string) => `paied/${patientId}`,
-  },
+ finance: {
+  root: 'finance',
+  paied: (
+    paymentId: number | string,
+    paymentReference: number | string
+  ) => `paied/${paymentId}/${paymentReference}`,
+},
+
 
   therapyCards: {
     root: 'therapy-cards',

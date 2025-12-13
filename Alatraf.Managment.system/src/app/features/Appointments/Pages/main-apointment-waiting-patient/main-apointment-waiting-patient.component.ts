@@ -1,6 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from "@angular/router";
-import { FilterEnum } from '../../../Pyments/Pages/main-payment-waiting-list/main-payment-waiting-list.component';
 import { PatientsFacade } from '../../../Reception/Patients/Services/patients.facade.service';
 import { AppointmentsNavigationFacade } from '../../../../core/navigation/Appointments-navigation.facade';
 import { ToastService } from '../../../../core/services/toast.service';

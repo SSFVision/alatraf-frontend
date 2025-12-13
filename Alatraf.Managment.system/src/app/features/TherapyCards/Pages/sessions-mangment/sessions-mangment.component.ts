@@ -82,7 +82,7 @@ export class SessionsManagementComponent implements OnInit {
       const therapyCardId = this.therapyCardIdSignal();
 
       if (mode === 'history' && therapyCardId) {
-        console.log("therapyCardIdSignal = ",this.therapyCardIdSignal());
+        console.log('therapyCardIdSignal = ', this.therapyCardIdSignal());
         this.loadSessionsHistory(therapyCardId);
       }
     });
@@ -117,17 +117,16 @@ export class SessionsManagementComponent implements OnInit {
 
         this.therapyCardId = therapyCardId;
 
-        this.sessionsFacade.loadTherapyCardById(therapyCardId).subscribe(
-        (res) => {
-          if (res.isSuccess && res.data) {
-             if (this.viewMode() === 'add') {
-              this.buildFormArrayFromPrograms();
-              this.loadTherapySections();
+        this.sessionsFacade
+          .loadTherapyCardById(therapyCardId)
+          .subscribe((res) => {
+            if (res.isSuccess && res.data) {
+              if (this.viewMode() === 'add') {
+                this.buildFormArrayFromPrograms();
+                this.loadTherapySections();
+              }
             }
-          }
-           
-          
-        });
+          });
       });
   }
 
@@ -202,7 +201,6 @@ export class SessionsManagementComponent implements OnInit {
     });
   }
 
-  
   switchToAdd(): void {
     this.viewMode.set('add');
   }
