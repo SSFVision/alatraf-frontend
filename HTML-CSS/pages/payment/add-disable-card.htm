@@ -21,7 +21,51 @@
 
     <div class="box max-width-324 culumn gap-24 max-hight-800" id="wating-list-container"></div>
 
-    <div class="box hight-800 gap-16 flex-center" id="hi-employee-container">
+    <div class="box hight-800 gap-16 flex-center">
+      <span class="backdrop"></span>
+      <div class="box dialog">
+
+        <div class="space-between">
+          <h2 class="title-lg">
+            اضافة بطاقة معاقين
+          </h2>
+          <img src="../../assets/icons/close-icon.svg" alt="إغلاق" class="close-icon" />
+        </div>
+
+
+        <div class="column gap-16" id="patient-info-container"></div>
+
+        <div class="width-100">
+          <p class="title-md">
+            بيانات البطاقة
+          </p>
+
+          <span class="home-line"></span>
+        </div>
+
+        <div class="row flex-center">
+          <label class="label-lg">
+            رقم البطاقة
+          </label>
+          <input class="label-lg" type="text" placeholder="">
+        </div>
+
+        <div class="row flex-center">
+          <label class="label-lg">
+            تاريخ الإصدار
+          </label>
+          <input class="label-lg" type="date" placeholder="">
+          <label class="label-lg">
+            تاريخ الإنتهاء
+          </label>
+          <input class="label-lg" type="date" placeholder="">
+        </div>
+
+
+        <div class="flex-center">
+          <button class="btn primary">حفظ</button>
+        </div>
+      </div>
     </div>
 
   </main>
@@ -46,10 +90,10 @@
         document.getElementById("wating-list-container").innerHTML = data;
       });
 
-    fetch("../template/hi-employee.html")
+    fetch("../template/patient-info.html")
       .then(res => res.text())
       .then(data => {
-        document.getElementById("hi-employee-container").innerHTML = data;
+        document.getElementById("patient-info-container").innerHTML = data;
       });
   </script>
 </body>
