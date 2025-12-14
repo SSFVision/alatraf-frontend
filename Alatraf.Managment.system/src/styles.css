@@ -42,5 +42,6 @@ body {
   z-index: 3;
   width: calc(100% - 128px);
   max-height: 688px;
+  min-height: 200px;
   max-width: 815px;
 }
