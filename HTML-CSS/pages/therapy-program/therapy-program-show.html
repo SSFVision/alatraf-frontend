@@ -17,12 +17,40 @@
   <aside id="aside-container"></aside>
   <header id="header-container"></header>
 
+
   <main class="padding-32 row gap-16 padding-24">
 
-    <div class="box max-width-324 culumn gap-24 max-hight-800" id="wating-list-container"></div>
-
-    <div class="box hight-800 gap-16 flex-center" id="hi-employee-container">
+    <div class="box max-width-324 culumn gap-24 max-hight-800" id="therapy-program-list-container">
     </div>
+
+
+    <div class="box max-hight-800 gap-16">
+      <h1 class="title-lg ">
+        بيانات البرنامج العلاجي
+      </h1>
+
+      <div class="row flex-center">
+        <label class="label-lg">
+          الاسم
+        </label>
+        <input class="label-lg" type="text" placeholder="">
+      </div>
+
+      <div class="row flex-center">
+        <label class="label-lg">
+          رقم البرنامج
+        </label>
+        <input class="label-lg" type="text" placeholder="">
+      </div>
+
+      <div class="flex-center gap-16">
+        <button class="btn secondary">تعديل</button>
+        <button class="btn danger">حذف</button>
+      </div>
+
+
+    </div>
+
 
   </main>
   <script>
@@ -39,11 +67,10 @@
       .then(data => {
         document.getElementById("header-container").innerHTML = data;
       });
-
-    fetch("../template/wating-list.html")
+    fetch("../template/therapy-program-list.html")
       .then(res => res.text())
       .then(data => {
-        document.getElementById("wating-list-container").innerHTML = data;
+        document.getElementById("therapy-program-list-container").innerHTML = data;
       });
 
     fetch("../template/hi-employee.html")

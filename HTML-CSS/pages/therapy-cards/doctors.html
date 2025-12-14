@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>إدارة المرضى</title>
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/icon.svg">
+  <link rel="stylesheet" href="../../assets/css/aside.css" />
+  <link rel="stylesheet" href="../../assets/css/header.css" />
+  <link rel="stylesheet" href="../../assets/css/home.css" />
+  <link rel="stylesheet" href="../../../Alatraf.Managment.system/src/styles.css" />
+  <style>
+    .flex-parent {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      width: 100%;
+    }
+
+    .flex-child {
+      flex: 0 0 calc(50% - 8px);
+      box-sizing: border-box;
+    }
+
+    .flex-parent>.flex-child:last-child:nth-child(odd) {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <aside id="aside-container"></aside>
+  <header id="header-container"></header>
+
+  <main class="padding-32 row gap-16 padding-24">
+    <div class="column gap-16  max-width-324">
+      <div class="box culumn gap-24 max-hight-360" id="box-T-cards-container">
+      </div>
+      <div class="box culumn gap-24 max-hight-360" id="box-doctors-container">
+      </div>
+    </div>
+
+
+    <div class="box max-hight-800 gap-16">
+      <h1 class="title-lg ">
+        الطبيب المعالج
+      </h1>
+
+      <div class="space-between">
+        <div>
+          <p class="body-md ">
+            د / محمد سعيد الأهدل
+          </p>
+          <div class="row gap-16">
+            <p class="body-sm flex-center primary-color-50">
+              <!-- اقتراح : ممكن نخلي الكهرباء و رقم 3 داخل input  -->
+              قسم :الكهرباء
+            </p>
+            <p class="body-sm flex-center primary-color-50">
+              الغرفة رقم : 3
+            </p>
+            <button class="btn primary icon">
+              <img src="../../assets/icons/setting.svg" alt="عرض التفاصيل">
+            </button>
+          </div>
+        </div>
+        <div>
+          <div class="row gap-16">
+            <p class="body-md flex-center">
+              عدد حالات اليوم
+            </p>
+            <div class="primary-color-background WH-40 flex-center border-radius-20">
+              <h2 class="title-md white-color margin-auto">
+                <!-- عدد الحالتي الذي عنده اليوم -->
+                3
+              </h2>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="search-box">
+          <img src="../../assets/icons/search-icon.svg" class="search-icon" alt="search">
+          <input type="text" placeholder="بحث: اسم المريض أو الرقم">
+        </div>
+      </div>
+
+      <div class="flex-parent">
+        <div class="flex-child card primary-card">
+          <p class="body-md">
+            عبدالحميد مجاهد سعيد الشرجبي
+          </p>
+          <p class="body-sm primary-color-50">
+            الرقم المريض : 741789852
+          </p>
+
+          <div class="row gap-16">
+            <p class="body-sm primary-color-50">
+              ذكر
+            </p>
+            <p class="body-sm primary-color-50">
+              28 سنة
+            </p>
+          </div>
+
+        </div>
+
+        <div class="flex-child card primary-card">
+          <p class="body-md">
+            عبدالحميد مجاهد سعيد الشرجبي
+          </p>
+          <p class="body-sm primary-color-50">
+            الرقم المريض : 741789852
+          </p>
+
+          <div class="row gap-16">
+            <p class="body-sm primary-color-50">
+              ذكر
+            </p>
+            <p class="body-sm primary-color-50">
+              28 سنة
+            </p>
+          </div>
+
+        </div>
+
+        <div class="flex-child card primary-card">
+          <p class="body-md">
+            عبدالحميد مجاهد سعيد الشرجبي
+          </p>
+          <p class="body-sm primary-color-50">
+            الرقم المريض : 741789852
+          </p>
+
+          <div class="row gap-16">
+            <p class="body-sm primary-color-50">
+              ذكر
+            </p>
+            <p class="body-sm primary-color-50">
+              28 سنة
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // استدعاء الـ ASIDE
+    fetch("../template/aside.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("aside-container").innerHTML = data;
+      });
+
+    // استدعاء الـ HEADER
+    fetch("../template/header.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("header-container").innerHTML = data;
+      });
+
+    fetch("../template/wating-list-T.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("wating-list-container").innerHTML = data;
+      });
+
+    fetch("../template/hi-reception.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("hi-reception-container").innerHTML = data;
+      });
+
+    fetch("../template/box-T-cards.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("box-T-cards-container").innerHTML = data;
+      });
+
+    fetch("../template/box-doctors.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("box-doctors-container").innerHTML = data;
+      });
+  </script>
+</body>
