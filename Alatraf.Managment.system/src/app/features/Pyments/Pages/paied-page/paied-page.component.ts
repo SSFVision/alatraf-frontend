@@ -4,12 +4,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ToastService } from '../../../../core/services/toast.service';
 import { PatientService } from '../../../Reception/Patients/Services/patient.service';
-import { HeaderPatientInfoComponent } from '../../../../shared/components/header-patient-info/header-patient-info.component';
 import { PatientDto } from '../../../../core/models/Shared/patient.model';
 
 @Component({
   selector: 'app-paied-page',
-  imports: [HeaderPatientInfoComponent],
+  imports: [],
   templateUrl: './paied-page.component.html',
   styleUrl: './paied-page.component.css',
 })

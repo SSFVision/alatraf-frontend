@@ -1,0 +1,23 @@
+@if (!loading() && (!items() || items().length === 0)) {
+<div class="empty-state">
+  <img src="assets/images/amico.svg" alt="no items" class="empty-icon" />
+  <p class="body-md primary-color-50">لا توجد بيانات حالياً</p>
+</div>
+} @for (item of items(); track item.id) {
+<div
+  class="card primary-card cursor-pointer column gap-8"
+  [class.selected]="selectedId() === item.id"
+  (click)="onSelect(item.id)"
+>
+  <p class="body-md">
+    {{ item.name }}
+  </p>
+  <div class="row space-between">
+    <p class="body-sm primary-color-50">رقم : {{ item.id }}</p>
+
+    @if (item.sectionName) {
+    <p class="body-sm neutral-color-60">{{ item.sectionName }}</p>
+    }
+  </div>
+</div>
+}

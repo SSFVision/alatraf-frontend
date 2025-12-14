@@ -69,6 +69,20 @@ export const APP_ROUTES: Routes = [
             (m) => m.RepairCardsRoutes
           ),
       },
+      {
+        path: AppRoutes.medicalPrograms.root,
+        loadChildren: () =>
+          import('./features/MedicalPrograms/medical-programs.routes').then(
+            (m) => m.MedicalProgramsRoutes
+          ),
+      },
+      {
+        path: AppRoutes.industrialParts.root,
+        loadChildren: () =>
+          import('./features/IndustrialParts/industrial-parts.routes').then(
+            (m) => m.IndustrialPartsRoutes
+          ),
+      },
     ],
   },
   {

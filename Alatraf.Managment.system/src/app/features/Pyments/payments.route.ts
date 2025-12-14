@@ -11,9 +11,9 @@ export const PaymentsRoutes: Routes = [
       import(
         './Pages/main-payment-waiting-list/main-payment-waiting-list.component'
       ).then((m) => m.MainPaymentWaitingListComponent),
-     children: [
+    children: [
       {
-  path: 'paied/:paymentId/:paymentReference',
+        path: 'paied/:paymentId/:paymentReference',
         canActivate: [PermissionGuard],
         data: { permission: PERMISSIONS.PAYMENTS.ADD },
         loadComponent: () =>

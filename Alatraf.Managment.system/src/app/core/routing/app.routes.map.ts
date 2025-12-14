@@ -47,14 +47,11 @@ export const AppRoutes = {
     },
   },
 
- finance: {
-  root: 'finance',
-  paied: (
-    paymentId: number | string,
-    paymentReference: number | string
-  ) => `paied/${paymentId}/${paymentReference}`,
-},
-
+  finance: {
+    root: 'finance',
+    paied: (paymentId: number | string, paymentReference: number | string) =>
+      `paied/${paymentId}/${paymentReference}`,
+  },
 
   therapyCards: {
     root: 'therapy-cards',
@@ -74,33 +71,32 @@ export const AppRoutes = {
     //     `therapy-cards/${cardId}/doctors`,
     // },
   },
-repairCards: {
-  root: 'repair-cards',
+  repairCards: {
+    root: 'repair-cards',
 
-  details: (cardId: number | string) =>
-    `repair-cards/${cardId}`,
+    details: (cardId: number | string) => `repair-cards/${cardId}`,
 
-  assignments: {
-    // صفحة إدارة التعيينات (تشبه sessions list)
-    list: (repairCardId: number | string) =>
-      `repair-cards/${repairCardId}/assignments`,
+    assignments: {
+      // صفحة إدارة التعيينات (تشبه sessions list)
+      list: (repairCardId: number | string) =>
+        `repair-cards/${repairCardId}/assignments`,
 
-    // تعيين كامل الكرت لطبيب
-    assignCard: (repairCardId: number | string) =>
-      `repair-cards/${repairCardId}/assignments/assign-card`,
+      // تعيين كامل الكرت لطبيب
+      assignCard: (repairCardId: number | string) =>
+        `repair-cards/${repairCardId}/assignments/assign-card`,
 
-    // تعيين قطع صناعية (industrial parts)
-    assignParts: (repairCardId: number | string) =>
-      `repair-cards/${repairCardId}/assignments/assign-parts`,
+      // تعيين قطع صناعية (industrial parts)
+      assignParts: (repairCardId: number | string) =>
+        `repair-cards/${repairCardId}/assignments/assign-parts`,
+    },
+
+    // عمليات سريعة (عادة dialogs أو inline forms)
+    status: (repairCardId: number | string) =>
+      `repair-cards/${repairCardId}/status`,
+
+    deliveryTime: (repairCardId: number | string) =>
+      `repair-cards/${repairCardId}/delivery-time`,
   },
-
-  // عمليات سريعة (عادة dialogs أو inline forms)
-  status: (repairCardId: number | string) =>
-    `repair-cards/${repairCardId}/status`,
-
-  deliveryTime: (repairCardId: number | string) =>
-    `repair-cards/${repairCardId}/delivery-time`,
-},
 
   Appointment: {
     root: 'appointments',
@@ -108,6 +104,29 @@ repairCards: {
     schedule: (patientId: number | string) => `schedule/${patientId}`,
     reschedule: (patientId: number | string) => `reschedule/${patientId}`,
   },
+  medicalPrograms: {
+    root: 'medical-programs',
+
+    list: 'medical-programs',
+
+    create: 'create',
+
+    edit: (medicalProgramId: number | string) => `edit/${medicalProgramId}`,
+
+    view: (medicalProgramId: number | string) => `view/${medicalProgramId}`,
+  },
+  industrialParts: {
+    root: 'industrial-parts',
+
+    list: 'industrial-parts',
+
+    create: 'create',
+
+    edit: (industrialPartId: number | string) => `edit/${industrialPartId}`,
+
+    view: (industrialPartId: number | string) => `view/${industrialPartId}`,
+  },
+
   admin: {
     root: 'admin',
     dashboard: 'admin/dashboard',
