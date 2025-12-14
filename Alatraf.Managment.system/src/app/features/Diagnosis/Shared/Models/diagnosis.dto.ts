@@ -1,21 +1,43 @@
-import { InjuryDto } from "./injury.dto";
+import { InjuryDto } from "../../../../core/models/injuries/injury.dto";
+import { PatientDto } from "../../../../core/models/Shared/patient.model";
+import { DiagnosisIndustrialPartDto } from "../../Industrial/Models/repair-card-diagnosis.dto";
+import { DiagnosisProgramDto } from "../../Therapy/Models/therapy-card-diagnosis.dto";
 
 export interface DiagnosisDto {
-  DiagnosisId: number;
-  DiagnosisText: string;
-  InjuryDate: string;
+  diagnosisId: number;
+  diagnosisText: string;
+  injuryDate: string; // DateTime → string
 
-  TicketId: number;
-  PatientId: number;
-  PatientName: string;
-  DiagnosisType: number;
-  InjuryReasons: InjuryDto[];
-  InjurySides: InjuryDto[];
-  InjuryTypes: InjuryDto[];
+  ticketId: number;
+  patientId: number;
+  patientName: string;
+  patient: PatientDto | null;
 
-  // Programs?: DiagnosisProgramDto[];
-  // IndustrialParts?: DiagnosisIndustrialPartDto[];
-  HasTherapyCards: boolean;
-  HasRepairCard: boolean;
-  HasSale: boolean;
+  diagnosisType: string;
+
+  injuryReasons: InjuryDto[];
+  injurySides: InjuryDto[];
+  injuryTypes: InjuryDto[];
+
+  programs: DiagnosisProgramDto[] | null;
+  industrialParts: DiagnosisIndustrialPartDto[] | null;
+  saleItems: SaleItemDto[] | null;
+
+  hasTherapyCards: boolean;
+  hasRepairCard: boolean;
+  hasSale: boolean;
+}
+// sale-item.dto.ts
+
+export interface SaleItemDto {
+  saleItemId: number;
+  itemId: number;
+  itemName: string;
+
+  unitId: number;
+  unitName: string;
+
+  quantity: number; // decimal → number
+  price: number;
+  total: number; // backend computed value
 }

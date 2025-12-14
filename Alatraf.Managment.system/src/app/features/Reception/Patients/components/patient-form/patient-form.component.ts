@@ -1,145 +1,3 @@
-// import {
-//   Component,
-//   input,
-//   output,
-//   OnChanges,
-//   SimpleChanges,
-//   OnInit,
-//   inject,
-//   effect,
-// } from '@angular/core';
-// import {
-//   FormBuilder,
-//   Validators,
-//   ReactiveFormsModule,
-//   FormGroup,
-// } from '@angular/forms';
-// import { NgIf } from '@angular/common';
-// import { PatientsFacade } from '../../Services/patients.facade.service';
-// import {
-//   CreateUpdatePatientDto,
-//   PatientType,
-// } from '../../models/patient.model';
-
-// @Component({
-//   selector: 'app-patient-form',
-//   standalone: true,
-//   imports: [ReactiveFormsModule, NgIf],
-//   templateUrl: './patient-form.component.html',
-//   styleUrl: './patient-form.component.css',
-// })
-// export class PatientFormComponent implements OnChanges, OnInit {
-//   patient = input.required<any>();
-//   close = output();
-//   save = output<any>();
-//   mode = input.required<boolean>();
-
-//   private facade = inject(PatientsFacade);
-//   form!: FormGroup;
-
-//   constructor(private fb: FormBuilder) {
-//     effect(() => {
-//       if (!this.form) return; // <--- FIXED
-
-//       const errors = this.facade.formValidationErrors();
-//       if (!errors) return;
-
-//       // Remove old backend errors
-//       Object.keys(this.form.controls).forEach((c) => {
-//         const control = this.form.get(c);
-//         if (control?.errors?.['backend']) {
-//           control.setErrors(null);
-//         }
-//       });
-
-//       // Apply new backend errors
-//       for (const field in errors) {
-//         const control = this.form.get(field);
-//         if (control) {
-//           control.setErrors({ backend: errors[field][0] });
-//           control.markAsTouched();
-//         }
-//       }
-//     });
-//   }
-
-//   ngOnInit(): void {
-//     this.form = this.fb.group({
-//       autoRegistrationNumber: [this.GenerateRandomAutoRegisterNumber()],
-//       fullname: ['', Validators.required],
-//       gender: [true, Validators.required],
-//       birthdate: [''],
-//       phone: ['', Validators.required],
-//       address: [''],
-//       nationalNo: ['', Validators.required],
-//       patientType: [PatientType.Normal],
-//     });
-
-//     // Clear old backend validation when user changes any field
-//     this.form.valueChanges.subscribe(() => {
-//       this.facade.formValidationErrors.set({});
-//     });
-//   }
-
-//   ngOnChanges(changes: SimpleChanges): void {
-//     if (changes['patient'] && this.patient() && this.form) {
-//       const p = this.patient()!;
-
-//       this.form.patchValue({
-//         ...p,
-//         birthdate: this.formatDate(p.birthdate),
-//       });
-//     }
-//   }
-
-//   onSave() {
-//     if (this.form.valid) {
-//       this.save.emit(this.form.value as CreateUpdatePatientDto);
-//     } else {
-//       this.form.markAllAsTouched();
-//     }
-//   }
-
-//  getBackendError(controlName: string): string | null {
-//   const control = this.form.get(controlName);
-//   if (!control) return null;
-
-//   return control.errors?.['backend'] ?? null;
-// }
-
-// hasBackendError(controlName: string): boolean {
-//   return this.getBackendError(controlName) !== null;
-// }
-
-// hasFrontendError(controlName: string): boolean {
-//   // If backend error exists → never show frontend error
-//   if (this.hasBackendError(controlName)) return false;
-
-//   const control = this.form.get(controlName);
-//   if (!control) return false;
-
-//   return control.invalid && control.touched;
-// }
-
-//   private formatDate(date: string | null | undefined): string | null {
-//     if (!date) return null;
-
-//     const d = new Date(date);
-//     return isNaN(d.getTime()) ? null : d.toISOString().split('T')[0];
-//   }
-
-//   onClose() {
-//     this.closeDialog();
-//   }
-//   closeDialog() {
-//     this.close.emit();
-//   }
-
-//    GenerateRandomAutoRegisterNumber(){
-//     return Math.random().toString();
-//   }
-
-// }
 import {
   Component,
   input,
@@ -150,21 +8,27 @@ import {
   inject,
   effect,
   EnvironmentInjector,
-  runInInjectionContext
+  runInInjectionContext,
 } from '@angular/core';
 import {
   FormBuilder,
   Validators,
   ReactiveFormsModule,
   FormGroup,
+  MaxLengthValidator,
+  MaxValidator,
 } from '@angular/forms';
 import { NgIf } from '@angular/common';
+
 import { PatientsFacade } from '../../Services/patients.facade.service';
-import {
-  CreateUpdatePatientDto,
-  PatientType,
-} from '../../models/patient.model';
+
 import { FormValidationState } from '../../../../../core/utils/form-validation-state';
+import {
+  PatientDto,
+  PatientType,
+} from '../../../../../core/models/Shared/patient.model';
+import { CreatePatientRequest } from '../../models/create-patient.request';
+import { max } from 'rxjs';
 
 @Component({
   selector: 'app-patient-form',
@@ -174,9 +38,9 @@ import { FormValidationState } from '../../../../../core/utils/form-validation-s
   styleUrl: './patient-form.component.css',
 })
 export class PatientFormComponent implements OnChanges, OnInit {
-  patient = input.required<any>();
+  patient = input.required<PatientDto | null>();
   close = output();
-  save = output<any>();
+  save = output<CreatePatientRequest>();
   mode = input.required<boolean>();
 
   private facade = inject(PatientsFacade);
@@ -189,48 +53,80 @@ export class PatientFormComponent implements OnChanges, OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    // 1️⃣ Create the form
+    // 1️⃣ Create the form — autoRegistrationNumber removed
     this.form = this.fb.group({
-      autoRegistrationNumber: [this.GenerateRandomAutoRegisterNumber()],
-      fullname: ['', Validators.required],
+      fullname: ['',Validators.required],
       gender: [true, Validators.required],
-      birthdate: [''],
-      phone: ['', Validators.required],
-      address: [''],
-      nationalNo: ['', Validators.required],
-      patientType: [PatientType.Normal],
+      birthdate: [null, Validators.required],
+      phone: [
+        '',
+        [
+          Validators.required,
+          Validators.maxLength(9),
+          Validators.pattern(/^\d{9}$/),
+          Validators.pattern(/^(77|78|73|71|70)\d{7}$/),
+        ],
+      ],
+      address: ['', Validators.required],
+      nationalNo: [''],
+      patientType: ['Disabled', Validators.required],
     });
 
-    // 2️⃣ Setup validation state
     this.validationState = new FormValidationState(
       this.form,
       this.facade.formValidationErrors
     );
 
-    // 3️⃣ Correctly execute the effect inside injection context
     runInInjectionContext(this.env, () => {
       effect(() => {
         this.validationState.apply();
       });
     });
 
-    // 4️⃣ Remove backend errors on user typing
     this.validationState.clearOnEdit();
+  }
+  allowOnlyNumbers(event: KeyboardEvent) {
+    const char = event.key;
+
+    // Allow only digits
+    if (!/^\d$/.test(char)) {
+      event.preventDefault();
+    }
+  }
+  onPhoneInput() {
+    const control = this.form.controls['phone'];
+    control.setValue(control.value.replace(/\D/g, '').slice(0, 9), {
+      emitEvent: false,
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['patient'] && this.patient() && this.form) {
-      const p = this.patient()!;
+      const p = this.patient() as PatientDto;
+
+      // Auto-registration number removed; everything else stays
       this.form.patchValue({
-        ...p,
-        birthdate: this.formatDate(p.birthdate),
+        fullname: p.personDto?.fullname ?? '',
+        gender: this.toBooleanGender(p.personDto?.gender),
+        birthdate: this.formatDate(p.personDto?.birthdate),
+        phone: p.personDto?.phone ?? '',
+        address: p.personDto?.address ?? '',
+        nationalNo: p.personDto?.nationalNo ?? '',
+        patientType: PatientType.Normal,
       });
     }
   }
 
   onSave() {
     if (this.form.valid) {
-      this.save.emit(this.form.value as CreateUpdatePatientDto);
+      const dto = { ...this.form.value };
+
+      // Convert empty string to null for the backend
+      if (dto.birthdate === '') {
+        dto.birthdate = null;
+      }
+
+      this.save.emit(dto);
     } else {
       this.form.markAllAsTouched();
     }
@@ -259,7 +155,15 @@ export class PatientFormComponent implements OnChanges, OnInit {
     this.close.emit();
   }
 
-  GenerateRandomAutoRegisterNumber() {
-    return Math.random().toString();
+  private toBooleanGender(value: string | boolean | null | undefined): boolean {
+    if (typeof value === 'boolean') return value;
+
+    if (typeof value === 'string') {
+      const v = value.toLowerCase();
+      if (v === 'male' || v === 'ذكر') return true;
+      if (v === 'female' || v === 'أنثى') return false;
+    }
+
+    return true; // default
   }
 }

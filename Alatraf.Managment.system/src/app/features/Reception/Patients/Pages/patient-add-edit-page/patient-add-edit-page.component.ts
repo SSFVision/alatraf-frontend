@@ -1,12 +1,14 @@
-import { Component, computed, inject, input, signal } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { PatientFormComponent } from '../../components/patient-form/patient-form.component';
-import { CreateUpdatePatientDto, Patient } from '../../models/patient.model';
 import { DialogService } from '../../../../../shared/components/dialog/dialog.service';
 import { ArabicSuccessMessages } from '../../../../../core/locals/Arabic';
 import { NavigationReceptionFacade } from '../../../../../core/navigation/navigation-reception.facade';
 import { PatientsFacade } from '../../Services/patients.facade.service';
-import { ActivatedRoute } from '@angular/router';
 import { UiLockService } from '../../../../../core/services/ui-lock.service';
+import { CreatePatientRequest } from '../../models/create-patient.request';
+import { UpdatePatientRequest } from '../../models/update-patient.request';
+
+// NEW DTOs
 
 @Component({
   selector: 'app-patient-add-edit-page',
@@ -35,14 +37,15 @@ export class PatientAddEditPageComponent {
     }
   }
 
-  OnSavePatient(dto: CreateUpdatePatientDto) {
-    // CLEAR previous inline errors
+  // DTO type changed here ↓
+  OnSavePatient(dto: CreatePatientRequest | UpdatePatientRequest) {
+    // Clear previous backend validation
     this.facade.formValidationErrors.set({});
 
     if (this.isEditMode()) {
-      // =============== UPDATE ===============
+      // ===================== UPDATE =====================
       this.facade
-        .updatePatient(Number(this.patientId()), dto)
+        .updatePatient(Number(this.patientId()), dto as UpdatePatientRequest)
         .subscribe((result) => {
           if (result.success) {
             this.closeModal();
@@ -54,9 +57,9 @@ export class PatientAddEditPageComponent {
           }
         });
     } else {
-      // =============== CREATE ===============
-      this.facade.createPatient(dto).subscribe((result) => {
-        if (result.success && result.validationErrors == null) {
+      // ===================== CREATE =====================
+      this.facade.createPatient(dto as CreatePatientRequest).subscribe((result) => {
+        if (result.success && !result.validationErrors) {
           const newPatientId = this.facade.createdPatientId();
 
           this.dialogService

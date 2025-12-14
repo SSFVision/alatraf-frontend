@@ -1,20 +1,25 @@
-import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-  ReactiveFormsModule,
-} from '@angular/forms';
+  Component,
+  DestroyRef,
+  EnvironmentInjector,
+  OnInit,
+  effect,
+  inject,
+  runInInjectionContext,
+  signal,
+} from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Patient } from '../../../../../mocks/patients/patient.dto';
-import { PatientService } from '../../../../Reception/Patients/Services/patient.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { HeaderPatientInfoComponent } from '../../../Shared/Components/header-patient-info/header-patient-info.component';
-import { MOCK_THERAPY_CARD_HISTORY, TherapyCardHistoryDto } from '../../Models/therapy-card-history.dto';
-import { PreviousTherapyCardDiagnosisComponent } from '../../Components/previous-therapy-card-diagnosis/previous-therapy-card-diagnosis.component';
+import { HeaderPatientInfoComponent } from '../../../../../shared/components/header-patient-info/header-patient-info.component';
 import { AddTherapyDiagnosisFormComponent } from '../../Components/add-therapy-diagnosis-form/add-therapy-diagnosis-form.component';
 import { ToastService } from '../../../../../core/services/toast.service';
 import { CreateTherapyCardRequest } from '../../Models/create-therapy-card.request';
+import { TherapyDiagnosisFacade } from '../../Services/therapy-diagnosis.facade.Service';
+import { UpdateTherapyCardRequest } from '../../Models/update-therapy-card.request';
+import { TicketFacade } from '../../../../Reception/Tickets/tickets.facade.service';
+import { PreviousTherapyCardDiagnosisComponent } from '../../Components/previous-therapy-card-diagnosis/previous-therapy-card-diagnosis.component';
+import { TherapyCardDiagnosisDto } from '../../Models/therapy-card-diagnosis.dto';
 
 @Component({
   selector: 'app-therapy-diagnosis-workspace',
@@ -22,79 +27,111 @@ import { CreateTherapyCardRequest } from '../../Models/create-therapy-card.reque
   imports: [
     ReactiveFormsModule,
     HeaderPatientInfoComponent,
-    PreviousTherapyCardDiagnosisComponent,
     AddTherapyDiagnosisFormComponent,
+    PreviousTherapyCardDiagnosisComponent,
   ],
   templateUrl: './therapy-diagnosis-workspace.component.html',
   styleUrls: ['./therapy-diagnosis-workspace.component.css'],
 })
 export class TherapyDiagnosisWorkspaceComponent implements OnInit {
-  private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
   private destroyRef = inject(DestroyRef);
-  private patientService = inject(PatientService);
 
+  private toast = inject(ToastService);
+  private therapyFacade = inject(TherapyDiagnosisFacade);
+  private ticketFacade = inject(TicketFacade);
 
-  private toast=inject(ToastService);
-  patient = signal<Patient | null>(null);
+  ticket = this.ticketFacade.selectedTicket;
   viewMode = signal<'add' | 'history'>('add');
 
-  isLoading = signal(true);
+  isLoading = this.ticketFacade.loadingTicket;
 
- 
+  injuryReasons = this.therapyFacade.injuryReasons;
+  injurySides = this.therapyFacade.injurySides;
+  injuryTypes = this.therapyFacade.injuryTypes;
+  medicalPrograms = this.therapyFacade.medicalPrograms;
+  isLookupLoading = this.therapyFacade.loadingLookups;
+
+  isEditMode = this.therapyFacade.isEditMode;
+  existingCard = signal<TherapyCardDiagnosisDto | null>(null);
+  patientTherapyDiagnoisis = this.therapyFacade.patientTherapyDiagnoisis;
+  loadingpatientTherapyDiagnoisis =
+    this.therapyFacade.loadingPatientTherapyDiagnoisis;
 
   ngOnInit(): void {
+    this.therapyFacade.loadLookups();
     this.listenToRouteChanges();
   }
+  constructor() {
+    effect(() => {
+      const mode = this.viewMode();
+      const patientId = this.ticket()?.patient?.patientId;
 
- 
+      if (mode === 'history' && patientId) {
+        this.therapyFacade.loadPatientTherapyDiagnoisis(patientId);
+      }
+    });
+  }
+
+
+
   private listenToRouteChanges() {
     this.route.paramMap
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((params) => {
-        const idParam = params.get('patientId');
-        const id = idParam ? Number(idParam) : NaN;
-
-        if (!id || Number.isNaN(id)) {
-          this.patient.set(null);
+        const ticketId = Number(params.get('ticketId'));
+        if (!ticketId || Number.isNaN(ticketId)) {
           this.isLoading.set(false);
           return;
         }
-
-        // Reset UI
-        this.isLoading.set(true);
-
-        this.patientService.getPatientById(id).subscribe((res) => {
-          if (res.isSuccess && res.data) {
-            this.patient.set(res.data);
-          } else {
-            this.patient.set(null);
-          }
-
-          this.isLoading.set(false); // ⬅ important
-        });
+        this.ticketFacade.loadTicketById(ticketId);
       });
   }
 
   switchToAdd() {
     this.viewMode.set('add');
+    this.therapyFacade.enterCreateMode();
   }
 
   switchToHistory() {
+    this.isEditMode.set(false);
     this.viewMode.set('history');
+    
   }
 
-  pevDiagnosis= MOCK_THERAPY_CARD_HISTORY;
-  onViewHistoryCard(card: TherapyCardHistoryDto) {
-    console.log('View history card details:', card);
-    // later: open dialog, navigate to details, etc.
+  onViewCard(patientDiagnosis: TherapyCardDiagnosisDto) {
+    this.existingCard.set(patientDiagnosis);
+    console.log('TherapyCardDiagnosisDto:', patientDiagnosis);
+    this.isEditMode.set(true);
+    this.viewMode.set('add');
   }
 
-  // for the form
-
-  saveTherapyDiagnosis(formValue: CreateTherapyCardRequest) {
-
-    this.toast.success("Saved Sucess"+formValue.DiagnosisText)
-    console.log('Therapy Diagnosis Payload:', formValue);
+  saveTherapyDiagnosis(
+    dto: CreateTherapyCardRequest | UpdateTherapyCardRequest
+  ) {
+    if (this.isEditMode() && this.existingCard() !== null) {
+      this.therapyFacade
+        .updateTherapyCard(
+          this.existingCard()!.therapyCardId,
+          dto as UpdateTherapyCardRequest
+        )
+        .subscribe((result) => {
+          if (result.validationErrors) {
+            this.therapyFacade.formValidationErrors.set(
+              result.validationErrors
+            );
+          }
+        });
+    } else {
+      this.therapyFacade
+        .createTherapyCard(dto as CreateTherapyCardRequest)
+        .subscribe((result) => {
+          if (result.validationErrors) {
+            this.therapyFacade.formValidationErrors.set(
+              result.validationErrors
+            );
+          }
+        });
+    }
   }
 }

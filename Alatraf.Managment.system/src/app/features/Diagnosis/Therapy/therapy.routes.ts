@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 
 export const TherapyRoutes: Routes = [
   {
-    path: 'create/:patientId',
+    path: 'create/:ticketId',
     
     loadComponent: () =>
       import(

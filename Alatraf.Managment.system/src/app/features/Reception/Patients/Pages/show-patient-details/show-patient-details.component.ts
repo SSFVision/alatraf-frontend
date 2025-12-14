@@ -2,8 +2,8 @@ import { Component, inject, signal } from '@angular/core';
 import { NavigationReceptionFacade } from '../../../../../core/navigation/navigation-reception.facade';
 import { PatientService } from '../../Services/patient.service';
 import { ActivatedRoute } from '@angular/router';
-import { Patient } from '../../models/patient.model';
 import { PatientSummaryCardComponent } from "../../components/patient-summary-card/patient-summary-card.component";
+import { PatientDto } from '../../../../../core/models/Shared/patient.model';
 
 @Component({
   selector: 'app-show-patient-details',
@@ -15,7 +15,7 @@ export class ShowPatientDetailsComponent {
   private nav = inject(NavigationReceptionFacade);
   patientService = inject(PatientService);
   private route = inject(ActivatedRoute);
-  patient!: Patient;
+  patient!: PatientDto;
     isLoading = signal(true);
 
   ngOnInit() {

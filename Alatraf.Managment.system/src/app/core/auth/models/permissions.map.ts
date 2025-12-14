@@ -41,4 +41,33 @@ export const PERMISSIONS = {
     ReSchedule: 'appointment:reschedule',
     AddHoliday: 'holiday:create',
   },
+  THERAPY_CARDS: {
+    VIEW: 'THERAPY_CARDS:View',
+    ASSIGN_DOCTORS: 'assign_therapy_card_doctors',
+  },
+
+  THERAPY_SESSIONS: {
+    VIEW: 'view_therapy_session',
+    ADD: 'add_therapy_session',
+    UPDATE: 'update_therapy_session',
+    DELETE: 'delete_therapy_session',
+  },
+
+
+  REPAIR_CARDS: {
+  VIEW: 'REPAIR_CARDS:View',
+
+  // Assign whole repair card to doctor
+  ASSIGN_DOCTOR: 'assign_repair_card_doctor',
+
+  // Assign industrial parts to doctors
+  ASSIGN_INDUSTRIAL_PARTS: 'assign_industrial_parts_to_doctors',
+
+  // Update card status
+  UPDATE_STATUS: 'update_repair_card_status',
+
+  // Create delivery time
+  CREATE_DELIVERY_TIME: 'create_repair_card_delivery_time',
+},
+
 } as const;

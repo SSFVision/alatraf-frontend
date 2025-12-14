@@ -1,67 +1,130 @@
-<form class="column gap-16" [formGroup]="form">
-  <!-- TITLE -->
+<form
+  class="padding-LR-24 column gap-16"
+  [formGroup]="form"
+  (ngSubmit)="onSubmit()"
+>
   <div class="width-100">
     <p class="title-md">بيانات التشخيص</p>
     <span class="home-line"></span>
   </div>
 
-  <!-- جهة الاصابة + نوع الاصابة -->
-  <div class="row flex-center">
-    <label class="label-lg">جهة الإصابة</label>
-    <select class="label-lg" formControlName="injurySide">
-      <option value=""></option>
-      <option value="علوي ايمن">علوي أيمن</option>
-      <option value="علوي ايسر">علوي أيسر</option>
-      <option value="سفلي ايمن">سفلي أيمن</option>
-      <option value="سفلي ايسر">سفلي أيسر</option>
-    </select>
+  <!-- Diagnosis -->
+  <div class="row flex-center width-100">
+    <label class="label-lg">التشخيص</label>
+    <textarea
+      rows="2"
+      class="label-lg"
+      formControlName="diagnosisText"
+    ></textarea>
 
-    <label class="label-lg">نوع الإصابة</label>
-    <select class="label-lg" formControlName="injuryType">
-      <option value=""></option>
-      <option value="مرفق">مرفق</option>
-      <option value="ساعد">ساعد</option>
-    </select>
+    <!-- Backend validation -->
+    <div
+      class="error-message label-lg"
+      *ngIf="hasBackendError('diagnosisText')"
+    >
+      {{ getBackendError("diagnosisText") }}
+    </div>
+
+    <!-- Frontend Validation -->
+    <div
+      class="error-message label-lg"
+      *ngIf="hasFrontendError('diagnosisText')"
+    >
+      التشخيص مطلوب
+    </div>
   </div>
 
-  <!-- تاريخ الإصابة + عمر الإصابة -->
+  <!-- Injury Reasons + Injury Sides -->
+  <div class="row flex-center">
+    <label class="label-lg">أسباب الإصابة</label>
+    <app-multi-select
+      formControlName="injuryReasons"
+      [options]="injuryReasonsOptions"
+      placeholder="اختر الأسباب"
+    ></app-multi-select>
+
+    <!-- Backend error -->
+    <div
+      class="error-message label-lg"
+      *ngIf="hasBackendError('injuryReasons')"
+    >
+      {{ getBackendError("injuryReasons") }}
+    </div>
+
+    <!-- Frontend -->
+    <div
+      class="error-message label-lg"
+      *ngIf="hasFrontendError('injuryReasons')"
+    >
+      أسباب الإصابة مطلوبة
+    </div>
+
+    <label class="label-lg">جهة الإصابة</label>
+    <app-multi-select
+      formControlName="injurySides"
+      [options]="injurySidesOptions"
+      placeholder="اختر الجهة"
+    ></app-multi-select>
+
+    <!-- Backend -->
+    <div class="error-message label-lg" *ngIf="hasBackendError('injurySides')">
+      {{ getBackendError("injurySides") }}
+    </div>
+
+    <!-- Frontend -->
+    <div class="error-message label-lg" *ngIf="hasFrontendError('injurySides')">
+      جهة الإصابة مطلوبة
+    </div>
+  </div>
+
+  <!-- Injury Types -->
+  <div class="row flex-center">
+    <label class="label-lg">نوع الإصابة</label>
+    <app-multi-select
+      formControlName="injuryTypes"
+      [options]="injuryTypesOptions"
+      placeholder="اختر النوع"
+    ></app-multi-select>
+
+    <!-- Backend -->
+    <div class="error-message label-lg" *ngIf="hasBackendError('injuryTypes')">
+      {{ getBackendError("injuryTypes") }}
+    </div>
+
+    <!-- Frontend -->
+    <div class="error-message label-lg" *ngIf="hasFrontendError('injuryTypes')">
+      نوع الإصابة مطلوب
+    </div>
+  </div>
+
+  <!-- Injury Date -->
   <div class="row flex-center">
     <label class="label-lg">تاريخ الإصابة</label>
     <input class="label-lg" type="date" formControlName="injuryDate" />
 
-    <label class="label-lg">عمر الإصابة</label>
-    <input class="label-lg" type="text" formControlName="injuryAge" />
-  </div>
+    <!-- Backend -->
+    <div class="error-message label-lg" *ngIf="hasBackendError('injuryDate')">
+      {{ getBackendError("injuryDate") }}
+    </div>
 
-  <!-- قسم -->
-  <div class="row flex-center">
-    <label class="label-lg">القسم</label>
-    <select class="label-lg" formControlName="department">
-      <option value=""></option>
-      <option value="العلاج الطبيعي">العلاج الطبيعي</option>
-      <option value="الأطراف الصناعية">الأطراف الصناعية</option>
-    </select>
-  </div>
-
-  <!-- التشخيص -->
-  <div class="row flex-center width-100">
-    <label class="label-lg">التشخيص</label>
-    <textarea rows="2" formControlName="diagnosis"></textarea>
-  </div>
-
-  <!-- تاريخ الانتهاء والمدة -->
-  <div class="row flex-center width-100">
-    <label class="label-lg">تاريخ الانتهاء</label>
-    <input class="label-lg" type="date" formControlName="endDate" />
-
-    <label class="label-lg">المدة</label>
-    <div class="row flex-center">
-      <input class="label-lg" type="text" formControlName="duration" />
-      <label class="label-lg">يوم</label>
+    <!-- Frontend -->
+    <div class="error-message label-lg" *ngIf="hasFrontendError('injuryDate')">
+      تاريخ الإصابة مطلوب
     </div>
   </div>
 
-  <!-- industrial parts -->
+  <!-- Notes -->
+  <div class="row flex-center width-100">
+    <label class="label-lg">الملاحظات</label>
+    <textarea rows="1" class="label-lg" formControlName="notes"></textarea>
+
+    <!-- Backend -->
+    <div class="error-message label-lg" *ngIf="hasBackendError('notes')">
+      {{ getBackendError("notes") }}
+    </div>
+  </div>
+
+  <!-- Industrial Parts section -->
   <div class="width-100">
     <p class="title-md">قطع الأطراف الصناعية</p>
     <span class="home-line"></span>
@@ -71,52 +134,112 @@
     <thead>
       <tr>
         <th class="label-lg">القطعة</th>
-        <th class="label-lg">الكمية</th>
         <th class="label-lg">الوحدة</th>
-        <th class="label-lg">القسم</th>
-        <th class="label-lg">ملاحظات</th>
+        <th class="label-lg">الكمية</th>
         <th></th>
       </tr>
     </thead>
 
     <tbody>
-      @for (row of industrialParts.controls; track $index; let i = $index) {
+      @for (row of industrialPartsForm.controls; track $index; let i = $index) {
       <tr [formGroup]="row">
+        <!-- Part -->
         <td>
-          <select class="label-lg" formControlName="partId">
-            <option value=""></option>
-            <option value="1">قدم</option>
-            <option value="2">ركبة</option>
+          <select
+            class="label-lg"
+            formControlName="industrialPartId"
+            (change)="onPartChange(i)"
+          >
+            <option [ngValue]="null">اختر القطعة</option>
+            <option
+              *ngFor="let p of industrialPartsDropdown"
+              [ngValue]="p.value"
+            >
+              {{ p.label }}
+            </option>
           </select>
+
+          <!-- Frontend Error -->
+          <div
+            class="error-message label-lg"
+            *ngIf="
+              row.get('industrialPartId')?.invalid &&
+              row.get('industrialPartId')?.touched
+            "
+          >
+            القطعة مطلوبة
+          </div>
+
+          <!-- Backend Error -->
+          <div
+            class="error-message label-lg"
+            *ngIf="
+              hasBackendError('industrialParts[' + i + '].industrialPartId')
+            "
+          >
+            {{ getBackendError("industrialParts[" + i + "].industrialPartId") }}
+          </div>
         </td>
 
-        <td>
-          <input class="label-lg" type="number" formControlName="quantity" />
-        </td>
-
+        <!-- Unit -->
         <td>
           <select class="label-lg" formControlName="unitId">
-            <option value=""></option>
-            <option value="1">حبة</option>
-            <option value="2">زوج</option>
+            <option [ngValue]="null">اختر الوحدة</option>
+            <option
+              *ngFor="let u of getUnitsOptionsForRow(i)"
+              [ngValue]="u.value"
+            >
+              {{ u.label }}
+            </option>
           </select>
+
+          <!-- Frontend Error -->
+          <div
+            class="error-message label-lg"
+            *ngIf="row.get('unitId')?.invalid && row.get('unitId')?.touched"
+          >
+            الوحدة مطلوبة
+          </div>
+
+          <!-- Backend Error -->
+          <div
+            class="error-message label-lg"
+            *ngIf="hasBackendError('industrialParts[' + i + '].unitId')"
+          >
+            {{ getBackendError("industrialParts[" + i + "].unitId") }}
+          </div>
         </td>
 
+        <!-- Quantity -->
         <td>
-          <select class="label-lg" formControlName="sectionId">
-            <option value=""></option>
-            <option value="1">الحديد</option>
-            <option value="2">الجبس</option>
-          </select>
+          <input
+            class="label-lg"
+            type="number"
+            min="1"
+            formControlName="quantity"
+          />
+
+          <div
+            class="error-message label-lg"
+            *ngIf="row.get('quantity')?.invalid && row.get('quantity')?.touched"
+          >
+            الكمية مطلوبة ويجب أن تكون رقمًا أكبر من 0
+          </div>
+
+          <div
+            class="error-message label-lg"
+            *ngIf="hasBackendError('industrialParts[' + i + '].quantity')"
+          >
+            {{ getBackendError("industrialParts[" + i + "].quantity") }}
+          </div>
         </td>
 
-        <td><input class="label-lg" type="text" formControlName="notes" /></td>
-
+        <!-- Remove -->
         <td>
           <button
-            *ngIf="industrialParts.length > 1"
-            class="btn danger icon"
+            *ngIf="industrialPartsForm.length > 1"
             type="button"
+            class="btn danger icon"
             (click)="removePartRow(i)"
           >
             ✕
@@ -127,15 +250,26 @@
     </tbody>
   </table>
 
+  <!-- Duplicate Part Error -->
+  <div
+    *ngIf="industrialPartsForm.errors?.['duplicatePart']"
+    class="error-message label-lg flex-center"
+  >
+    لا يمكن اختيار نفس القطعة مع نفس الوحدة أكثر من مرة
+  </div>
+
+  <!-- Add part -->
   <div class="flex-end">
     <button class="btn primary" type="button" (click)="addPartRow()">
       + إضافة قطعة
     </button>
   </div>
 
+  <!-- Submit -->
   <div class="flex-center">
-    <button class="btn primary label-md" type="button" (click)="onSubmit()">
-      حفظ
-    </button>
+    <!-- Submit -->
+    <div class="flex-center">
+      <button class="btn primary label-md" type="submit">حفظ</button>
+    </div>
   </div>
 </form>

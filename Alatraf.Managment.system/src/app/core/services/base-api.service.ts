@@ -14,8 +14,21 @@ export class BaseApiService {
 
   constructor(protected http: HttpClient) {}
 
+  // protected buildUrl(endpoint: string): string {
+  //   if (!endpoint.startsWith('/')) endpoint = `/${endpoint}`;
+  //   return this.normalize(`${this.baseUrl}${endpoint}`);
+  // }
   protected buildUrl(endpoint: string): string {
-    if (!endpoint.startsWith('/')) endpoint = `/${endpoint}`;
+    // If endpoint is absolute URL => use it directly (real API)
+    if (endpoint.startsWith('http://') || endpoint.startsWith('https://')) {
+      return this.normalize(endpoint);
+    }
+
+    // Otherwise use baseUrl => this will go to InMemory API
+    if (!endpoint.startsWith('/')) {
+      endpoint = '/' + endpoint;
+    }
+
     return this.normalize(`${this.baseUrl}${endpoint}`);
   }
 
@@ -23,7 +36,6 @@ export class BaseApiService {
     // Remove double slashes except after http:// or https://
     return url.replace(/([^:]\/)\/+/g, '$1');
   }
-
 
   protected createHeaders(custom?: HttpHeaders): HttpHeaders {
     let headers = new HttpHeaders({

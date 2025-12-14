@@ -2,23 +2,23 @@ import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { ToastService } from '../../../../core/services/toast.service';
-import { Patient } from '../../../../mocks/patients/patient.dto';
 import { PatientService } from '../../../Reception/Patients/Services/patient.service';
-import { HeaderPatientInfoComponent } from "../../../Diagnosis/Shared/Components/header-patient-info/header-patient-info.component";
+import { HeaderPatientInfoComponent } from '../../../../shared/components/header-patient-info/header-patient-info.component';
+import { PatientDto } from '../../../../core/models/Shared/patient.model';
 
 @Component({
   selector: 'app-schedule-new-appointment',
   imports: [HeaderPatientInfoComponent],
   templateUrl: './schedule-new-appointment.component.html',
-  styleUrl: './schedule-new-appointment.component.css'
+  styleUrl: './schedule-new-appointment.component.css',
 })
 export class ScheduleNewAppointmentComponent {
- private route = inject(ActivatedRoute);
+  private route = inject(ActivatedRoute);
   private destroyRef = inject(DestroyRef);
   private patientService = inject(PatientService);
 
   private toast = inject(ToastService);
-  patient = signal<Patient | null>(null);
+  patient = signal<PatientDto | null>(null);
 
   isLoading = signal(true);
 
@@ -53,7 +53,6 @@ export class ScheduleNewAppointmentComponent {
         });
       });
   }
-
 
   Schedule() {
     this.toast.info('Schedule feature will be here sooon');

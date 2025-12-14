@@ -1,4 +1,3 @@
-import { Patient } from './../../mocks/patients/patient.dto';
 export const AppRoutes = {
   auth: {
     root: 'auth',
@@ -34,24 +33,75 @@ export const AppRoutes = {
 
     therapy: {
       root: 'therapy',
-      create: (patientId: number | string) => `therapy/create/${patientId}`,
+      create: (ticketId: number | string) => `therapy/create/${ticketId}`,
       view: (diagnosisId: number | string) => `therapy/view/${diagnosisId}`,
       edit: (diagnosisId: number | string) => `therapy/edit/${diagnosisId}`,
     },
 
     industrial: {
       root: 'industrial',
-      create: (patientId: number | string) =>
-        `industrial/Patient/${patientId}/create`,
+      create: (ticketId: number | string) =>
+        `industrial/Patient/${ticketId}/create`,
       view: (diagnosisId: number | string) => `industrial/view/${diagnosisId}`,
       edit: (diagnosisId: number | string) => `industrial/edit/${diagnosisId}`,
     },
   },
 
-  finance: {
-    root: 'finance',
-    paied: (patientId: number | string) => `paied/${patientId}`,
+ finance: {
+  root: 'finance',
+  paied: (
+    paymentId: number | string,
+    paymentReference: number | string
+  ) => `paied/${paymentId}/${paymentReference}`,
+},
+
+
+  therapyCards: {
+    root: 'therapy-cards',
+    details: (cardId: number | string) => `therapy-cards/${cardId}`,
+    sessions: {
+      list: (therapyCardId: number | string) =>
+        `therapy-cards/${therapyCardId}/sessions`,
+
+      create: (therapyCardId: number | string) =>
+        `therapy-cards/${therapyCardId}/sessions/create`,
+
+      edit: (therapyCardId: number | string, sessionId: number | string) =>
+        `therapy-cards/${therapyCardId}/sessions/edit/${sessionId}`,
+    },
+    // doctors: {
+    //   assign: (cardId: number | string) =>
+    //     `therapy-cards/${cardId}/doctors`,
+    // },
   },
+repairCards: {
+  root: 'repair-cards',
+
+  details: (cardId: number | string) =>
+    `repair-cards/${cardId}`,
+
+  assignments: {
+    // صفحة إدارة التعيينات (تشبه sessions list)
+    list: (repairCardId: number | string) =>
+      `repair-cards/${repairCardId}/assignments`,
+
+    // تعيين كامل الكرت لطبيب
+    assignCard: (repairCardId: number | string) =>
+      `repair-cards/${repairCardId}/assignments/assign-card`,
+
+    // تعيين قطع صناعية (industrial parts)
+    assignParts: (repairCardId: number | string) =>
+      `repair-cards/${repairCardId}/assignments/assign-parts`,
+  },
+
+  // عمليات سريعة (عادة dialogs أو inline forms)
+  status: (repairCardId: number | string) =>
+    `repair-cards/${repairCardId}/status`,
+
+  deliveryTime: (repairCardId: number | string) =>
+    `repair-cards/${repairCardId}/delivery-time`,
+},
+
   Appointment: {
     root: 'appointments',
     addHoliday: 'new/holiday',

@@ -1,46 +1,84 @@
-import { PaymentsNavigationFacade } from './../../../../core/navigation/payments-navigation.facade';
-import { Component, inject, signal } from '@angular/core';
-import { NavigationDiagnosisFacade } from '../../../../core/navigation/navigation-diagnosis.facade';
-import { PatientsFacade } from '../../../Reception/Patients/Services/patients.facade.service';
-import { PatientCardComponent } from '../../../Diagnosis/Shared/Components/waiting-patient-card/waiting-patient-card.component';
+import { Component, computed, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { Patient } from '../../../Reception/Patients/models/patient.model';
-export enum FilterEnum {
-  All = 0,
-  Therapy = 1, // علاج طبيعي
-  Industrual = 2, // أعصاب
-}
+
+import { GeneralWaitingPatientQueueComponent } from '../../../../shared/components/general-waiting-patient-queue/general-waiting-patient-queue.component';
+
+import { PaymentsNavigationFacade } from '../../../../core/navigation/payments-navigation.facade';
+
+import { GeneralWaitingPatientVM } from '../../../../shared/models/general-waiting-patient.vm';
+import { PaymentWaitingListDto } from '../../Models/payment-waitingList-dto';
+import { PaymentReference } from '../../Models/payment-reference.enum';
+import { PaymentsFacade } from '../../Services/payments.facade.service';
+
 @Component({
   selector: 'app-main-payment-waiting-list',
-  imports: [PatientCardComponent, RouterOutlet],
+  standalone: true,
+  imports: [GeneralWaitingPatientQueueComponent, RouterOutlet],
   templateUrl: './main-payment-waiting-list.component.html',
   styleUrl: './main-payment-waiting-list.component.css',
 })
 export class MainPaymentWaitingListComponent {
-  selectedPatient = signal<Patient | null>(null);
-  private facade = inject(PatientsFacade);
-  patients = this.facade.patients;
-  private navPyment = inject(PaymentsNavigationFacade);
-  currentActiveFilter: FilterEnum = FilterEnum.All;
+  private paymentsFacade = inject(PaymentsFacade);
 
-  ngOnInit() {
-    this.facade.loadPatients();
+  waitingPayments = this.paymentsFacade.waitingList;
+  loading = this.paymentsFacade.loadingWaitingList;
+  totalCount = this.paymentsFacade.totalCount;
+
+  private navPayment = inject(PaymentsNavigationFacade);
+
+  selectedPaymentId = signal<number | null>(null);
+
+  PaymentReference = PaymentReference;
+  currentPaymentReference = signal<PaymentReference | null>(null);
+  isCompleted = signal<boolean | null>(null);
+  patientsVM = computed<GeneralWaitingPatientVM[]>(() =>
+    this.waitingPayments().map((payment: PaymentWaitingListDto) => ({
+      id: payment.paymentId,
+      patientNumber: payment.cardId,
+      cardNumber: payment.cardId,
+      fullName: payment.patientName,
+      gender: payment.gender ?? 'غير محدد',
+      referenceType: payment.paymentReference, // IMPORTANT
+      extraInfo: payment.paymentReference,
+    }))
+  );
+  // extraInfo: PaymentReference[payment.paymentReference],
+  // referenceType: payment.paymentReference, // enum
+
+  ngOnInit(): void {
+    this.paymentsFacade.loadPaymentsWaitingList();
   }
+
+  ngOnDestroy(): void {
+    this.paymentsFacade.resetFilters();
+  }
+
+  // ------------------------------------------------------------------
+  // UI Actions
+  // ------------------------------------------------------------------
   onSearch(term: string) {
-    this.facade.search(term);
-    this.ResetSelectedPatient();
+    this.paymentsFacade.search(term);
   }
 
-  selectPatient(patient: Patient) {
-    this.selectedPatient.set(patient);
-    this.navPyment.goToPaiedPage(patient.patientId);
-  }
-  SelectFilter(currentValue: FilterEnum) {
-    this.currentActiveFilter = currentValue;
-    this.ResetSelectedPatient();
+  select(vm: GeneralWaitingPatientVM): void {
+    if (vm.referenceType == null) return;
+
+    this.selectedPaymentId.set(vm.id);
+    this.navPayment.goToPaiedPage(vm.id, vm.referenceType);
   }
 
-  private ResetSelectedPatient() {
-    this.selectedPatient.set(null);
+  selectFilter(reference: PaymentReference | null): void {
+    this.currentPaymentReference.set(reference);
+    this.paymentsFacade.updateFilters({
+      paymentReference: reference,
+    });
+  }
+
+  setPaymentStatus(isCompleted: boolean): void {
+    this.isCompleted.set(isCompleted);
+
+    this.paymentsFacade.updateFilters({
+      isCompleted,
+    });
   }
 }

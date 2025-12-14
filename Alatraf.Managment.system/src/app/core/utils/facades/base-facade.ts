@@ -46,10 +46,8 @@ export abstract class BaseFacade {
   ): Observable<FacadeResult<T>> {
     return call$.pipe(
       map((result) => {
-        if (result.isSuccess && result.data) {
-          // Success case
+        if (result.isSuccess ) {
           this.toast.success(options.successMessage);
-
           return {
             success: true,
             data: result.data,
@@ -57,6 +55,7 @@ export abstract class BaseFacade {
           };
         }
 
+        console.log("error accoure and this is the reult ",result);
         const err = this.extractError(result);
 
         // Validation error → no toast, send errors back to facade

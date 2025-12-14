@@ -1,20 +1,31 @@
-import { Component, DestroyRef, inject, signal } from '@angular/core';
-import { HeaderPatientInfoComponent } from '../../../Shared/Components/header-patient-info/header-patient-info.component';
+import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { PatientService } from '../../../../Reception/Patients/Services/patient.service';
-import { Patient } from '../../../../Reception/Patients/models/patient.model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
+import { HeaderPatientInfoComponent } from '../../../../../shared/components/header-patient-info/header-patient-info.component';
 import { AddIndustrialDiagnosisFormComponent } from '../../Components/add-industrial-diagnosis-form/add-industrial-diagnosis-form.component';
 import { PreviousIndustrialDiagnosisComponent } from '../../Components/previous-industrial-diagnosis/previous-industrial-diagnosis.component';
+
+import { ToastService } from '../../../../../core/services/toast.service';
+
+import { TicketFacade } from '../../../../Reception/Tickets/tickets.facade.service';
+
+import { CreateRepairCardRequest } from '../../Models/create-repair-card.request';
+import { UpdateRepairCardRequest } from '../../Models/update-repair-card.request';
+import { RepairCardDiagnosisDto } from '../../Models/repair-card-diagnosis.dto';
+
 import {
   MOCK_INDUSTRIAL_DIAGNOSIS_HISTORY,
   IndustrialDiagnosisHistoryDto,
 } from '../../Models/industrial-diagnosis-history.dto';
-import { ToastService } from '../../../../../core/services/toast.service';
+import { RepairCardDiagnosisFacade } from '../../Services/repair-card-diagnosis.facade.service';
 
 @Component({
   selector: 'app-industrial-diagnosis-workspace',
+  standalone: true,
   imports: [
+    ReactiveFormsModule,
     HeaderPatientInfoComponent,
     AddIndustrialDiagnosisFormComponent,
     PreviousIndustrialDiagnosisComponent,
@@ -22,66 +33,104 @@ import { ToastService } from '../../../../../core/services/toast.service';
   templateUrl: './industrial-diagnosis-workspace.component.html',
   styleUrl: './industrial-diagnosis-workspace.component.css',
 })
-export class IndustrialDiagnosisWorkspaceComponent {
-  isLoading = signal(true);
+export class IndustrialDiagnosisWorkspaceComponent implements OnInit {
+  // ------------------------------
+  // INJECTIONS
+  // ------------------------------
   private route = inject(ActivatedRoute);
   private destroyRef = inject(DestroyRef);
-  private patientService = inject(PatientService);
   private toast = inject(ToastService);
-  patient = signal<Patient | null>(null);
+
+  private ticketFacade = inject(TicketFacade);
+  private repairFacade = inject(RepairCardDiagnosisFacade);
+
+  // ------------------------------
+  // STATE
+  // ------------------------------
+  ticket = this.ticketFacade.selectedTicket;
+  isLoading = this.ticketFacade.loadingTicket;
+
   viewMode = signal<'add' | 'history'>('add');
+
+  injuryReasons = this.repairFacade.injuryReasons;
+  injurySides = this.repairFacade.injurySides;
+  injuryTypes = this.repairFacade.injuryTypes;
+  industrialParts = this.repairFacade.industrialParts;
+  isLookupLoading = this.repairFacade.loadingLookups;
+
+  isEditMode = this.repairFacade.isEditMode;
+
+  existingCard = signal<RepairCardDiagnosisDto | null>(null);
+
+  // Mock history for now
+  industrialHistoryItems = MOCK_INDUSTRIAL_DIAGNOSIS_HISTORY;
+
   ngOnInit(): void {
+    this.repairFacade.loadLookups();
+
     this.listenToRouteChanges();
   }
 
-  // ------------------
-  // ROUTE PARAM CHANGE HANDLER
-  // ------------------
   private listenToRouteChanges() {
     this.route.paramMap
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((params) => {
-        const idParam = params.get('patientId');
-        const id = idParam ? Number(idParam) : NaN;
+        const ticketId = Number(params.get('ticketId'));
 
-        if (!id || Number.isNaN(id)) {
-          this.patient.set(null);
+        if (!ticketId || Number.isNaN(ticketId)) {
           this.isLoading.set(false);
           return;
         }
 
-        // Reset UI
-        this.isLoading.set(true);
-
-        this.patientService.getPatientById(id).subscribe((res) => {
-          if (res.isSuccess && res.data) {
-            this.patient.set(res.data);
-          } else {
-            this.patient.set(null);
-          }
-
-          this.isLoading.set(false); // ⬅ important
-        });
+        this.ticketFacade.loadTicketById(ticketId);
       });
   }
+
+  // ------------------------------
+  // VIEW MODE
+  // ------------------------------
   switchToAdd() {
     this.viewMode.set('add');
+    this.repairFacade.enterCreateMode();
+    this.existingCard.set(null);
   }
 
   switchToHistory() {
     this.viewMode.set('history');
   }
 
-  // for the add new Diagnosis
-  onSubmitDiagnosis(formValue: any) {
-    this.toast.success('Saved Sucess' + formValue.diagnosis);
-    console.log('Final Diagnosis Payload:', formValue);
+  // ------------------------------
+  // SAVE HANDLER
+  // ------------------------------
+  saveIndustrialDiagnosis(
+    dto: CreateRepairCardRequest | UpdateRepairCardRequest
+  ) {
+    if (this.isEditMode()) {
+      const current = this.existingCard();
+      if (!current) {
+        this.toast.error('لا توجد بطاقة إصلاح محددة للتعديل');
+        return;
+      }
+
+      this.repairFacade
+        .updateRepairCard(current.repairCardId, dto as UpdateRepairCardRequest)
+        .subscribe();
+    } else {
+      this.repairFacade
+        .createRepairCard(dto as CreateRepairCardRequest)
+        .subscribe();
+    }
   }
 
-  // for previous disgnosis
-  industrialHistoryItems = MOCK_INDUSTRIAL_DIAGNOSIS_HISTORY;
-
+  // ------------------------------
+  // HISTORY HANDLER (placeholder)
+  // ------------------------------
   openHistoryDetails(item: IndustrialDiagnosisHistoryDto) {
-    console.log('View details:', item);
+    // لاحقاً: يمكنك هنا استدعاء API لجلب RepairCardDiagnosisDto حقيقي
+    console.log('View industrial diagnosis history details:', item);
+    // مثال مستقبلي:
+    // this.repairFacade.loadRepairCardForEdit(item.repairCardId);
+    // this.existingCard.set(.... من الفاساد ....);
+    // this.viewMode.set('add');
   }
 }

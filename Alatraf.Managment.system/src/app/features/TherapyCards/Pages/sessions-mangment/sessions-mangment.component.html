@@ -1,0 +1,143 @@
+@if (loadingTherapyCard()) {
+<div class="flex-center">
+  <span class="loader"></span>
+</div>
+<p class="flex-center">جاري تحميل بيانات المريض...</p>
+} @else {
+
+<div class="row gap-16">
+  <h1
+    class="title-lg cursor-pointer"
+    (click)="switchToAdd()"
+    [class.primary-color-50]="viewMode() !== 'add'"
+  >
+    إضافة جلسة
+  </h1>
+  <h1
+    class="title-lg cursor-pointer primary-color-50"
+    [class.primary-color-50]="viewMode() !== 'history'"
+    (click)="switchToHistory()"
+  >
+    الجلسات السابقة
+  </h1>
+</div>
+
+<div class="max-hight-712 column gap-16">
+  <div class="column gap-16" id="patient-info-container">
+    <app-header-patient-info [patient]="patient()!"></app-header-patient-info>
+  </div>
+
+  @if(viewMode()==='add'){
+
+  <div class="width-100">
+    <p class="title-md">بيانات الجلسة الحالية</p>
+
+    <span class="home-line"></span>
+  </div>
+
+  <form [formGroup]="sessionForm" (ngSubmit)="submit()">
+    <table class="no-shadow">
+      <thead>
+        <tr>
+          <th class="label-lg">البرنامج العلاجي</th>
+          <th class="label-lg">القسم</th>
+          <th class="label-lg">الغرفة</th>
+          <th class="label-lg">الطبيب المعالج</th>
+        </tr>
+      </thead>
+
+      <tbody formArrayName="sessionPrograms">
+        <tr
+          *ngFor="let group of sessionProgramsArray.controls; let i = index"
+          [formGroupName]="i"
+        >
+          <!-- البرنامج -->
+          <td>
+            <input
+              type="text"
+              class="label-lg"
+              [value]="programs()[i]?.programName"
+              disabled
+            />
+          </td>
+
+          <!-- القسم -->
+          <td>
+            <select
+              class="label-lg"
+              formControlName="sectionId"
+              (change)="onSectionChange(i)"
+            >
+              <option value="" disabled hidden>القسم</option>
+              <option *ngFor="let section of sections()" [value]="section.id">
+                {{ section.name }}
+              </option>
+            </select>
+          </td>
+
+          <!-- الغرفة -->
+          <td>
+            <select
+              class="label-lg"
+              formControlName="roomId"
+              (change)="onRoomChange(i)"
+            >
+              <option value="" disabled hidden>الغرفة</option>
+              <option
+                *ngFor="let room of getRoomsForRow(i)"
+                [value]="room.roomId"
+              >
+                {{ room.roomName }}
+              </option>
+            </select>
+          </td>
+
+          <!-- الطبيب -->
+          <td>
+            <select class="label-lg" formControlName="doctorId">
+              <option value="" disabled hidden>الطبيب المعالج</option>
+              <option
+                *ngFor="let doctor of getDoctorsForRow(i)"
+                [value]="doctor.id"
+              >
+                {{ doctor.name }}
+              </option>
+            </select>
+          </td>
+        </tr>
+      </tbody>
+
+      <!-- ✅ زر الإرسال -->
+      <tfoot>
+        <tr>
+          <td colspan="4" class="text-end padding-16">
+            <button
+              type="submit"
+              class="btn primary"
+              [disabled]="creatingSession() || sessionCreated()"
+            >
+              حفظ الجلسة
+            </button>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </form>
+
+  <div class="column gap-16" id="diagnosis-info-container"></div>
+
+  } @if(viewMode()==='history' ){
+
+  <!-- @if (sections()) { -->
+
+  <app-previous-therapy-sessions-history
+    [sessions]="sessions()"
+    (viewDetails)="onViewSessionDetails($event)"
+  ></app-previous-therapy-sessions-history>
+
+  <!-- } -->
+
+  }
+</div>
+
+}

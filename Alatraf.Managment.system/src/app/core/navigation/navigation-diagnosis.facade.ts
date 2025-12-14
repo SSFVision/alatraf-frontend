@@ -18,13 +18,13 @@ export class NavigationDiagnosisFacade {
   }
 
   goToTherapyCreate(
-    patientId: number | string,
+    ticketId: number | string,
     extras?: NavigationExtras
   ): void {
     // /diagnosis/therapy/create/:patientId
     this.go(
       `${AppRoutes.diagnosis.root}/${AppRoutes.diagnosis.therapy.create(
-        patientId
+        ticketId
       )}`,
       extras
     );
@@ -65,12 +65,12 @@ export class NavigationDiagnosisFacade {
   }
 
   goToIndustrialCreate(
-    patientId: number | string,
+    ticketId: number | string,
     extras?: NavigationExtras
   ): void {
     this.go(
       `${AppRoutes.diagnosis.root}/${AppRoutes.diagnosis.industrial.create(
-        patientId
+        ticketId
       )}`,
       extras
     );

@@ -1,28 +1,52 @@
-import { Component, inject, signal } from '@angular/core';
-import { PatientCardComponent } from '../../../Shared/Components/waiting-patient-card/waiting-patient-card.component';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavigationDiagnosisFacade } from '../../../../../core/navigation/navigation-diagnosis.facade';
-import { Patient } from '../../../../Reception/Patients/models/patient.model';
-import { PatientsFacade } from '../../../../Reception/Patients/Services/patients.facade.service';
+import { PaginationComponent } from '../../../../../shared/components/pagination/pagination.component';
+import { TicketDto, TicketStatus } from '../../../../Reception/Tickets/models/ticket.model';
+import { TicketFacade } from '../../../../Reception/Tickets/tickets.facade.service';
+import { ServiceType, Department } from '../../../Shared/enums/department.enum';
+import { PatientCardComponent } from "../../../../../shared/components/waiting-patient-card/waiting-patient-card.component";
 
 @Component({
   selector: 'app-industrial-waiting-list',
-  imports: [RouterOutlet, PatientCardComponent],
+  imports: [RouterOutlet, PaginationComponent, PatientCardComponent],
   templateUrl: './industrial-waiting-list.component.html',
   styleUrl: './industrial-waiting-list.component.css',
 })
-export class IndustrialWaitingListComponent {
-  selectedPatient = signal<any>(null);
-  private patientsService = inject(PatientsFacade);
-  patients = this.patientsService.patients;
+export class IndustrialWaitingListComponent implements OnInit, OnDestroy {
+  activeService = signal<number | null>(null);
+
+  ticketFacade = inject(TicketFacade);
   private navDiagnos = inject(NavigationDiagnosisFacade);
+
+  tickets = this.ticketFacade.tickets;
+  selectedTicket = signal<TicketDto | null>(null);
+  ServiceType = ServiceType;
+
+  pageRequest = this.ticketFacade.pageRequest;
+  totalCount = this.ticketFacade.totalCount;
+
   ngOnInit() {
-    this.patientsService.loadPatients();
+    this.ticketFacade.updateFilters({departmentId:Department.Industrial,status:TicketStatus.New});
+    this.ticketFacade.loadTickets();
+  }
+  ngOnDestroy() {
+    this.ticketFacade.resetFilters();
+  }
+  onSearch(term: string) {
+    this.ticketFacade.search(term);
   }
 
-  selectPatient(patient: Patient) {
-    console.log('selected : ', patient);
-    this.selectedPatient.set(patient);
-    this.navDiagnos.goToIndustrialCreate(patient.patientId);
+  filterByService(serviceId: number | null) {
+    this.activeService.set(serviceId);
+    this.ticketFacade.updateFilters({
+      departmentId: Department.Industrial,
+      serviceId: serviceId ?? undefined,
+    });
+    this.ticketFacade.setPage(1);
+  }
+  select(ticket: TicketDto) {
+    this.selectedTicket.set(ticket);
+    this.navDiagnos.goToIndustrialCreate(ticket.ticketId);
   }
 }

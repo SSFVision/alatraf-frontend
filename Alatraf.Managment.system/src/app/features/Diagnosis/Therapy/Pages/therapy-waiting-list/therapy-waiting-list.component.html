@@ -1,13 +1,17 @@
 <main class="padding-32 row gap-16 padding-24">
   <div class="box max-width-324 culumn gap-24 max-hight-800">
+    <!-- Header -->
     <div class="row space-between">
       <h2 class="title-md flex-center">قائمة الإنتظار</h2>
+
       <div class="primary-color-background WH-40 flex-center border-radius-20">
         <h2 class="title-md white-color margin-auto">
-          {{ patients().length }}
+          {{ tickets().length }}
         </h2>
       </div>
     </div>
+
+    <!-- Search box -->
     <div class="search-box">
       <img
         src="assets/icons/search-icon.svg"
@@ -21,26 +25,87 @@
         (input)="onSearch(searchBox.value)"
       />
     </div>
+
+    <!-- Service Filters -->
     <div class="filters-container">
-      <button class="filter-btn active">الكل</button>
-      <button class="filter-btn">علاج طبيعي</button>
-      <button class="filter-btn">أعصاب</button>
-      <button class="filter-btn">عظام</button>
+      <!-- ALL services in therapy -->
+      <button
+        class="filter-btn"
+        [class.active]="activeService() === null"
+        (click)="filterByService(null)"
+      >
+        الكل
+      </button>
+
+      <!-- علاج طبيعي -->
+      <button
+        class="filter-btn"
+        [class.active]="activeService() === ServiceType.Therapy"
+        (click)="filterByService(ServiceType.Therapy)"
+      >
+        علاج طبيعي
+      </button>
+
+      <!-- أعصاب -->
+      <button
+        class="filter-btn"
+        [class.active]="activeService() === ServiceType.Nerves"
+        (click)="filterByService(ServiceType.Nerves)"
+      >
+        أعصاب
+      </button>
+
+      <!-- عظام -->
+      <button
+        class="filter-btn"
+        [class.active]="activeService() === ServiceType.Orthopedics"
+        (click)="filterByService(ServiceType.Orthopedics)"
+      >
+        عظام
+      </button>
+
+      <!-- تجديد كروت -->
+      <button
+        class="filter-btn"
+        [class.active]="activeService() === ServiceType.TherapyCardRenew"
+        (click)="filterByService(ServiceType.TherapyCardRenew)"
+      >
+        تجديد كروت
+      </button>
+
+      <!-- بدل فاقد -->
+      <button
+        class="filter-btn"
+        [class.active]="activeService() === ServiceType.TherapyLostCard"
+        (click)="filterByService(ServiceType.TherapyLostCard)"
+      >
+        بدل فاقد
+      </button>
     </div>
 
+    <!-- Waiting list -->
     <app-waiting-patient-card
       class="max-hight-712 column gap-16"
-      [patients]="patients()"
-      (select)="selectPatient($event)"
+      [tickets]="tickets()"
+      (select)="select($event)"
     ></app-waiting-patient-card>
+
+    <!-- Pagination Component -->
+    <app-pagination
+      [page]="pageRequest().page"
+      [pageSize]="pageRequest().pageSize"
+      [totalCount]="totalCount()"
+      (pageChange)="ticketFacade.setPage($event)"
+      (pageSizeChange)="ticketFacade.setPageSize($event)"
+    ></app-pagination>
   </div>
 
-  @if (selectedPatient()) {
-
+  <!-- Right section -->
+  @if (selectedTicket()) {
   <div class="box max-hight-800 gap-16">
     <router-outlet></router-outlet>
   </div>
-  }@else {
+  } @else {
   <div class="box max-hight-800 gap-16 flex-center">
     <img
       src="assets/images/bro.svg"
@@ -53,3 +118,4 @@
   </div>
   }
 </main>
+

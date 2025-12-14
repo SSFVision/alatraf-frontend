@@ -48,11 +48,25 @@ export const APP_ROUTES: Routes = [
             (m) => m.PaymentsRoutes
           ),
       },
-        {
+      {
         path: AppRoutes.Appointment.root,
         loadChildren: () =>
           import('./features/Appointments/appointments.route').then(
             (m) => m.AppointmentRoutes
+          ),
+      },
+      {
+        path: AppRoutes.therapyCards.root,
+        loadChildren: () =>
+          import('./features/TherapyCards/therapy-cards.routes').then(
+            (m) => m.TherapyCardsRoutes
+          ),
+      },
+      {
+        path: AppRoutes.repairCards.root,
+        loadChildren: () =>
+          import('./features/RepairCards/repairCards.routes').then(
+            (m) => m.RepairCardsRoutes
           ),
       },
     ],

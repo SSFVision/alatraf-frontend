@@ -1,7 +1,7 @@
 import { Component, inject, input, Input, output, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { Patient } from '../../models/patient.model';
 import { NavigationReceptionFacade } from '../../../../../core/navigation/navigation-reception.facade';
+import { PatientDto } from '../../../../../core/models/Shared/patient.model';
 
 @Component({
   selector: 'app-patient-summary-card',
@@ -10,7 +10,7 @@ import { NavigationReceptionFacade } from '../../../../../core/navigation/naviga
   styleUrl: './patient-summary-card.component.css',
 })
 export class PatientSummaryCardComponent {
-  patient = input<Patient | null>(null);
+  patient = input<PatientDto | null>(null);
   close = output();
 
   private nav = inject(NavigationReceptionFacade);

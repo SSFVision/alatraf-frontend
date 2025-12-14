@@ -1,0 +1,60 @@
+<div class="pagination-wrapper">
+
+  <div class="page-controls">
+
+    <!-- Previous Button -->
+    <button
+      class="base-btn nav-btn"
+      [disabled]="page <= 1"
+      (click)="prev()"
+      title="السابق"
+    >
+      ‹
+    </button>
+
+    <!-- Dynamic pages + dots -->
+    <div class="pages-container">
+      <ng-container *ngFor="let p of getPagesToShow()">
+
+        <!-- Dots -->
+        <span *ngIf="p === 'dots'" class="dots">...</span>
+
+        <!-- Page button -->
+        <button
+          *ngIf="p !== 'dots'"
+          class="base-btn page-btn"
+          [class.active]="p === page"
+          (click)="onPageClick(p)"
+        >
+          {{ p }}
+        </button>
+
+      </ng-container>
+    </div>
+
+    <!-- Next Button -->
+    <button
+      class="base-btn nav-btn"
+      [disabled]="page >= totalPages"
+      (click)="next()"
+      title="التالي"
+    >
+      ›
+    </button>
+
+  </div>
+
+  <!-- Page size selector -->
+  <div class="page-size">
+    <label>لكل صفحة:</label>
+    <select
+      [value]="pageSize"
+      (change)="onPageSizeChange($any($event.target).value)"
+    >
+      <option *ngFor="let size of pageSizes" [value]="size">
+        {{ size }}
+      </option>
+    </select>
+  </div>
+
+</div>

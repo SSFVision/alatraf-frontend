@@ -46,6 +46,13 @@ export const MENU_CONFIG: MenuCategory[] = [
         route: `${AppRoutes.diagnosis.root}/${AppRoutes.diagnosis.therapy.root}`,
         requiredPermissions: [PERMISSIONS.DIAGNOSIS.THERAPY.VIEW],
       },
+      {
+        label: 'إدارة الجلسات',
+        icon: 'assets/icons/dumbbell-w.svg',
+        activeIcon: 'assets/icons/dumbbell-b.svg',
+        route: `${AppRoutes.therapyCards.root}`,
+        requiredPermissions: [PERMISSIONS.THERAPY_CARDS.VIEW],
+      },
     ],
   },
 
@@ -59,6 +66,13 @@ export const MENU_CONFIG: MenuCategory[] = [
         activeIcon: 'assets/icons/prosthetic-foot-b.svg',
         route: `${AppRoutes.diagnosis.root}/${AppRoutes.diagnosis.industrial.root}`,
         requiredPermissions: [PERMISSIONS.DIAGNOSIS.INDUSTRIAL.VIEW],
+      },
+      {
+        label: 'كروت الاصلاح الفني ',
+        icon: 'assets/icons/prosthetic-foot-w.svg',
+        activeIcon: 'assets/icons/prosthetic-foot-b.svg',
+        route: `${AppRoutes.repairCards.root}`,
+        requiredPermissions: [PERMISSIONS.THERAPY_CARDS.VIEW],
       },
     ],
   },
@@ -77,7 +91,7 @@ export const MENU_CONFIG: MenuCategory[] = [
     ],
   },
 
-   {
+  {
     category: 'قسم   المواعيد ',
     CateRoute: AppRoutes.Appointment.root,
     items: [

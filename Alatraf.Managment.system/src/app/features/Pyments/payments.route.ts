@@ -13,7 +13,7 @@ export const PaymentsRoutes: Routes = [
       ).then((m) => m.MainPaymentWaitingListComponent),
      children: [
       {
-        path: 'paied/:patientId',
+  path: 'paied/:paymentId/:paymentReference',
         canActivate: [PermissionGuard],
         data: { permission: PERMISSIONS.PAYMENTS.ADD },
         loadComponent: () =>

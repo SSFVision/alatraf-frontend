@@ -1,0 +1,81 @@
+<main class="padding-32 row gap-16 padding-24">
+  <div class="column gap-16 max-width-324">
+    <div class="box culumn gap-24 max-hight-360">
+      <div class="row space-between">
+        <h2 class="title-md flex-center">قائمة الإنتظار</h2>
+        <div
+          class="primary-color-background WH-40 flex-center border-radius-20"
+        >
+          <h2 class="title-md white-color margin-auto">
+            {{ paidRepairCards().length }}
+          </h2>
+        </div>
+      </div>
+
+      <div class="search-box">
+        <img
+          src="assets/icons/search-icon.svg"
+          class="search-icon"
+          alt="search"
+        />
+        <input
+          type="text"
+          placeholder="بحث: اسم المريض أو الرقم"
+          #searchBox
+          (input)="onSearch(searchBox.value)"
+        />
+      </div>
+      <div class="filters-container">
+        <button class="filter-btn active">الكل</button>
+        <button class="filter-btn">جديد</button>
+        <button class="filter-btn">يتجهز</button>
+        <button class="filter-btn">جاهز</button>
+      </div>
+      <app-general-waiting-patient-queue
+        class="max-hight-712 column gap-16"
+        [patients]="patientsVM()"
+        [loading]="loading()"
+        (select)="select($event)"
+      ></app-general-waiting-patient-queue>
+    </div>
+
+    <div class="box culumn gap-24 max-hight-360">
+      <h2 class="title-md">الأطباءالفنين</h2>
+
+      <div class="search-box">
+        <img
+          src="assets/icons/search-icon.svg"
+          class="search-icon"
+          alt="search"
+        />
+        <input type="text" placeholder="بحث: اسم الطبيب أو الرقم" />
+      </div>
+
+      <div class="filters-container">
+        <button class="filter-btn active">الكل</button>
+        <button class="filter-btn">حديد</button>
+        <button class="filter-btn">جلد</button>
+        <button class="filter-btn">اطراف</button>
+      </div>
+
+      <app-doctor-card></app-doctor-card>
+    </div>
+  </div>
+
+  @if (selectedCardId()) {
+  <div class="box max-hight-800 gap-16">
+    <router-outlet></router-outlet>
+  </div>
+  } @else {
+  <div class="box max-hight-800 gap-16 flex-center">
+    <img
+      src="assets/images/therapy.svg"
+      alt="اضافة تشخيص"
+      width="401"
+      height="379.76"
+      class="padding-32"
+    />
+    <p class="title-md primary-color-50">مرحباً بك</p>
+  </div>
+  }
+</main>

@@ -2,7 +2,7 @@ import { Component, forwardRef, inject, OnInit, Pipe, signal } from '@angular/co
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ServiceService } from '../../../features/Reception/Services/service.service';
 import { ServiceDto } from '../../../mocks/services/service.model';
-import { CommonModule, NgFor,  } from '@angular/common';
+import { CommonModule, NgFor, NgIf,  } from '@angular/common';
 
 @Component({
   selector: 'app-service-select',
