@@ -36,6 +36,9 @@ export class MedicalProgramsManagementService extends BaseApiService {
       })
     );
   }
+  getMedicalProgramById(id: number): Observable<ApiResult<MedicalProgramDto>> {
+    return this.get<MedicalProgramDto>(`${this.medicalProgramsUrl}/${id}`);
+  }
 
   createMedicalProgram(request: CreateMedicalProgramRequest) {
     return this.post<MedicalProgramDto>(this.medicalProgramsUrl, request).pipe(
