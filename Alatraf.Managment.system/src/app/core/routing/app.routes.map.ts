@@ -105,18 +105,27 @@ export const AppRoutes = {
     reschedule: (patientId: number | string) => `reschedule/${patientId}`,
   },
   medicalPrograms: {
-  root: 'medical-programs',
+    root: 'medical-programs',
 
-  list: 'medical-programs',
+    list: 'medical-programs',
 
-  create: 'medical-programs/create',
+    create: 'create',
 
-  edit: (medicalProgramId: number | string) =>
-    `medical-programs/edit/${medicalProgramId}`,
+    edit: (medicalProgramId: number | string) => `edit/${medicalProgramId}`,
 
-  view: (medicalProgramId: number | string) =>
-    `medical-programs/view/${medicalProgramId}`,
-},
+    view: (medicalProgramId: number | string) => `view/${medicalProgramId}`,
+  },
+  industrialParts: {
+    root: 'industrial-parts',
+
+    list: 'industrial-parts',
+
+    create: 'create',
+
+    edit: (industrialPartId: number | string) => `edit/${industrialPartId}`,
+
+    view: (industrialPartId: number | string) => `view/${industrialPartId}`,
+  },
 
   admin: {
     root: 'admin',

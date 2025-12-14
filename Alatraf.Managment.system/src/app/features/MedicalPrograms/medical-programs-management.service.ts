@@ -19,7 +19,25 @@ export class MedicalProgramsManagementService extends BaseApiService {
 
   private medicalProgramsUrl = 'http://localhost:2003/api/v1/medical-programs';
 
-  getMedicalPrograms(): Observable<ApiResult<MedicalProgramDto[]>> {
+  getPagnidedMedicalPrograms(): Observable<ApiResult<MedicalProgramDto[]>> {
+    const cached = this.cache.get<MedicalProgramDto[]>(
+      CACHE_KEYS.MEDICAL_PROGRAMS
+    );
+
+    if (cached) {
+      return of(ApiResult.success(cached));
+    }
+
+    return this.get<MedicalProgramDto[]>(this.medicalProgramsUrl).pipe(
+      tap((res) => {
+        if (res.isSuccess && res.data) {
+          this.cache.set(CACHE_KEYS.MEDICAL_PROGRAMS, res.data);
+        }
+      })
+    );
+  }
+
+   getMedicalPrograms(): Observable<ApiResult<MedicalProgramDto[]>> {
     const cached = this.cache.get<MedicalProgramDto[]>(
       CACHE_KEYS.MEDICAL_PROGRAMS
     );

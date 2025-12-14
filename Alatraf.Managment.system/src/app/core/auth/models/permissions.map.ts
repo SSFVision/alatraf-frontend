@@ -69,5 +69,17 @@ export const PERMISSIONS = {
   // Create delivery time
   CREATE_DELIVERY_TIME: 'create_repair_card_delivery_time',
 },
+MedicalPrograms: {
+  VIEW: 'medical-program:read',
+  CREATE: 'medical-program:create',
+  UPDATE: 'medical-program:update',
+  DELETE: 'medical-program:delete',
+},
+IndustrialParts: {
+  VIEW: 'industrial-part:read',
+  CREATE: 'industrial-part:create',
+  UPDATE: 'industrial-part:update',
+  DELETE: 'industrial-part:delete',
+},
 
 } as const;

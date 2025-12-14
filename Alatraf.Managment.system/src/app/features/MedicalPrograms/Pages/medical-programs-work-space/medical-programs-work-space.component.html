@@ -1,0 +1,45 @@
+@if (isLoading()) {
+<div class="flex-center">
+  <span class="loader"></span>
+</div>
+<p class="flex-center">جاري تحميل بيانات الرنامج العلاجي...</p>
+
+} @else {
+
+<h1 class="title-lg">البرامج العلاجية</h1>
+
+<form class="padding-LR-24 column gap-16">
+  <div class="width-100">
+    <p class="title-md">بيانات البرنامج</p>
+
+    <span class="home-line"></span>
+  </div>
+
+  <div class="row flex-center">
+    <label class="label-lg"> رقم البرنامج </label>
+    <input class="label-lg" type="text" disabled />
+  </div>
+  <div class="row flex-center">
+    <label class="label-lg"> الاسم </label>
+    <input class="label-lg" type="text" placeholder="" />
+  </div>
+
+  <div class="row flex-center">
+    <label class="label-lg"> اختر قسم </label>
+    <select class="label-lg">
+      <option value=" ">تمارين</option>
+      <option value=" ">كهرباء</option>
+    </select>
+  </div>
+
+  <div class="row flex-center width-100">
+    <label class="label-lg">الوصف</label>
+    <textarea rows="2" class="label-lg"></textarea>
+  </div>
+  <div class="flex-center gap-16">
+    <button class="btn secondary" type="submit">تعديل</button>
+    <button class="btn danger" type="submit">حذف</button>
+  </div>
+</form>
+
+}

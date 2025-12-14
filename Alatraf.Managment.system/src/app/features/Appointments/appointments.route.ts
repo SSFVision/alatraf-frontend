@@ -23,6 +23,12 @@ export const AppointmentRoutes: Routes = [
       },
     ],
   },
+  
+  {
+    path: '',
+    redirectTo: 'appointments',
+    pathMatch: 'full',
+  },
   // {
   //   path: 'new/holiday',
   //   canActivate: [PermissionGuard],
@@ -33,9 +39,5 @@ export const AppointmentRoutes: Routes = [
   //     ),
   // },
 
-  {
-    path: '',
-    redirectTo: 'appointments',
-    pathMatch: 'full',
-  },
+ 
 ];

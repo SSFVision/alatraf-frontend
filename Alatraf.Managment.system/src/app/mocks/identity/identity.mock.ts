@@ -48,6 +48,8 @@ export const IDENTITY_USERS_MOCK: IdentityUserMock[] = [
       PERMISSIONS.PAYMENTS.VIEW,
       PERMISSIONS.PAYMENTS.ADD,
       PERMISSIONS.THERAPY_CARDS.VIEW,
+      PERMISSIONS.MedicalPrograms.VIEW,
+      PERMISSIONS.MedicalPrograms.CREATE,
     ],
   },
   {

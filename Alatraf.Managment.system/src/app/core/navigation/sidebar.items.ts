@@ -53,6 +53,13 @@ export const MENU_CONFIG: MenuCategory[] = [
         route: `${AppRoutes.therapyCards.root}`,
         requiredPermissions: [PERMISSIONS.THERAPY_CARDS.VIEW],
       },
+      {
+        label: 'البرامج العلاجية ',
+        icon: 'assets/icons/dumbbell-w.svg',
+        activeIcon: 'assets/icons/dumbbell-b.svg',
+        route: `${AppRoutes.medicalPrograms.root}`,
+        requiredPermissions: [PERMISSIONS.MedicalPrograms.VIEW],
+      },
     ],
   },
 
@@ -73,6 +80,13 @@ export const MENU_CONFIG: MenuCategory[] = [
         activeIcon: 'assets/icons/prosthetic-foot-b.svg',
         route: `${AppRoutes.repairCards.root}`,
         requiredPermissions: [PERMISSIONS.THERAPY_CARDS.VIEW],
+      },
+      {
+        label: 'الاطراف الصناعية ',
+        icon: 'assets/icons/prosthetic-foot-w.svg',
+        activeIcon: 'assets/icons/prosthetic-foot-b.svg',
+        route: `${AppRoutes.industrialParts.root}`,
+        requiredPermissions: [PERMISSIONS.IndustrialParts.VIEW],
       },
     ],
   },
