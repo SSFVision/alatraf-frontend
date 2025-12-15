@@ -1,44 +1,56 @@
 <main class="padding-32 row gap-16 padding-24">
+  <!-- LEFT SIDE: LIST -->
   <div
     class="box max-width-324 culumn gap-24 max-hight-800"
     id="therapy-program-list-container"
   >
     <h2 class="title-md">البرامج العلاجية</h2>
 
+    <!-- SEARCH -->
     <div class="search-box">
       <img
         src="assets/icons/search-icon.svg"
         class="search-icon"
         alt="search"
       />
-      <input type="text" placeholder="بحث: اسم البرنامج أو الرقم" />
+      <input
+        type="text"
+        placeholder="بحث: اسم البرنامج أو الرقم"
+        (input)="onSearch($any($event.target).value)"
+      />
     </div>
 
-      <app-management-entity-card
+    <!-- LIST -->
+    <app-management-entity-card
       class="max-hight-712 column gap-16"
-        [items]="card()"
-        [loading]="loading()"
-        (select)="onCardSelected($event)"
-      ></app-management-entity-card>
+      [items]="card()"
+      [loading]="loading()"
+      (select)="onCardSelected($event)"
+    ></app-management-entity-card>
+
+    <!-- ADD BUTTON -->
     <div class="flex-center">
-      <button class="btn primary" (click)="goToAddMedicalProgram()">إضافة برنامج علاجي</button>
+      <button class="btn primary" (click)="goToAddMedicalProgram()">
+        إضافة برنامج علاجي
+      </button>
     </div>
   </div>
 
-   @if (selectedId()) {
-  <div class="box max-hight-800 gap-16">
-    <router-outlet></router-outlet>
-  </div>
+  <!-- RIGHT SIDE: DETAILS -->
+  @if (selectedId() || addMode()) {
+    <div class="box max-hight-800 gap-16">
+      <router-outlet></router-outlet>
+    </div>
   } @else {
-  <div class="box max-hight-800 gap-16 flex-center">
-    <img
-      src="assets/images/bro.svg"
-      alt="مرحبا"
-      width="496.75"
-      height="512"
-      class="padding-32"
-    />
-    <p class="title-md primary-color-50">مرحباً بك</p>
-  </div>
+    <div class="box max-hight-800 gap-16 flex-center">
+      <img
+        src="assets/images/bro.svg"
+        alt="مرحبا"
+        width="496.75"
+        height="512"
+        class="padding-32"
+      />
+      <p class="title-md primary-color-50">مرحباً بك</p>
+    </div>
   }
 </main>

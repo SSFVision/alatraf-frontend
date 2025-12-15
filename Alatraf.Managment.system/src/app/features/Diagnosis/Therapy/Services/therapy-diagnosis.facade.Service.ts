@@ -10,8 +10,8 @@ import { UpdateTherapyCardRequest } from '../Models/update-therapy-card.request'
 import { InjuryDto } from '../../../../core/models/injuries/injury.dto';
 import { MedicalProgramDto } from '../../../../core/models/medical-programs/medical-program.dto';
 import { InjuriesManagementService } from '../../../Injuries/Services/injuries-management.service';
-import { MedicalProgramsManagementService } from '../../../MedicalPrograms/medical-programs-management.service';
 import { PatientService } from '../../../Reception/Patients/Services/patient.service';
+import { MedicalProgramsManagementService } from '../../../MedicalPrograms/Services/medical-programs-management.service';
 
 @Injectable({
   providedIn: 'root',

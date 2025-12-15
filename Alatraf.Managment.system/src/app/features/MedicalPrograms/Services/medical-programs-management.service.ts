@@ -1,18 +1,17 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable, of, tap } from 'rxjs';
+import { CACHE_KEYS } from '../../../core/constants/cache-keys.constants';
+import { ApiResult } from '../../../core/models/ApiResult';
+import { MedicalProgramDto } from '../../../core/models/medical-programs/medical-program.dto';
+import { PageRequest } from '../../../core/models/Shared/page-request.model';
+import { PaginatedList } from '../../../core/models/Shared/paginated-list.model';
+import { BaseApiService } from '../../../core/services/base-api.service';
+import { CacheService } from '../../../core/services/cache.service';
+import { CreateMedicalProgramRequest } from '../Models/create-medical-program-request.model';
+import { MedicalProgramsFilterRequest } from '../Models/medical-programs-filter.request';
+import { UpdateMedicalProgramRequest } from '../Models/update-medical-program-request.model';
 
-import { ApiResult } from '../../core/models/ApiResult';
-import { MedicalProgramDto } from '../../core/models/medical-programs/medical-program.dto';
-import { BaseApiService } from '../../core/services/base-api.service';
-
-import { CreateMedicalProgramRequest } from './Models/create-medical-program-request.model';
-import { UpdateMedicalProgramRequest } from './Models/update-medical-program-request.model';
-import { CacheService } from '../../core/services/cache.service';
-import { CACHE_KEYS } from '../../core/constants/cache-keys.constants';
-import { PageRequest } from '../../core/models/Shared/page-request.model';
-import { PaginatedList } from '../../core/models/Shared/paginated-list.model';
-import { MedicalProgramsFilterRequest } from './Models/medical-programs-filter.request';
 
 @Injectable({ providedIn: 'root' })
 export class MedicalProgramsManagementService extends BaseApiService {
