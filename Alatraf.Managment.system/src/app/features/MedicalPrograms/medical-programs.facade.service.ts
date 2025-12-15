@@ -8,63 +8,81 @@ import { SearchManager } from '../../core/utils/search-manager';
 import { MedicalProgramsManagementService } from './medical-programs-management.service';
 import { CreateMedicalProgramRequest } from './Models/create-medical-program-request.model';
 import { UpdateMedicalProgramRequest } from './Models/update-medical-program-request.model';
-
+import { PageRequest } from '../../core/models/Shared/page-request.model';
+import { MedicalProgramsFilterRequest } from './Models/medical-programs-filter.request';
 
 @Injectable({ providedIn: 'root' })
 export class MedicalProgramsFacade extends BaseFacade {
   private service = inject(MedicalProgramsManagementService);
 
-  // ================================
-  // Signals
-  // ================================
-  private _medicalPrograms = signal<MedicalProgramDto[]>([]);
-  medicalPrograms = this._medicalPrograms.asReadonly();
-
   constructor() {
     super();
   }
 
-  // ================================
-  // SEARCH MANAGER (ready - no public method yet)
-  // ================================
+  // ---------------------------------------------
+  // SIGNALS
+  // ---------------------------------------------
+  private _medicalPrograms = signal<MedicalProgramDto[]>([]);
+  medicalPrograms = this._medicalPrograms.asReadonly();
+
+  private _filters = signal<MedicalProgramsFilterRequest>({
+    searchTerm: '',
+    sectionId: null,
+    hasSection: null,
+    sortColumn: 'Name',
+    sortDirection: 'asc',
+  });
+  filters = this._filters.asReadonly();
+
+  private _pageRequest = signal<PageRequest>({
+    page: 1,
+    pageSize: 20,
+  });
+  pageRequest = this._pageRequest.asReadonly();
+
+  totalCount = signal<number>(0);
+  formValidationErrors = signal<Record<string, string[]>>({});
+
   private searchManager = new SearchManager<MedicalProgramDto[]>(
     (term: string) =>
-      this.service.getMedicalPrograms().pipe(
-        tap((res: ApiResult<MedicalProgramDto[]>) => {
-          if (!res.isSuccess) this.handleSearchError(res);
-        }),
-        map((res: ApiResult<MedicalProgramDto[]>) => {
-          const items = res.isSuccess && res.data ? res.data : [];
-          const t = (term ?? '').trim().toLowerCase();
-
-          if (!t) return items;
-
-          return items.filter((x) => {
-            const name = (x.name ?? '').toLowerCase();
-            const desc = (x.description ?? '').toLowerCase();
-            return name.includes(t) || desc.includes(t);
-          });
-        })
-      ),
-
-    null, // no cache here (service already caches)
-    (data) => this._medicalPrograms.set(data)
+      this.service
+        .getMedicalProgramsWithFilters(
+          { ...this._filters(), searchTerm: term },
+          this._pageRequest()
+        )
+        .pipe(
+          tap((result) => {
+            if (!result.isSuccess) this.handleLoadMedicalProgramsError(result);
+          }),
+          map((result) =>
+            result.isSuccess && result.data?.items ? result.data.items : []
+          )
+        ),
+    null,
+    (items: MedicalProgramDto[]) => this._medicalPrograms.set(items)
   );
-search(term: string): void {
-  this.searchManager.search(term);
-}
-  // ================================
-  // 1) LOAD MEDICAL PROGRAMS  ✅ (first method only)
-  // ================================
-  loadMedicalPrograms(): void {
+
+  search(term: string) {
+    this._filters.update((f) => ({ ...f, searchTerm: term }));
+    this._pageRequest.update((p) => ({ ...p, page: 1 }));
+    this.searchManager.search(term);
+  }
+  updateFilters(newFilters: Partial<MedicalProgramsFilterRequest>) {
+    this._filters.update((f) => ({ ...f, ...newFilters }));
+    this._pageRequest.update((p) => ({ ...p, page: 1 }));
+  }
+
+  loadMedicalPrograms() {
     this.service
-      .getMedicalPrograms()
+      .getMedicalProgramsWithFilters(this._filters(), this._pageRequest())
       .pipe(
-        tap((result: ApiResult<MedicalProgramDto[]>) => {
-          if (result.isSuccess && result.data) {
-            this._medicalPrograms.set(result.data);
+        tap((result: ApiResult<any>) => {
+          if (result.isSuccess && result.data?.items) {
+            this._medicalPrograms.set(result.data.items);
+            this.totalCount.set(result.data.totalCount ?? 0);
           } else {
             this._medicalPrograms.set([]);
+            this.totalCount.set(0);
             this.handleLoadMedicalProgramsError(result);
           }
         })
@@ -72,8 +90,38 @@ search(term: string): void {
       .subscribe();
   }
 
+  setPage(page: number) {
+    this._pageRequest.update((p) => ({ ...p, page }));
+    this.loadMedicalPrograms();
+  }
 
-  createMedicalProgram(dto: CreateMedicalProgramRequest) {
+  setPageSize(size: number) {
+    this._pageRequest.update((p) => ({
+      pageSize: size,
+      page: 1,
+    }));
+
+    this.loadMedicalPrograms();
+  }
+  resetFilters() {
+    this._filters.set({
+      searchTerm: '',
+      sectionId: null,
+      hasSection: null,
+      sortColumn: 'Name',
+      sortDirection: 'asc',
+    });
+
+    this._pageRequest.set({
+      page: 1,
+      pageSize: 20,
+    });
+
+    this._medicalPrograms.set([]);
+    this.totalCount.set(0);
+  }
+
+ createMedicalProgram(dto: CreateMedicalProgramRequest) {
   return this.handleCreateOrUpdate(
     this.service.createMedicalProgram(dto),
     {
@@ -83,14 +131,17 @@ search(term: string): void {
   ).pipe(
     tap((res) => {
       if (res.success) {
-        // reload list after create
+        this.formValidationErrors.set({});
         this.loadMedicalPrograms();
+      } else if (res.validationErrors) {
+        this.formValidationErrors.set(res.validationErrors);
       }
     })
   );
 }
 
-updateMedicalProgram(id: number, dto: UpdateMedicalProgramRequest) {
+
+ updateMedicalProgram(id: number, dto: UpdateMedicalProgramRequest) {
   return this.handleCreateOrUpdate(
     this.service.updateMedicalProgram(id, dto),
     {
@@ -100,76 +151,83 @@ updateMedicalProgram(id: number, dto: UpdateMedicalProgramRequest) {
   ).pipe(
     tap((res) => {
       if (res.success) {
-        // reload list after update
+        this.formValidationErrors.set({});
         this.loadMedicalPrograms();
+      } else if (res.validationErrors) {
+        this.formValidationErrors.set(res.validationErrors);
       }
     })
   );
 }
 
-// ================================
-// SELECTED MEDICAL PROGRAM + EDIT MODE
-// ================================
-private _selectedMedicalProgram = signal<MedicalProgramDto | null>(null);
-selectedMedicalProgram = this._selectedMedicalProgram.asReadonly();
 
-isEditMode = signal<boolean>(false);
+  // ================================
+  // SELECTED MEDICAL PROGRAM + EDIT MODE
+  // ================================
+  private _selectedMedicalProgram = signal<MedicalProgramDto | null>(null);
+  selectedMedicalProgram = this._selectedMedicalProgram.asReadonly();
 
-enterCreateMode(): void {
+  isEditMode = signal<boolean>(false);
+
+ enterCreateMode(): void {
   this.isEditMode.set(false);
   this._selectedMedicalProgram.set(null);
+  this.formValidationErrors.set({});
 }
 
-loadMedicalProgramForEdit(id: number): void {
-  this.isEditMode.set(true);
-  this._selectedMedicalProgram.set(null);
 
-  this.service
-    .getMedicalProgramById(id)
-    .pipe(
-      tap((result: ApiResult<MedicalProgramDto>) => {
-        if (result.isSuccess && result.data) {
-          this._selectedMedicalProgram.set(result.data);
-        } else {
-          this.toast.error(
-            result.errorDetail ?? 'لم يتم العثور على البرنامج الطبي'
-          );
-          this.isEditMode.set(false);
-          this._selectedMedicalProgram.set(null);
-        }
-      })
-    )
-    .subscribe();
-}
+  loadMedicalProgramForEdit(id: number): void {
+    this.isEditMode.set(true);
+    this._selectedMedicalProgram.set(null);
 
-// ================================
-// DELETE
-// ================================
-deleteMedicalProgram(program: MedicalProgramDto): void {
-  if (!program?.id) return;
+    this.service
+      .getMedicalProgramById(id)
+      .pipe(
+        tap((result: ApiResult<MedicalProgramDto>) => {
+          if (result.isSuccess && result.data) {
+            this._selectedMedicalProgram.set(result.data);
+              this.formValidationErrors.set({});
 
-  const config = {
-    title: 'حذف البرنامج الطبي',
-    message: 'هل أنت متأكد من حذف البرنامج الطبي التالي؟',
-    payload: {
-      الاسم: program.name,
-      الوصف: program.description ?? '',
-    },
-  };
+          } else {
+            this.toast.error(
+              result.errorDetail ?? 'لم يتم العثور على البرنامج الطبي'
+            );
+            this.isEditMode.set(false);
+            this._selectedMedicalProgram.set(null);
+          }
+        })
+      )
+      .subscribe();
+  }
 
-  this.confirmAndDelete(
-    config,
-    () => this.service.deleteMedicalProgram(program.id),
-    {
-      successMessage: 'تم حذف البرنامج الطبي بنجاح',
-      defaultErrorMessage: 'فشل حذف البرنامج الطبي. حاول لاحقاً.',
-    }
-  ).subscribe((success) => {
-    if (success) {
-      this.loadMedicalPrograms();
-    }
-  });
-}
+  // ================================
+  // DELETE
+  // ================================
+  deleteMedicalProgram(program: MedicalProgramDto): void {
+    if (!program?.id) return;
+
+    const config = {
+      title: 'حذف البرنامج الطبي',
+      message: 'هل أنت متأكد من حذف البرنامج الطبي التالي؟',
+      payload: {
+        الاسم: program.name,
+        الوصف: program.description ?? '',
+      },
+    };
+
+    this.confirmAndDelete(
+      config,
+      () => this.service.deleteMedicalProgram(program.id),
+      {
+        successMessage: 'تم حذف البرنامج الطبي بنجاح',
+        defaultErrorMessage: 'فشل حذف البرنامج الطبي. حاول لاحقاً.',
+      }
+    ).subscribe((success) => {
+      if (success) {
+        this.loadMedicalPrograms();
+      }
+    });
+  }
 
   // ================================
   // Error Handlers (minimal)
@@ -181,15 +239,6 @@ deleteMedicalProgram(program: MedicalProgramDto): void {
       return;
     }
     this.toast.error('تعذر تحميل البرامج الطبية. يرجى المحاولة لاحقاً.');
-  }
-
-  private handleSearchError(result: ApiResult<any>) {
-    const err = this.extractError(result);
-    if (err.type === 'validation' || err.type === 'business') {
-      this.toast.info(err.message);
-      return;
-    }
-    this.toast.error('حدث خطأ أثناء تنفيذ عملية البحث.');
   }
 
 }

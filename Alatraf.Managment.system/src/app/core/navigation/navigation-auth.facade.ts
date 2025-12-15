@@ -45,7 +45,7 @@ export class NavigationAuthFacade {
       case 'Appointment':
         return AppRoutes.Appointment.root;
         case 'Admin':
-        return AppRoutes.industrialParts.root;
+        return AppRoutes.medicalPrograms.root;
 
       // case 'Manager':
       //   return AppRoutes.management.dashboard;

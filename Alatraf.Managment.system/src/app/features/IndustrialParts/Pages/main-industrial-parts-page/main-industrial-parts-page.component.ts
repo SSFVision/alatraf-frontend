@@ -2,7 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ManagementEntityCardComponent } from '../../../../shared/components/management-entity-card/management-entity-card.component';
 import { ManagementEntityCardUiModel } from '../../../../shared/models/management-entity-card.ui-model';
-import { IndustrialPartsNavigationFacade } from './../../industrial-parts-navigation.facade.service';
+import { IndustrialPartsNavigationFacade } from '../../../../core/navigation/industrial-parts-navigation.facade';
 
 @Component({
   selector: 'app-main-industrial-parts-page',

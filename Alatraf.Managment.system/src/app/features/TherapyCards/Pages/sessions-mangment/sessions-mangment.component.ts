@@ -213,9 +213,7 @@ export class SessionsManagementComponent implements OnInit {
     console.log('View session details:', sessionId);
   }
 
-  // ------------------------------------------------------------------
-  // Submit (Add only – API later)
-  // ------------------------------------------------------------------
+
   submit(): void {
     if (this.sessionForm.invalid) {
       this.sessionForm.markAllAsTouched();

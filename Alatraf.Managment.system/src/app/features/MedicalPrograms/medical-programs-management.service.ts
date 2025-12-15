@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of, tap } from 'rxjs';
 
 import { ApiResult } from '../../core/models/ApiResult';
@@ -10,6 +10,9 @@ import { CreateMedicalProgramRequest } from './Models/create-medical-program-req
 import { UpdateMedicalProgramRequest } from './Models/update-medical-program-request.model';
 import { CacheService } from '../../core/services/cache.service';
 import { CACHE_KEYS } from '../../core/constants/cache-keys.constants';
+import { PageRequest } from '../../core/models/Shared/page-request.model';
+import { PaginatedList } from '../../core/models/Shared/paginated-list.model';
+import { MedicalProgramsFilterRequest } from './Models/medical-programs-filter.request';
 
 @Injectable({ providedIn: 'root' })
 export class MedicalProgramsManagementService extends BaseApiService {
@@ -19,25 +22,29 @@ export class MedicalProgramsManagementService extends BaseApiService {
 
   private medicalProgramsUrl = 'http://localhost:2003/api/v1/medical-programs';
 
-  getPagnidedMedicalPrograms(): Observable<ApiResult<MedicalProgramDto[]>> {
-    const cached = this.cache.get<MedicalProgramDto[]>(
-      CACHE_KEYS.MEDICAL_PROGRAMS
-    );
+  getMedicalProgramsWithFilters(
+    filters: MedicalProgramsFilterRequest,
+    pagination: PageRequest
+  ): Observable<ApiResult<PaginatedList<MedicalProgramDto>>> {
+    let params = new HttpParams()
+      .set('page', pagination.page)
+      .set('pageSize', pagination.pageSize);
 
-    if (cached) {
-      return of(ApiResult.success(cached));
+    if (filters) {
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== null && value !== undefined && value !== '') {
+          params = params.set(key, value as any);
+        }
+      });
     }
 
-    return this.get<MedicalProgramDto[]>(this.medicalProgramsUrl).pipe(
-      tap((res) => {
-        if (res.isSuccess && res.data) {
-          this.cache.set(CACHE_KEYS.MEDICAL_PROGRAMS, res.data);
-        }
-      })
+    return this.get<PaginatedList<MedicalProgramDto>>(
+      `${this.medicalProgramsUrl}/with-filters`,
+      params
     );
   }
 
-   getMedicalPrograms(): Observable<ApiResult<MedicalProgramDto[]>> {
+  getMedicalPrograms(): Observable<ApiResult<MedicalProgramDto[]>> {
     const cached = this.cache.get<MedicalProgramDto[]>(
       CACHE_KEYS.MEDICAL_PROGRAMS
     );

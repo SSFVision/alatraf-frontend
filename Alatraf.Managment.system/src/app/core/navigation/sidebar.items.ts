@@ -88,6 +88,14 @@ export const MENU_CONFIG: MenuCategory[] = [
         route: `${AppRoutes.industrialParts.root}`,
         requiredPermissions: [PERMISSIONS.IndustrialParts.VIEW],
       },
+     
+      {
+        label: 'إدارة المواعيد',
+        icon: 'assets/icons/prosthetic-foot-w.svg',
+        activeIcon: 'assets/icons/prosthetic-foot-b.svg',
+        route: AppRoutes.Appointment.root,
+        requiredPermissions: [PERMISSIONS.Appointment.VIEW],
+      },
     ],
   },
 
@@ -105,17 +113,5 @@ export const MENU_CONFIG: MenuCategory[] = [
     ],
   },
 
-  {
-    category: 'قسم   المواعيد ',
-    CateRoute: AppRoutes.Appointment.root,
-    items: [
-      {
-        label: 'إدارة المواعيد',
-        icon: 'assets/icons/prosthetic-foot-w.svg',
-        activeIcon: 'assets/icons/prosthetic-foot-b.svg',
-        route: AppRoutes.Appointment.root,
-        requiredPermissions: [PERMISSIONS.Appointment.VIEW],
-      },
-    ],
-  },
+
 ];
