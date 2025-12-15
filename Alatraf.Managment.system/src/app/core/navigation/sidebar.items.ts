@@ -60,6 +60,13 @@ export const MENU_CONFIG: MenuCategory[] = [
         route: `${AppRoutes.medicalPrograms.root}`,
         requiredPermissions: [PERMISSIONS.MedicalPrograms.VIEW],
       },
+      {
+        label: ' إدارة الاقسام ',
+        icon: 'assets/icons/dumbbell-w.svg',
+        activeIcon: 'assets/icons/dumbbell-b.svg',
+        route: `${AppRoutes.sections.root}`,
+        requiredPermissions: [PERMISSIONS.MedicalPrograms.VIEW],
+      },
     ],
   },
 
@@ -88,6 +95,14 @@ export const MENU_CONFIG: MenuCategory[] = [
         route: `${AppRoutes.industrialParts.root}`,
         requiredPermissions: [PERMISSIONS.IndustrialParts.VIEW],
       },
+     
+      {
+        label: 'إدارة المواعيد',
+        icon: 'assets/icons/prosthetic-foot-w.svg',
+        activeIcon: 'assets/icons/prosthetic-foot-b.svg',
+        route: AppRoutes.Appointment.root,
+        requiredPermissions: [PERMISSIONS.Appointment.VIEW],
+      },
     ],
   },
 
@@ -105,17 +120,5 @@ export const MENU_CONFIG: MenuCategory[] = [
     ],
   },
 
-  {
-    category: 'قسم   المواعيد ',
-    CateRoute: AppRoutes.Appointment.root,
-    items: [
-      {
-        label: 'إدارة المواعيد',
-        icon: 'assets/icons/prosthetic-foot-w.svg',
-        activeIcon: 'assets/icons/prosthetic-foot-b.svg',
-        route: AppRoutes.Appointment.root,
-        requiredPermissions: [PERMISSIONS.Appointment.VIEW],
-      },
-    ],
-  },
+
 ];

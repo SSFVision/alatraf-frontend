@@ -83,6 +83,13 @@ export const APP_ROUTES: Routes = [
             (m) => m.IndustrialPartsRoutes
           ),
       },
+      {
+        path: AppRoutes.sections.root,
+        loadChildren: () =>
+          import('./features/Organization/Sections/sections.routes').then(
+            (m) => m.SectionsRoutes
+          ),
+      },
     ],
   },
   {

@@ -2,10 +2,18 @@
   <!-- LEFT SIDE: LIST -->
   <div
     class="box max-width-324 culumn gap-24 max-hight-800"
-    id="therapy-program-list-container"
+    id="sections-list-container"
   >
-    <h2 class="title-md">البرامج العلاجية</h2>
-
+ <div class="row space-between">
+    <h2 class="title-md">الأقسام</h2>
+        <div
+          class="primary-color-background WH-40 flex-center border-radius-20"
+        >
+          <h2 class="title-md white-color margin-auto">
+            {{ card().length }}
+          </h2>
+        </div>
+      </div>
     <!-- SEARCH -->
     <div class="search-box">
       <img
@@ -15,7 +23,7 @@
       />
       <input
         type="text"
-        placeholder="بحث: اسم البرنامج أو الرقم"
+        placeholder="بحث: اسم القسم"
         (input)="onSearch($any($event.target).value)"
       />
     </div>
@@ -30,8 +38,8 @@
 
     <!-- ADD BUTTON -->
     <div class="flex-center">
-      <button class="btn primary" (click)="goToAddMedicalProgram()">
-        إضافة برنامج علاجي
+      <button class="btn primary" (click)="goToAddSection()">
+        إضافة قسم
       </button>
     </div>
   </div>

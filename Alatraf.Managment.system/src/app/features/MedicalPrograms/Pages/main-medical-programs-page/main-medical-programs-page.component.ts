@@ -1,8 +1,9 @@
 import { MedicalProgramsNavigationFacade } from '../../../../core/navigation/navigation-medical-programs.facade';
-import { Component, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { ManagementEntityCardComponent } from '../../../../shared/components/management-entity-card/management-entity-card.component';
 import { ManagementEntityCardUiModel } from '../../../../shared/models/management-entity-card.ui-model';
 import { RouterOutlet } from '@angular/router';
+import { MedicalProgramsFacade } from '../../Services/medical-programs.facade.service';
 
 @Component({
   selector: 'app-medical-programs-page',
@@ -11,38 +12,44 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './main-medical-programs-page.component.css',
 })
 export class MainMedicalProgramsPageComponent {
-  card = signal(MANAGEMENT_ENTITY_CARD_TEST_DATA);
-  loading = signal(false);
-  selectedId = signal<number | string | null>(null);
+  private facade = inject(MedicalProgramsFacade);
   private nav = inject(MedicalProgramsNavigationFacade);
+
+  card = signal<ManagementEntityCardUiModel[]>([]);
+  loading = signal<boolean>(true);
+  selectedId = signal<number | string | null>(null);
+addMode=signal<boolean>(false);
+
+  constructor() {
+    // initial load (first page)
+    this.facade.loadMedicalPrograms();
+
+    // react to facade data changes
+    effect(() => {
+      const programs = this.facade.medicalPrograms();
+
+      this.card.set(
+        programs.map((p) => ({
+          id: p.id,
+          name: p.name,
+          sectionName: p.sectionName ?? null,
+        }))
+      );
+
+      this.loading.set(false);
+    });
+  }
 
   onCardSelected(id: number | string) {
     this.selectedId.set(id);
-    this.nav.goToViewMedicalProgramPage(id);
+    this.nav.goToEditMedicalProgramPage(id);
   }
+
   goToAddMedicalProgram() {
+this.addMode.set(true)
     this.nav.goToCreateMedicalProgramPage();
   }
+  onSearch(term: string) {
+    this.facade.search(term);
+  }
 }
-export const MANAGEMENT_ENTITY_CARD_TEST_DATA: ManagementEntityCardUiModel[] = [
-  {
-    id: 1,
-    name: 'مساج',
-    sectionName: 'العلاج الطبيعي',
-  },
-  {
-    id: 2,
-    name: 'تمارين تأهيلية',
-    sectionName: 'العلاج الطبيعي',
-  },
-  {
-    id: 3,
-    name: 'تقويم أطراف صناعية',
-    sectionName: 'الأطراف الصناعية',
-  },
-  {
-    id: 4,
-    name: 'جبائر طبية',
-    sectionName: 'العلاج الطبيعي',
-  },
-];

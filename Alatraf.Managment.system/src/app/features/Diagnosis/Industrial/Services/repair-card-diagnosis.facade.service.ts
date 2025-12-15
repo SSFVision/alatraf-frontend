@@ -12,7 +12,7 @@ import { RepairCardDiagnosisService } from './repair-card-diagnosis.service';
 import { InjuryDto } from '../../../../core/models/injuries/injury.dto';
 
 import { InjuriesManagementService } from '../../../Injuries/Services/injuries-management.service';
-import { IndustrialPartsManagementService } from '../../../IndustrialParts/industrial-parts-management.service';
+import { IndustrialPartsManagementService } from '../../../IndustrialParts/Services/industrial-parts-management.service';
 import { IndustrialPartDto } from '../../../../core/models/industrial-parts/industrial-partdto';
 
 @Injectable({
@@ -52,7 +52,8 @@ export class RepairCardDiagnosisFacade extends BaseFacade {
       parts: this.industrialPartsService.getIndustrialParts(),
     }).subscribe({
       next: (res) => {
-        if (res.reasons.isSuccess) this.injuryReasons.set(res.reasons.data ?? []);
+        if (res.reasons.isSuccess)
+          this.injuryReasons.set(res.reasons.data ?? []);
         if (res.types.isSuccess) this.injuryTypes.set(res.types.data ?? []);
         if (res.sides.isSuccess) this.injurySides.set(res.sides.data ?? []);
         if (res.parts.isSuccess) this.industrialParts.set(res.parts.data ?? []);
@@ -79,29 +80,26 @@ export class RepairCardDiagnosisFacade extends BaseFacade {
     this.formValidationErrors.set({});
     this.createdRepairCard.set(null);
 
-    this.repairService
-      .getRepairCardById(repairCardId)
-      .pipe(
-        tap((result) => {
-          if (result.isSuccess && result.data) {
-            this._selectedRepairCard.set(result.data);
-          } else {
-            this.toast.error(result.errorDetail ?? 'لم يتم العثور على بطاقة الإصلاح');
-            this.isEditMode.set(false);
-          }
-        })
-      )
+    this.repairService.getRepairCardById(repairCardId).pipe(
+      tap((result) => {
+        if (result.isSuccess && result.data) {
+          this._selectedRepairCard.set(result.data);
+        } else {
+          this.toast.error(
+            result.errorDetail ?? 'لم يتم العثور على بطاقة الإصلاح'
+          );
+          this.isEditMode.set(false);
+        }
+      })
+    );
   }
 
   // ------------------ CREATE ------------------
   createRepairCard(dto: CreateRepairCardRequest) {
-    return this.handleCreateOrUpdate(
-      this.repairService.createRepairCard(dto),
-      {
-        successMessage: 'تم حفظ بطاقة الإصلاح بنجاح',
-        defaultErrorMessage: 'فشل حفظ بطاقة الإصلاح. يرجى المحاولة لاحقاً.',
-      }
-    ).pipe(
+    return this.handleCreateOrUpdate(this.repairService.createRepairCard(dto), {
+      successMessage: 'تم حفظ بطاقة الإصلاح بنجاح',
+      defaultErrorMessage: 'فشل حفظ بطاقة الإصلاح. يرجى المحاولة لاحقاً.',
+    }).pipe(
       tap((res) => {
         if (res.success && res.data) {
           this.createdRepairCard.set(res.data);

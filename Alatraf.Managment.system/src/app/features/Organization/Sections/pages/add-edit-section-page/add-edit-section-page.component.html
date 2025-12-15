@@ -1,0 +1,60 @@
+<h1 class="title-lg">
+  {{ isEditMode() ? 'تعديل قسم' : 'إضافة قسم' }}
+</h1>
+
+<form
+  class="padding-LR-24 column gap-16"
+  [formGroup]="form"
+  (ngSubmit)="submit()"
+>
+  <div class="width-100">
+    <p class="title-md">بيانات القسم</p>
+    <span class="home-line"></span>
+  </div>
+
+  <!-- NAME -->
+  <div class="row flex-center">
+    <label class="label-lg">الاسم</label>
+    <input
+      class="label-lg"
+      type="text"
+      formControlName="name"
+    />
+  </div>
+
+  <!-- DEPARTMENT -->
+  <div class="row flex-center">
+    <label class="label-lg">القسم الرئيسي</label>
+
+    <select class="label-lg" formControlName="departmentId">
+      <option [ngValue]="null">-- اختر قسم --</option>
+
+      @for (dept of departments(); track dept.id) {
+        <option [ngValue]="dept.id">
+          {{ dept.name }}
+        </option>
+      }
+    </select>
+  </div>
+
+  <!-- ACTIONS -->
+  <div class="flex-center gap-16">
+    <button
+      class="btn primary"
+      type="submit"
+      [disabled]="!canSubmit()"
+    >
+      {{ isEditMode() ? 'تعديل' : 'إضافة' }}
+    </button>
+
+    @if (canDelete()) {
+      <button
+        class="btn danger"
+        type="button"
+        (click)="delete()"
+      >
+        حذف
+      </button>
+    }
+  </div>
+</form>
