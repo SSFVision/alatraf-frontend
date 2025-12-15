@@ -81,5 +81,10 @@ IndustrialParts: {
   UPDATE: 'industrial-part:update',
   DELETE: 'industrial-part:delete',
 },
-
+ Sections: {
+    VIEW: 'Sections.View',
+    CREATE: 'Sections.Create',
+    EDIT: 'Sections.Edit',
+    DELETE: 'Sections.Delete',
+  },
 } as const;

@@ -21,7 +21,7 @@ export class SectionsFacade extends BaseFacade {
   }
 
   // ---------------------------------------------
-  // SIGNALS
+  // LIST STATE
   // ---------------------------------------------
   private _sections = signal<SectionDto[]>([]);
   sections = this._sections.asReadonly();
@@ -41,11 +41,10 @@ export class SectionsFacade extends BaseFacade {
   pageRequest = this._pageRequest.asReadonly();
 
   totalCount = signal<number>(0);
-
   formValidationErrors = signal<Record<string, string[]>>({});
 
   // ---------------------------------------------
-  // SEARCH MANAGER (server-side, paginated)
+  // SEARCH MANAGER
   // ---------------------------------------------
   private searchManager = new SearchManager<SectionDto[]>(
     (term: string) =>
@@ -55,21 +54,19 @@ export class SectionsFacade extends BaseFacade {
           this._pageRequest()
         )
         .pipe(
-          tap((result) => {
-            if (!result.isSuccess) this.handleLoadSectionsError(result);
+          tap((res) => {
+            if (!res.isSuccess) this.handleLoadSectionsError(res);
           }),
-          map((result) =>
-            result.isSuccess && result.data?.items
-              ? result.data.items
-              : []
+          map((res) =>
+            res.isSuccess && res.data?.items ? res.data.items : []
           )
         ),
     null,
-    (items: SectionDto[]) => this._sections.set(items)
+    (items) => this._sections.set(items)
   );
 
   // ---------------------------------------------
-  // SEARCH
+  // SEARCH & FILTERS
   // ---------------------------------------------
   search(term: string) {
     this._filters.update((f) => ({ ...f, searchTerm: term }));
@@ -77,9 +74,6 @@ export class SectionsFacade extends BaseFacade {
     this.searchManager.search(term);
   }
 
-  // ---------------------------------------------
-  // FILTERS
-  // ---------------------------------------------
   updateFilters(newFilters: Partial<SectionFilterRequest>) {
     this._filters.update((f) => ({ ...f, ...newFilters }));
     this._pageRequest.update((p) => ({ ...p, page: 1 }));
@@ -102,28 +96,25 @@ export class SectionsFacade extends BaseFacade {
   }
 
   setPageSize(size: number) {
-    this._pageRequest.update((p) => ({
-      pageSize: size,
-      page: 1,
-    }));
+    this._pageRequest.update((p) => ({ page: 1, pageSize: size }));
     this.loadSections();
   }
 
   // ---------------------------------------------
-  // LOAD
+  // LOAD LIST
   // ---------------------------------------------
   loadSections() {
     this.service
       .getSections(this._filters(), this._pageRequest())
       .pipe(
-        tap((result: ApiResult<any>) => {
-          if (result.isSuccess && result.data?.items) {
-            this._sections.set(result.data.items);
-            this.totalCount.set(result.data.totalCount ?? 0);
+        tap((res) => {
+          if (res.isSuccess && res.data?.items) {
+            this._sections.set(res.data.items);
+            this.totalCount.set(res.data.totalCount ?? 0);
           } else {
             this._sections.set([]);
             this.totalCount.set(0);
-            this.handleLoadSectionsError(result);
+            this.handleLoadSectionsError(res);
           }
         })
       )
@@ -138,17 +129,13 @@ export class SectionsFacade extends BaseFacade {
       sortDirection: 'asc',
     });
 
-    this._pageRequest.set({
-      page: 1,
-      pageSize: 10,
-    });
-
+    this._pageRequest.set({ page: 1, pageSize: 10 });
     this._sections.set([]);
     this.totalCount.set(0);
   }
 
   // ---------------------------------------------
-  // CREATE / UPDATE
+  // CREATE / UPDATE (🔥 LOCAL MUTATION)
   // ---------------------------------------------
   createSection(dto: CreateSectionRequest) {
     return this.handleCreateOrUpdate(this.service.createSection(dto), {
@@ -156,9 +143,9 @@ export class SectionsFacade extends BaseFacade {
       defaultErrorMessage: 'فشل إنشاء القسم. يرجى المحاولة لاحقاً.',
     }).pipe(
       tap((res) => {
-        if (res.success) {
+        if (res.success && res.data) {
           this.formValidationErrors.set({});
-          this.loadSections();
+          this.addSectionToList(res.data);
         } else if (res.validationErrors) {
           this.formValidationErrors.set(res.validationErrors);
         }
@@ -177,7 +164,7 @@ export class SectionsFacade extends BaseFacade {
       tap((res) => {
         if (res.success) {
           this.formValidationErrors.set({});
-          this.loadSections();
+          this.updateSectionInList(id, dto);
         } else if (res.validationErrors) {
           this.formValidationErrors.set(res.validationErrors);
         }
@@ -185,18 +172,54 @@ export class SectionsFacade extends BaseFacade {
     );
   }
 
-  // ---------------------------------------------
-  // DELETE
-  // ---------------------------------------------
+
+  private _selectedSection = signal<SectionDto | null>(null);
+  selectedSection = this._selectedSection.asReadonly();
+
+  isEditMode = signal<boolean>(false);
+
+  enterCreateMode(): void {
+    this.isEditMode.set(false);
+    this._selectedSection.set(null);
+    this.formValidationErrors.set({});
+  }
+
+  enterEditMode(section: SectionDto): void {
+    this.isEditMode.set(true);
+    this._selectedSection.set(section);
+    this.formValidationErrors.set({});
+  }
+
+  loadSectionForEdit(id: number): void {
+    const local = this._sections().find((s) => s.id === id);
+    if (local) {
+      this.enterEditMode(local);
+      return;
+    }
+
+    this.service
+      .getSectionById(id)
+      .pipe(
+        tap((res: ApiResult<SectionDto>) => {
+          if (res.isSuccess && res.data) {
+            this.enterEditMode(res.data);
+          } else {
+            this.toast.error(res.errorDetail ?? 'لم يتم العثور على القسم');
+            this.enterCreateMode();
+          }
+        })
+      )
+      .subscribe();
+  }
+
+
   deleteSection(section: SectionDto): void {
     if (!section?.id) return;
 
     const config = {
       title: 'حذف القسم',
       message: 'هل أنت متأكد من حذف القسم التالي؟',
-      payload: {
-        الاسم: section.name,
-      },
+      payload: { الاسم: section.name },
     };
 
     this.confirmAndDelete(
@@ -208,14 +231,47 @@ export class SectionsFacade extends BaseFacade {
       }
     ).subscribe((success) => {
       if (success) {
-        this.loadSections();
+        this.removeSectionFromList(section.id);
+        this.enterCreateMode();
       }
     });
   }
 
-  // ---------------------------------------------
-  // ERROR HANDLING
-  // ---------------------------------------------
+
+  private addSectionToList(section: SectionDto) {
+    this._sections.update((list) => [section, ...list]);
+    this.totalCount.update((c) => c + 1);
+  }
+
+  private updateSectionInList(id: number, dto: UpdateSectionRequest) {
+    this._sections.update((list) =>
+      list.map((s) =>
+        s.id === id
+          ? {
+              ...s,
+              name: dto.name,
+              departmentId: dto.departmentId,
+            }
+          : s
+      )
+    );
+
+    const selected = this._selectedSection();
+    if (selected?.id === id) {
+      this._selectedSection.set({
+        ...selected,
+        name: dto.name,
+        departmentId: dto.departmentId,
+      });
+    }
+  }
+
+  private removeSectionFromList(id: number) {
+    this._sections.update((list) => list.filter((s) => s.id !== id));
+    this.totalCount.update((c) => Math.max(0, c - 1));
+  }
+
+ 
   private handleLoadSectionsError(result: ApiResult<any>) {
     const err = this.extractError(result);
     if (err.type === 'validation' || err.type === 'business') {

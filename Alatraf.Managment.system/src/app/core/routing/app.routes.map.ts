@@ -126,6 +126,17 @@ export const AppRoutes = {
 
     view: (industrialPartId: number | string) => `view/${industrialPartId}`,
   },
+sections: {
+  root: 'sections',
+
+  list: 'sections',
+
+  create: 'create',
+
+  edit: (sectionId: number | string) => `edit/${sectionId}`,
+
+  view: (sectionId: number | string) => `view/${sectionId}`,
+},
 
   admin: {
     root: 'admin',

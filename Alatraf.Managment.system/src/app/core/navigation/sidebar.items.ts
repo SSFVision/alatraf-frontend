@@ -60,6 +60,13 @@ export const MENU_CONFIG: MenuCategory[] = [
         route: `${AppRoutes.medicalPrograms.root}`,
         requiredPermissions: [PERMISSIONS.MedicalPrograms.VIEW],
       },
+      {
+        label: ' إدارة الاقسام ',
+        icon: 'assets/icons/dumbbell-w.svg',
+        activeIcon: 'assets/icons/dumbbell-b.svg',
+        route: `${AppRoutes.sections.root}`,
+        requiredPermissions: [PERMISSIONS.MedicalPrograms.VIEW],
+      },
     ],
   },
 
