@@ -43,9 +43,7 @@ export class MainRepairCardsWaitingListComponent {
   selectedCardId = signal<number | null>(null);
   SelectedDoctorId = signal<number | null>(null);
 
-  // ------------------------------------------------------------------
-  // Patients VM (UNCHANGED)
-  // ------------------------------------------------------------------
+  
   patientsVM = computed<GeneralWaitingPatientVM[]>(() =>
     this.paidRepairCards().map((card: RepairCardDiagnosisDto) => ({
       id: card.repairCardId,
@@ -67,19 +65,13 @@ export class MainRepairCardsWaitingListComponent {
     () => this.doctorWorkloadFacade.technicians().length === 0
   );
 
-  // ------------------------------------------------------------------
-  // Lifecycle
-  // ------------------------------------------------------------------
   ngOnInit(): void {
     this.repairCardsFacade.loadPaidRepairCards().subscribe();
 
     this.doctorWorkloadFacade.loadTechnicians();
   }
 
-  ngOnDestroy(): void {
-    this.repairCardsFacade.resetPaidFilters();
-    this.doctorWorkloadFacade.resetTechnicians();
-  }
+ 
 
 
   onSearch(term: string): void {
