@@ -13,7 +13,6 @@ export const RepairCardsRoutes: Routes = [
       ).then((m) => m.MainRepairCardsWaitingListComponent),
 
     children: [
-      // ================= WORKSPACE =================
       {
         path: ':repairCardId/assignments/assign-parts',
         canActivate: [PermissionGuard],
@@ -23,7 +22,15 @@ export const RepairCardsRoutes: Routes = [
             './Pages/repair-card-assignments-workspace/repair-card-assignments-workspace.component'
           ).then((m) => m.RepairCardAssignmentsWorkspaceComponent),
       },
-
+      {
+        path: 'doctors/:doctorId',
+        canActivate: [PermissionGuard],
+        data: { permission: PERMISSIONS.Doctors.VIEW },
+        loadComponent: () =>
+          import(
+            '../Organization/Doctors/Pages/doctor-workspace-page/doctor-workspace-page.component'
+          ).then((m) => m.DoctorWorkspacePageComponent),
+      },
       // ================= ASSIGN WHOLE CARD =================
       // {
       //   path: ':repairCardId/assignments/assign-doctor',

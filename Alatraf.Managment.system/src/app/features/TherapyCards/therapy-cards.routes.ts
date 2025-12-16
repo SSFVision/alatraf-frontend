@@ -18,13 +18,22 @@ export const TherapyCardsRoutes: Routes = [
         canActivate: [PermissionGuard],
         data: { permission: PERMISSIONS.THERAPY_SESSIONS.ADD },
         loadComponent: () =>
+          import('./Pages/sessions-mangment/sessions-mangment.component').then(
+            (m) => m.SessionsManagementComponent
+          ),
+      },
+      {
+        path: 'doctors/:doctorId',
+        canActivate: [PermissionGuard],
+        data: { permission: PERMISSIONS.Doctors.VIEW },
+        loadComponent: () =>
           import(
-            './Pages/sessions-mangment/sessions-mangment.component'
-          ).then((m) => m.SessionsManagementComponent),
+            '../Organization/Doctors/Pages/doctor-workspace-page/doctor-workspace-page.component'
+          ).then((m) => m.DoctorWorkspacePageComponent),
       },
     ],
   },
- {
+  {
     path: '',
     redirectTo: 'therapy-cards',
     pathMatch: 'full',
@@ -78,6 +87,4 @@ export const TherapyCardsRoutes: Routes = [
   //       './Pages/assign-doctors/assign-doctors.component'
   //     ).then((m) => m.AssignDoctorsComponent),
   // },
-
- 
 ];

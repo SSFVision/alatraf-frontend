@@ -90,6 +90,13 @@ export const APP_ROUTES: Routes = [
             (m) => m.SectionsRoutes
           ),
       },
+        {
+        path: AppRoutes.doctors.root,
+        loadChildren: () =>
+          import('./features/Organization/Doctors/doctors.routes').then(
+            (m) => m.DoctorsRoutes
+          ),
+      },
     ],
   },
   {

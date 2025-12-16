@@ -1,10 +1,36 @@
- <div class="max-hight-712 column gap-16">
-        <div class="card primary-card row space-between">
-          <p class="body-md flex-center">د/ مصلح شرهان علي الرياشي</p>
-          <div
-            class="primary-color-background WH-40 flex-center border-radius-20"
-          >
-            <h2 class="title-md white-color margin-auto">13</h2>
-          </div>
-        </div>
-      </div>
+@if (!loading() && (!doctors() || doctors().length === 0)) {
+  <div class="empty-state">
+    <img src="assets/images/amico.svg" alt="no doctors" class="empty-icon" />
+    <p class="body-md primary-color-50">
+      لا يوجد أطباء متاحين حالياً
+    </p>
+  </div>
+}
+
+@for (doctor of doctors(); track doctor.id) {
+  <div
+    class="card cursor-pointer primary-card row space-between"
+    [class.selected]="selectedId() === doctor.id"
+    (click)="onSelect(doctor)"
+  >
+    <!-- Doctor name -->
+    <div class="column gap-4">
+      <p class="body-md">
+        د/ {{ doctor.name }}
+      </p>
+
+      @if (doctor.sectionName) {
+        <p class="body-sm primary-color-50">
+          {{ doctor.sectionName }}
+        </p>
+      }
+    </div>
+
+    <!-- Today total -->
+    <div class="primary-color-background WH-40 flex-center border-radius-20">
+      <h2 class="title-md white-color margin-auto">
+        {{ doctor.todayCount }}
+      </h2>
+    </div>
+  </div>
+}

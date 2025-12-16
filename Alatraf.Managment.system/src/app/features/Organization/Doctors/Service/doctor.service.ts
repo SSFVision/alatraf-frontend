@@ -13,6 +13,10 @@ import { DoctorListItemDto } from '../Models/doctor-list-item.dto';
 import { DoctorDto } from '../Models/doctor.dto';
 import { UpdateDoctorRequest } from '../Models/update-doctor.request';
 import { DoctorsFilterRequest } from '../Models/doctors-filter.request';
+import { TechnicianFilterRequest } from '../Models/technicians/technician-filter.request';
+import { TechnicianDto } from '../Models/technicians/technician.dto';
+import { TherapistFilterRequest } from '../Models/therapists/therapist-filter.request';
+import { TherapistDto } from '../Models/therapists/therapist.dto';
 
 
 @Injectable({
@@ -112,4 +116,52 @@ export class DoctorService extends BaseApiService {
       headers
     );
   }
+
+
+  getTechniciansDropdown(
+  filters: TechnicianFilterRequest,
+  pagination: PageRequest
+): Observable<ApiResult<PaginatedList<TechnicianDto>>> {
+  let params = new HttpParams()
+    .set('page', pagination.page)
+    .set('pageSize', pagination.pageSize);
+
+  if (filters) {
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== null && value !== undefined && value !== '') {
+        params = params.set(key, value as any);
+      }
+    });
+  }
+
+  return this.get<PaginatedList<TechnicianDto>>(
+    `${this.endpoint}/technicians`,
+    params
+  );
+}
+
+// -----------------------------
+// GET: Therapists Dropdown
+// -----------------------------
+getTherapistsDropdown(
+  filters: TherapistFilterRequest,
+  pagination: PageRequest
+): Observable<ApiResult<PaginatedList<TherapistDto>>> {
+  let params = new HttpParams()
+    .set('page', pagination.page)
+    .set('pageSize', pagination.pageSize);
+
+  if (filters) {
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== null && value !== undefined && value !== '') {
+        params = params.set(key, value as any);
+      }
+    });
+  }
+
+  return this.get<PaginatedList<TherapistDto>>(
+    `${this.endpoint}/therapists`,
+    params
+  );
+}
 }

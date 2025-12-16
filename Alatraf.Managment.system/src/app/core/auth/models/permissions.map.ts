@@ -87,4 +87,10 @@ IndustrialParts: {
     EDIT: 'Sections.Edit',
     DELETE: 'Sections.Delete',
   },
+  Doctors: {
+    VIEW: 'Doctors.View',
+    CREATE: 'Doctors.Create',
+    UPDATE: 'Doctors.Update',
+    DELETE: 'Doctors.Delete',
+  },
 } as const;
