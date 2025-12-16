@@ -28,12 +28,11 @@ export class MainTherapyPatientsWatingListComponent implements OnDestroy {
   loading = this.sessionsFacade.loadingPaidTherapyCards;
   totalCount = this.sessionsFacade.paidTotalCount;
 
- 
   private navTherapyCard = inject(TherapyCardsNavigationFacade);
 
   selectedCardId = signal<number | null>(null);
+  SelectedDoctorId = signal<number | null>(null);
 
-  
   patientsVM = computed<GeneralWaitingPatientVM[]>(() =>
     this.paidTherapyCards().map((card: TherapyCardDiagnosisDto) => ({
       id: card.therapyCardId,
@@ -41,7 +40,7 @@ export class MainTherapyPatientsWatingListComponent implements OnDestroy {
       cardNumber: card.therapyCardId,
       fullName: card.patientName,
       gender: card.gender,
-      extraInfo:card.diagnosisType
+      extraInfo: card.diagnosisType,
     }))
   );
 
@@ -69,7 +68,10 @@ export class MainTherapyPatientsWatingListComponent implements OnDestroy {
 
   select(patient: GeneralWaitingPatientVM): void {
     this.selectedCardId.set(patient.id);
-
     this.navTherapyCard.goToCreateTherapySessionPage(patient.id);
+  }
+
+  OnSelectDoctor(doctorId: number) {
+    this.SelectedDoctorId.set(doctorId);
   }
 }

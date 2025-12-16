@@ -18,9 +18,6 @@ export class IndustrialPartsFacade extends BaseFacade {
     super();
   }
 
-  // ---------------------------------------------
-  // SIGNALS
-  // ---------------------------------------------
   private _industrialParts = signal<IndustrialPartDto[]>([]);
   industrialParts = this._industrialParts.asReadonly();
 
@@ -41,9 +38,7 @@ export class IndustrialPartsFacade extends BaseFacade {
 
   formValidationErrors = signal<Record<string, string[]>>({});
 
-  // ---------------------------------------------
-  // SEARCH MANAGER (server-side, paginated)
-  // ---------------------------------------------
+
   private searchManager = new SearchManager<IndustrialPartDto[]>(
     (term: string) =>
       this.service

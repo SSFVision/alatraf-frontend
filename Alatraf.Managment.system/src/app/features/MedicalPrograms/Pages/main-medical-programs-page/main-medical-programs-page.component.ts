@@ -21,13 +21,9 @@ export class MainMedicalProgramsPageComponent {
 addMode=signal<boolean>(false);
 
   constructor() {
-    // initial load (first page)
     this.facade.loadMedicalPrograms();
-
-    // react to facade data changes
     effect(() => {
       const programs = this.facade.medicalPrograms();
-
       this.card.set(
         programs.map((p) => ({
           id: p.id,
