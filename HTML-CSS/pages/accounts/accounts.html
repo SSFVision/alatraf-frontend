@@ -19,7 +19,7 @@
 
   <main class="padding-32 row gap-16 padding-24">
 
-    <div class="box max-width-324 culumn gap-24 max-hight-800" id="services-list-container"></div>
+    <div class="box max-width-324 culumn gap-24 max-hight-800" id="accounts-list-container"></div>
 
     <div class="box hight-800 gap-16 flex-center" id="hi-employee-container">
     </div>
@@ -40,10 +40,10 @@
         document.getElementById("header-container").innerHTML = data;
       });
 
-    fetch("../template/services-list.html")
+    fetch("../template/accounts-list.html")
       .then(res => res.text())
       .then(data => {
-        document.getElementById("services-list-container").innerHTML = data;
+        document.getElementById("accounts-list-container").innerHTML = data;
       });
 
     fetch("../template/hi-employee.html")
