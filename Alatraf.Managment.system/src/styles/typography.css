@@ -118,7 +118,9 @@ th {
 
 /* Label / Large */
 .label-lg,
-input::placeholder {
+input::placeholder,
+th,
+td {
   font-size: 13.6px;
   /* 16px × 0.85 */
   font-weight: 400;
