@@ -1,54 +1,75 @@
-/* لإخفاء الـ checkbox الأصلي مع بقاءه قابل للوصول */
+/* ==============================
+   Ring Toggle – Base
+   ============================== */
+
 .ring-toggle input {
   position: absolute;
   opacity: 0;
   width: 1px;
   height: 1px;
+  min-width: unset !important;
 }
 
-/* مساحة النقر */
-.ring-toggle {
+label.ring-toggle {
+  min-width: unset !important;
+  width: auto !important;
+  padding: 0 !important;
+  margin: 0 !important;
   display: inline-flex;
   align-items: center;
-  cursor: pointer;
-  user-select: none;
+  justify-content: center;
 }
 
-/* شكل الحلقة */
+/* ==============================
+   Ring Appearance
+   ============================== */
+
 .ring-toggle .ring {
-  width: 72px;
-  /* غيّر الحجم حسب رغبتك */
-  aspect-ratio: 1 / 1;
-  border-radius: 999px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
   background: var(--red-color);
-  /* أحمر افتراضي */
   position: relative;
-  transition: background .15s ease, transform .1s ease;
+  transition: background 0.15s ease, transform 0.1s ease;
 }
 
-/* الفتحة الداخلية (الفراغ) */
 .ring-toggle .ring::after {
   content: "";
   position: absolute;
-  inset: 22px;
-  /* سماكة الحلقة: قللها لتزيد السماكة */
-  background: var(--wihte-color);
-  /* لون الخلفية داخل الفتحة */
-  border-radius: 999px;
+  inset: 6px;
+  background: var(--white-color, #fff);
+  border-radius: 50%;
 }
 
-/* عند التحديد يصبح أخضر */
+/* ==============================
+   States
+   ============================== */
+
 .ring-toggle input:checked+.ring {
   background: var(--green-color);
-  /* أخضر */
 }
 
-/* تحسينات تجربة الاستخدام */
 .ring-toggle input:focus-visible+.ring {
-  outline: 3px solid var(--primary-color);
-  outline-offset: 4px;
+  outline: 2px solid var(--primary-color);
+  outline-offset: 3px;
 }
 
 .ring-toggle:active .ring {
-  transform: scale(0.97);
+  transform: scale(0.95);
+}
+
+/* ==============================
+   Permissions Table
+   ============================== */
+
+.permissions-table td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.permissions-table td .ring-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }

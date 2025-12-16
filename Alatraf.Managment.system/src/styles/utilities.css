@@ -43,6 +43,10 @@
   padding: 0 24px;
 }
 
+.margin-LR-24 {
+  margin: 0 24px;
+}
+
 .padding-80 {
   padding: 80px;
 }
