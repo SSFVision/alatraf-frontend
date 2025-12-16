@@ -1,0 +1,54 @@
+/* لإخفاء الـ checkbox الأصلي مع بقاءه قابل للوصول */
+.ring-toggle input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+
+/* مساحة النقر */
+.ring-toggle {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* شكل الحلقة */
+.ring-toggle .ring {
+  width: 72px;
+  /* غيّر الحجم حسب رغبتك */
+  aspect-ratio: 1 / 1;
+  border-radius: 999px;
+  background: var(--red-color);
+  /* أحمر افتراضي */
+  position: relative;
+  transition: background .15s ease, transform .1s ease;
+}
+
+/* الفتحة الداخلية (الفراغ) */
+.ring-toggle .ring::after {
+  content: "";
+  position: absolute;
+  inset: 22px;
+  /* سماكة الحلقة: قللها لتزيد السماكة */
+  background: var(--wihte-color);
+  /* لون الخلفية داخل الفتحة */
+  border-radius: 999px;
+}
+
+/* عند التحديد يصبح أخضر */
+.ring-toggle input:checked+.ring {
+  background: var(--green-color);
+  /* أخضر */
+}
+
+/* تحسينات تجربة الاستخدام */
+.ring-toggle input:focus-visible+.ring {
+  outline: 3px solid var(--primary-color);
+  outline-offset: 4px;
+}
+
+.ring-toggle:active .ring {
+  transform: scale(0.97);
+}
