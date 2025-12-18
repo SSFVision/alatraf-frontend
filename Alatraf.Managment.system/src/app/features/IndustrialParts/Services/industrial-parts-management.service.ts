@@ -60,7 +60,13 @@ export class IndustrialPartsManagementService extends BaseApiService {
       })
     );
   }
-
+ getIndustrialPartById(
+    id: number
+  ): Observable<ApiResult<IndustrialPartDto>> {
+    return this.get<IndustrialPartDto>(
+      `${this.industrialPartsUrl}/${id}`
+    );
+  }
   createIndustrialPart(
     request: CreateIndustrialPartRequest
   ): Observable<ApiResult<IndustrialPartDto>> {

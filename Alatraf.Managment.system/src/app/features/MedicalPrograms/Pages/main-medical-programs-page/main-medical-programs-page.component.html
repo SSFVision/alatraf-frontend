@@ -4,8 +4,15 @@
     class="box max-width-324 culumn gap-24 max-hight-800"
     id="therapy-program-list-container"
   >
-    <h2 class="title-md">البرامج العلاجية</h2>
+    <div class="row space-between">
+      <h2 class="title-md">البرامج العلاجية</h2>
 
+      <div class="primary-color-background WH-40 flex-center border-radius-20">
+        <h2 class="title-md white-color margin-auto">
+          {{ card().length }}
+        </h2>
+      </div>
+    </div>
     <!-- SEARCH -->
     <div class="search-box">
       <img
@@ -38,19 +45,19 @@
 
   <!-- RIGHT SIDE: DETAILS -->
   @if (selectedId() || addMode()) {
-    <div class="box max-hight-800 gap-16">
-      <router-outlet></router-outlet>
-    </div>
+  <div class="box max-hight-800 gap-16">
+    <router-outlet></router-outlet>
+  </div>
   } @else {
-    <div class="box max-hight-800 gap-16 flex-center">
-      <img
-        src="assets/images/bro.svg"
-        alt="مرحبا"
-        width="496.75"
-        height="512"
-        class="padding-32"
-      />
-      <p class="title-md primary-color-50">مرحباً بك</p>
-    </div>
+  <div class="box max-hight-800 gap-16 flex-center">
+    <img
+      src="assets/images/bro.svg"
+      alt="مرحبا"
+      width="496.75"
+      height="512"
+      class="padding-32"
+    />
+    <p class="title-md primary-color-50">مرحباً بك</p>
+  </div>
   }
 </main>
