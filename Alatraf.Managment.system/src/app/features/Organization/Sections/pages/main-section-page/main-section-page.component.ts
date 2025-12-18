@@ -1,10 +1,8 @@
 import { Component, effect, inject, signal } from '@angular/core';
-import { ManagementEntityCardComponent } from "../../../../../shared/components/management-entity-card/management-entity-card.component";
-import { MedicalProgramsNavigationFacade } from '../../../../../core/navigation/navigation-medical-programs.facade';
-import { ManagementEntityCardUiModel } from '../../../../../shared/models/management-entity-card.ui-model';
-import { MedicalProgramsFacade } from '../../../../MedicalPrograms/Services/medical-programs.facade.service';
 import { RouterOutlet } from "@angular/router";
 import { SectionsNavigationFacade } from '../../../../../core/navigation/sections-navigation.facade';
+import { ManagementEntityCardComponent } from "../../../../../shared/components/management-entity-card/management-entity-card.component";
+import { ManagementEntityCardUiModel } from '../../../../../shared/models/management-entity-card.ui-model';
 import { SectionsFacade } from '../../Service/sections.facade.service';
 
 @Component({
@@ -27,6 +25,7 @@ export class MainSectionPageComponent {
 
   constructor() {
     // initial load
+    // this.facade.setDepartment(Department.Therapy)
     this.facade.loadSections();
 
     // react to facade changes

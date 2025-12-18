@@ -66,10 +66,10 @@ export const AppRoutes = {
       edit: (therapyCardId: number | string, sessionId: number | string) =>
         `therapy-cards/${therapyCardId}/sessions/edit/${sessionId}`,
     },
-    // doctors: {
-    //   assign: (cardId: number | string) =>
-    //     `therapy-cards/${cardId}/doctors`,
-    // },
+    doctors: {
+    view: (doctorId: number | string) =>
+      `therapy-cards/doctors/${doctorId}`,
+  },
   },
   repairCards: {
     root: 'repair-cards',
@@ -89,7 +89,10 @@ export const AppRoutes = {
       assignParts: (repairCardId: number | string) =>
         `repair-cards/${repairCardId}/assignments/assign-parts`,
     },
-
+     doctors: {
+    view: (doctorId: number | string) =>
+      `repair-cards/doctors/${doctorId}`,
+  },
     // عمليات سريعة (عادة dialogs أو inline forms)
     status: (repairCardId: number | string) =>
       `repair-cards/${repairCardId}/status`,
@@ -126,17 +129,36 @@ export const AppRoutes = {
 
     view: (industrialPartId: number | string) => `view/${industrialPartId}`,
   },
-sections: {
-  root: 'sections',
+  sections: {
+    root: 'sections',
 
-  list: 'sections',
+    list: 'sections',
 
-  create: 'create',
+    create: 'create',
 
-  edit: (sectionId: number | string) => `edit/${sectionId}`,
+    edit: (sectionId: number | string) => `edit/${sectionId}`,
 
-  view: (sectionId: number | string) => `view/${sectionId}`,
-},
+    view: (sectionId: number | string) => `view/${sectionId}`,
+  },
+  doctors: {
+    root: 'doctors',
+
+    list: 'doctors',
+
+    create: 'create',
+
+    edit: (doctorId: number | string) => `edit/${doctorId}`,
+
+    view: (doctorId: number | string) => `view/${doctorId}`,
+  },
+  rooms: {
+    root: 'rooms',
+    create: 'create',
+
+    edit: (roomId: number | string) => `edit/${roomId}`,
+
+    view: (roomId: number | string) => `view/${roomId}`,
+  },
 
   admin: {
     root: 'admin',

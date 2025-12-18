@@ -13,29 +13,20 @@ export const IndustrialPartsRoutes: Routes = [
       ).then((m) => m.MainIndustrialPartsPageComponent),
 
     children: [
-      // {
-      //   path: 'create',
-      //   canActivate: [PermissionGuard],
-      //   data: { permission: PERMISSIONS.IndustrialParts.CREATE },
-      //   loadComponent: () =>
-      //     import(
-      //       './Pages/industrial-part-create-page/industrial-part-create-page.component'
-      //     ).then((m) => m.IndustrialPartCreatePageComponent),
-      // },
-
-      // {
-      //   path: 'edit/:industrialPartId',
-      //   canActivate: [PermissionGuard],
-      //   data: { permission: PERMISSIONS.IndustrialParts.UPDATE },
-      //   loadComponent: () =>
-      //     import(
-      //       './Pages/industrial-part-edit-page/industrial-part-edit-page.component'
-      //     ).then((m) => m.IndustrialPartEditPageComponent),
-      // },
       {
-        path: 'view/:industrialPartId',
+        path: 'create',
         canActivate: [PermissionGuard],
-        data: { permission: PERMISSIONS.IndustrialParts.VIEW },
+        data: { permission: PERMISSIONS.IndustrialParts.CREATE },
+        loadComponent: () =>
+          import(
+            './Pages/industrial-part-worke-space-view-page.component/industrial-part-worke-space-view-page.component.component'
+          ).then((m) => m.IndustrialPartWorkeSpaceViewPageComponentComponent),
+      },
+
+      {
+        path: 'edit/:industrialPartId',
+        canActivate: [PermissionGuard],
+        data: { permission: PERMISSIONS.IndustrialParts.UPDATE },
         loadComponent: () =>
           import(
             './Pages/industrial-part-worke-space-view-page.component/industrial-part-worke-space-view-page.component.component'

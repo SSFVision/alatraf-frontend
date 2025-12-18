@@ -16,10 +16,7 @@ export class TherapyCardsNavigationFacade {
     cardId: number | string,
     extras?: NavigationExtras
   ): void {
-    this.go(
-      AppRoutes.therapyCards.details(cardId),
-      extras
-    );
+    this.go(AppRoutes.therapyCards.details(cardId), extras);
   }
 
   // ================= SESSIONS =================
@@ -27,20 +24,14 @@ export class TherapyCardsNavigationFacade {
     cardId: number | string,
     extras?: NavigationExtras
   ): void {
-    this.go(
-      AppRoutes.therapyCards.sessions.list(cardId),
-      extras
-    );
+    this.go(AppRoutes.therapyCards.sessions.list(cardId), extras);
   }
 
   goToCreateTherapySessionPage(
     cardId: number | string,
     extras?: NavigationExtras
   ): void {
-    this.go(
-      AppRoutes.therapyCards.sessions.create(cardId),
-      extras
-    );
+    this.go(AppRoutes.therapyCards.sessions.create(cardId), extras);
   }
 
   goToEditTherapySessionPage(
@@ -48,13 +39,15 @@ export class TherapyCardsNavigationFacade {
     sessionId: number | string,
     extras?: NavigationExtras
   ): void {
-    this.go(
-      AppRoutes.therapyCards.sessions.edit(cardId, sessionId),
-      extras
-    );
+    this.go(AppRoutes.therapyCards.sessions.edit(cardId, sessionId), extras);
   }
 
-  
+  goToTherapyDoctorsListPage(
+    doctorId: number | string,
+    extras?: NavigationExtras
+  ): void {
+    this.go(`${AppRoutes.therapyCards.doctors.view(doctorId)}`, extras);
+  }
 
   // ================= INTERNAL =================
   private go(path: string | any[], extras?: NavigationExtras): void {

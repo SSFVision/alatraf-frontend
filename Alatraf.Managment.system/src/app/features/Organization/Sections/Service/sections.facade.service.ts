@@ -134,9 +134,7 @@ export class SectionsFacade extends BaseFacade {
     this.totalCount.set(0);
   }
 
-  // ---------------------------------------------
-  // CREATE / UPDATE (🔥 LOCAL MUTATION)
-  // ---------------------------------------------
+
   createSection(dto: CreateSectionRequest) {
     return this.handleCreateOrUpdate(this.service.createSection(dto), {
       successMessage: 'تم إنشاء القسم بنجاح',

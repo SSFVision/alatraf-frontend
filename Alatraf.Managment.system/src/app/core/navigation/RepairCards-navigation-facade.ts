@@ -16,10 +16,7 @@ export class RepairCardsNavigationFacade {
     cardId: number | string,
     extras?: NavigationExtras
   ): void {
-    this.go(
-      AppRoutes.repairCards.details(cardId),
-      extras
-    );
+    this.go(AppRoutes.repairCards.details(cardId), extras);
   }
 
   // ================= ASSIGNMENTS =================
@@ -27,10 +24,7 @@ export class RepairCardsNavigationFacade {
     cardId: number | string,
     extras?: NavigationExtras
   ): void {
-    this.go(
-      AppRoutes.repairCards.assignments.list(cardId),
-      extras
-    );
+    this.go(AppRoutes.repairCards.assignments.list(cardId), extras);
   }
 
   // assign whole repair card to doctor
@@ -38,10 +32,7 @@ export class RepairCardsNavigationFacade {
     cardId: number | string,
     extras?: NavigationExtras
   ): void {
-    this.go(
-      AppRoutes.repairCards.assignments.assignCard(cardId),
-      extras
-    );
+    this.go(AppRoutes.repairCards.assignments.assignCard(cardId), extras);
   }
 
   // assign industrial parts to doctors
@@ -49,10 +40,7 @@ export class RepairCardsNavigationFacade {
     cardId: number | string,
     extras?: NavigationExtras
   ): void {
-    this.go(
-      AppRoutes.repairCards.assignments.assignParts(cardId),
-      extras
-    );
+    this.go(AppRoutes.repairCards.assignments.assignParts(cardId), extras);
   }
 
   // ================= STATUS =================
@@ -60,10 +48,7 @@ export class RepairCardsNavigationFacade {
     cardId: number | string,
     extras?: NavigationExtras
   ): void {
-    this.go(
-      AppRoutes.repairCards.status(cardId),
-      extras
-    );
+    this.go(AppRoutes.repairCards.status(cardId), extras);
   }
 
   // ================= DELIVERY TIME =================
@@ -71,12 +56,14 @@ export class RepairCardsNavigationFacade {
     cardId: number | string,
     extras?: NavigationExtras
   ): void {
-    this.go(
-      AppRoutes.repairCards.deliveryTime(cardId),
-      extras
-    );
+    this.go(AppRoutes.repairCards.deliveryTime(cardId), extras);
   }
-
+  goToRepairDoctorsListPage(
+    doctorId: number | string,
+    extras?: NavigationExtras
+  ): void {
+    this.go(`${AppRoutes.repairCards.doctors.view(doctorId)}`, extras);
+  }
   // ================= INTERNAL =================
   private go(path: string | any[], extras?: NavigationExtras): void {
     this.router.navigate(Array.isArray(path) ? path : [path], extras);

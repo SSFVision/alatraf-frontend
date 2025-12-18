@@ -21,11 +21,11 @@
         (select)="onCardSelected($event)"
       ></app-management-entity-card>
     <div class="flex-center">
-      <button class="btn primary" (click)="goToAddMedicalProgram()">إضافة طرف صناعي جديد </button>
+      <button class="btn primary" (click)="goToIndustrialPart()">إضافة طرف صناعي جديد </button>
     </div>
   </div>
 
-   @if (selectedId()) {
+   @if (selectedId() ||addMode()) {
   <div class="box max-hight-800 gap-16">
     <router-outlet></router-outlet>
   </div>

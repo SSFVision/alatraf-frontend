@@ -1,15 +1,15 @@
-import { Subject } from 'rxjs';
 import { Component, computed, inject, OnDestroy, signal } from '@angular/core';
 
-import { Department } from '../../../Diagnosis/Shared/enums/department.enum';
 import { RouterOutlet } from '@angular/router';
 import { TherapyCardsNavigationFacade } from '../../../../core/navigation/TherapyCards-navigation.facade';
-import { PatientCardComponent } from '../../../../shared/components/waiting-patient-card/waiting-patient-card.component';
+import { mapTherapistToDoctorWorkloadCardVM } from '../../../../core/utils/doctor-workload.mapper';
 import { DoctorCardComponent } from '../../../../shared/components/doctor-card/doctor-card.component';
-import { TherapyCardDiagnosisDto } from '../../../Diagnosis/Therapy/Models/therapy-card-diagnosis.dto';
-import { TherapySessionsFacade } from '../../services/therapy-sessions.facade.service';
 import { GeneralWaitingPatientQueueComponent } from '../../../../shared/components/general-waiting-patient-queue/general-waiting-patient-queue.component';
+import { DoctorWorkloadCardVM } from '../../../../shared/models/doctor-workload-card.vm';
 import { GeneralWaitingPatientVM } from '../../../../shared/models/general-waiting-patient.vm';
+import { TherapyCardDiagnosisDto } from '../../../Diagnosis/Therapy/Models/therapy-card-diagnosis.dto';
+import { DoctorWorkloadFacade } from '../../../Organization/Doctors/Service/doctor-workload.facade.service';
+import { TherapySessionsFacade } from '../../services/therapy-sessions.facade.service';
 
 @Component({
   selector: 'app-main-therapy-patients-wating-list',
@@ -22,18 +22,21 @@ import { GeneralWaitingPatientVM } from '../../../../shared/models/general-waiti
   styleUrl: './main-therapy-patients-wating-list.component.css',
 })
 export class MainTherapyPatientsWatingListComponent implements OnDestroy {
-  private sessionsFacade = inject(TherapySessionsFacade);
+
+
+private sessionsFacade = inject(TherapySessionsFacade);
+  private doctorWorkloadFacade = inject(DoctorWorkloadFacade);
+  private navTherapyCard = inject(TherapyCardsNavigationFacade);
+
 
   paidTherapyCards = this.sessionsFacade.paidTherapyCards;
   loading = this.sessionsFacade.loadingPaidTherapyCards;
   totalCount = this.sessionsFacade.paidTotalCount;
 
- 
-  private navTherapyCard = inject(TherapyCardsNavigationFacade);
-
   selectedCardId = signal<number | null>(null);
+  selectedDoctorId = signal<number | null>(null);
 
-  
+
   patientsVM = computed<GeneralWaitingPatientVM[]>(() =>
     this.paidTherapyCards().map((card: TherapyCardDiagnosisDto) => ({
       id: card.therapyCardId,
@@ -41,24 +44,33 @@ export class MainTherapyPatientsWatingListComponent implements OnDestroy {
       cardNumber: card.therapyCardId,
       fullName: card.patientName,
       gender: card.gender,
-      extraInfo:card.diagnosisType
+      extraInfo: card.diagnosisType,
     }))
   );
 
-  // ------------------------------------------------------------------
-  // Lifecycle
-  // ------------------------------------------------------------------
+
+  therapistDoctorsVM = computed<DoctorWorkloadCardVM[]>(() =>
+    this.doctorWorkloadFacade
+      .therapists()
+      .map(mapTherapistToDoctorWorkloadCardVM)
+  );
+
+  loadingTherapists = computed(() =>
+    this.doctorWorkloadFacade.therapists().length === 0
+  );
+
   ngOnInit(): void {
     this.sessionsFacade.loadPaidTherapyCards();
+
+    this.doctorWorkloadFacade.loadTherapists();
   }
 
   ngOnDestroy(): void {
     this.sessionsFacade.resetPaidFilters();
+    this.doctorWorkloadFacade.resetTherapists();
   }
 
-  // ------------------------------------------------------------------
-  // UI Actions
-  // ------------------------------------------------------------------
+
   onSearch(term: string): void {
     this.sessionsFacade.searchPaid(term);
   }
@@ -69,7 +81,21 @@ export class MainTherapyPatientsWatingListComponent implements OnDestroy {
 
   select(patient: GeneralWaitingPatientVM): void {
     this.selectedCardId.set(patient.id);
-
     this.navTherapyCard.goToCreateTherapySessionPage(patient.id);
   }
+
+
+  onDoctorSearch(term: string): void {
+    this.doctorWorkloadFacade.searchTherapists(term);
+  }
+
+  onDoctorPageChange(page: number): void {
+    this.doctorWorkloadFacade.setTherapistsPage(page);
+  }
+
+  OnSelectDoctor(doctorId: number): void {
+    this.selectedDoctorId.set(doctorId);
+    this.navTherapyCard.goToTherapyDoctorsListPage(doctorId);
+  }
+
 }

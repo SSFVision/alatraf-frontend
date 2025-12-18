@@ -26,8 +26,7 @@
         />
       </div>
       <app-general-waiting-patient-queue
-            class="max-hight-712 column gap-16"
-
+        class="max-hight-712 column gap-16"
         [patients]="patientsVM()"
         [loading]="loading()"
         (select)="select($event)"
@@ -43,7 +42,11 @@
           class="search-icon"
           alt="search"
         />
-        <input type="text" placeholder="بحث: اسم الطبيب أو الرقم" />
+        <input
+          type="text"
+          placeholder="بحث: اسم الطبيب أو الرقم"
+          (input)="onDoctorSearch($any($event.target).value)"
+        />
       </div>
 
       <div class="filters-container">
@@ -53,11 +56,16 @@
         <button class="filter-btn">عظام</button>
       </div>
 
-      <app-doctor-card></app-doctor-card>
+      <app-doctor-card
+        class="max-hight-712 column gap-16"
+        [doctors]="therapistDoctorsVM()"
+        [loading]="loadingTherapists()"
+        (select)="OnSelectDoctor($event)"
+      ></app-doctor-card>
     </div>
   </div>
 
-  @if (selectedCardId()) {
+  @if (selectedCardId() || selectedDoctorId()) {
   <div class="box max-hight-800 gap-16">
     <router-outlet></router-outlet>
   </div>

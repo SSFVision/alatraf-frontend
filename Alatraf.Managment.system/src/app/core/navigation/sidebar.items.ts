@@ -33,6 +33,13 @@ export const MENU_CONFIG: MenuCategory[] = [
         route: AppRoutes.reception.patients.add,
         requiredPermissions: [PERMISSIONS.PATIENTS.ADD],
       },
+      {
+        label: 'إدارةالدكاترة',
+        icon: 'assets/icons/user-icon-w.svg',
+        activeIcon: 'assets/icons/user-icon-b.svg',
+        route: AppRoutes.doctors.root,
+        requiredPermissions: [PERMISSIONS.PATIENTS.ADD],
+      },
     ],
   },
   {
@@ -95,7 +102,7 @@ export const MENU_CONFIG: MenuCategory[] = [
         route: `${AppRoutes.industrialParts.root}`,
         requiredPermissions: [PERMISSIONS.IndustrialParts.VIEW],
       },
-     
+
       {
         label: 'إدارة المواعيد',
         icon: 'assets/icons/prosthetic-foot-w.svg',
@@ -119,6 +126,4 @@ export const MENU_CONFIG: MenuCategory[] = [
       },
     ],
   },
-
-
 ];

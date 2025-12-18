@@ -100,6 +100,17 @@ export class BaseApiService {
       })
       .pipe(catchError((err) => this.handleError(err)));
   }
+protected patch<T>(
+  endpoint: string,
+  body: any,
+  headers?: HttpHeaders,
+  params?: HttpParams
+): Observable<ApiResult<T>> {
+  const url = this.buildUrl(endpoint);
+  return this.http
+    .patch<ApiResult<T>>(url, body, this.buildOptions(params, headers))
+    .pipe(catchError((err) => this.handleError(err)));
+}
 
   protected delete<T>(
     endpoint: string,
