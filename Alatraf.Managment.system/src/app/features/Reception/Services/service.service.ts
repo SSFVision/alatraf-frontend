@@ -35,7 +35,7 @@ export class ServiceService extends BaseApiService {
     dto: CreateUpdateServiceDto
   ): Observable<ApiResult<ServiceDto>> {
     
-    // const headers = new HttpHeaders().set('X-Success-Toast', 'تم تحديث الخدمة بنجاح');
+    const headers = new HttpHeaders().set('X-Success-Toast', 'تم تحديث الخدمة بنجاح');
 
     return this.put<ServiceDto>(`${this.endpoint}/${id}`, dto);
   }
