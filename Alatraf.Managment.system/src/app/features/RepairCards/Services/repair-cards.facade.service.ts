@@ -49,7 +49,7 @@ export class RepairCardsFacade extends BaseFacade {
   // ----------------------- Paid Repair Cards -----------------------
   private _paidRepairCards = signal<RepairCardDiagnosisDto[]>([]);
   paidRepairCards = this._paidRepairCards.asReadonly();
-
+  
   private _paidFilters = signal<GetPaidRepairCardsFilterRequest>({
     searchTerm: '',
     sortColumn: '',
@@ -83,7 +83,11 @@ export class RepairCardsFacade extends BaseFacade {
           )
         ),
     null,
-    (items) => this._paidRepairCards.set(items)
+    (items) => {
+    this.loadingPaidRepairCards.set(false);
+
+      this._paidRepairCards.set(items);
+    }
   );
   loadPaidRepairCards() {
     this.loadingPaidRepairCards.set(true);
@@ -105,6 +109,8 @@ export class RepairCardsFacade extends BaseFacade {
       );
   }
   searchPaid(term: string): void {
+       this.loadingPaidRepairCards.set(true);
+
     this._paidFilters.update((f) => ({ ...f, searchTerm: term }));
     this._paidPageRequest.update((p) => ({ ...p, page: 1 }));
     this.paidSearchManager.search(term);

@@ -55,9 +55,7 @@ private sessionsFacade = inject(TherapySessionsFacade);
       .map(mapTherapistToDoctorWorkloadCardVM)
   );
 
-  loadingTherapists = computed(() =>
-    this.doctorWorkloadFacade.therapists().length === 0
-  );
+  loadingTherapists = this.doctorWorkloadFacade.isLoadingTherapists
 
   ngOnInit(): void {
     this.sessionsFacade.loadPaidTherapyCards();
