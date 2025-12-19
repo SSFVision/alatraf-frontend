@@ -7,11 +7,11 @@ export const SkeletonLoadingInterceptor: HttpInterceptorFn = (req, next) => {
   const pageLoader = inject(SkeletonsLoadingService);
   const isGetRequest = req.method === 'GET';
 
-  // const skip = req.headers.get('X-Skip-Page-Loader') === 'true';
+  const skip = req.headers.get('X-Skip-Page-Loader') === 'true';
 
-  // if (isGetRequest && !skip) {
-  // pageLoader.start();
-  // }
+  if (isGetRequest && !skip) {
+  pageLoader.start();
+  }
 
   return next(req).pipe(
     finalize(() => {
