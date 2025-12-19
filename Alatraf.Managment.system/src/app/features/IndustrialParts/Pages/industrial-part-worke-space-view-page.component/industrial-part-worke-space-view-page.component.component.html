@@ -1,11 +1,15 @@
 @if (isLoading()) {
-<div class="flex-center">
-  <span class="loader"></span>
-</div>
-<p class="flex-center">جاري تحميل بيانات الطرف الصناعي...</p>
-
+  <div class="flex-center">
+    <span class="loader"></span>
+  </div>
+  <p class="flex-center">جاري تحميل بيانات الطرف الصناعي...</p>
 } @else {
-
-<app-add-edit-industrial-part></app-add-edit-industrial-part>
-
+  <app-add-edit-industrial-part
+    [mode]="mode()"
+    [part]="part()"
+    [units]="units()"
+    (create)="onCreate($event)"
+    (update)="onUpdate($event)"
+    (delete)="onDelete($event)"
+  ></app-add-edit-industrial-part>
 }

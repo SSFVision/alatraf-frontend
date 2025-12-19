@@ -1,10 +1,12 @@
-import { TherapistDto } from './../../../Doctors/Models/therapists/therapist.dto';
 import { Component, effect, inject, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+
 import { SectionsNavigationFacade } from '../../../../../core/navigation/sections-navigation.facade';
 import { ManagementEntityCardComponent } from '../../../../../shared/components/management-entity-card/management-entity-card.component';
 import { ManagementEntityCardUiModel } from '../../../../../shared/models/management-entity-card.ui-model';
+
 import { SectionsFacade } from '../../Service/sections.facade.service';
+import { Department } from '../../../../Diagnosis/Shared/enums/department.enum';
 
 @Component({
   selector: 'app-main-section-page',
@@ -12,26 +14,22 @@ import { SectionsFacade } from '../../Service/sections.facade.service';
   templateUrl: './main-section-page.component.html',
   styleUrl: './main-section-page.component.css',
 })
-export class MainSectionPageComponent {
-  private facade = inject(SectionsFacade);
+export class MainSectionPageComponent implements OnInit {
+  facade = inject(SectionsFacade);
   private nav = inject(SectionsNavigationFacade);
 
-  // ---------------------------------------------
-  // UI STATE
-  // ---------------------------------------------
   card = signal<ManagementEntityCardUiModel[]>([]);
-  loading = signal<boolean>(true);
   selectedId = signal<number | string | null>(null);
   addMode = signal<boolean>(false);
 
+  department = Department;
+  activeDepartment = signal<number | null>(null);
+
+  loading = this.facade.isLoading;
+  loadingMore = this.facade.isLoadingNextPage;
+
   constructor() {
-    // initial load
-    this.facade.loadSections();
-
-    // react to facade changes
     effect(() => {
-        // this.facade.setDepartment()
-
       const sections = this.facade.sections();
 
       this.card.set(
@@ -41,12 +39,14 @@ export class MainSectionPageComponent {
           sectionName: s.departmentName ?? null,
         }))
       );
-
-      this.loading.set(false);
     });
   }
 
+  ngOnInit(): void {
+    this.facade.resetAndLoad();
+  }
 
+ 
   onCardSelected(id: number | string) {
     this.selectedId.set(id);
     this.addMode.set(false);
@@ -56,16 +56,20 @@ export class MainSectionPageComponent {
   goToAddSection() {
     this.selectedId.set(null);
     this.addMode.set(true);
+    this.facade.enterCreateMode();
     this.nav.goToCreateSectionPage();
   }
 
   onSearch(term: string) {
     this.facade.search(term);
   }
-  activeDepartment = signal<number | null>(1); // null = "الكل"
 
-  filterByDepartment(departmentID: number) {
+  filterByDepartment(departmentID: Department | null) {
     this.activeDepartment.set(departmentID);
-    this.facade.updateFilters({ departmentId: departmentID });
+    this.facade.setDepartment(departmentID);
+  }
+
+  onLoadMore() {
+    this.facade.loadNextPage();
   }
 }

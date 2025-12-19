@@ -1,16 +1,13 @@
 import { Component, effect, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormBuilder,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { SectionsFacade } from '../../Service/sections.facade.service';
 
 import { CreateSectionRequest } from '../../Models/create-section.request';
 import { UpdateSectionRequest } from '../../Models/update-section.request';
 import { DepartmentsFacade } from '../../../Departments/departments.facade.service';
+import { SectionsNavigationFacade } from '../../../../../core/navigation/sections-navigation.facade';
 
 @Component({
   selector: 'app-add-edit-section-page',
@@ -23,6 +20,7 @@ export class AddEditSectionPageComponent {
   private fb = inject(FormBuilder);
   private facade = inject(SectionsFacade);
   private departmentsFacade = inject(DepartmentsFacade);
+private nav = inject(SectionsNavigationFacade);
 
   // ---------------------------------------------
   // STATE (SAME AS MEDICAL PROGRAM)
@@ -64,6 +62,8 @@ export class AddEditSectionPageComponent {
 
       this.form.markAsPristine();
       this.form.enable();
+            this.form.controls.departmentId.disable({ emitEvent: false });
+
       this.canDelete.set(true);
       this.canSubmit.set(false);
     });
@@ -78,6 +78,7 @@ export class AddEditSectionPageComponent {
         name: '',
         departmentId: null,
       });
+      this.form.controls.departmentId.enable({ emitEvent: false });
 
       this.form.markAsPristine();
       this.form.enable();
@@ -101,14 +102,14 @@ export class AddEditSectionPageComponent {
 
     const name = this.form.controls.name.value;
     const departmentId = this.form.controls.departmentId.value!;
-    
+
     if (this.isEditMode()) {
       const section = this.facade.selectedSection();
       if (!section) return;
 
       const updateDto: UpdateSectionRequest = {
         name,
-        departmentId,
+        // departmentId
       };
 
       this.facade.updateSection(section.id, updateDto).subscribe((res) => {
@@ -127,8 +128,7 @@ export class AddEditSectionPageComponent {
 
       this.facade.createSection(createDto).subscribe((res) => {
         if (res.success && res.data) {
-          // 🔥 REQUIRED BUSINESS STEP (SAME AS MEDICAL)
-          this.facade.enterEditMode(res.data);
+    this.nav.goToEditSectionPage(res.data.id);
           this.form.markAsPristine();
           this.canDelete.set(true);
           this.canSubmit.set(false);

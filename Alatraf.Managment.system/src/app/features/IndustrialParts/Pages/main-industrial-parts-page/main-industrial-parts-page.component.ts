@@ -18,12 +18,11 @@ export class MainIndustrialPartsPageComponent {
   private nav = inject(IndustrialPartsNavigationFacade);
 
   card = signal<ManagementEntityCardUiModel[]>([]);
-  loading = signal<boolean>(true);
+  loading = this.facade.isLoading;
   selectedId = signal<number | string | null>(null);
   addMode = signal<boolean>(false);
 
   constructor() {
-    this.facade.loadIndustrialParts();
     effect(() => {
       const programs = this.facade.industrialParts();
       this.card.set(
@@ -34,10 +33,11 @@ export class MainIndustrialPartsPageComponent {
         }))
       );
 
-      this.loading.set(false);
     });
   }
-
+  ngOnInit(): void {
+    this.facade.loadIndustrialParts();
+  }
   onCardSelected(id: number | string) {
     this.selectedId.set(id);
     this.nav.goToEditIndustrialPartPage(id);

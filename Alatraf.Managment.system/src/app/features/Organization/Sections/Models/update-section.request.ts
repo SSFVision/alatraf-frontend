@@ -1,4 +1,4 @@
 export interface UpdateSectionRequest {
-  departmentId: number;
+  departmentId?: number;
   name: string;
 }

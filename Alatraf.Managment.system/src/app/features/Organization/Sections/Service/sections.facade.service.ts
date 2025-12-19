@@ -1,3 +1,4 @@
+import { Department } from './../../../Diagnosis/Shared/enums/department.enum';
 import { Injectable, inject, signal } from '@angular/core';
 import { tap, map } from 'rxjs/operators';
 
@@ -47,23 +48,25 @@ export class SectionsFacade extends BaseFacade {
   // SEARCH MANAGER
   // ---------------------------------------------
   private searchManager = new SearchManager<SectionDto[]>(
-    (term: string) =>
-      this.service
-        .getSections(
-          { ...this._filters(), searchTerm: term },
-          this._pageRequest()
-        )
-        .pipe(
-          tap((res) => {
-            if (!res.isSuccess) this.handleLoadSectionsError(res);
-          }),
-          map((res) =>
-            res.isSuccess && res.data?.items ? res.data.items : []
-          )
-        ),
-    null,
-    (items) => this._sections.set(items)
-  );
+  (term: string) =>
+    this.service
+      .getSections(
+        { ...this._filters(), searchTerm: term },
+        this._pageRequest()
+      )
+      .pipe(
+        tap((res) => {
+          if (!res.isSuccess) this.handleLoadSectionsError(res);
+        }),
+        map((res) => (res.isSuccess && res.data?.items ? res.data.items : []))
+      ),
+  null,
+  (items) => {
+    this._sections.set(items);
+    this._isLoading.set(false);
+  }
+);
+
 
   // ---------------------------------------------
   // SEARCH & FILTERS
@@ -71,21 +74,29 @@ export class SectionsFacade extends BaseFacade {
   search(term: string) {
     this._filters.update((f) => ({ ...f, searchTerm: term }));
     this._pageRequest.update((p) => ({ ...p, page: 1 }));
+      this._isLoading.set(true);
+
     this.searchManager.search(term);
   }
 
-  updateFilters(newFilters: Partial<SectionFilterRequest>) {
-    this._filters.update((f) => ({ ...f, ...newFilters }));
-    this._pageRequest.update((p) => ({ ...p, page: 1 }));
-  }
+ updateFilters(newFilters: Partial<SectionFilterRequest>) {
+  this._filters.update((f) => ({ ...f, ...newFilters }));
+  this._pageRequest.update((p) => ({ ...p, page: 1 }));
+  this.loadSections();
+}
 
-  setDepartment(departmentId: number | null) {
-    this._filters.update((f) => ({
-      ...f,
-      departmentId: departmentId ?? null,
-    }));
-    this._pageRequest.update((p) => ({ ...p, page: 1 }));
-  }
+
+setDepartment(departmentId: number | null) {
+  this._filters.update((f) => ({
+    ...f,
+    departmentId: departmentId ?? null,
+  }));
+
+  this._pageRequest.update((p) => ({ ...p, page: 1 }));
+
+  this.loadSections(); // loadSections يضبط loading
+}
+
 
   // ---------------------------------------------
   // PAGINATION
@@ -103,23 +114,31 @@ export class SectionsFacade extends BaseFacade {
   // ---------------------------------------------
   // LOAD LIST
   // ---------------------------------------------
-  loadSections() {
-    this.service
-      .getSections(this._filters(), this._pageRequest())
-      .pipe(
-        tap((res) => {
-          if (res.isSuccess && res.data?.items) {
-            this._sections.set(res.data.items);
-            this.totalCount.set(res.data.totalCount ?? 0);
-          } else {
-            this._sections.set([]);
-            this.totalCount.set(0);
-            this.handleLoadSectionsError(res);
-          }
-        })
-      )
-      .subscribe();
-  }
+private _isLoading = signal<boolean>(false);
+isLoading = this._isLoading.asReadonly();
+
+loadSections() {
+  this._isLoading.set(true);
+
+  this.service
+    .getSections(this._filters(), this._pageRequest())
+    .pipe(
+      tap((res) => {
+        if (res.isSuccess && res.data?.items) {
+          this._sections.set(res.data.items);
+          this.totalCount.set(res.data.totalCount ?? 0);
+        } else {
+          this._sections.set([]);
+          this.totalCount.set(0);
+          this.handleLoadSectionsError(res);
+        }
+
+        this._isLoading.set(false);
+      })
+    )
+    .subscribe();
+}
+
 
   resetFilters() {
     this._filters.set({
@@ -129,11 +148,10 @@ export class SectionsFacade extends BaseFacade {
       sortDirection: 'asc',
     });
 
-    this._pageRequest.set({ page: 1, pageSize: 10 });
+    this._pageRequest.set({ page: 1, pageSize: 5 });
     this._sections.set([]);
     this.totalCount.set(0);
   }
-
 
   createSection(dto: CreateSectionRequest) {
     return this.handleCreateOrUpdate(this.service.createSection(dto), {
@@ -152,13 +170,10 @@ export class SectionsFacade extends BaseFacade {
   }
 
   updateSection(id: number, dto: UpdateSectionRequest) {
-    return this.handleCreateOrUpdate(
-      this.service.updateSection(id, dto),
-      {
-        successMessage: 'تم تعديل القسم بنجاح',
-        defaultErrorMessage: 'فشل تعديل القسم. حاول لاحقاً.',
-      }
-    ).pipe(
+    return this.handleCreateOrUpdate(this.service.updateSection(id, dto), {
+      successMessage: 'تم تعديل القسم بنجاح',
+      defaultErrorMessage: 'فشل تعديل القسم. حاول لاحقاً.',
+    }).pipe(
       tap((res) => {
         if (res.success) {
           this.formValidationErrors.set({});
@@ -169,7 +184,6 @@ export class SectionsFacade extends BaseFacade {
       })
     );
   }
-
 
   private _selectedSection = signal<SectionDto | null>(null);
   selectedSection = this._selectedSection.asReadonly();
@@ -210,7 +224,6 @@ export class SectionsFacade extends BaseFacade {
       .subscribe();
   }
 
-
   deleteSection(section: SectionDto): void {
     if (!section?.id) return;
 
@@ -235,7 +248,6 @@ export class SectionsFacade extends BaseFacade {
     });
   }
 
-
   private addSectionToList(section: SectionDto) {
     this._sections.update((list) => [section, ...list]);
     this.totalCount.update((c) => c + 1);
@@ -248,7 +260,7 @@ export class SectionsFacade extends BaseFacade {
           ? {
               ...s,
               name: dto.name,
-              departmentId: dto.departmentId,
+              // departmentId: dto.departmentId,
             }
           : s
       )
@@ -259,7 +271,8 @@ export class SectionsFacade extends BaseFacade {
       this._selectedSection.set({
         ...selected,
         name: dto.name,
-        departmentId: dto.departmentId,
+                      // departmentId: dto.departmentId,
+
       });
     }
   }
@@ -269,7 +282,6 @@ export class SectionsFacade extends BaseFacade {
     this.totalCount.update((c) => Math.max(0, c - 1));
   }
 
- 
   private handleLoadSectionsError(result: ApiResult<any>) {
     const err = this.extractError(result);
     if (err.type === 'validation' || err.type === 'business') {
@@ -278,4 +290,84 @@ export class SectionsFacade extends BaseFacade {
     }
     this.toast.error('تعذر تحميل الأقسام. يرجى المحاولة لاحقاً.');
   }
+private _isLoadingNextPage = signal(false);
+isLoadingNextPage = this._isLoadingNextPage.asReadonly();
+
+ // ---------------------------------------------
+// SCROLL PAGINATION (SAFE & GUARDED)
+// ---------------------------------------------
+loadNextPage(): void {
+  // 🔒 منع التكرار أثناء التحميل
+  if (this._isLoadingNextPage()) return;
+
+  const currentItems = this._sections();
+  const total = this.totalCount();
+  const { page, pageSize } = this._pageRequest();
+
+  // 1️⃣ لا يوجد المزيد من البيانات
+  if (currentItems.length >= total) return;
+
+  // 2️⃣ حساب آخر صفحة
+  const lastPage = Math.ceil(total / pageSize);
+
+  // 3️⃣ لا تطلب صفحات خارج النطاق
+  if (page >= lastPage) return;
+
+  const nextPage = page + 1;
+
+  // 🔒 قفل التحميل
+  this._isLoadingNextPage.set(true);
+
+  this.service
+    .getSections(this._filters(), {
+      ...this._pageRequest(),
+      page: nextPage,
+    })
+    .pipe(
+      tap((res) => {
+        if (!res.isSuccess) {
+          this.handleLoadSectionsError(res);
+          return;
+        }
+
+        const newItems = res.data?.items ?? [];
+        if (newItems.length === 0) return;
+
+        // append بدون تكرار
+        this._sections.update((current) => {
+          const existingIds = new Set(current.map((x) => x.id));
+          const uniqueNewItems = newItems.filter(
+            (item) => !existingIds.has(item.id)
+          );
+          return [...current, ...uniqueNewItems];
+        });
+
+        // تحديث الصفحة فقط بعد نجاح التحميل
+        this._pageRequest.update((p) => ({
+          ...p,
+          page: nextPage,
+        }));
+      }),
+      // 🔓 فتح القفل مهما حصل
+      tap({
+        finalize: () => this._isLoadingNextPage.set(false),
+      })
+    )
+    .subscribe();
+}
+
+
+resetAndLoad(): void {
+  this._pageRequest.set({
+    page: 1,
+    pageSize: this._pageRequest().pageSize,
+  });
+
+  this._sections.set([]);
+  this.totalCount.set(0);
+
+  this.loadSections();
+}
+
+
 }
