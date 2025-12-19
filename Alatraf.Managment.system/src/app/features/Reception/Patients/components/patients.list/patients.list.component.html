@@ -11,8 +11,9 @@
   </thead>
 
   <tbody>
-    <!-- ⭐ SHOW SKELETON ROWS WHILE LOADING -->
-    @if (pageLoader.isLoading()) { @for (i of skeletonRows; track i) {
+    @if (pageLoader.isLoading() || loading()) { @for (i of skeletonRows; track
+    i) {
+
     <tr>
       <td><app-skeleton width="70%" height="16px"></app-skeleton></td>
       <td><app-skeleton width="70%" height="16px"></app-skeleton></td>

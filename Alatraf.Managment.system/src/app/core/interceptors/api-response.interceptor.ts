@@ -9,7 +9,7 @@ import { inject } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { ApiResult } from '../models/ApiResult';
 import { ToastService } from '../services/toast.service';
-import { catchError, map, of } from 'rxjs';
+import { catchError, delay, map, of } from 'rxjs';
 import { handleException } from '../errors/helpers/handle-exception';
 import { handleErrorResponse } from '../errors/helpers/handle-error-response';
 
@@ -26,6 +26,7 @@ export const apiResponseInterceptor: HttpInterceptorFn = (req, next) => {
     return next(req);
   }
   return next(req).pipe(
+    delay(1500),
     map((event: HttpEvent<any>) => {
       if (event instanceof HttpResponse) {
         const body = event.body;

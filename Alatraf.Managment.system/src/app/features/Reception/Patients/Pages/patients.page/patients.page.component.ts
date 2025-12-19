@@ -39,6 +39,7 @@ export class PatientsPageComponent implements OnInit {
 
   // NEW model type
   filters: PatientFilterRequest = {};
+  loading = this.facade.isLoading;
 
   // NEW DTO array from facade
   patients = this.facade.patients;
