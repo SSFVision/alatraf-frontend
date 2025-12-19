@@ -24,9 +24,6 @@ export class AddEditIndustrialPartComponent {
   private facade = inject(IndustrialPartsFacade);
   private unitsFacade = inject(UnitsFacade);
 
-  // ---------------------------------------------
-  // STATE
-  // ---------------------------------------------
   isEditMode = this.facade.isEditMode;
   selectedPart = this.facade.selectedIndustrialPart;
 
@@ -35,84 +32,80 @@ export class AddEditIndustrialPartComponent {
 
   availableUnits = this.unitsFacade.units;
 
-  // ---------------------------------------------
-  // FORM
-  // ---------------------------------------------
   form = this.fb.group({
     name: this.fb.nonNullable.control('', Validators.required),
     description: this.fb.control<string | null>(null),
-    units: this.fb.array([this.createUnitRow()]),
+    units: this.fb.array([]),
   });
 
   get units(): FormArray {
     return this.form.controls.units as FormArray;
   }
 
-  constructor() {
-    // Load units
-    this.unitsFacade.loadUnits();
+ constructor() {
+  this.unitsFacade.loadUnits();
 
-    // ---------------------------------------------
-    // EDIT MODE → PATCH
-    // ---------------------------------------------
-    effect(() => {
-      const part = this.selectedPart();
-      if (!part) return;
+  // =========================
+  // EDIT MODE
+  // =========================
+  effect(() => {
+    const part = this.selectedPart();
+    const units = this.availableUnits();
 
-      this.form.patchValue({
-        name: part.name,
-        description: part.description ?? null,
-      });
+    if (!part || units.length === 0) return;
 
-      this.units.clear();
-
-      part.industrialPartUnits.forEach((u) => {
-        this.units.push(
-          this.fb.group({
-            unitId: [u.unitId, Validators.required],
-            price: [
-              u.pricePerUnit,
-              [Validators.required, Validators.min(0)],
-            ],
-          })
-        );
-      });
-
-      this.form.markAsPristine();
-      this.canDelete.set(true);
-      this.canSubmit.set(false);
+    this.form.patchValue({
+      name: part.name,
+      description: part.description ?? null,
     });
 
-    // ---------------------------------------------
-    // CREATE MODE → RESET
-    // ---------------------------------------------
-    effect(() => {
-      if (this.isEditMode()) return;
+    this.units.clear();
 
-      this.form.reset({
-        name: '',
-        description: null,
-      });
-
-      this.units.clear();
-      this.units.push(this.createUnitRow());
-
-      this.form.markAsPristine();
-      this.canDelete.set(false);
-      this.canSubmit.set(false);
+    part.industrialPartUnits.forEach((u) => {
+      this.units.push(
+        this.fb.group({
+          unitId: [u.unitId, Validators.required],
+          price: [
+            u.pricePerUnit,
+            [Validators.required, Validators.min(0)],
+          ],
+        })
+      );
     });
 
-    // ---------------------------------------------
-    // ENABLE SUBMIT
-    // ---------------------------------------------
-    this.form.valueChanges.subscribe(() => {
-      this.canSubmit.set(this.form.valid && this.form.dirty);
-    });
-  }
+    this.form.markAsPristine();
+    this.canDelete.set(true);
+    this.canSubmit.set(false);
+  });
 
-  // ---------------------------------------------
-  // UNIT ROW
-  // ---------------------------------------------
+  // =========================
+  // CREATE MODE
+  // =========================
+  effect(() => {
+    if (this.isEditMode()) return;
+
+    this.form.reset({
+      name: '',
+      description: null,
+    });
+
+    this.units.clear();
+    this.units.push(this.createUnitRow()); // ✅ هنا فقط
+
+    this.form.markAsPristine();
+    this.canDelete.set(false);
+    this.canSubmit.set(false);
+  });
+
+  // =========================
+  // ENABLE SUBMIT
+  // =========================
+  this.form.valueChanges.subscribe(() => {
+    this.canSubmit.set(this.form.valid && this.form.dirty);
+  });
+}
+
+
   private createUnitRow() {
     return this.fb.group({
       unitId: [null, Validators.required],

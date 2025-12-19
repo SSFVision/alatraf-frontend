@@ -126,20 +126,19 @@ export class IndustrialPartsFacade extends BaseFacade {
   // CREATE / UPDATE
   // ======================================================
   createIndustrialPart(dto: CreateIndustrialPartRequest) {
-    return this.handleCreateOrUpdate(
-      this.service.createIndustrialPart(dto),
-      {
-        successMessage: 'تم إنشاء القطعة الصناعية بنجاح',
-        defaultErrorMessage: 'فشل إنشاء القطعة الصناعية. يرجى المحاولة لاحقاً.',
-      }
-    ).pipe(
+    return this.handleCreateOrUpdate(this.service.createIndustrialPart(dto), {
+      successMessage: 'تم إنشاء القطعة الصناعية بنجاح',
+      defaultErrorMessage: 'فشل إنشاء القطعة الصناعية. يرجى المحاولة لاحقاً.',
+    }).pipe(
       tap((res) => {
         if (res.success && res.data) {
           this.formValidationErrors.set({});
-          this.applyIndustrialPartMutation({
-            type: 'create',
-            item: res.data,
-          });
+          this.loadIndustrialParts();
+
+          // this.applyIndustrialPartMutation({
+          //   type: 'create',
+          //   item: res.data,
+          // });
         } else if (res.validationErrors) {
           this.formValidationErrors.set(res.validationErrors);
         }
@@ -158,11 +157,12 @@ export class IndustrialPartsFacade extends BaseFacade {
       tap((res) => {
         if (res.success) {
           this.formValidationErrors.set({});
-          this.applyIndustrialPartMutation({
-            type: 'update',
-            id,
-            changes: dto,
-          });
+          this.loadIndustrialParts();
+          // this.applyIndustrialPartMutation({
+          //   type: 'update',
+          //   id,
+          //   changes: dto,
+          // });
         } else if (res.validationErrors) {
           this.formValidationErrors.set(res.validationErrors);
         }
@@ -246,15 +246,10 @@ export class IndustrialPartsFacade extends BaseFacade {
   // ======================================================
   // MUTATION HANDLER
   // ======================================================
-  private applyIndustrialPartMutation(
-    mutation: IndustrialPartMutation
-  ): void {
+  private applyIndustrialPartMutation(mutation: IndustrialPartMutation): void {
     switch (mutation.type) {
       case 'create': {
-        this._industrialParts.update((list) => [
-          mutation.item,
-          ...list,
-        ]);
+        this._industrialParts.update((list) => [mutation.item, ...list]);
         this.totalCount.update((c) => c + 1);
         this.enterEditMode(mutation.item);
         break;
