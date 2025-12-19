@@ -1,9 +1,8 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { Subject } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { finalize, map, tap } from 'rxjs/operators';
 
 import { PatientService } from '../Services/patient.service';
-
 
 import { ApiResult } from '../../../../core/models/ApiResult';
 import { PaginatedList } from '../../../../core/models/Shared/paginated-list.model';
@@ -27,6 +26,8 @@ export class PatientsFacade extends BaseFacade {
   // ================================
   private _patients = signal<PatientDto[]>([]);
   patients = this._patients.asReadonly();
+  private _isLoading = signal<boolean>(false);
+  isLoading = this._isLoading.asReadonly();
 
   private _filters = signal<PatientFilterRequest>({});
   filters = this._filters.asReadonly();
@@ -56,7 +57,7 @@ export class PatientsFacade extends BaseFacade {
       this.patientService
         .getPatients(
           { ...this._filters(), searchTerm: term },
-          this._pageRequest(),
+          this._pageRequest()
         )
         .pipe(
           tap((res: ApiResult<PaginatedList<PatientDto>>) => {
@@ -69,7 +70,11 @@ export class PatientsFacade extends BaseFacade {
 
     null, // NO cache
 
-    (data) => this._patients.set(data)
+    (data) => {
+      this._isLoading.set(false);
+
+      this._patients.set(data);
+    }
   );
 
   // ================================
@@ -78,6 +83,8 @@ export class PatientsFacade extends BaseFacade {
   search(term: string): void {
     this._pageRequest.update((p) => ({ ...p, page: 1 }));
     this._filters.update((f) => ({ ...f, searchTerm: term }));
+    this._isLoading.set(true);
+
     this.searchManager.search(term);
   }
 
@@ -85,6 +92,8 @@ export class PatientsFacade extends BaseFacade {
   // LOAD PATIENTS
   // ================================
   loadPatients(): void {
+    this._isLoading.set(true);
+
     this.patientService
       .getPatients(this._filters(), this._pageRequest())
       .pipe(
@@ -97,7 +106,8 @@ export class PatientsFacade extends BaseFacade {
             this.totalCount.set(0);
             this.handleLoadPatientsError(result);
           }
-        })
+        }),
+        finalize(() => this._isLoading.set(false))
       )
       .subscribe();
   }
@@ -172,6 +182,7 @@ export class PatientsFacade extends BaseFacade {
           }
         })
       )
+
       .subscribe();
   }
 
@@ -206,7 +217,7 @@ export class PatientsFacade extends BaseFacade {
       }
     ).pipe(
       tap((res) => {
-        if (res.success ) {
+        if (res.success) {
           this.formValidationErrors.set({});
         } else if (res.validationErrors) {
           this.formValidationErrors.set(res.validationErrors);

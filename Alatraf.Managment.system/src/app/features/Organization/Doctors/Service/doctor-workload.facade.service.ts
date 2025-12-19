@@ -1,5 +1,5 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { tap, map } from 'rxjs/operators';
+import { tap, map, finalize } from 'rxjs/operators';
 
 import { BaseFacade } from '../../../../core/utils/facades/base-facade';
 import { PageRequest } from '../../../../core/models/Shared/page-request.model';
@@ -22,6 +22,8 @@ export class DoctorWorkloadFacade extends BaseFacade {
   private _technicians = signal<TechnicianDto[]>([]);
   technicians = this._technicians.asReadonly();
   techniciansTotalCount = signal<number>(0);
+  private _isLoadingTechnicians = signal<boolean>(false);
+  isLoadingTechnicians = this._isLoadingTechnicians.asReadonly();
 
   private _technicianFilters = signal<TechnicianFilterRequest>({
     sectionId: null,
@@ -54,10 +56,15 @@ export class DoctorWorkloadFacade extends BaseFacade {
           })
         ),
     null,
-    (items) => this._technicians.set(items)
+    (items) => {
+      this._isLoadingTechnicians.set(false);
+      this._technicians.set(items);
+    }
   );
 
   loadTechnicians(): void {
+    this._isLoadingTechnicians.set(true);
+
     this.service
       .getTechniciansDropdown(this._technicianFilters(), this._technicianPage())
       .pipe(
@@ -70,12 +77,17 @@ export class DoctorWorkloadFacade extends BaseFacade {
             this.techniciansTotalCount.set(0);
             this.handleDropdownError(res);
           }
+        }),
+        finalize(() => {
+          this._isLoadingTechnicians.set(false);
         })
       )
       .subscribe();
   }
 
   searchTechnicians(term: string): void {
+    this._isLoadingTechnicians.set(true);
+
     this._technicianFilters.update((f) => ({ ...f, searchTerm: term }));
     this._technicianPage.update((p) => ({ ...p, page: 1 }));
     this.techniciansSearchManager.search(term);
@@ -101,6 +113,8 @@ export class DoctorWorkloadFacade extends BaseFacade {
   private _therapists = signal<TherapistDto[]>([]);
   therapists = this._therapists.asReadonly();
   therapistsTotalCount = signal<number>(0);
+  private _isLoadingTherapists = signal<boolean>(false);
+  isLoadingTherapists = this._isLoadingTherapists.asReadonly();
 
   private _therapistFilters = signal<TherapistFilterRequest>({
     sectionId: null,
@@ -134,10 +148,17 @@ export class DoctorWorkloadFacade extends BaseFacade {
           })
         ),
     null,
-    (items) => this._therapists.set(items)
+    (items) =>
+    {
+          this._isLoadingTherapists.set(false);
+
+      this._therapists.set(items)
+    }
   );
 
   loadTherapists(): void {
+              this._isLoadingTherapists.set(true);
+
     this.service
       .getTherapistsDropdown(this._therapistFilters(), this._therapistPage())
       .pipe(
@@ -150,12 +171,17 @@ export class DoctorWorkloadFacade extends BaseFacade {
             this.therapistsTotalCount.set(0);
             this.handleDropdownError(res);
           }
+        }),
+         finalize(() => {
+          this._isLoadingTherapists.set(false);
         })
       )
       .subscribe();
   }
 
   searchTherapists(term: string): void {
+            this._isLoadingTherapists.set(true);
+
     this._therapistFilters.update((f) => ({ ...f, searchTerm: term }));
     this._therapistPage.update((p) => ({ ...p, page: 1 }));
     this.therapistsSearchManager.search(term);

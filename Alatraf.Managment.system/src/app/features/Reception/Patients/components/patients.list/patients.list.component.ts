@@ -24,6 +24,7 @@ import { PatientDto } from '../../../../../core/models/Shared/patient.model';
 })
 export class PatientsListComponent {
  patients = input.required<PatientDto[]>();
+  loading = input<boolean>(false);
 
   pageLoader = inject(SkeletonsLoadingService);
   private uiLock = inject(UiLockService);

@@ -75,7 +75,7 @@ export class BaseApiService {
       .get<ApiResult<T>>(url, this.buildOptions(params, headers))
       .pipe(
         catchError((err) => this.handleError(err)),
-        delay(1500)
+        // delay(1500)
       );
   }
 

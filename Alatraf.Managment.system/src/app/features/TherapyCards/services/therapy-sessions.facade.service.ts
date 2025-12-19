@@ -157,9 +157,16 @@ export class TherapySessionsFacade extends BaseFacade {
           )
         ),
     null,
-    (items) => this._paidTherapyCards.set(items)
+    (items) =>
+    {
+    this.loadingPaidTherapyCards.set(false);
+
+      this._paidTherapyCards.set(items)
+    }
   );
   searchPaid(term: string): void {
+       this.loadingPaidTherapyCards.set(true);
+
     this._paidFilters.update((f) => ({ ...f, searchTerm: term }));
     this._paidPageRequest.update((p) => ({ ...p, page: 1 }));
     this.paidSearchManager.search(term);

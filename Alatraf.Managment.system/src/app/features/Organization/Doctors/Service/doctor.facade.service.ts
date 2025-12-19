@@ -1,5 +1,5 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
-import { tap, map } from 'rxjs/operators';
+import { tap, map, finalize } from 'rxjs/operators';
 
 import { BaseFacade } from '../../../../core/utils/facades/base-facade';
 import { ApiResult } from '../../../../core/models/ApiResult';
@@ -25,7 +25,11 @@ export class DoctorFacade extends BaseFacade {
 
   private _doctors = signal<DoctorListItemDto[]>([]);
   doctors = this._doctors.asReadonly();
-  private isLoading = signal(false);
+  private _isLoading = signal<boolean>(false);
+  isLoading = this._isLoading.asReadonly();
+
+
+  
   hasActiveFilters = computed(() => {
     const f = this._filters();
     return !!(
@@ -73,7 +77,11 @@ export class DoctorFacade extends BaseFacade {
           map((res) => (res.isSuccess && res.data?.items ? res.data.items : []))
         ),
     null,
-    (items) => this._doctors.set(items)
+    (items) => {
+      this._isLoading.set(false);
+
+      this._doctors.set(items);
+    }
   );
 
   // ---------------------------------------------
@@ -82,6 +90,7 @@ export class DoctorFacade extends BaseFacade {
   search(term: string) {
     this._filters.update((f) => ({ ...f, search: term }));
     this._pageRequest.update((p) => ({ ...p, page: 1 }));
+    this._isLoading.set(true);
     this.searchManager.search(term);
   }
 
@@ -132,14 +141,12 @@ export class DoctorFacade extends BaseFacade {
   loadDoctors() {
     if (this.isLoading()) return;
 
-    this.isLoading.set(true);
+    this._isLoading.set(true);
 
     this.service
       .getDoctors(this._filters(), this._pageRequest())
       .pipe(
         tap((res) => {
-          this.isLoading.set(false);
-
           if (res.isSuccess && res.data?.items) {
             this._doctors.set(res.data.items);
             this.totalCount.set(res.data.totalCount ?? 0);
@@ -148,7 +155,8 @@ export class DoctorFacade extends BaseFacade {
             this.totalCount.set(0);
             this.handleLoadDoctorsError(res);
           }
-        })
+        }),
+        finalize(() => this._isLoading.set(true))
       )
       .subscribe();
   }

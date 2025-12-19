@@ -22,6 +22,7 @@ export class IndustrialWaitingListComponent implements OnInit, OnDestroy {
   tickets = this.ticketFacade.tickets;
   selectedTicket = signal<TicketDto | null>(null);
   ServiceType = ServiceType;
+  loading = this.ticketFacade.isLoading;
 
   pageRequest = this.ticketFacade.pageRequest;
   totalCount = this.ticketFacade.totalCount;

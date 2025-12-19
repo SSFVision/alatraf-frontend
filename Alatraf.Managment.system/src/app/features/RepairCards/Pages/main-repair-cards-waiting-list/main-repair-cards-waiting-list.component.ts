@@ -43,7 +43,6 @@ export class MainRepairCardsWaitingListComponent {
   selectedCardId = signal<number | null>(null);
   SelectedDoctorId = signal<number | null>(null);
 
-  
   patientsVM = computed<GeneralWaitingPatientVM[]>(() =>
     this.paidRepairCards().map((card: RepairCardDiagnosisDto) => ({
       id: card.repairCardId,
@@ -61,18 +60,13 @@ export class MainRepairCardsWaitingListComponent {
       .map(mapTechnicianToDoctorWorkloadCardVM)
   );
 
-  loadingTechnicians = computed(
-    () => this.doctorWorkloadFacade.technicians().length === 0
-  );
+  loadingTechnicians = this.doctorWorkloadFacade.isLoadingTechnicians;
 
   ngOnInit(): void {
     this.repairCardsFacade.loadPaidRepairCards().subscribe();
 
     this.doctorWorkloadFacade.loadTechnicians();
   }
-
- 
-
 
   onSearch(term: string): void {
     this.repairCardsFacade.searchPaid(term);
@@ -83,7 +77,6 @@ export class MainRepairCardsWaitingListComponent {
     this.navRepairCard.goToAssignIndustrialPartsPage(repaireCard.id);
   }
 
-  
   onDoctorSearch(term: string): void {
     this.doctorWorkloadFacade.searchTechnicians(term);
   }
