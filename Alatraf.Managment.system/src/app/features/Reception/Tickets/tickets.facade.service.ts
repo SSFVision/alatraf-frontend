@@ -1,5 +1,5 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { tap, map } from 'rxjs/operators';
+import { tap, map, finalize } from 'rxjs/operators';
 
 import { BaseFacade } from '../../../core/utils/facades/base-facade';
 import { ApiResult } from '../../../core/models/ApiResult';
@@ -20,6 +20,8 @@ export class TicketFacade extends BaseFacade {
   // ---------------------------------------------
   private _tickets = signal<TicketDto[]>([]);
   tickets = this._tickets.asReadonly();
+  private _isLoading = signal<boolean>(false);
+  isLoading = this._isLoading.asReadonly();
 
   private _filters = signal<TicketFilterRequest>({
     searchTerm: '',
@@ -64,10 +66,16 @@ export class TicketFacade extends BaseFacade {
           )
         ),
     null,
-    (items: TicketDto[]) => this._tickets.set(items)
+    (items: TicketDto[]) => {
+      this._isLoading.set(false);
+
+      this._tickets.set(items);
+    }
   );
 
   search(term: string) {
+    this._isLoading.set(true);
+
     this._filters.update((f) => ({ ...f, searchTerm: term }));
     this._pageRequest.update((p) => ({ ...p, page: 1 }));
     this.searchManager.search(term);
@@ -111,6 +119,8 @@ export class TicketFacade extends BaseFacade {
   }
 
   loadTickets() {
+    this._isLoading.set(true);
+
     this.service
       .getTickets(this._filters(), this._pageRequest())
       .pipe(
@@ -123,31 +133,32 @@ export class TicketFacade extends BaseFacade {
             this.totalCount.set(0);
             this.handleLoadTicketsError(result);
           }
-        })
+        }),
+        finalize(() => this._isLoading.set(false))
       )
       .subscribe();
   }
-resetFilters() {
-  this._filters.set({
-    searchTerm: '',
-    sortBy: 'createdAt',
-    sortDirection: 'desc',
-    departmentId: undefined,
-    serviceId: undefined,
-    patientId: undefined,
-    createdFrom: null,
-    createdTo: null,
-    status: undefined,
-  });
+  resetFilters() {
+    this._filters.set({
+      searchTerm: '',
+      sortBy: 'createdAt',
+      sortDirection: 'desc',
+      departmentId: undefined,
+      serviceId: undefined,
+      patientId: undefined,
+      createdFrom: null,
+      createdTo: null,
+      status: undefined,
+    });
 
-  this._pageRequest.set({
-    page: 1,
-    pageSize: 5
-  });
+    this._pageRequest.set({
+      page: 1,
+      pageSize: 5,
+    });
 
-  this._tickets.set([]);
-  this.totalCount.set(0);
-}
+    this._tickets.set([]);
+    this.totalCount.set(0);
+  }
 
   createTicket(dto: any) {
     return this.handleCreateOrUpdate(this.service.createTicket(dto), {
@@ -168,22 +179,21 @@ resetFilters() {
   private _selectedTicket = signal<TicketDto | null>(null);
   selectedTicket = this._selectedTicket.asReadonly();
 
- loadingTicket = signal(false);
+  loadingTicket = signal(false);
 
-loadTicketById(ticketId: number) {
-  this.loadingTicket.set(true);
+  loadTicketById(ticketId: number) {
+    this.loadingTicket.set(true);
 
-   this.service.getTicketById(ticketId).subscribe(res => {
-    if (res.isSuccess && res.data) {
-      this._selectedTicket.set(res.data);
-    } else {
-      this._selectedTicket.set(null);
-    }
+    this.service.getTicketById(ticketId).subscribe((res) => {
+      if (res.isSuccess && res.data) {
+        this._selectedTicket.set(res.data);
+      } else {
+        this._selectedTicket.set(null);
+      }
 
-    this.loadingTicket.set(false);
-  });
-}
-
+      this.loadingTicket.set(false);
+    });
+  }
 
   private handleLoadTicketsError(result: ApiResult<any>) {
     const err = this.extractError(result);

@@ -27,50 +27,50 @@
     </div>
 
     <!-- Service Filters -->
-  <div class="filters-container">
-  <!-- ALL -->
-  <button
-    class="filter-btn"
-    [class.active]="activeService() === null"
-    (click)="filterByService(null)"
-  >
-    الكل
-  </button>
+    <div class="filters-container">
+      <!-- ALL -->
+      <button
+        class="filter-btn"
+        [class.active]="activeService() === null"
+        (click)="filterByService(null)"
+      >
+        الكل
+      </button>
 
-  <!-- أطراف صناعية -->
-  <button
-    class="filter-btn"
-    [class.active]="activeService() === ServiceType.Industrial"
-    (click)="filterByService(ServiceType.Industrial)"
-  >
-    أطراف صناعية
-  </button>
+      <!-- أطراف صناعية -->
+      <button
+        class="filter-btn"
+        [class.active]="activeService() === ServiceType.Industrial"
+        (click)="filterByService(ServiceType.Industrial)"
+      >
+        أطراف صناعية
+      </button>
 
-  <!-- مبيعات -->
-  <button
-    class="filter-btn"
-    [class.active]="activeService() === ServiceType.Sales"
-    (click)="filterByService(ServiceType.Sales)"
-  >
-    مبيعات
-  </button>
+      <!-- مبيعات -->
+      <button
+        class="filter-btn"
+        [class.active]="activeService() === ServiceType.Sales"
+        (click)="filterByService(ServiceType.Sales)"
+      >
+        مبيعات
+      </button>
 
-  <!-- إصلاحات -->
-  <button
-    class="filter-btn"
-    [class.active]="activeService() === ServiceType.Repairs"
-    (click)="filterByService(ServiceType.Repairs)"
-  >
-    إصلاحات
-  </button>
-</div>
-
+      <!-- إصلاحات -->
+      <button
+        class="filter-btn"
+        [class.active]="activeService() === ServiceType.Repairs"
+        (click)="filterByService(ServiceType.Repairs)"
+      >
+        إصلاحات
+      </button>
+    </div>
 
     <!-- Waiting list -->
     <app-waiting-patient-card
       class="max-hight-712 column gap-16"
       [tickets]="tickets()"
       (select)="select($event)"
+      [loading]="loading()"
     ></app-waiting-patient-card>
 
     <!-- Pagination Component -->

@@ -1,11 +1,21 @@
-import { Component, inject, signal, OnInit, effect, OnDestroy } from '@angular/core';
+import {
+  Component,
+  inject,
+  signal,
+  OnInit,
+  effect,
+  OnDestroy,
+} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavigationDiagnosisFacade } from '../../../../../core/navigation/navigation-diagnosis.facade';
-import { TicketDto, TicketStatus } from '../../../../Reception/Tickets/models/ticket.model';
+import {
+  TicketDto,
+  TicketStatus,
+} from '../../../../Reception/Tickets/models/ticket.model';
 import { TicketFacade } from '../../../../Reception/Tickets/tickets.facade.service';
 import { PaginationComponent } from '../../../../../shared/components/pagination/pagination.component';
 import { Department, ServiceType } from '../../../Shared/enums/department.enum';
-import { PatientCardComponent } from "../../../../../shared/components/waiting-patient-card/waiting-patient-card.component";
+import { PatientCardComponent } from '../../../../../shared/components/waiting-patient-card/waiting-patient-card.component';
 
 @Component({
   selector: 'app-therapy-waiting-list',
@@ -13,7 +23,7 @@ import { PatientCardComponent } from "../../../../../shared/components/waiting-p
   templateUrl: './therapy-waiting-list.component.html',
   styleUrl: './therapy-waiting-list.component.css',
 })
-export class TherapyWaitingListComponent  implements OnInit, OnDestroy  {
+export class TherapyWaitingListComponent implements OnInit, OnDestroy {
   activeService = signal<number | null>(null); // null = "الكل"
 
   ticketFacade = inject(TicketFacade);
@@ -22,13 +32,16 @@ export class TherapyWaitingListComponent  implements OnInit, OnDestroy  {
   // Signals
   tickets = this.ticketFacade.tickets;
   selectedTicket = signal<TicketDto | null>(null);
-  ServiceType = ServiceType;  
-
+  ServiceType = ServiceType;
+  loading = this.ticketFacade.isLoading;
   pageRequest = this.ticketFacade.pageRequest;
   totalCount = this.ticketFacade.totalCount;
 
   ngOnInit() {
-    this.ticketFacade.updateFilters({departmentId:Department.Therapy,status:TicketStatus.New});
+    this.ticketFacade.updateFilters({
+      departmentId: Department.Therapy,
+      status: TicketStatus.New,
+    });
     this.ticketFacade.loadTickets();
   }
   ngOnDestroy() {
