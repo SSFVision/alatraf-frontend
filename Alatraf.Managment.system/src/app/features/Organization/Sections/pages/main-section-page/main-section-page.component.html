@@ -27,7 +27,35 @@
         (input)="onSearch($any($event.target).value)"
       />
     </div>
+  <div class="filters-container">
+      <!-- ALL services in therapy -->
+      <!-- <button
+        class="filter-btn"
+        [class.active]="activeService() === null"
+        (click)="filterByService(null)"
+      >
+        الكل
+      </button> -->
 
+      <!-- علاج طبيعي -->
+      <button
+        class="filter-btn"
+        [class.active]="activeDepartment() === 1"
+        (click)="filterByDepartment(1)"
+      >
+        علاج طبيعي
+      </button>
+
+      <!-- أعصاب -->
+      <button
+        class="filter-btn"
+        [class.active]="activeDepartment() === 2"
+        (click)="filterByDepartment(2)"
+      >
+        إدارة فنية
+      </button>
+
+    </div>
     <!-- LIST -->
     <app-management-entity-card
       class="max-hight-712 column gap-16"

@@ -1,6 +1,6 @@
 export interface CreateIndustrialPartUnitRequest {
   unitId: number;
-  price: number; // decimal → number
+  price: number;
 }
 
 export interface CreateIndustrialPartRequest {
