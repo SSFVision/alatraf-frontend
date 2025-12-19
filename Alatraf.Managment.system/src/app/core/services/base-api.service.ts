@@ -1,7 +1,7 @@
 // import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, delay } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { ApiResult } from '../models/ApiResult';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
@@ -73,7 +73,10 @@ export class BaseApiService {
     const url = this.buildUrl(endpoint);
     return this.http
       .get<ApiResult<T>>(url, this.buildOptions(params, headers))
-      .pipe(catchError((err) => this.handleError(err)));
+      .pipe(
+        catchError((err) => this.handleError(err)),
+        delay(1500)
+      );
   }
 
   protected post<T>(

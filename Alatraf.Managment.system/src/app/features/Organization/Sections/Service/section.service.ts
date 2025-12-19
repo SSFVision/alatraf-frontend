@@ -1,6 +1,6 @@
 import { HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { delay, Observable } from 'rxjs';
 
 import { ApiResult } from '../../../../core/models/ApiResult';
 import { PageRequest } from '../../../../core/models/Shared/page-request.model';

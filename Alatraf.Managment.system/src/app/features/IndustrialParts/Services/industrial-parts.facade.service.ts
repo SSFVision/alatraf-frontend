@@ -19,10 +19,9 @@ export class IndustrialPartsFacade extends BaseFacade {
   constructor() {
     super();
   }
+private _isLoading = signal<boolean>(false);
+isLoading = this._isLoading.asReadonly();
 
-  // ======================================================
-  // LIST STATE
-  // ======================================================
   private _industrialParts = signal<IndustrialPartDto[]>([]);
   industrialParts = this._industrialParts.asReadonly();
 
@@ -58,7 +57,12 @@ export class IndustrialPartsFacade extends BaseFacade {
           )
         ),
     null,
-    (items) => this._industrialParts.set(items)
+    (items) => {
+      
+      this._industrialParts.set(items)
+    this._isLoading.set(false);
+
+    }
   );
 
   // ======================================================
@@ -67,6 +71,8 @@ export class IndustrialPartsFacade extends BaseFacade {
   search(term: string) {
     this._filters.update((f) => ({ ...f, searchTerm: term }));
     this._pageRequest.update((p) => ({ ...p, page: 1 }));
+         this._isLoading.set(true);
+
     this.searchManager.search(term);
   }
 
@@ -89,6 +95,8 @@ export class IndustrialPartsFacade extends BaseFacade {
   }
 
   loadIndustrialParts() {
+      this._isLoading.set(true);
+
     this.service
       .getIndustrialPartsWithFilters(this._filters(), this._pageRequest())
       .pipe(
@@ -101,6 +109,8 @@ export class IndustrialPartsFacade extends BaseFacade {
             this.totalCount.set(0);
             this.handleLoadIndustrialPartsError(result);
           }
+            this._isLoading.set(false);
+
         })
       )
       .subscribe();
@@ -122,9 +132,7 @@ export class IndustrialPartsFacade extends BaseFacade {
     this.totalCount.set(0);
   }
 
-  // ======================================================
-  // CREATE / UPDATE
-  // ======================================================
+  
   createIndustrialPart(dto: CreateIndustrialPartRequest) {
     return this.handleCreateOrUpdate(this.service.createIndustrialPart(dto), {
       successMessage: 'تم إنشاء القطعة الصناعية بنجاح',
@@ -235,10 +243,11 @@ export class IndustrialPartsFacade extends BaseFacade {
       }
     ).subscribe((success) => {
       if (success) {
-        this.applyIndustrialPartMutation({
-          type: 'delete',
-          id: part.industrialPartId,
-        });
+        this.loadIndustrialParts()
+        // this.applyIndustrialPartMutation({
+        //   type: 'delete',
+        //   id: part.industrialPartId,
+        // });
       }
     });
   }

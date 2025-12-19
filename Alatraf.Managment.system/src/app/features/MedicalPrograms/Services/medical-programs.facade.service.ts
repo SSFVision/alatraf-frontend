@@ -18,6 +18,11 @@ export class MedicalProgramsFacade extends BaseFacade {
   constructor() {
     super();
   }
+  // ---------------------------------------------
+  // LOADING STATE
+  // ---------------------------------------------
+  private _isLoading = signal<boolean>(false);
+  isLoading = this._isLoading.asReadonly();
 
   // ---------------------------------------------
   // SIGNALS
@@ -59,12 +64,17 @@ export class MedicalProgramsFacade extends BaseFacade {
           )
         ),
     null,
-    (items: MedicalProgramDto[]) => this._medicalPrograms.set(items)
+    (items: MedicalProgramDto[]) => {
+      this._medicalPrograms.set(items);
+      this._isLoading.set(false);
+    }
   );
 
   search(term: string) {
     this._filters.update((f) => ({ ...f, searchTerm: term }));
     this._pageRequest.update((p) => ({ ...p, page: 1 }));
+    this._isLoading.set(true);
+
     this.searchManager.search(term);
   }
   updateFilters(newFilters: Partial<MedicalProgramsFilterRequest>) {
@@ -73,6 +83,8 @@ export class MedicalProgramsFacade extends BaseFacade {
   }
 
   loadMedicalPrograms() {
+    this._isLoading.set(true);
+
     this.service
       .getMedicalProgramsWithFilters(this._filters(), this._pageRequest())
       .pipe(
@@ -85,6 +97,8 @@ export class MedicalProgramsFacade extends BaseFacade {
             this.totalCount.set(0);
             this.handleLoadMedicalProgramsError(result);
           }
+
+          this._isLoading.set(false);
         })
       )
       .subscribe();

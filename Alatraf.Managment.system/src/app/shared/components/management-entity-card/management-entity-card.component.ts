@@ -8,8 +8,9 @@ import { ManagementEntityCardUiModel } from '../../models/management-entity-card
   styleUrl: './management-entity-card.component.css',
 })
 export class ManagementEntityCardComponent {
-items = input.required<ManagementEntityCardUiModel[]>();
+  items = input.required<ManagementEntityCardUiModel[]>();
   loading = input<boolean>(false);
+loadingMore = input<boolean>(false);
 
   // Output
   select = output<number | string>();
@@ -21,4 +22,20 @@ items = input.required<ManagementEntityCardUiModel[]>();
     this.selectedId.set(id);
     this.select.emit(id);
   }
+
+  loadMore = output<void>();
+  onScroll(event: Event): void {
+  if (this.loading() || this.loadingMore()) return;
+
+    const el = event.target as HTMLElement;
+    const threshold = 50;
+
+    const reachedBottom =
+      el.scrollTop + el.clientHeight >= el.scrollHeight - threshold;
+
+    if (reachedBottom) {
+      this.loadMore.emit();
+    }
+  }
+
 }

@@ -1,4 +1,4 @@
-import { Component, effect, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -20,7 +20,7 @@ import { UpdateMedicalProgramRequest } from '../../Models/update-medical-program
   templateUrl: './add-edit-medical-program.component.html',
   styleUrl: './add-edit-medical-program.component.css',
 })
-export class AddEditMedicalProgramComponent {
+export class AddEditMedicalProgramComponent implements OnInit {
   private fb = inject(FormBuilder);
   private facade = inject(MedicalProgramsFacade);
   private sectionsFacade = inject(SectionsFacade);
@@ -44,12 +44,6 @@ export class AddEditMedicalProgramComponent {
   sections = this.sectionsFacade.sections;
 
   constructor() {
-    // ---------------------------------------------
-    // LOAD SECTIONS
-    // ---------------------------------------------
-    this.sectionsFacade.setDepartment(Department.Therapy);
-    this.sectionsFacade.loadSections();
-
     // ---------------------------------------------
     // EDIT MODE → PATCH FORM
     // ---------------------------------------------
@@ -96,6 +90,14 @@ export class AddEditMedicalProgramComponent {
   }
 
   // ---------------------------------------------
+  // INIT (LOAD DATA HERE)
+  // ---------------------------------------------
+  ngOnInit(): void {
+    this.sectionsFacade.setDepartment(Department.Therapy);
+    this.sectionsFacade.resetAndLoad(); // 👈 أفضل من loadSections
+  }
+
+  // ---------------------------------------------
   // SEARCH SECTIONS
   // ---------------------------------------------
   onSearchSection(term: string) {
@@ -139,7 +141,6 @@ export class AddEditMedicalProgramComponent {
 
       this.facade.createMedicalProgram(createDto).subscribe((res) => {
         if (res.success && res.data) {
-          // 🔥 REQUIRED BUSINESS STEP
           this.facade.enterEditMode(res.data);
           this.form.markAsPristine();
           this.canDelete.set(true);

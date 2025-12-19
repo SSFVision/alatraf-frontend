@@ -1,5 +1,5 @@
 import { MedicalProgramsNavigationFacade } from '../../../../core/navigation/navigation-medical-programs.facade';
-import { Component, effect, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal, OnInit } from '@angular/core';
 import { ManagementEntityCardComponent } from '../../../../shared/components/management-entity-card/management-entity-card.component';
 import { ManagementEntityCardUiModel } from '../../../../shared/models/management-entity-card.ui-model';
 import { RouterOutlet } from '@angular/router';
@@ -11,19 +11,21 @@ import { MedicalProgramsFacade } from '../../Services/medical-programs.facade.se
   templateUrl: './main-medical-programs-page.component.html',
   styleUrl: './main-medical-programs-page.component.css',
 })
-export class MainMedicalProgramsPageComponent {
+export class MainMedicalProgramsPageComponent implements OnInit {
   private facade = inject(MedicalProgramsFacade);
   private nav = inject(MedicalProgramsNavigationFacade);
 
   card = signal<ManagementEntityCardUiModel[]>([]);
-  loading = signal<boolean>(true);
   selectedId = signal<number | string | null>(null);
-addMode=signal<boolean>(false);
+  addMode = signal<boolean>(false);
+
+  // ✅ loader من الـ facade
+  loading = this.facade.isLoading;
 
   constructor() {
-    this.facade.loadMedicalPrograms();
     effect(() => {
       const programs = this.facade.medicalPrograms();
+
       this.card.set(
         programs.map((p) => ({
           id: p.id,
@@ -31,9 +33,11 @@ addMode=signal<boolean>(false);
           sectionName: p.sectionName ?? null,
         }))
       );
-
-      this.loading.set(false);
     });
+  }
+
+  ngOnInit(): void {
+    this.facade.loadMedicalPrograms();
   }
 
   onCardSelected(id: number | string) {
@@ -42,9 +46,10 @@ addMode=signal<boolean>(false);
   }
 
   goToAddMedicalProgram() {
-this.addMode.set(true)
+    this.addMode.set(true);
     this.nav.goToCreateMedicalProgramPage();
   }
+
   onSearch(term: string) {
     this.facade.search(term);
   }
