@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>الموردون</title>
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/icon.svg">
+  <link rel="stylesheet" href="../../assets/css/aside.css" />
+  <link rel="stylesheet" href="../../assets/css/header.css" />
+  <link rel="stylesheet" href="../../assets/css/home.css" />
+  <link rel="stylesheet" href="../../../Alatraf.Managment.system/src/styles.css" />
+</head>
+
+<body>
+  <aside id="aside-container"></aside>
+  <header id="header-container"></header>
+
+  <main class="padding-32 row gap-16 padding-24">
+    <div class="column gap-16  max-width-324">
+      <div class="box culumn gap-24 max-hight-360" id="suppliers-list-container"></div>
+      <div class="box culumn gap-24 max-hight-360" id="invoice-list-container"></div>
+    </div>
+
+    <div class="column gap-16">
+
+      <div class="box max-hight-800 gap-16">
+
+        <div class="space-between">
+          <h2 class="title-lg">الموردون</h2>
+        </div>
+
+        <div class="max-hight-712 column gap-16 padding-LR-24">
+          <div class="width-100">
+            <p class="title-md">بيانات المورد</p>
+            <span class="home-line"></span>
+          </div>
+
+          <div class="row flex-center">
+            <label class="label-lg">الرقم</label>
+            <input class="label-lg" type="text" placeholder="">
+            <label class="label-lg">الاسم</label>
+            <input class="label-lg" type="text" placeholder="">
+          </div>
+
+          <div class="row flex-center">
+            <label class="label-lg">كشف حساب</label>
+            <input class="label-lg" type="text" placeholder="">
+          </div>
+
+          <div class="width-100">
+            <p class="title-md">الفواتير</p>
+            <span class="home-line"></span>
+          </div>
+
+          <div class="overflow-auto">
+            <table class="no-shadow">
+              <thead>
+                <tr>
+                  <th>م</th>
+                  <th>رقم الفاتورة</th>
+                  <th>التاريخ</th>
+                  <th>الإجمالي</th>
+                  <th class="buttons"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>74152</td>
+                  <td>2025/05/08</td>
+                  <td>15,650</td>
+                  <td class="td-actions">
+                    <button class="btn primary icon">
+                      <img src="../../assets/icons/eye-icon.svg" alt="عرض" class="WH-20">
+                    </button>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>2</td>
+                  <td>74153</td>
+                  <td>2025/05/09</td>
+                  <td>3,200</td>
+                  <td class="td-actions">
+                    <button class="btn primary icon">
+                      <img src="../../assets/icons/eye-icon.svg" alt="عرض" class="WH-20">
+                    </button>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>3</td>
+                  <td>74154</td>
+                  <td>2025/05/10</td>
+                  <td>1,200</td>
+                  <td class="td-actions">
+                    <button class="btn primary icon">
+                      <img src="../../assets/icons/eye-icon.svg" alt="عرض" class="WH-20">
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>cl
+
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // استدعاء الـ ASIDE
+    fetch("../template/aside.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("aside-container").innerHTML = data;
+      });
+
+    // استدعاء الـ HEADER
+    fetch("../template/header.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("header-container").innerHTML = data;
+      });
+
+    fetch("../template/suppliers-list.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("suppliers-list-container").innerHTML = data;
+      });
+
+    fetch("../template/invoice-list.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("invoice-list-container").innerHTML = data;
+      });
+  </script>
+</body>
+
+</html>

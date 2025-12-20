@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>فواتير المشتريات</title>
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/icon.svg">
+  <link rel="stylesheet" href="../../assets/css/aside.css" />
+  <link rel="stylesheet" href="../../assets/css/header.css" />
+  <link rel="stylesheet" href="../../assets/css/home.css" />
+  <link rel="stylesheet" href="../../../Alatraf.Managment.system/src/styles.css" />
+</head>
+
+<body>
+  <aside id="aside-container"></aside>
+  <header id="header-container"></header>
+
+  <main class="padding-32 row gap-16 padding-24">
+    <div class="column gap-16  max-width-324">
+      <div class="box culumn gap-24 max-hight-360" id="suppliers-list-container">
+      </div>
+      <div class="box culumn gap-24 max-hight-360" id="invoice-list-container">
+      </div>
+    </div>
+
+    <div class="box max-hight-800 gap-16 flex-center" id="right-panel-container"></div>
+
+  </main>
+
+  <script>
+    // استدعاء الـ ASIDE
+    fetch("../template/aside.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("aside-container").innerHTML = data;
+      });
+
+    // استدعاء الـ HEADER
+    fetch("../template/header.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("header-container").innerHTML = data;
+      });
+
+    fetch("../template/suppliers-list.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("suppliers-list-container").innerHTML = data;
+      });
+
+    fetch("../template/invoice-list.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("invoice-list-container").innerHTML = data;
+      });
+
+    fetch("../template/hi-employee.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("right-panel-container").innerHTML = data;
+      });
+
+  </script>
+</body>
+
+</html>
