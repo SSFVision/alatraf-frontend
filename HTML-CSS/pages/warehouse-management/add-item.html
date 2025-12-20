@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>إدارة المرضى</title>
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/icon.svg">
+  <link rel="stylesheet" href="../../assets/css/aside.css" />
+  <link rel="stylesheet" href="../../assets/css/header.css" />
+  <link rel="stylesheet" href="../../assets/css/home.css" />
+  <link rel="stylesheet" href="../../../Alatraf.Managment.system/src/styles.css" />
+</head>
+
+<body>
+  <aside id="aside-container"></aside>
+  <header id="header-container"></header>
+
+  <main class="padding-32 row gap-16 padding-24">
+    <div class="column gap-16  max-width-324">
+      <div class="box culumn gap-24 max-hight-360" id="warehouse-list-container">
+      </div>
+      <div class="box culumn gap-24 max-hight-360" id="items-list-container">
+      </div>
+    </div>
+    <div class="column gap-16">
+
+      <button class="btn primary large">
+        التحويل بين المخازن
+      </button>
+
+      <div class="box max-hight-800 gap-16">
+        <span class="backdrop"></span>
+
+        <div class="box dialog">
+          <div class="space-between">
+            <h2 class="title-lg">إضافة صنف جديد</h2>
+            <img src="../../assets/icons/close-icon.svg" alt="إغلاق" class="close-icon" />
+          </div>
+
+          <div class="max-hight-712 column gap-16 padding-LR-24">
+            <div class="width-100">
+              <p class="title-md">بيانات الصنف</p>
+              <span class="home-line"></span>
+            </div>
+
+            <div class="row flex-center">
+              <label class="label-lg">الاسم</label>
+              <input class="label-lg" type="text" placeholder="">
+              <label class="label-lg">الرقم</label>
+              <input class="label-lg" type="text" placeholder="">
+            </div>
+
+            <div class="row flex-center">
+              <label class="label-lg">السعر</label>
+              <input class="label-lg" type="number" placeholder="">
+              <label class="label-lg">سعر البيع</label>
+              <input class="label-lg" type="number" placeholder="">
+            </div>
+
+            <div class="row flex-center">
+              <label class="label-lg">الحالة</label>
+              <select class="label-lg">
+                <option></option>
+                <option>نشط</option>
+                <option>غير نشط</option>
+              </select>
+              <label class="label-lg">أقل كمية</label>
+              <input class="label-lg" type="number" placeholder="">
+            </div>
+
+            <table class="items-table">
+              <thead>
+                <tr>
+                  <th>الوحدة</th>
+                  <th>الكمية</th>
+                  <th class="buttons">الرئيسة</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>حبة</td>
+                  <td>1 حبة</td>
+                  <td>
+                    <label class="ring-toggle">
+                      <input type="checkbox" name="unit1" checked>
+                      <span class="ring" aria-hidden="true"></span>
+                    </label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>درزن</td>
+                  <td>12 حبة</td>
+                  <td>
+                    <label class="ring-toggle">
+                      <input type="checkbox" name="unit2">
+                      <span class="ring" aria-hidden="true"></span>
+                    </label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>كرتون</td>
+                  <td>36 حبة</td>
+                  <td>
+                    <label class="ring-toggle">
+                      <input type="checkbox" name="unit3">
+                      <span class="ring" aria-hidden="true"></span>
+                    </label>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="flex-center">
+            <button class="btn primary label-md">حفظ</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // استدعاء الـ ASIDE
+    fetch("../template/aside.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("aside-container").innerHTML = data;
+      });
+
+    // استدعاء الـ HEADER
+    fetch("../template/header.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("header-container").innerHTML = data;
+      });
+
+    fetch("../template/warehouse-list.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("warehouse-list-container").innerHTML = data;
+      });
+
+    fetch("../template/items-list.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("items-list-container").innerHTML = data;
+      });
+  </script>
+</body>

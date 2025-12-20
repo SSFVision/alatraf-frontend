@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>حركة الصنف</title>
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/icon.svg">
+  <link rel="stylesheet" href="../../assets/css/aside.css" />
+  <link rel="stylesheet" href="../../assets/css/header.css" />
+  <link rel="stylesheet" href="../../assets/css/home.css" />
+  <link rel="stylesheet" href="../../../Alatraf.Managment.system/src/styles.css" />
+</head>
+
+<body>
+  <aside id="aside-container"></aside>
+  <header id="header-container"></header>
+
+  <main class="padding-32 row gap-16 padding-24">
+    <div class="column gap-16  max-width-324">
+      <div class="box culumn gap-24 max-hight-360" id="warehouse-list-container">
+      </div>
+      <div class="box culumn gap-24 max-hight-360" id="items-list-container">
+      </div>
+    </div>
+
+    <div class="column gap-16">
+      <button class="btn primary large">
+        <span class="column gap-16">التحويل بين المخازن</span>
+      </button>
+
+
+
+      <div class="box max-hight-800 gap-16">
+        <div class="row gap-16 padding-LR-24 items-center">
+          <div class="row gap-16">
+            <h1 class="title-lg primary-color-50">الأصناف</h1>
+            <h1 class="title-lg">حركة الصنف</h1>
+          </div>
+        </div>
+
+        <div class="width-100">
+          <p class="title-md">بيانات الصنف</p>
+          <span class="home-line"></span>
+        </div>
+
+        <div class="row flex-center gap-8">
+          <label class="label-lg">الرقم</label>
+          <input class="label-lg" type="text">
+
+          <label class="label-lg">الاسم</label>
+          <input class="label-lg" type="text">
+        </div>
+
+        <div class="padding-LR-24">
+          <div class="overflow-auto">
+            <table class="table no-shadow">
+              <thead>
+                <tr>
+                  <th class="label-lg">م</th>
+                  <th class="label-lg">التاريخ</th>
+                  <th class="label-lg">العملية</th>
+                  <th class="label-lg">الكمية</th>
+                  <th class="label-lg">الوحدة</th>
+                  <th class="label-lg">المخزن</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // استدعاء الـ ASIDE
+    fetch("../template/aside.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("aside-container").innerHTML = data;
+      });
+
+    // استدعاء الـ HEADER
+    fetch("../template/header.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("header-container").innerHTML = data;
+      });
+
+    fetch("../template/warehouse-list.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("warehouse-list-container").innerHTML = data;
+      });
+
+    fetch("../template/items-list.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("items-list-container").innerHTML = data;
+      });
+  </script>
+</body>
+
+</html>

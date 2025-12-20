@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>تحويل مخزني</title>
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/icon.svg">
+  <link rel="stylesheet" href="../../assets/css/aside.css" />
+  <link rel="stylesheet" href="../../assets/css/header.css" />
+  <link rel="stylesheet" href="../../assets/css/home.css" />
+  <link rel="stylesheet" href="../../../Alatraf.Managment.system/src/styles.css" />
+</head>
+
+<body>
+  <aside id="aside-container"></aside>
+  <header id="header-container"></header>
+
+  <main class="padding-32 row gap-16 padding-24">
+    <div class="column gap-16  max-width-324">
+      <div class="box culumn gap-24 max-hight-360" id="warehouse-list-container"></div>
+      <div class="box culumn gap-24 max-hight-360" id="items-list-container"></div>
+    </div>
+
+    <div class="column gap-16">
+
+      <div class="box max-hight-800 gap-16">
+        <span class="backdrop"></span>
+
+        <div class="box dialog">
+          <div class="space-between">
+            <h2 class="title-lg">تحويل مخزني</h2>
+            <img src="../../assets/icons/close-icon.svg" alt="إغلاق" class="close-icon" />
+          </div>
+
+          <div class="max-hight-712 column gap-16 padding-LR-24">
+            <div class="width-100">
+              <p class="title-md">بيانات الأصناف</p>
+              <span class="home-line"></span>
+            </div>
+
+            <table class="no-shadow">
+              <thead>
+                <tr>
+                  <th>م</th>
+                  <th>الصنف</th>
+                  <th>الكمية</th>
+                  <th>الوحدة</th>
+                  <th>المخزن الحالي</th>
+                  <th>المخزن الجديد</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>
+                    <select>
+                      <option></option>
+                      <option>صنف أ</option>
+                    </select>
+                  </td>
+                  <td><input type="number" placeholder="" /></td>
+                  <td>
+                    <select>
+                      <option></option>
+                      <option>حبة</option>
+                      <option>درزن</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select>
+                      <option></option>
+                      <option>المخزن الرئيسي</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select>
+                      <option></option>
+                      <option>المخزن 2</option>
+                    </select>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>2</td>
+                  <td>
+                    <select>
+                      <option></option>
+                      <option>صنف ب</option>
+                    </select>
+                  </td>
+                  <td><input type="number" placeholder="" /></td>
+                  <td>
+                    <select>
+                      <option></option>
+                      <option>حبة</option>
+                      <option>كرتون</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select>
+                      <option></option>
+                      <option>المخزن الرئيسي</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select>
+                      <option></option>
+                      <option>المخزن 2</option>
+                    </select>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+          </div>
+
+          <div class="flex-center">
+            <button class="btn primary label-md">حفظ</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // استدعاء الـ ASIDE
+    fetch("../template/aside.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("aside-container").innerHTML = data;
+      });
+
+    // استدعاء الـ HEADER
+    fetch("../template/header.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("header-container").innerHTML = data;
+      });
+
+  </script>
+</body>
+
+</html>
