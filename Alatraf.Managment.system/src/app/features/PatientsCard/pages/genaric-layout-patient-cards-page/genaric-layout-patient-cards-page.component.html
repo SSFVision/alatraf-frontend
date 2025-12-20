@@ -1,0 +1,77 @@
+<main class="padding-32 row gap-16 padding-24">
+  <div
+    class="box max-width-324 culumn gap-24 max-hight-800"
+    id="patiens-cards-list-container"
+  >
+    <div class="row space-between">
+      <h2 class="title-md">بطائق المرضى</h2>
+      <div class="primary-color-background WH-40 flex-center border-radius-20">
+        <h2 class="title-md white-color margin-auto">
+          {{ facade.items().length }}
+        </h2>
+      </div>
+    </div>
+
+    <div class="search-box">
+      <img
+        src="assets/icons/search-icon.svg"
+        class="search-icon"
+        alt="search"
+      />
+      <input
+        type="text"
+        placeholder="بحث: اسم المريض او رقمه"
+        (input)="onSearch($any($event.target).value)"
+      />
+    </div>
+    <div class="filters-container">
+        <button
+      class="filter-btn"
+      [class.active]="activeType === cardType.Disabled"
+      (click)="switchType(cardType.Disabled)"
+    >
+      معاقين
+    </button>
+
+    <button
+      class="filter-btn"
+      [class.active]="activeType === cardType.Wounded"
+      (click)="switchType(cardType.Wounded)"
+    >
+      جرحى
+    </button>
+
+    </div>
+
+    <app-patient-cards-list
+      class="max-hight-712 column gap-16"
+      [items]="facade.items()"
+      [loading]="facade.isLoading()"
+      (select)="onSelectCard($event)"
+    ></app-patient-cards-list>
+
+    <!-- Add Button -->
+    <div class="flex-center">
+      <button class="btn primary" (click)="onAddCard()">
+        إضافة بطاقة جديدة
+      </button>
+    </div>
+  </div>
+
+  @if (selectedId()) {
+  <div class="box max-hight-800 gap-16">
+    <router-outlet></router-outlet>
+  </div>
+  } @else {
+  <div class="box max-hight-800 gap-16 flex-center">
+    <img
+      src="assets/images/bro.svg"
+      alt="مرحبا"
+      width="496.75"
+      height="512"
+      class="padding-32"
+    />
+    <p class="title-md primary-color-50">مرحباً بك</p>
+  </div>
+  }
+</main>

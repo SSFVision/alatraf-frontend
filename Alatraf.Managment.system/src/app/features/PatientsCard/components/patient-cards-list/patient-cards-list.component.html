@@ -1,0 +1,44 @@
+@if (loading()) {
+<div class="flex-center padding-32">
+  <span class="loader"></span>
+  <span class="body-md primary-color-50 margin-left-8"> جاري التحميل... </span>
+</div>
+} @else {
+
+<div class="column gap-16" style="overflow-y: auto; max-height: 712px">
+  <!-- 🟡 EMPTY STATE -->
+  @if (!items() || items().length === 0) {
+  <div class="empty-state">
+    <img src="assets/images/amico.svg" alt="no items" class="empty-icon" />
+    <p class="body-md primary-color-50">لا توجد بطاقات حالياً</p>
+  </div>
+  } @else { @for (item of items(); track item.id; let i = $index) {
+  <div
+    class="card primary-card cursor-pointer column gap-8"
+    [class.selected]="selectedId() === item.id"
+    (click)="onSelect(item.id)"
+  >
+    <!-- counter -->
+    <p class="body-sm neutral-color-60">#{{ i + 1 }}</p>
+
+    <p class="body-md">
+      {{ item.fullName }}
+    </p>
+    <p class="body-sm">
+      {{ item.cardTypeLabel }}
+    </p>
+    <div class="row space-between">
+      <p class="body-sm primary-color-50">رقم البطاقة: {{ item.cardNumber }}</p>
+
+      <p
+        class="body-sm"
+        [class.danger-color]="item.isExpired"
+        [class.neutral-color-60]="!item.isExpired"
+      >
+        {{ item.isExpired ? "منتهية" : "سارية" }}
+      </p>
+    </div>
+  </div>
+  } }
+</div>
+}

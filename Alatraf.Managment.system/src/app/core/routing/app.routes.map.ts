@@ -52,6 +52,38 @@ export const AppRoutes = {
     paied: (paymentId: number | string, paymentReference: number | string) =>
       `paied/${paymentId}/${paymentReference}`,
   },
+    patientCards: {
+    root: 'patient-cards',
+
+    wounded: {
+      root: 'patient-cards/wounded',
+
+      list: 'patient-cards/wounded',
+
+      create: 'patient-cards/wounded/create',
+
+      edit: (woundedCardId: number | string) =>
+        `patient-cards/wounded/edit/${woundedCardId}`,
+
+      view: (woundedCardId: number | string) =>
+        `patient-cards/wounded/view/${woundedCardId}`,
+    },
+
+    disabled: {
+      root: 'patient-cards/disabled',
+
+      list: 'patient-cards/disabled',
+
+      create: 'patient-cards/disabled/create',
+
+      edit: (disabledCardId: number | string) =>
+        `patient-cards/disabled/edit/${disabledCardId}`,
+
+      view: (disabledCardId: number | string) =>
+        `patient-cards/disabled/view/${disabledCardId}`,
+    },
+  },
+
 
   therapyCards: {
     root: 'therapy-cards',
@@ -67,9 +99,8 @@ export const AppRoutes = {
         `therapy-cards/${therapyCardId}/sessions/edit/${sessionId}`,
     },
     doctors: {
-    view: (doctorId: number | string) =>
-      `therapy-cards/doctors/${doctorId}`,
-  },
+      view: (doctorId: number | string) => `therapy-cards/doctors/${doctorId}`,
+    },
   },
   repairCards: {
     root: 'repair-cards',
@@ -89,10 +120,9 @@ export const AppRoutes = {
       assignParts: (repairCardId: number | string) =>
         `repair-cards/${repairCardId}/assignments/assign-parts`,
     },
-     doctors: {
-    view: (doctorId: number | string) =>
-      `repair-cards/doctors/${doctorId}`,
-  },
+    doctors: {
+      view: (doctorId: number | string) => `repair-cards/doctors/${doctorId}`,
+    },
     // عمليات سريعة (عادة dialogs أو inline forms)
     status: (repairCardId: number | string) =>
       `repair-cards/${repairCardId}/status`,

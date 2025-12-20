@@ -40,6 +40,20 @@ export const MENU_CONFIG: MenuCategory[] = [
         route: AppRoutes.doctors.root,
         requiredPermissions: [PERMISSIONS.PATIENTS.ADD],
       },
+       {
+        label: 'Wounded',
+        icon: 'assets/icons/user-icon-w.svg',
+        activeIcon: 'assets/icons/user-icon-b.svg',
+        route: AppRoutes.patientCards.wounded.root,
+        requiredPermissions: [PERMISSIONS.PATIENTS.ADD],
+      },
+      {
+        label: 'disabled',
+        icon: 'assets/icons/user-icon-w.svg',
+        activeIcon: 'assets/icons/user-icon-b.svg',
+        route: AppRoutes.patientCards.disabled.root,
+        requiredPermissions: [PERMISSIONS.PATIENTS.ADD],
+      },
     ],
   },
   {

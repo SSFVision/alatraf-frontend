@@ -98,9 +98,6 @@ setDepartment(departmentId: number | null) {
 }
 
 
-  // ---------------------------------------------
-  // PAGINATION
-  // ---------------------------------------------
   setPage(page: number) {
     this._pageRequest.update((p) => ({ ...p, page }));
     this.loadSections();
@@ -111,9 +108,6 @@ setDepartment(departmentId: number | null) {
     this.loadSections();
   }
 
-  // ---------------------------------------------
-  // LOAD LIST
-  // ---------------------------------------------
 private _isLoading = signal<boolean>(false);
 isLoading = this._isLoading.asReadonly();
 
@@ -290,12 +284,12 @@ loadSections() {
     }
     this.toast.error('تعذر تحميل الأقسام. يرجى المحاولة لاحقاً.');
   }
+
+
 private _isLoadingNextPage = signal(false);
 isLoadingNextPage = this._isLoadingNextPage.asReadonly();
 
- // ---------------------------------------------
-// SCROLL PAGINATION (SAFE & GUARDED)
-// ---------------------------------------------
+
 loadNextPage(): void {
   // 🔒 منع التكرار أثناء التحميل
   if (this._isLoadingNextPage()) return;
