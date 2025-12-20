@@ -95,8 +95,8 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
       injuryTypes: [[] as number[], Validators.required],
 
       programStartDate: ['', Validators.required],
-      // programEndDate: ['', Validators.required],
-      programEndDate: [{ value: '', disabled: true }], // ⬅️ read-only
+      programEndDate: ['', Validators.required],
+      // programEndDate: [{ value: '', disabled: true }], // ⬅️ read-only
 
       numberOfSessions: [
         { value: null, disabled: true }, // ⬅️ disabled initially
