@@ -96,6 +96,12 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
 
       programStartDate: ['', Validators.required],
       programEndDate: ['', Validators.required],
+      // programEndDate: [{ value: '', disabled: true }], // ⬅️ read-only
+
+      numberOfSessions: [
+        { value: null, disabled: true }, // ⬅️ disabled initially
+        Validators.required,
+      ],
 
       therapyCardType: [TherapyCardType.General, Validators.required],
       notes: [''],
@@ -121,13 +127,31 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
 
   private validationState!: FormValidationState;
 
+  // ngOnInit(): void {
+  //   this.validationState = new FormValidationState(
+  //     this.form,
+  //     this.facade.formValidationErrors
+  //   );
+
+  //   runInInjectionContext(this.env, () => {
+  //     effect(() => {
+  //       this.validationState.apply();
+  //     });
+  //   });
+
+  //   this.validationState.clearOnEdit();
+
+  //   if (!this.editMode()) {
+  //     this.addProgramRow();
+  //   }
+  // }
   ngOnInit(): void {
+    // الموجود عندك
     this.validationState = new FormValidationState(
       this.form,
       this.facade.formValidationErrors
     );
 
-    // ربط الـ signal بالـ form
     runInInjectionContext(this.env, () => {
       effect(() => {
         this.validationState.apply();
@@ -139,6 +163,29 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
     if (!this.editMode()) {
       this.addProgramRow();
     }
+
+    // ===============================
+    // 🔹 NEW LOGIC
+    // ===============================
+    this.form.get('programStartDate')?.valueChanges.subscribe((startDate) => {
+      const sessionsCtrl = this.form.get('numberOfSessions');
+
+      if (startDate) {
+        sessionsCtrl?.enable();
+      } else {
+        sessionsCtrl?.disable();
+        sessionsCtrl?.reset();
+        this.form.get('programEndDate')?.reset();
+      }
+    });
+
+    this.form.get('numberOfSessions')?.valueChanges.subscribe(() => {
+      this.updateProgramEndDate();
+    });
+
+    this.form.get('programStartDate')?.valueChanges.subscribe(() => {
+      this.updateProgramEndDate();
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -232,6 +279,7 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
 
       programStartDate: this.formatDate(card.programStartDate), // FIXED
       programEndDate: this.formatDate(card.programEndDate), // FIXED
+      numberOfSessions: (card as any).numberOfSessions ?? null, // ✅ NEW
 
       therapyCardType: this.mapArabicTypeToEnum(card.therapyCardType),
       notes: card.notes ?? '',
@@ -317,6 +365,7 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
         InjuryTypes: v.injuryTypes,
         ProgramStartDate: v.programStartDate,
         ProgramEndDate: v.programEndDate,
+        numberOfSessions: v.numberOfSessions,
         TherapyCardType: v.therapyCardType,
         Programs: v.programs,
         Notes: v.notes ?? null,
@@ -333,6 +382,7 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
         InjuryTypes: v.injuryTypes,
         ProgramStartDate: v.programStartDate,
         ProgramEndDate: v.programEndDate,
+        numberOfSessions: v.numberOfSessions,
         TherapyCardType: v.therapyCardType,
         Programs: v.programs,
         Notes: v.notes ?? null,
@@ -341,4 +391,27 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
       this.submitForm.emit(dto);
     }
   }
+
+  private updateProgramEndDate() {
+    const start = this.form.get('programStartDate')?.value;
+    const sessions = this.form.get('numberOfSessions')?.value;
+
+    if (!start || !sessions || sessions <= 0) {
+      this.form.get('programEndDate')?.reset();
+      return;
+    }
+
+    const startDate = new Date(start);
+    const endDate = new Date(startDate);
+    endDate.setDate(startDate.getDate() + Number(sessions));
+
+    const iso = endDate.toISOString().split('T')[0];
+    this.form.get('programEndDate')?.setValue(iso, { emitEvent: false });
+  }
+isSpecialCardType(): boolean {
+  const v = this.form.get('therapyCardType')?.value;
+  return Number(v) === TherapyCardType.Special;
+}
+
+
 }

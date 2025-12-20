@@ -9,8 +9,8 @@ export interface UpdateTherapyCardRequest {
   InjuryTypes: number[];
 
   ProgramStartDate: string;             // DateTime → ISO string
-  ProgramEndDate: string;               // DateTime → ISO string
-
+  ProgramEndDate?: string;    
+  numberOfSessions: number;
   TherapyCardType: TherapyCardType;
 
   Programs: TherapyCardMedicalProgramRequest[];

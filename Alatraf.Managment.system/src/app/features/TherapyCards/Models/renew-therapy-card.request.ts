@@ -5,6 +5,8 @@ export interface RenewTherapyCardRequest {
   programStartDate: string; // DateOnly (yyyy-MM-dd)
   programEndDate: string; // DateOnly (yyyy-MM-dd)
   therapyCardType: number; // enum value
+    numberOfSessions: number;
+
   programs: TherapyCardMedicalProgramRequest[];
   notes?: string | null;
 }
