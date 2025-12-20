@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>إدارة المرضى</title>
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/icon.svg">
+  <link rel="stylesheet" href="../../assets/css/aside.css" />
+  <link rel="stylesheet" href="../../assets/css/header.css" />
+  <link rel="stylesheet" href="../../assets/css/home.css" />
+  <link rel="stylesheet" href="../../../Alatraf.Managment.system/src/styles.css" />
+</head>
+
+<body>
+  <aside id="aside-container"></aside>
+  <header id="header-container"></header>
+
+  <main class="padding-32 row gap-16 padding-24">
+    <div class="column gap-16  max-width-324">
+      <div class="box culumn gap-24 max-hight-360" id="cards-request-materials-list-container">
+      </div>
+      <div class="box culumn gap-24 max-hight-360" id="request-materials-list-container">
+      </div>
+    </div>
+
+
+    <div class="box max-hight-800 gap-16 flex-center" id="hi-reception-container"></div>
+  </main>
+
+  <script>
+    // استدعاء الـ ASIDE
+    fetch("../template/aside.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("aside-container").innerHTML = data;
+      });
+
+    // استدعاء الـ HEADER
+    fetch("../template/header.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("header-container").innerHTML = data;
+      });
+
+    fetch("../template/wating-list-T.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("wating-list-container").innerHTML = data;
+      });
+
+    fetch("../template/hi-reception.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("hi-reception-container").innerHTML = data;
+      });
+
+    fetch("../template/cards-request-materials-list.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("cards-request-materials-list-container").innerHTML = data;
+      });
+
+    fetch("../template/request-materials-list.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("request-materials-list-container").innerHTML = data;
+      });
+  </script>
+</body>

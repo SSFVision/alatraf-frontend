@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>إدارة المرضى</title>
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/icon.svg">
+  <link rel="stylesheet" href="../../assets/css/aside.css" />
+  <link rel="stylesheet" href="../../assets/css/header.css" />
+  <link rel="stylesheet" href="../../assets/css/home.css" />
+  <link rel="stylesheet" href="../../../Alatraf.Managment.system/src/styles.css" />
+</head>
+
+<body>
+
+  <aside id="aside-container"></aside>
+  <header id="header-container"></header>
+
+  <main class="padding-32 row gap-16 padding-24">
+
+    <div class="box max-width-324 culumn gap-24 max-hight-800" id="doctors-list-container"></div>
+
+    <div class="box hight-800 gap-16">
+      <h2 class="title-lg">
+        الأطباء
+      </h2>
+
+      <div class="width-100">
+        <p class="title-md">
+          بيانات الطبيب
+        </p>
+
+        <span class="home-line"></span>
+      </div>
+
+      <div class="row flex-center">
+        <label class="label-lg">
+          الاسم
+        </label>
+        <input class="label-lg" type="text" placeholder="">
+        <label class="label-lg">
+          الرقم الوظيفي
+        </label>
+        <input class="label-lg" type="text" placeholder="">
+      </div>
+
+      <div class="row flex-center">
+        <label class="label-lg">
+          القسم
+        </label>
+        <select class="label-lg">
+          <option value="cardiology"></option>
+          <option value="neurology">الأعصاب</option>
+          <option value="orthopedics">العظام</option>
+        </select>
+
+        <label class="label-lg">
+          الغرفة
+        </label>
+        <select class="label-lg">
+          <option value="101"></option>
+          <option value="102">102</option>
+          <option value="103">103</option>
+        </select>
+      </div>
+
+      <div class="row flex-center">
+        <label class="label-lg">
+          الحالة
+        </label>
+        <select class="label-lg">
+          <option></option>
+          <option>نشط</option>
+          <option>غير نشط</option>
+        </select>
+      </div>
+
+      <div class="row gap-16 flex-center">
+        <button class="btn secondary" disabled>تعديل</button>
+        <button class="btn danger">حذف </button>
+      </div>
+
+
+    </div>
+
+  </main>
+  <script>
+    // استدعاء الـ ASIDE
+    fetch("../template/aside.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("aside-container").innerHTML = data;
+      });
+
+    // استدعاء الـ HEADER
+    fetch("../template/header.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("header-container").innerHTML = data;
+      });
+
+    fetch("../template/doctors-list.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("doctors-list-container").innerHTML = data;
+      });
+  </script>
+</body>

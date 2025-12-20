@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>إدارة المرضى</title>
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/icon.svg">
+  <link rel="stylesheet" href="../../assets/css/aside.css" />
+  <link rel="stylesheet" href="../../assets/css/header.css" />
+  <link rel="stylesheet" href="../../assets/css/home.css" />
+  <link rel="stylesheet" href="../../../Alatraf.Managment.system/src/styles.css" />
+</head>
+
+<body>
+  <aside id="aside-container"></aside>
+  <header id="header-container"></header>
+
+  <main class="padding-32 row gap-16 padding-24">
+    <div class="column gap-16  max-width-324">
+      <div class="box culumn gap-24 max-hight-360" id="cards-request-materials-list-container">
+      </div>
+      <div class="box culumn gap-24 max-hight-360" id="request-materials-list-container">
+      </div>
+    </div>
+
+
+    <div class="box max-hight-800 gap-16">
+      <h2 class="title-lg">
+        طلب مواد
+      </h2>
+      <div class="max-hight-712 column gap-16">
+
+        <!-- ممكن نظيف بيانات المريض هنا بس أنا أشوفه مش مهم -->
+
+        <div class="width-100">
+          <p class="title-md">
+            بيانات الفنييون
+          </p>
+
+          <span class="home-line"></span>
+        </div>
+
+        <table class="no-shadow">
+          <thead>
+            <tr>
+              <th class="label-lg">القطعة </th>
+              <th class="label-lg">القسم</th>
+              <th class="label-lg">الطبيب الفني</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>
+                <input class="label-lg" type="text" placeholder="">
+              </td>
+
+              <td>
+                <input class="label-lg" type="text" placeholder="">
+              </td>
+
+
+              <td>
+                <input class="label-lg" type="text" placeholder="">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="width-100">
+          <p class="title-md">
+            الأصناف المطلوبة
+          </p>
+
+          <span class="home-line"></span>
+        </div>
+
+        <table class="no-shadow">
+          <thead>
+            <tr>
+              <th class="label-lg">الصنف </th>
+              <th class="label-lg">الكمية</th>
+              <th class="label-lg"> الوحدة</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>
+                <input class="label-lg" type="text" placeholder="">
+              </td>
+
+              <td>
+                <input class="label-lg" type="text" placeholder="">
+              </td>
+
+
+              <td>
+                <input class="label-lg" type="text" placeholder="">
+              </td>
+            </tr>
+            <!-- 
+          هل ممكن نخليه يضيف مواد ولا الاضافة ديفولت بجكم ان كل قطعة موجود الأصناف الذي تحتاجها 
+          الأمر راجع لكم
+          -->
+          </tbody>
+        </table>
+        <div class="flex-center">
+          <button class="btn primary label-md">
+            طلب المواد
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    // استدعاء الـ ASIDE
+    fetch("../template/aside.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("aside-container").innerHTML = data;
+      });
+
+    // استدعاء الـ HEADER
+    fetch("../template/header.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("header-container").innerHTML = data;
+      });
+
+    fetch("../template/wating-list-T.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("wating-list-container").innerHTML = data;
+      });
+
+    fetch("../template/cards-request-materials-list.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("cards-request-materials-list-container").innerHTML = data;
+      });
+
+    fetch("../template/request-materials-list.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("request-materials-list-container").innerHTML = data;
+      });
+  </script>
+</body>

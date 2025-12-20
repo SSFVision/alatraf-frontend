@@ -8,6 +8,7 @@
 @import "./styles/table.css";
 @import "./styles/cards.css";
 @import "./styles/filters.css";
+@import "./styles/checkbox.css";
 
 * {
   margin: 0;
