@@ -1,4 +1,3 @@
-
 <form
   class="padding-LR-24 column gap-16"
   [formGroup]="form"
@@ -19,12 +18,18 @@
     ></textarea>
 
     <!-- Backend validation -->
-    <div class="error-message label-lg" *ngIf="hasBackendError('diagnosisText')">
-      {{ getBackendError('diagnosisText') }}
+    <div
+      class="error-message label-lg"
+      *ngIf="hasBackendError('diagnosisText')"
+    >
+      {{ getBackendError("diagnosisText") }}
     </div>
 
     <!-- Frontend Validation -->
-    <div class="error-message label-lg" *ngIf="hasFrontendError('diagnosisText')">
+    <div
+      class="error-message label-lg"
+      *ngIf="hasFrontendError('diagnosisText')"
+    >
       التشخيص مطلوب
     </div>
   </div>
@@ -39,11 +44,17 @@
       placeholder="اختر الأسباب"
     ></app-multi-select>
 
-    <div class="error-message label-lg" *ngIf="hasBackendError('injuryReasons')">
-      {{ getBackendError('injuryReasons') }}
+    <div
+      class="error-message label-lg"
+      *ngIf="hasBackendError('injuryReasons')"
+    >
+      {{ getBackendError("injuryReasons") }}
     </div>
 
-    <div class="error-message label-lg" *ngIf="hasFrontendError('injuryReasons')">
+    <div
+      class="error-message label-lg"
+      *ngIf="hasFrontendError('injuryReasons')"
+    >
       أسباب الإصابة مطلوبة
     </div>
 
@@ -56,7 +67,7 @@
     ></app-multi-select>
 
     <div class="error-message label-lg" *ngIf="hasBackendError('injurySides')">
-      {{ getBackendError('injurySides') }}
+      {{ getBackendError("injurySides") }}
     </div>
 
     <div class="error-message label-lg" *ngIf="hasFrontendError('injurySides')">
@@ -75,7 +86,7 @@
     ></app-multi-select>
 
     <div class="error-message label-lg" *ngIf="hasBackendError('injuryTypes')">
-      {{ getBackendError('injuryTypes') }}
+      {{ getBackendError("injuryTypes") }}
     </div>
 
     <div class="error-message label-lg" *ngIf="hasFrontendError('injuryTypes')">
@@ -89,7 +100,7 @@
     <input class="label-lg" type="date" formControlName="injuryDate" />
 
     <div class="error-message label-lg" *ngIf="hasBackendError('injuryDate')">
-      {{ getBackendError('injuryDate') }}
+      {{ getBackendError("injuryDate") }}
     </div>
 
     <div class="error-message label-lg" *ngIf="hasFrontendError('injuryDate')">
@@ -98,7 +109,7 @@
   </div>
 
   <!-- Program dates -->
-  <div class="row flex-center">
+  <!-- <div class="row flex-center">
     <label class="label-lg">تاريخ بداية البرنامج</label>
     <input class="label-lg" type="date" formControlName="programStartDate" />
 
@@ -120,8 +131,73 @@
     <div class="error-message label-lg" *ngIf="hasFrontendError('programEndDate')">
       تاريخ النهاية مطلوب
     </div>
-  </div>
+  </div> -->
+  <div class="row flex-center">
+    <label class="label-lg">تاريخ بداية البرنامج</label>
+    <input class="label-lg" type="date" formControlName="programStartDate" />
 
+    <div
+      class="error-message label-lg"
+      *ngIf="hasBackendError('programStartDate')"
+    >
+      {{ getBackendError("programStartDate") }}
+    </div>
+
+    <div
+      class="error-message label-lg"
+      *ngIf="hasFrontendError('programStartDate')"
+    >
+      تاريخ البداية مطلوب
+    </div>
+
+    <label class="label-lg">عدد الجلسات</label>
+    <input
+      class="label-lg"
+      type="number"
+      min="1"
+      formControlName="numberOfSessions"
+    />
+    <div
+      class="error-message label-lg"
+      *ngIf="hasBackendError('numberOfSessions')"
+    >
+      {{ getBackendError("numberOfSessions") }}
+    </div>
+    <div
+      class="error-message label-lg"
+      *ngIf="hasFrontendError('numberOfSessions')"
+    >
+      عدد الجلسات مطلوب
+    </div>
+
+    <!-- <label class="label-lg">تاريخ نهاية البرنامج</label>
+    <input class="label-lg" type="date" formControlName="programEndDate" /> -->
+<label class="label-lg" *ngIf="!isSpecialCardType()">
+  تاريخ نهاية البرنامج
+</label>
+
+<input
+  *ngIf="!isSpecialCardType()"
+  class="label-lg"
+  type="date"
+  formControlName="programEndDate"
+  readonly
+/>
+
+    <div
+      class="error-message label-lg"
+      *ngIf="hasBackendError('programEndDate')"
+    >
+      {{ getBackendError("programEndDate") }}
+    </div>
+
+    <div
+      class="error-message label-lg"
+      *ngIf="hasFrontendError('programEndDate')"
+    >
+      تاريخ النهاية مطلوب
+    </div>
+  </div>
   <!-- Date Range Error -->
   <div
     class="error-message label-lg flex-center"
@@ -144,11 +220,17 @@
       </option>
     </select>
 
-    <div class="error-message label-lg" *ngIf="hasBackendError('therapyCardType')">
-      {{ getBackendError('therapyCardType') }}
+    <div
+      class="error-message label-lg"
+      *ngIf="hasBackendError('therapyCardType')"
+    >
+      {{ getBackendError("therapyCardType") }}
     </div>
 
-    <div class="error-message label-lg" *ngIf="hasFrontendError('therapyCardType')">
+    <div
+      class="error-message label-lg"
+      *ngIf="hasFrontendError('therapyCardType')"
+    >
       نوع البطاقة مطلوب
     </div>
   </div>
@@ -159,7 +241,7 @@
     <textarea rows="1" class="label-lg" formControlName="notes"></textarea>
 
     <div class="error-message label-lg" *ngIf="hasBackendError('notes')">
-      {{ getBackendError('notes') }}
+      {{ getBackendError("notes") }}
     </div>
   </div>
 
@@ -192,7 +274,10 @@
 
           <div
             class="error-message label-lg"
-            *ngIf="row.get('medicalProgramId')?.invalid && row.get('medicalProgramId')?.touched"
+            *ngIf="
+              row.get('medicalProgramId')?.invalid &&
+              row.get('medicalProgramId')?.touched
+            "
           >
             البرنامج مطلوب
           </div>
@@ -201,12 +286,17 @@
             class="error-message label-lg"
             *ngIf="hasBackendError('programs[' + i + '].medicalProgramId')"
           >
-            {{ getBackendError('programs[' + i + '].medicalProgramId') }}
+            {{ getBackendError("programs[" + i + "].medicalProgramId") }}
           </div>
         </td>
 
         <td>
-          <input class="label-lg" type="number" min="1" formControlName="duration" />
+          <input
+            class="label-lg"
+            type="number"
+            min="1"
+            formControlName="duration"
+          />
 
           <div
             class="error-message label-lg"
@@ -219,7 +309,7 @@
             class="error-message label-lg"
             *ngIf="hasBackendError('programs[' + i + '].duration')"
           >
-            {{ getBackendError('programs[' + i + '].duration') }}
+            {{ getBackendError("programs[" + i + "].duration") }}
           </div>
         </td>
 
@@ -256,19 +346,13 @@
   </div>
 
   <div class="flex-center" *ngIf="!editMode()">
-  <button class="btn primary label-md" type="submit">حفظ</button>
-</div>
+    <button class="btn primary label-md" type="submit">حفظ</button>
+  </div>
 
+  <div class="flex-center gap-16" *ngIf="editMode()">
+    <!-- غير مفعل إلى أن يتم التعديل -->
+    <button class="btn primary label-md" type="submit">حفظ التعديلات</button>
 
-<div class="flex-center gap-16" *ngIf="editMode()">
-  <!-- غير مفعل إلى أن يتم التعديل -->
-  <button class="btn primary label-md" type="submit">
-    حفظ التعديلات
-  </button>
-
-  <button class="btn danger label-md" disabled>
-    حذف التشخيص
-  </button>
-</div>
-
+    <button class="btn danger label-md" disabled>حذف التشخيص</button>
+  </div>
 </form>
