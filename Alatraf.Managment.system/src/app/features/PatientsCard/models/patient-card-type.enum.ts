@@ -4,6 +4,6 @@ export enum PatientCardType {
 }
 
 export const PatientCardTypeLabel: Record<PatientCardType, string> = {
-  [PatientCardType.Disabled]: 'المعاقين',
-  [PatientCardType.Wounded]: 'الجرحى',
+  [PatientCardType.Disabled]: 'صندوق المعاقين',
+  [PatientCardType.Wounded]: 'صندوق الجرحى',
 };

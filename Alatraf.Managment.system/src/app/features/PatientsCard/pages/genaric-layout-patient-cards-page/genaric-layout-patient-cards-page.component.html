@@ -25,22 +25,20 @@
       />
     </div>
     <div class="filters-container">
-        <button
-      class="filter-btn"
-      [class.active]="activeType === cardType.Disabled"
-      (click)="switchType(cardType.Disabled)"
-    >
-      معاقين
-    </button>
-
-    <button
-      class="filter-btn"
-      [class.active]="activeType === cardType.Wounded"
-      (click)="switchType(cardType.Wounded)"
-    >
-      جرحى
-    </button>
-
+      <button
+        class="filter-btn"
+        [class.active]="activeType === cardType.Wounded"
+        (click)="switchType(cardType.Wounded)"
+      >
+        الجرحى
+      </button>
+      <button
+        class="filter-btn"
+        [class.active]="activeType === cardType.Disabled"
+        (click)="switchType(cardType.Disabled)"
+      >
+        المعاقين
+      </button>
     </div>
 
     <app-patient-cards-list

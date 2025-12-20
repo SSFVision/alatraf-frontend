@@ -18,18 +18,18 @@
     [class.selected]="selectedId() === item.id"
     (click)="onSelect(item.id)"
   >
-    <!-- counter -->
-    <p class="body-sm neutral-color-60">#{{ i + 1 }}</p>
-
     <p class="body-md">
       {{ item.fullName }}
     </p>
-    <p class="body-sm">
-      {{ item.cardTypeLabel }}
+    <p class="body-sm primary-color-50">رقم البطاقة: {{ item.cardNumber }}</p>
+    <p class="body-sm primary-color-50">
+      تاريخ الانتهاء: {{ item.expirationDate }}
     </p>
-    <div class="row space-between">
-      <p class="body-sm primary-color-50">رقم البطاقة: {{ item.cardNumber }}</p>
 
+    <div class="row space-between">
+      <p class="body-sm">
+        {{ typeLabel[item.cardTypeLabel] }}
+      </p>
       <p
         class="body-sm"
         [class.danger-color]="item.isExpired"

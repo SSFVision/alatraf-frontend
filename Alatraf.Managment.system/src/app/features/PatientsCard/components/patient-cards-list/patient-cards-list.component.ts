@@ -1,5 +1,6 @@
 import { Component, input, output, signal } from '@angular/core';
 import { PatientCardListItemVm } from '../../models/patient-card-list-item.vm';
+import { PatientCardTypeLabel } from '../../models/patient-card-type.enum';
 
 @Component({
   selector: 'app-patient-cards-list',
@@ -13,6 +14,7 @@ export class PatientCardsListComponent {
   items = input.required<PatientCardListItemVm[]>();
   loading = input<boolean>(false);
 
+  readonly typeLabel = PatientCardTypeLabel;
 
   select = output<number>();
 

@@ -8,7 +8,8 @@ export interface CreateTherapyCardRequest {
   InjurySides: number[];
   InjuryTypes: number[];
   ProgramStartDate: string;           // DateTime → ISO string
-  ProgramEndDate: string;             // DateTime → ISO string
+  ProgramEndDate?: string;    
+  numberOfSessions: number;
   TherapyCardType: TherapyCardType;
   Programs: TherapyCardMedicalProgramRequest[];
   Notes?: string | null;

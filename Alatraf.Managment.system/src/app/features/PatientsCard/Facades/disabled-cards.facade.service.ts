@@ -11,6 +11,7 @@ import { DisabledCardsFilterRequest } from '../models/disabled-Models/disabled-c
 import { DisabledCardsService } from '../services/disabled-cards.service';
 import { PatientCardsFacade } from './patient-cards.facade.service';
 import { PatientCardType } from '../models/patient-card-type.enum';
+import { PatientCardsNavigationFacade } from '../../../core/navigation/patient-cards-navigation.facade';
 
 @Injectable({ providedIn: 'root' })
 export class DisabledCardsFacade
@@ -107,11 +108,10 @@ export class DisabledCardsFacade
     this._pageRequest.update(() => ({ page: 1, pageSize: size }));
     this.load();
   }
+  private navCard = inject(PatientCardsNavigationFacade);
 
   openWorkspace(cardId: number): void {
-    this.router.navigate([cardId], {
-      relativeTo: this.route,
-    });
+    this.navCard.goToEditDisabledCardPage(cardId);
   }
 
   private toVm(dto: DisabledCardDto): PatientCardListItemVm {
