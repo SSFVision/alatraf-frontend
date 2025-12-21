@@ -39,6 +39,8 @@ export class TherapySessionsFacade extends BaseFacade {
     this._therapyCard.set(null);
     this.formValidationErrors.set({});
     this.loadingTherapyCard.set(false);
+        this.sessionCreated.set(false);
+
     this.creatingSession.set(false);
   }
 
@@ -49,6 +51,8 @@ export class TherapySessionsFacade extends BaseFacade {
     this.loadingTherapyCard.set(true);
     this._therapyCard.set(null);
     this.formValidationErrors.set({});
+    this.sessionCreated.set(false);
+    this.creatingSession.set(false);
 
     return this.therapyDiagnosisService.getTherapyCardById(therapyCardId).pipe(
       tap((result) => {

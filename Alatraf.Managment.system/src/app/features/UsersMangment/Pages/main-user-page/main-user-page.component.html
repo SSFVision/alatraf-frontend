@@ -1,7 +1,11 @@
 <main class="padding-32 row gap-16 padding-24">
   <div class="box max-width-324 culumn gap-24 max-hight-800">
-    <h2 class="title-md">المستخدمون</h2>
-
+    <div class="row space-between">
+      <h2 class="title-md">المستخدمين</h2>
+      <div class="primary-color-background WH-40 flex-center border-radius-20">
+        <h2 class="title-md white-color margin-auto">7</h2>
+      </div>
+    </div>
     <div class="search-box">
       <img
         src="assets/icons/search-icon.svg"
@@ -20,25 +24,49 @@
       <button class="filter-btn">المخازن</button>
     </div>
 
-    <div class="max-hight-712 column gap-16">
-      <div class="card primary-card">
-        <p class="body-md">صالح المرادي</p>
-        <p class="body-sm primary-color-50">الرقم: 1</p>
-      </div>
+    <div>
+      <div class="max-hight-712 column gap-16">
+        <div
+          class="card primary-card"
+          (click)="OnSelectedUser(1)"
+          [class.selected]="selectedId() === 1"
+        >
+          <p class="body-md">صالح المرادي</p>
+          <p class="body-sm primary-color-50">الرقم: 1</p>
+        </div>
 
-      <div class="card primary-card">
-        <p class="body-md">خالد العتيبي</p>
-        <p class="body-sm primary-color-50">الرقم: 2</p>
+        <div
+          class="card primary-card"
+          (click)="OnSelectedUser(2)"
+          [class.selected]="selectedId() === 2"
+        >
+          <p class="body-md">خالد العتيبي</p>
+          <p class="body-sm primary-color-50">الرقم: 2</p>
+        </div>
       </div>
     </div>
+
     <div class="flex-center">
-      <button class="btn primary">إضافة مستخدم جديد</button>
+      <button class="btn primary" (click)="goToAddUser()">
+        إضافة مستخدم جديد
+      </button>
     </div>
   </div>
-
-  <div class="box hight-800 gap-16 flex-center">
-
-
-    
+  @if (canRout() ) {
+  <div class="box max-hight-800 gap-16">
+    <router-outlet></router-outlet>
   </div>
+  } @else {
+  <div class="box max-hight-800 gap-16 flex-center">
+    <img
+      src="assets/images/bro.svg"
+      alt="مرحبا"
+      width="496.75"
+      height="512"
+      class="padding-32"
+    />
+    <p class="title-md primary-color-50">مرحباً بك</p>
+  </div>
+  }
+  <!-- <div class="box hight-800 gap-16 flex-center"></div> -->
 </main>
