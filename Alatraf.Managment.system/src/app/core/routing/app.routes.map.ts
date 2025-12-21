@@ -99,7 +99,7 @@ export const AppRoutes = {
         `therapy-cards/${therapyCardId}/sessions/edit/${sessionId}`,
     },
     doctors: {
-      view: (doctorId: number | string) => `therapy-cards/doctors/${doctorId}`,
+      viewDoctorAssigments: (doctorId: number | string) => `therapy-cards/doctors/${doctorId}/assigments`,
     },
   },
   repairCards: {

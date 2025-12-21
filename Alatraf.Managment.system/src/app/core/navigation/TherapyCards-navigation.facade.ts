@@ -46,7 +46,7 @@ export class TherapyCardsNavigationFacade {
     doctorId: number | string,
     extras?: NavigationExtras
   ): void {
-    this.go(`${AppRoutes.therapyCards.doctors.view(doctorId)}`, extras);
+    this.go(`${AppRoutes.therapyCards.doctors.viewDoctorAssigments(doctorId)}`, extras);
   }
 
   // ================= INTERNAL =================

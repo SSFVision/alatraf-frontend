@@ -8,29 +8,29 @@ export const DoctorsRoutes: Routes = [
     canActivate: [PermissionGuard],
     data: { permission: PERMISSIONS.Doctors.VIEW },
     loadComponent: () =>
-      import(
-        './Pages/doctor-workspace-page/doctor-workspace-page.component'
-      ).then((m) => m.DoctorWorkspacePageComponent),
+      import('./Pages/main-doctor-page/main-doctor-page.component').then(
+        (m) => m.MainDoctorPageComponent
+      ),
 
     children: [
-      // {
-      //   path: 'edit/:doctorId',
-      //   canActivate: [PermissionGuard],
-      //   data: { permission: PERMISSIONS.Doctors.UPDATE },
-      //   loadComponent: () =>
-      //     import(
-      //       './Pages/doctors-work-space/doctors-work-space.component'
-      //     ).then((m) => m.DoctorsWorkSpaceComponent),
-      // },
-      // {
-      //   path: 'create',
-      //   canActivate: [PermissionGuard],
-      //   data: { permission: PERMISSIONS.Doctors.CREATE },
-      //   loadComponent: () =>
-      //     import(
-      //       './Pages/doctors-work-space/doctors-work-space.component'
-      //     ).then((m) => m.DoctorsWorkSpaceComponent),
-      // },
+      {
+        path: 'edit/:doctorId',
+        canActivate: [PermissionGuard],
+        data: { permission: PERMISSIONS.Doctors.UPDATE },
+        loadComponent: () =>
+          import(
+            './Pages/doctor-workspace-page/doctor-workspace-page.component'
+          ).then((m) => m.DoctorWorkspacePageComponent),
+      },
+      {
+        path: 'create',
+        canActivate: [PermissionGuard],
+        data: { permission: PERMISSIONS.Doctors.CREATE },
+        loadComponent: () =>
+          import(
+            './Pages/doctor-workspace-page/doctor-workspace-page.component'
+          ).then((m) => m.DoctorWorkspacePageComponent),
+      },
       // {
       //   path: 'view/:doctorId',
       //   canActivate: [PermissionGuard],

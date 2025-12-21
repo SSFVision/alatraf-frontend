@@ -1,52 +1,46 @@
-<!-- <div class="max-hight-800 gap-16"> -->
-<div class="width-100">
-  <h1 class="title-lg">الطبيب المعالج</h1>
-</div>
+<div class="max-hight-712 column gap-16">
+  <h2 class="title-lg">الأطباء</h2>
 
-<div class="space-between">
-  <div>
-    <p class="body-md">د / محمد سعيد الأهدل</p>
-    <div class="row gap-16">
-      <p class="body-sm flex-center primary-color-50">
-        <!-- اقتراح : ممكن نخلي الكهرباء و رقم 3 داخل input  -->
-        قسم :الكهرباء
-      </p>
-      <p class="body-sm flex-center primary-color-50">الغرفة رقم : 3</p>
-      <button class="btn primary icon">
-        <img src="assets/icons/setting.svg" alt="عرض التفاصيل" />
-      </button>
-    </div>
-  </div>
-  <div>
-    <div class="row gap-16">
-      <p class="body-md flex-center">عدد حالات اليوم</p>
-      <div class="primary-color-background WH-40 flex-center border-radius-20">
-        <h2 class="title-md white-color margin-auto">
-          <!-- عدد الحالتي الذي عنده اليوم -->
-          3
-        </h2>
-      </div>
-    </div>
-  </div>
-</div>
+  <div class="width-100">
+    <p class="title-md">بيانات الطبيب</p>
 
-<div>
-  <div class="search-box">
-    <img src="assets/icons/search-icon.svg" class="search-icon" alt="search" />
-    <input type="text" placeholder="بحث: اسم المريض أو الرقم" />
-  </div>
-</div>
-
-<div class="flex-parent">
-  <span class="home-line"></span>
-
-  <div class="flex-child">
-    <app-general-waiting-patient-queue
-    class="row gap-16"
-      [patients]="patientsVM()"
-    ></app-general-waiting-patient-queue>
+    <span class="home-line"></span>
   </div>
 
-  
+  <div class="row flex-center">
+    <label class="label-lg"> الاسم </label>
+    <input class="label-lg" type="text" placeholder="" />
+    <label class="label-lg"> الرقم الوظيفي </label>
+    <input class="label-lg" type="text" placeholder="" />
+  </div>
+
+  <div class="row flex-center">
+    <label class="label-lg"> القسم </label>
+    <select class="label-lg">
+      <option value="cardiology"></option>
+      <option value="neurology">الأعصاب</option>
+      <option value="orthopedics">العظام</option>
+    </select>
+
+    <label class="label-lg"> الغرفة </label>
+    <select class="label-lg">
+      <option value="101"></option>
+      <option value="102">102</option>
+      <option value="103">103</option>
+    </select>
+  </div>
+
+  <div class="row flex-center">
+    <label class="label-lg"> الحالة </label>
+    <select class="label-lg">
+      <option></option>
+      <option>نشط</option>
+      <option>غير نشط</option>
+    </select>
+  </div>
+
+  <div class="row gap-16 flex-center">
+    <button class="btn secondary" disabled>تعديل</button>
+    <button class="btn danger">حذف</button>
+  </div>
 </div>
-<!-- </div> -->
