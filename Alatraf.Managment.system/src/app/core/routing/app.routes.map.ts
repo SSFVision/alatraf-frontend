@@ -190,9 +190,8 @@ export const AppRoutes = {
     view: (roomId: number | string) => `view/${roomId}`,
   },
 
-  admin: {
-    root: 'admin',
-    dashboard: 'admin/dashboard',
+  dashboard: {
+    root: 'dashboard',
   },
 
   management: {
