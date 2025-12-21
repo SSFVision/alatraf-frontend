@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>فواتير المشتريات</title>
+  <link rel="icon" type="image/svg+xml" href="../../assets/images/icon.svg">
+  <link rel="stylesheet" href="../../assets/css/aside.css" />
+  <link rel="stylesheet" href="../../assets/css/header.css" />
+  <link rel="stylesheet" href="../../assets/css/home.css" />
+  <link rel="stylesheet" href="../../../Alatraf.Managment.system/src/styles.css" />
+</head>
+
+<body>
+  <aside id="aside-container"></aside>
+  <header id="header-container"></header>
+
+  <main class="padding-32 row gap-16 padding-24">
+    <div class="column gap-16  max-width-324">
+      <div class="box culumn gap-24 max-hight-360" id="suppliers-list-container">
+      </div>
+      <div class="box culumn gap-24 max-hight-360" id="invoice-list-container">
+      </div>
+    </div>
+
+    <div class="box max-hight-800 gap-16">
+      <div class="space-between">
+        <h2 class="title-lg">فاتورة مشتريات</h2>
+      </div>
+
+      <div class="max-hight-712 column gap-16 padding-LR-24">
+        <div class="width-100">
+          <p class="title-md">بيانات المورد</p>
+          <span class="home-line"></span>
+        </div>
+
+        <div class="row flex-center">
+          <label class="label-lg">المورد</label>
+          <input class="label-lg" type="text" placeholder="">
+        </div>
+
+        <div class="row flex-center">
+          <label class="label-lg">رقم الفاتورة</label>
+          <input class="label-lg" type="text" placeholder="">
+          <label class="label-lg">التاريخ</label>
+          <input class="label-lg" type="date" placeholder="">
+        </div>
+
+        <div class="row flex-center">
+          <label class="label-lg">المخزن</label>
+          <input class="label-lg" type="text" placeholder="">
+        </div>
+
+        <div class="width-100">
+          <p class="title-md">الأصناف</p>
+          <span class="home-line"></span>
+        </div>
+
+        <table class="no-shadow">
+          <thead>
+            <tr>
+              <th>م</th>
+              <th>الصنف</th>
+              <th>الكمية</th>
+              <th>الوحدة</th>
+              <th>السعر</th>
+              <th>الإجمالي</th>
+              <th>ملاحظات</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td><input class="label-lg" type="text" placeholder=""></td>
+              <td><input class="label-lg" type="number" placeholder=""></td>
+              <td>
+                <select class="label-lg">
+                  <option></option>
+                  <option>حبة</option>
+                  <option>درزن</option>
+                </select>
+              </td>
+              <td><input class="label-lg" type="number" placeholder=""></td>
+              <td><input class="label-lg" type="number" placeholder="" readonly></td>
+              <td><input class="label-lg" type="text" placeholder=""></td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td><input class="label-lg" type="text" placeholder=""></td>
+              <td><input class="label-lg" type="number" placeholder=""></td>
+              <td>
+                <select class="label-lg">
+                  <option></option>
+                  <option>حبة</option>
+                  <option>كرتون</option>
+                </select>
+              </td>
+              <td><input class="label-lg" type="number" placeholder=""></td>
+              <td><input class="label-lg" type="number" placeholder="" readonly></td>
+              <td><input class="label-lg" type="text" placeholder=""></td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td><input class="label-lg" type="text" placeholder=""></td>
+              <td><input class="label-lg" type="number" placeholder=""></td>
+              <td>
+                <select class="label-lg">
+                  <option></option>
+                  <option>حبة</option>
+                  <option>درزن</option>
+                </select>
+              </td>
+              <td><input class="label-lg" type="number" placeholder=""></td>
+              <td><input class="label-lg" type="number" placeholder="" readonly></td>
+              <td><input class="label-lg" type="text" placeholder=""></td>
+            </tr>
+          </tbody>
+        </table>
+
+
+        <div class="row flex-center">
+          <label class="label-lg">المبلغ المطلوب</label>
+          <input class="label-lg" type="number" placeholder="">
+          <label class="label-lg">تخفيض</label>
+          <input class="label-lg" type="number" placeholder="">
+        </div>
+
+        <div class="row flex-center">
+          <label class="label-lg">الإجمالي</label>
+          <input class="label-lg" type="number" placeholder="">
+        </div>
+
+        <div class="row gap-16 flex-center">
+          <button class="btn secondary" disabled>تعديل</button>
+          <button class="btn danger">حذف </button>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+    // استدعاء الـ ASIDE
+    fetch("../template/aside.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("aside-container").innerHTML = data;
+      });
+
+    // استدعاء الـ HEADER
+    fetch("../template/header.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("header-container").innerHTML = data;
+      });
+
+    fetch("../template/suppliers-list.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("suppliers-list-container").innerHTML = data;
+      });
+
+    fetch("../template/invoice-list.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("invoice-list-container").innerHTML = data;
+      });
+
+  </script>
+</body>
+
+</html>
