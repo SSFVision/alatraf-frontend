@@ -9,6 +9,7 @@
 @import "./styles/cards.css";
 @import "./styles/filters.css";
 @import "./styles/checkbox.css";
+@import "./styles/main.css";
 
 * {
   margin: 0;

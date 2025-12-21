@@ -26,7 +26,7 @@ export const apiResponseInterceptor: HttpInterceptorFn = (req, next) => {
     return next(req);
   }
   return next(req).pipe(
-    // delay(1500),
+    delay(1000),
     map((event: HttpEvent<any>) => {
       if (event instanceof HttpResponse) {
         const body = event.body;
@@ -44,7 +44,6 @@ export const apiResponseInterceptor: HttpInterceptorFn = (req, next) => {
     }),
 
     catchError((error: any) => {
-      // error =new HttpErrorResponse(error);
       console.log('⛔ error from backend ', error);
 
       let apiResult;

@@ -28,6 +28,20 @@ export const APP_ROUTES: Routes = [
     canActivate: [AuthGuard],
     children: [
       {
+        path: AppRoutes.dashboard.root,
+        loadChildren: () =>
+          import('./features/Dashboard/dashboard.routes').then(
+            (m) => m.DASHBOARD_ROUTES
+          ),
+      },
+       {
+        path: AppRoutes.users.root,
+        loadChildren: () =>
+          import('./features/UsersMangment/users.routes').then(
+            (m) => m.USERS_ROUTES
+          ),
+      },
+      {
         path: AppRoutes.reception.root, //
         loadChildren: () =>
           import('./features/Reception/registration.routes').then(
@@ -97,7 +111,7 @@ export const APP_ROUTES: Routes = [
             (m) => m.DoctorsRoutes
           ),
       },
-       {
+      {
         path: AppRoutes.patientCards.root,
         loadChildren: () =>
           import('./features/PatientsCard/patient-cards.routes').then(

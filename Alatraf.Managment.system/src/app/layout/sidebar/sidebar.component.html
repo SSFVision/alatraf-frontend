@@ -1,7 +1,18 @@
 <img src="/assets/images/logo-white.svg" alt="مركز الأطراف و العلاج الطبيعي" />
 
-<button >
-  <img alt="الصفحة الرئيسية" src="/assets/icons/home-white.svg" />
+<button
+  [routerLink]="['dashboard']"
+  routerLinkActive="active"
+  #rla="routerLinkActive"
+>
+  <img
+    alt="الصفحة الرئيسية"
+    [src]="
+      !rla.isActive
+        ? '/assets/icons/home-white.svg'
+        : '/assets/icons/home-blue.svg'
+    "
+  />
   <p class="title-md">الصفحة الرئيسية</p>
 </button>
 <ul>
@@ -15,17 +26,24 @@
   </li>
   @for (item of cat.items; track $index) {
   <li>
-    <button [routerLink]="[item.route]" routerLinkActive="active" #rla="routerLinkActive">
-
-      <img alt="{{ item.label }}" [src]="!rla.isActive
-        ? (item.icon || '/assets/icons/home-white.svg')
-        : (item.activeIcon || '/assets/icons/home-blue.svg')" />
+    <button
+      [routerLink]="[item.route]"
+      routerLinkActive="active"
+      #rla="routerLinkActive"
+    >
+      <img
+        alt="{{ item.label }}"
+        [src]="
+          !rla.isActive
+            ? item.icon || '/assets/icons/home-white.svg'
+            : item.activeIcon || '/assets/icons/home-blue.svg'
+        "
+      />
 
       <p class="title-md">
         {{ item.label }}
       </p>
     </button>
-
   </li>
   } }
 </ul>

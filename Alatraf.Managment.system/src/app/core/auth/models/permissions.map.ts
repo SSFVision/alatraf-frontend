@@ -93,4 +93,13 @@ IndustrialParts: {
     UPDATE: 'Doctors.Update',
     DELETE: 'Doctors.Delete',
   },
+  ADMIN: {
+    VIEW: 'Admin:View',
+  },
+   Users: {
+    VIEW: 'Sections.View',
+    CREATE: 'Sections.Create',
+    EDIT: 'Sections.Edit',
+    DELETE: 'Sections.Delete',
+  },
 } as const;

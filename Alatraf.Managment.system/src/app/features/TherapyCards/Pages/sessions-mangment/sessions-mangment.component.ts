@@ -74,6 +74,7 @@ export class SessionsManagementComponent implements OnInit {
   therapyCardIdSignal = computed<number | null>(() => {
     return this.therapyCard()?.therapyCardId ?? null;
   });
+  // canSubmit = signal(false);
 
   sessionForm!: FormGroup;
   constructor() {
@@ -229,6 +230,7 @@ export class SessionsManagementComponent implements OnInit {
       .subscribe((res) => {
         if (res.success) {
           this.sessionForm.disable(); // ✅ هنا السحر
+          // this.canSubmit.set(true);
         }
       });
   }

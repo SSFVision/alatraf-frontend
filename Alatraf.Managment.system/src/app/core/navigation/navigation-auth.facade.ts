@@ -45,7 +45,7 @@ export class NavigationAuthFacade {
       case 'Appointment':
         return AppRoutes.Appointment.root;
       case 'Admin':
-        return AppRoutes.patientCards.wounded.root;
+        return AppRoutes.users.root;
 
       // case 'Manager':
       //   return AppRoutes.management.dashboard;

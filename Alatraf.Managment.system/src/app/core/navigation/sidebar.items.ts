@@ -16,6 +16,27 @@ export interface MenuCategory {
 }
 export const MENU_CONFIG: MenuCategory[] = [
   {
+    category: '  إدارة النظام ',
+    CateRoute: AppRoutes.finance.root,
+    items: [
+      {
+        label: ' المستخدمين',
+        icon: 'assets/icons/user-icon-w.svg',
+        activeIcon: 'assets/icons/user-icon-b.svg',
+        route: AppRoutes.users.root,
+        requiredPermissions: [PERMISSIONS.PAYMENTS.VIEW],
+      },
+      {
+        label: 'إدارةالدكاترة',
+        icon: 'assets/icons/user-icon-w.svg',
+        activeIcon: 'assets/icons/user-icon-b.svg',
+        route: AppRoutes.doctors.root,
+        requiredPermissions: [PERMISSIONS.PATIENTS.ADD],
+      },
+    ],
+  },
+
+  {
     category: 'الاستقبال',
     CateRoute: AppRoutes.reception.root,
     items: [
@@ -31,13 +52,6 @@ export const MENU_CONFIG: MenuCategory[] = [
         icon: 'assets/icons/user-icon-w.svg',
         activeIcon: 'assets/icons/user-icon-b.svg',
         route: AppRoutes.reception.patients.add,
-        requiredPermissions: [PERMISSIONS.PATIENTS.ADD],
-      },
-      {
-        label: 'إدارةالدكاترة',
-        icon: 'assets/icons/user-icon-w.svg',
-        activeIcon: 'assets/icons/user-icon-b.svg',
-        route: AppRoutes.doctors.root,
         requiredPermissions: [PERMISSIONS.PATIENTS.ADD],
       },
     ],

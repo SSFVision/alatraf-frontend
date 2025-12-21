@@ -99,7 +99,7 @@ export const AppRoutes = {
         `therapy-cards/${therapyCardId}/sessions/edit/${sessionId}`,
     },
     doctors: {
-      view: (doctorId: number | string) => `therapy-cards/doctors/${doctorId}`,
+      viewDoctorAssigments: (doctorId: number | string) => `therapy-cards/doctors/${doctorId}/assigments`,
     },
   },
   repairCards: {
@@ -190,10 +190,23 @@ export const AppRoutes = {
     view: (roomId: number | string) => `view/${roomId}`,
   },
 
-  admin: {
-    root: 'admin',
-    dashboard: 'admin/dashboard',
+  dashboard: {
+    root: 'dashboard',
   },
+  users: {
+  root: 'users',
+
+  list: 'users',
+
+  create: 'create',
+
+  edit: (userId: number | string) => `edit/${userId}`,
+
+  view: (userId: number | string) => `view/${userId}`,
+
+  permissions: (userId: number | string) => `${userId}/permissions`,
+},
+
 
   management: {
     root: 'management',
