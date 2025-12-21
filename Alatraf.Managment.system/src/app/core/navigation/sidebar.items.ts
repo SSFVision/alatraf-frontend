@@ -26,6 +26,13 @@ export const MENU_CONFIG: MenuCategory[] = [
         route: AppRoutes.users.root,
         requiredPermissions: [PERMISSIONS.PAYMENTS.VIEW],
       },
+      {
+        label: 'إدارةالدكاترة',
+        icon: 'assets/icons/user-icon-w.svg',
+        activeIcon: 'assets/icons/user-icon-b.svg',
+        route: AppRoutes.doctors.root,
+        requiredPermissions: [PERMISSIONS.PATIENTS.ADD],
+      },
     ],
   },
 
@@ -45,13 +52,6 @@ export const MENU_CONFIG: MenuCategory[] = [
         icon: 'assets/icons/user-icon-w.svg',
         activeIcon: 'assets/icons/user-icon-b.svg',
         route: AppRoutes.reception.patients.add,
-        requiredPermissions: [PERMISSIONS.PATIENTS.ADD],
-      },
-      {
-        label: 'إدارةالدكاترة',
-        icon: 'assets/icons/user-icon-w.svg',
-        activeIcon: 'assets/icons/user-icon-b.svg',
-        route: AppRoutes.doctors.root,
         requiredPermissions: [PERMISSIONS.PATIENTS.ADD],
       },
     ],
