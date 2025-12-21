@@ -12,9 +12,9 @@ export class DashboardNavigationFacade {
   }
 
 
-  // goToUsers(extras?: NavigationExtras): void {
-  //   this.go(AppRoutes.users.root, extras);
-  // }
+  goToUsers(extras?: NavigationExtras): void {
+    this.go(AppRoutes.users.root, extras);
+  }
 
   goToSections(extras?: NavigationExtras): void {
     this.go(AppRoutes.sections.root, extras);

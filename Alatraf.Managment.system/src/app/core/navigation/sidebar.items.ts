@@ -16,6 +16,20 @@ export interface MenuCategory {
 }
 export const MENU_CONFIG: MenuCategory[] = [
   {
+    category: '  إدارة النظام ',
+    CateRoute: AppRoutes.finance.root,
+    items: [
+      {
+        label: ' المستخدمين',
+        icon: 'assets/icons/user-icon-w.svg',
+        activeIcon: 'assets/icons/user-icon-b.svg',
+        route: AppRoutes.users.root,
+        requiredPermissions: [PERMISSIONS.PAYMENTS.VIEW],
+      },
+    ],
+  },
+
+  {
     category: 'الاستقبال',
     CateRoute: AppRoutes.reception.root,
     items: [

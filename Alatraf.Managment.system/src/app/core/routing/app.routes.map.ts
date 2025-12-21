@@ -193,6 +193,20 @@ export const AppRoutes = {
   dashboard: {
     root: 'dashboard',
   },
+  users: {
+  root: 'users',
+
+  list: 'users',
+
+  create: 'create',
+
+  edit: (userId: number | string) => `edit/${userId}`,
+
+  view: (userId: number | string) => `view/${userId}`,
+
+  permissions: (userId: number | string) => `${userId}/permissions`,
+},
+
 
   management: {
     root: 'management',

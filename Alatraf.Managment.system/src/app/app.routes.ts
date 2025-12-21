@@ -34,6 +34,13 @@ export const APP_ROUTES: Routes = [
             (m) => m.DASHBOARD_ROUTES
           ),
       },
+       {
+        path: AppRoutes.users.root,
+        loadChildren: () =>
+          import('./features/UsersMangment/users.routes').then(
+            (m) => m.USERS_ROUTES
+          ),
+      },
       {
         path: AppRoutes.reception.root, //
         loadChildren: () =>
