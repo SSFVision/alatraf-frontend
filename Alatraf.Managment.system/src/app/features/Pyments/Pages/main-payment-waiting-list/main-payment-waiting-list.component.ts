@@ -8,7 +8,7 @@ import { PaymentsNavigationFacade } from '../../../../core/navigation/payments-n
 import { GeneralWaitingPatientVM } from '../../../../shared/models/general-waiting-patient.vm';
 import { PaymentWaitingListDto } from '../../Models/payment-waitingList-dto';
 import { PaymentReference } from '../../Models/payment-reference.enum';
-import { PaymentsFacade } from '../../Services/payments.facade.service';
+import { PaymentsWaitingListFacade } from '../../Services/payments-waiting-list.facade.service';
 
 @Component({
   selector: 'app-main-payment-waiting-list',
@@ -18,7 +18,7 @@ import { PaymentsFacade } from '../../Services/payments.facade.service';
   styleUrl: './main-payment-waiting-list.component.css',
 })
 export class MainPaymentWaitingListComponent {
-  private paymentsFacade = inject(PaymentsFacade);
+  private paymentsFacade = inject(PaymentsWaitingListFacade);
 
   waitingPayments = this.paymentsFacade.waitingList;
   loading = this.paymentsFacade.loadingWaitingList;

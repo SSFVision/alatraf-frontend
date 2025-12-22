@@ -50,7 +50,7 @@ export const AppRoutes = {
   finance: {
     root: 'finance',
     paied: (paymentId: number | string, paymentReference: number | string) =>
-      `paied/${paymentId}/${paymentReference}`,
+      `paid/${paymentId}/${paymentReference}`,
   },
     patientCards: {
     root: 'patient-cards',

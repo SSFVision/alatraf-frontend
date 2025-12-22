@@ -1,0 +1,35 @@
+<table class="no-shadow">
+  <thead>
+    <tr>
+      <th class="label-lg">اسم البرنامج</th>
+      <th class="label-lg">المدة</th>
+      <th class="label-lg">الملاحظات</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    @if (data.diagnosisPrograms.length) {
+      @for (program of data.diagnosisPrograms; track $index) {
+        <tr>
+          <td class="label-lg">
+            {{ program.programName }}
+          </td>
+
+          <td class="label-lg">
+            {{ program.duration }}
+          </td>
+
+          <td class="label-lg">
+            {{ program.notes || '—' }}
+          </td>
+        </tr>
+      }
+    } @else {
+      <tr>
+        <td colspan="3" class="label-lg text-center padding-16">
+          لا توجد برامج علاجية
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>

@@ -14,7 +14,7 @@ export const PaymentsRoutes: Routes = [
    
       children: [
       {
-        path: 'paied/:paymentId/:paymentReference',
+        path: 'paid/:paymentId/:paymentReference',
         canActivate: [PermissionGuard],
         data: { permission: PERMISSIONS.PAYMENTS.ADD },
         loadComponent: () =>

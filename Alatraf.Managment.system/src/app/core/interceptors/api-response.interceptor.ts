@@ -26,7 +26,7 @@ export const apiResponseInterceptor: HttpInterceptorFn = (req, next) => {
     return next(req);
   }
   return next(req).pipe(
-    delay(1000),
+    // delay(1000),
     map((event: HttpEvent<any>) => {
       if (event instanceof HttpResponse) {
         const body = event.body;
