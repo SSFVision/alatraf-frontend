@@ -1,33 +1,29 @@
 @if (isLoading()) {
-  <div class="flex-center">
-    <span class="loader"></span>
-  </div>
-  <p class="flex-center">جاري تحميل بيانات الدفع...</p>
+<div class="flex-center">
+  <span class="loader"></span>
+</div>
+<p class="flex-center">جاري تحميل بيانات الدفع...</p>
 } @else {
 
-  <div class="row space-between sticky">
-    <h1 class="title-lg">الحسابات</h1>
-    <button class="btn primary">طباعة</button>
-  </div>
+<div class="row space-between sticky">
+  <h1 class="title-lg">الحسابات</h1>
+  <button class="btn primary">طباعة</button>
+</div>
 
-<ng-container *ngIf="paymentType() === 'therapy' && therapyPayment() as therapy">
-  <app-therapy-payment-details
-    [data]="therapy"
-  ></app-therapy-payment-details>
+<ng-container
+  *ngIf="paymentType() === 'therapy' && therapyPayment() as therapy"
+>
+  <app-therapy-payment-details [data]="therapy"></app-therapy-payment-details>
 </ng-container>
 
- <ng-container *ngIf="paymentType() === 'repair' && repairPayment() as repair">
-  <app-repair-payment-details
-    [data]="repair"
-  ></app-repair-payment-details>
+<ng-container *ngIf="paymentType() === 'repair' && repairPayment() as repair">
+  <app-repair-payment-details [data]="repair"></app-repair-payment-details>
 </ng-container>
 
-  <app-payment-actions
-    [allowedAccountKinds]="allowedAccountKinds()"
-      [totalAmount]="totalAmount()"
-
-      (submitPayment)="onSubmitPayment($event)"
-
-  >
-  </app-payment-actions>
+<app-payment-actions
+  [allowedAccountKinds]="allowedAccountKinds()"
+  [totalAmount]="totalAmount()"
+  (submitPayment)="onSubmitPayment($event)"
+>
+</app-payment-actions>
 }

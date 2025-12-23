@@ -40,7 +40,6 @@ export class PaiedPageComponent {
   repairPayment = this.processingFacade.repairPayment;
   isPaying = this.processingFacade.isPaying;
 
-  /** ✅ المبلغ الكلي الموحّد */
   totalAmount = computed<number>(() => {
     if (this.paymentType() === 'therapy') {
       return this.therapyPayment()?.totalAmount ?? 0;
@@ -103,13 +102,48 @@ export class PaiedPageComponent {
     }
   }
 
-  onSubmitPayment(event: PaymentSubmitEvent): void {
+
+onSubmitPayment(event: PaymentSubmitEvent): void {
+
     console.log('AccountKind:', event.accountKind);
     console.log('Payload:', event.payload);
 
-    // 👇 الخطوة التالية (لاحقًا):
-    // this.processingFacade.pay(paymentId, event)
+  const paymentId = this.paymentId();
+  const reference = this.paymentReference();
+
+  if (!paymentId || reference === null) {
+    return;
   }
+
+  switch (event.accountKind) {
+    case AccountKind.Free:
+      this.processingFacade.payFree(paymentId).subscribe();
+      break;
+
+    case AccountKind.Patient:
+      this.processingFacade.payPatient(paymentId, {
+        paidAmount: event.payload?.paidAmount,
+        discount: event.payload?.discount ?? 0, // نسبة %
+        voucherNumber: event.payload?.voucherNumber,
+        notes: event.payload?.notes ?? null,
+      }).subscribe();
+      break;
+
+    case AccountKind.Disabled:
+      this.processingFacade.payDisabled(paymentId, {
+        disabledCardId: event.payload?.disabledCardId,
+        notes: event.payload?.notes ?? null,
+      }).subscribe();
+      break;
+
+    case AccountKind.Wounded:
+      this.processingFacade.payWounded(paymentId, {
+        reportNumber: event.payload?.reportNumber ?? null,
+        notes: event.payload?.notes ?? null,
+      }).subscribe();
+      break;
+  }
+}
 
   /* ---------------------------------------------
    * HELPERS
@@ -137,7 +171,6 @@ export class PaiedPageComponent {
         return 'therapy';
 
       case PaymentReference.Repair:
-      case PaymentReference.Sales:
         return 'repair';
 
       default:
@@ -174,7 +207,10 @@ export class PaiedPageComponent {
         break;
 
       case PaymentReference.Sales:
-        this.allowedAccountKinds.set([AccountKind.Patient]);
+        this.allowedAccountKinds.set([AccountKind.Patient,
+          AccountKind.Disabled,
+
+        ]);
         break;
 
       default:
