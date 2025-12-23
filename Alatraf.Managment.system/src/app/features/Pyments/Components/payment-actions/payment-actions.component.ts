@@ -31,8 +31,8 @@ import { NgIf } from '@angular/common';
 })
 export class PaymentActionsComponent {
   @Input({ required: true }) allowedAccountKinds!: AccountKind[];
+  @Input() disabled = false;
 
-  /** المبلغ الكلي يأتي من الأب (PaiedPageComponent) */
   @Input({ required: true }) totalAmount!: number;
 
   @Output() submitPayment = new EventEmitter<PaymentSubmitEvent>();
@@ -141,10 +141,7 @@ export class PaymentActionsComponent {
 
     const net = Math.max(total - safeDiscount, 0);
 
-    this.form.patchValue(
-      { netAmount: net },
-      { emitEvent: false }
-    );
+    this.form.patchValue({ netAmount: net }, { emitEvent: false });
   }
 
   /** ===============================

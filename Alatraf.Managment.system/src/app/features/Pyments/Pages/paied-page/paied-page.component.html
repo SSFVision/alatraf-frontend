@@ -23,6 +23,7 @@
 <app-payment-actions
   [allowedAccountKinds]="allowedAccountKinds()"
   [totalAmount]="totalAmount()"
+  [disabled]="isSaveDisabled()"
   (submitPayment)="onSubmitPayment($event)"
 >
 </app-payment-actions>

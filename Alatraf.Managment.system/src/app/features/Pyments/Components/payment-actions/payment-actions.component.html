@@ -6,7 +6,6 @@
 </div>
 
 <form [formGroup]="form" class="column gap-16">
-
   <!-- Account Kind Selector -->
   <div class="row gap-16 align-center">
     <label class="label-lg">نوع الحساب</label>
@@ -15,9 +14,9 @@
       <option [ngValue]="null">اختر نوع الحساب</option>
 
       @for (kind of allowedAccountKinds; track kind) {
-        <option [ngValue]="kind">
-          {{ ACCOUNT_KIND_LABELS[kind] }}
-        </option>
+      <option [ngValue]="kind">
+        {{ ACCOUNT_KIND_LABELS[kind] }}
+      </option>
       }
     </select>
   </div>
@@ -34,8 +33,6 @@
   </div>
 
   <ng-container *ngIf="selectedConfig() as config">
-
-   
     <!-- Paid Amount -->
     <div *ngIf="config.showPaidAmount" class="row gap-16 align-center">
       <label class="label-lg">المبلغ المدفوع</label>
@@ -47,14 +44,10 @@
       />
     </div>
 
-  <!-- Discount -->
+    <!-- Discount -->
     <div *ngIf="config.showDiscount" class="row gap-16 align-center">
       <label class="label-lg">التخفيض</label>
-      <input
-        class="label-lg"
-        type="number"
-        formControlName="discount"
-      />
+      <input class="label-lg" type="number" formControlName="discount" />
     </div>
 
     <!-- Net Amount -->
@@ -118,11 +111,10 @@
         class="btn primary label-md"
         type="button"
         (click)="onSubmit()"
-        [disabled]="form.invalid"
+        [disabled]="form.invalid || disabled"
       >
         حفظ
       </button>
     </div>
-
   </ng-container>
 </form>

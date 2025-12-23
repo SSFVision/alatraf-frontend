@@ -1,4 +1,11 @@
-import { Component, DestroyRef, inject, signal, computed } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  inject,
+  signal,
+  computed,
+  effect,
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -39,6 +46,22 @@ export class PaiedPageComponent {
   therapyPayment = this.processingFacade.therapyPayment;
   repairPayment = this.processingFacade.repairPayment;
   isPaying = this.processingFacade.isPaying;
+  private hasSubmittedPayment = signal(false);
+
+  isSaveDisabled = computed<boolean>(() => {
+    if (this.isPaying()) return true;
+    if (this.hasSubmittedPayment()) return true;
+
+    if (this.paymentType() === 'therapy') {
+      return this.therapyPayment()?.isCompleted === true;
+    }
+
+    if (this.paymentType() === 'repair') {
+      return this.repairPayment()?.isCompleted === true;
+    }
+
+    return true;
+  });
 
   totalAmount = computed<number>(() => {
     if (this.paymentType() === 'therapy') {
@@ -62,6 +85,11 @@ export class PaiedPageComponent {
     this.processingFacade.reset();
   }
 
+  constructor() {
+    effect(() => {
+      console.log('SaveDisabled:', this.isSaveDisabled());
+    });
+  }
   private listenToRouteParams(): void {
     this.route.paramMap
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -76,9 +104,9 @@ export class PaiedPageComponent {
           this.resetState();
           return;
         }
-
         this.paymentId.set(id);
         this.paymentReference.set(reference);
+        this.hasSubmittedPayment.set(false);
 
         const type = this.resolvePaymentType(reference);
         this.paymentType.set(type);
@@ -102,48 +130,65 @@ export class PaiedPageComponent {
     }
   }
 
+  onSubmitPayment(event: PaymentSubmitEvent): void {
+    const paymentId = this.paymentId();
+    const reference = this.paymentReference();
 
-onSubmitPayment(event: PaymentSubmitEvent): void {
+    if (!paymentId || reference === null) {
+      return;
+    }
 
-    console.log('AccountKind:', event.accountKind);
-    console.log('Payload:', event.payload);
+    switch (event.accountKind) {
+      case AccountKind.Free:
+        this.processingFacade.payFree(paymentId).subscribe((res) => {
+          if (res.isSuccess) {
+            this.hasSubmittedPayment.set(true);
+          }
+        });
+        break;
 
-  const paymentId = this.paymentId();
-  const reference = this.paymentReference();
+      case AccountKind.Patient:
+        this.processingFacade
+          .payPatient(paymentId, {
+            paidAmount: event.payload?.paidAmount,
+            discount: event.payload?.discount ?? 0, // نسبة %
+            voucherNumber: event.payload?.voucherNumber,
+            notes: event.payload?.notes ?? null,
+          })
+          .subscribe((res) => {
+            if (res.isSuccess) {
+              this.hasSubmittedPayment.set(true);
+            }
+          });
+        break;
 
-  if (!paymentId || reference === null) {
-    return;
+      case AccountKind.Disabled:
+        this.processingFacade
+          .payDisabled(paymentId, {
+            disabledCardId: event.payload?.disabledCardId,
+            notes: event.payload?.notes ?? null,
+          })
+          .subscribe((res) => {
+            if (res.isSuccess) {
+              this.hasSubmittedPayment.set(true);
+            }
+          });
+        break;
+
+      case AccountKind.Wounded:
+        this.processingFacade
+          .payWounded(paymentId, {
+            reportNumber: event.payload?.reportNumber ?? null,
+            notes: event.payload?.notes ?? null,
+          })
+          .subscribe((res) => {
+            if (res.isSuccess) {
+              this.hasSubmittedPayment.set(true);
+            }
+          });
+        break;
+    }
   }
-
-  switch (event.accountKind) {
-    case AccountKind.Free:
-      this.processingFacade.payFree(paymentId).subscribe();
-      break;
-
-    case AccountKind.Patient:
-      this.processingFacade.payPatient(paymentId, {
-        paidAmount: event.payload?.paidAmount,
-        discount: event.payload?.discount ?? 0, // نسبة %
-        voucherNumber: event.payload?.voucherNumber,
-        notes: event.payload?.notes ?? null,
-      }).subscribe();
-      break;
-
-    case AccountKind.Disabled:
-      this.processingFacade.payDisabled(paymentId, {
-        disabledCardId: event.payload?.disabledCardId,
-        notes: event.payload?.notes ?? null,
-      }).subscribe();
-      break;
-
-    case AccountKind.Wounded:
-      this.processingFacade.payWounded(paymentId, {
-        reportNumber: event.payload?.reportNumber ?? null,
-        notes: event.payload?.notes ?? null,
-      }).subscribe();
-      break;
-  }
-}
 
   /* ---------------------------------------------
    * HELPERS
@@ -200,16 +245,13 @@ onSubmitPayment(event: PaymentSubmitEvent): void {
         break;
 
       case PaymentReference.Repair:
-        this.allowedAccountKinds.set([
-          AccountKind.Patient,
-          AccountKind.Free,
-        ]);
+        this.allowedAccountKinds.set([AccountKind.Patient, AccountKind.Free]);
         break;
 
       case PaymentReference.Sales:
-        this.allowedAccountKinds.set([AccountKind.Patient,
+        this.allowedAccountKinds.set([
+          AccountKind.Patient,
           AccountKind.Disabled,
-
         ]);
         break;
 
