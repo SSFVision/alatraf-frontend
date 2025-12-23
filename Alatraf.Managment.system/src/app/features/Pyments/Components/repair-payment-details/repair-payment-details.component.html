@@ -1,0 +1,33 @@
+@if (data) {
+  <table class="no-shadow">
+    <thead>
+      <tr>
+        <th class="label-lg">اسم القطعة</th>
+        <th class="label-lg">الوحدة</th>
+        <th class="label-lg">الكمية</th>
+        <th class="label-lg">سعر الوحدة</th>
+        <th class="label-lg">الإجمالي</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      @if (data.diagnosisIndustrialParts.length) {
+        @for (part of data.diagnosisIndustrialParts; track $index) {
+          <tr>
+            <td class="label-lg">{{ part.partName }}</td>
+            <td class="label-lg">{{ part.unitName }}</td>
+            <td class="label-lg">{{ part.quantity }}</td>
+            <td class="label-lg">{{ part.price }}</td>
+            <td class="label-lg fw-bold">{{ part.totalPrice }}</td>
+          </tr>
+        }
+      } @else {
+        <tr>
+          <td colspan="5" class="label-lg text-center padding-16">
+            لا توجد قطع مسجلة
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}

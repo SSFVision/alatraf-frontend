@@ -1,0 +1,172 @@
+<div class="column gap-16">
+  <div class="width-100">
+    <p class="title-md">بيانات الدفع</p>
+    <span class="home-line"></span>
+  </div>
+</div>
+
+<form [formGroup]="form" class="column gap-16">
+  <!-- Account Kind Selector -->
+  <div class="row gap-16 align-center">
+    <label class="label-lg">نوع الحساب</label>
+
+    <select class="label-lg" formControlName="accountKind">
+      <option [ngValue]="null">اختر نوع الحساب</option>
+
+      @for (kind of allowedAccountKinds; track kind) {
+      <option [ngValue]="kind">
+        {{ ACCOUNT_KIND_LABELS[kind] }}
+      </option>
+      }
+    </select>
+  </div>
+
+  <!-- Total Amount (Always) -->
+  <div class="row gap-16 align-center">
+    <label class="label-lg">المبلغ الكلي</label>
+    <input
+      class="label-lg"
+      type="number"
+      formControlName="totalAmount"
+      readonly
+    />
+  </div>
+
+  <ng-container *ngIf="selectedConfig() as config">
+    <!-- Paid Amount -->
+    <div *ngIf="config.showPaidAmount" class="row gap-16 align-center">
+      <label class="label-lg">المبلغ المدفوع</label>
+
+      <input
+        class="label-lg"
+        type="number"
+        formControlName="paidAmount"
+        appPositiveNumber
+        (blur)="form.controls['paidAmount']?.markAsTouched()"
+      />
+
+      <!-- Backend -->
+      <div
+        class="error-message label-lg"
+        *ngIf="validationState.hasBackendError('paidAmount')"
+      >
+        {{ validationState.getBackendError("paidAmount") }}
+      </div>
+
+      <!-- Frontend -->
+      <div
+        class="error-message label-lg"
+        *ngIf="validationState.hasFrontendError('paidAmount')"
+      >
+        المبلغ يجب أن يكون رقمًا موجبًا
+      </div>
+    </div>
+
+    <!-- Discount -->
+    <div *ngIf="config.showDiscount" class="row gap-16 align-center">
+      <label class="label-lg">التخفيض (%)</label>
+
+      <input
+        class="label-lg"
+        type="number"
+        formControlName="discount"
+        appPositiveNumber
+        (blur)="form.controls['discount']?.markAsTouched()"
+      />
+
+      <!-- Backend -->
+      <div
+        class="error-message label-lg"
+        *ngIf="validationState.hasBackendError('discount')"
+      >
+        {{ validationState.getBackendError("discount") }}
+      </div>
+
+      <!-- Frontend -->
+      <div
+        class="error-message label-lg"
+        *ngIf="validationState.hasFrontendError('discount')"
+      >
+        التخفيض يجب أن يكون نسبة بين 0 و 100
+      </div>
+    </div>
+
+    <!-- Net Amount -->
+    <div *ngIf="config.showDiscount" class="row gap-16 align-center">
+      <label class="label-lg">الإجمالي بعد التخفيض</label>
+      <input
+        class="label-lg"
+        type="number"
+        formControlName="netAmount"
+        readonly
+      />
+    </div>
+
+    <!-- Voucher Number -->
+    <div *ngIf="config.showVoucherNumber" class="row gap-16 align-center">
+      <label class="label-lg">رقم السند</label>
+
+      <input
+        class="label-lg"
+        type="text"
+        formControlName="voucherNumber"
+        appPositiveNumber
+        (blur)="form.controls['voucherNumber']?.markAsTouched()"
+      />
+
+      <div
+        class="error-message label-lg"
+        *ngIf="validationState.hasFrontendError('voucherNumber')"
+      >
+        رقم السند مطلوب ويجب أن يكون رقميًا
+      </div>
+    </div>
+
+    <!-- Disabled Card ID -->
+    <div *ngIf="config.showDisabledCardId" class="row gap-16 align-center">
+      <label class="label-lg">رقم بطاقة المعاق</label>
+      <input
+        class="label-lg"
+        type="number"
+        placeholder="رقم البطاقة"
+        formControlName="disabledCardId"
+        appPositiveNumber
+      />
+    </div>
+
+    <!-- Report Number -->
+    <div *ngIf="config.showReportNumber" class="row gap-16 align-center">
+      <label class="label-lg">رقم البلاغ</label>
+      <input
+        class="label-lg"
+        type="text"
+        placeholder="رقم البلاغ"
+        formControlName="reportNumber"
+        appPositiveNumber
+      />
+    </div>
+
+    <!-- Notes -->
+    <div *ngIf="config.showNotes" class="row gap-16 align-center">
+      <label class="label-lg">ملاحظات</label>
+      <input
+        class="label-lg"
+        type="text"
+        placeholder="ملاحظات إضافية"
+        formControlName="notes"
+      />
+    </div>
+
+    <!-- Submit -->
+    <div class="flex-center margin-top-16">
+      <button
+        class="btn primary label-md"
+        type="button"
+        (click)="onSubmit()"
+        [disabled]="form.invalid || disabled"
+      >
+        حفظ
+      </button>
+    </div>
+  </ng-container>
+</form>

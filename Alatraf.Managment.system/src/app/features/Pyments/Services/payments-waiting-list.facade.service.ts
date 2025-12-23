@@ -5,7 +5,7 @@ import { BaseFacade } from '../../../core/utils/facades/base-facade';
 import { ApiResult } from '../../../core/models/ApiResult';
 import { PageRequest } from '../../../core/models/Shared/page-request.model';
 
-import { PaymentsService } from '../Services/payments.service';
+import { PaymentsService } from './payments.service';
 import { PaymentWaitingListDto } from '../Models/payment-waitingList-dto';
 import { GetPaymentsWaitingListFilterRequest } from '../Models/get-payments-waitingList-filter-request';
 import { PaymentReference } from '../Models/payment-reference.enum';
@@ -14,7 +14,7 @@ import { SearchManager } from '../../../core/utils/search-manager';
 import { PaginatedList } from '../../../core/models/Shared/paginated-list.model';
 
 @Injectable({ providedIn: 'root' })
-export class PaymentsFacade extends BaseFacade {
+export class PaymentsWaitingListFacade extends BaseFacade {
   private service = inject(PaymentsService);
 
   /* ---------------------------------------------
@@ -64,9 +64,7 @@ export class PaymentsFacade extends BaseFacade {
             }
           }),
           map((result: ApiResult<PaginatedList<PaymentWaitingListDto>>) =>
-            result.isSuccess && result.data?.items
-              ? result.data.items
-              : []
+            result.isSuccess && result.data?.items ? result.data.items : []
           )
         ),
     null,

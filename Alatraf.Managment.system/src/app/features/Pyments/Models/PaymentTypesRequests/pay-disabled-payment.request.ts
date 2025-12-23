@@ -1,4 +1,5 @@
-export interface DisabledPaymentDto {
+
+export interface PayDisabledPaymentRequest {
   disabledCardId: number;
   notes?: string | null;
 }
