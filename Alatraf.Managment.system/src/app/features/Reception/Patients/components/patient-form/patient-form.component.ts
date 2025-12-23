@@ -1,34 +1,31 @@
+import { NgIf } from '@angular/common';
 import {
   Component,
-  input,
-  output,
-  OnChanges,
-  SimpleChanges,
-  OnInit,
-  inject,
   effect,
   EnvironmentInjector,
+  inject,
+  input,
+  OnChanges,
+  OnInit,
+  output,
   runInInjectionContext,
+  SimpleChanges,
 } from '@angular/core';
 import {
   FormBuilder,
-  Validators,
-  ReactiveFormsModule,
   FormGroup,
-  MaxLengthValidator,
-  MaxValidator,
+  ReactiveFormsModule,
+  Validators
 } from '@angular/forms';
-import { NgIf } from '@angular/common';
 
 import { PatientsFacade } from '../../Services/patients.facade.service';
 
-import { FormValidationState } from '../../../../../core/utils/form-validation-state';
 import {
   PatientDto,
   PatientType,
 } from '../../../../../core/models/Shared/patient.model';
+import { FormValidationState } from '../../../../../core/utils/form-validation-state';
 import { CreatePatientRequest } from '../../models/create-patient.request';
-import { max } from 'rxjs';
 
 @Component({
   selector: 'app-patient-form',
@@ -53,7 +50,6 @@ export class PatientFormComponent implements OnChanges, OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    // 1️⃣ Create the form — autoRegistrationNumber removed
     this.form = this.fb.group({
       fullname: ['',Validators.required],
       gender: [true, Validators.required],

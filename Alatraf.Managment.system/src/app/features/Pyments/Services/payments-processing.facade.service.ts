@@ -14,7 +14,6 @@ import { PayDisabledPaymentRequest } from '../Models/PaymentTypesRequests/pay-di
 import { PayPatientPaymentRequest } from '../Models/PaymentTypesRequests/pay-patient-payment.request';
 import { PayWoundedPaymentRequest } from '../Models/PaymentTypesRequests/pay-wounded-payment.request';
 
-
 @Injectable({ providedIn: 'root' })
 export class PaymentsProcessingFacade extends BaseFacade {
   private service = inject(PaymentsService);
@@ -39,6 +38,9 @@ export class PaymentsProcessingFacade extends BaseFacade {
   private _isPaying = signal<boolean>(false);
   isPaying = this._isPaying.asReadonly();
 
+  /** ✅ Backend validation errors (NEW) */
+  formValidationErrors = signal<Record<string, string[]>>({});
+
   /* ---------------------------------------------
    * LOAD PAYMENT DETAILS
    * --------------------------------------------- */
@@ -50,6 +52,7 @@ export class PaymentsProcessingFacade extends BaseFacade {
     this._isLoading.set(true);
     this._therapyPayment.set(null);
     this._repairPayment.set(null);
+    this.formValidationErrors.set({}); // 🔹 clear old errors
 
     this.service
       .getTherapyPayment(paymentId, paymentReference)
@@ -74,6 +77,7 @@ export class PaymentsProcessingFacade extends BaseFacade {
     this._isLoading.set(true);
     this._therapyPayment.set(null);
     this._repairPayment.set(null);
+    this.formValidationErrors.set({}); // 🔹 clear old errors
 
     this.service
       .getRepairPayment(paymentId, paymentReference)
@@ -97,74 +101,82 @@ export class PaymentsProcessingFacade extends BaseFacade {
 
   payFree(paymentId: number) {
     this._isPaying.set(true);
+    this.formValidationErrors.set({});
 
-    return this.service
-      .payFree(paymentId, {})
-      .pipe(
-        tap((res) => {
-          this._isPaying.set(false);
+    return this.service.payFree(paymentId, {}).pipe(
+      tap((res) => {
+        this._isPaying.set(false);
 
-          if (res.isSuccess) {
-            this.toast.success('تم إتمام الدفع المجاني بنجاح');
-          } else {
-            this.handleError(res);
-          }
-        })
-      );
+        if (res.isSuccess) {
+          this.toast.success('تم إتمام الدفع المجاني بنجاح');
+          this.formValidationErrors.set({});
+        } else if (res.validationErrors) {
+          this.formValidationErrors.set(res.validationErrors);
+        } else {
+          this.handleError(res);
+        }
+      })
+    );
   }
 
   payPatient(paymentId: number, body: PayPatientPaymentRequest) {
     this._isPaying.set(true);
+    this.formValidationErrors.set({});
 
-    return this.service
-      .payPatient(paymentId, body)
-      .pipe(
-        tap((res) => {
-          this._isPaying.set(false);
+    return this.service.payPatient(paymentId, body).pipe(
+      tap((res) => {
+        this._isPaying.set(false);
 
-          if (res.isSuccess) {
-            this.toast.success('تم إتمام الدفع بنجاح');
-          } else {
-            this.handleError(res);
-          }
-        })
-      );
+        if (res.isSuccess) {
+          this.toast.success('تم إتمام الدفع بنجاح');
+          this.formValidationErrors.set({});
+        } else if (res.validationErrors) {
+          this.formValidationErrors.set(res.validationErrors);
+        } else {
+          this.handleError(res);
+        }
+      })
+    );
   }
 
   payDisabled(paymentId: number, body: PayDisabledPaymentRequest) {
     this._isPaying.set(true);
+    this.formValidationErrors.set({});
 
-    return this.service
-      .payDisabled(paymentId, body)
-      .pipe(
-        tap((res) => {
-          this._isPaying.set(false);
+    return this.service.payDisabled(paymentId, body).pipe(
+      tap((res) => {
+        this._isPaying.set(false);
 
-          if (res.isSuccess) {
-            this.toast.success('تم إتمام الدفع بنجاح');
-          } else {
-            this.handleError(res);
-          }
-        })
-      );
+        if (res.isSuccess) {
+          this.toast.success('تم إتمام الدفع بنجاح');
+          this.formValidationErrors.set({});
+        } else if (res.validationErrors) {
+          this.formValidationErrors.set(res.validationErrors);
+        } else {
+          this.handleError(res);
+        }
+      })
+    );
   }
 
   payWounded(paymentId: number, body: PayWoundedPaymentRequest) {
     this._isPaying.set(true);
+    this.formValidationErrors.set({});
 
-    return this.service
-      .payWounded(paymentId, body)
-      .pipe(
-        tap((res) => {
-          this._isPaying.set(false);
+    return this.service.payWounded(paymentId, body).pipe(
+      tap((res) => {
+        this._isPaying.set(false);
 
-          if (res.isSuccess) {
-            this.toast.success('تم إتمام الدفع بنجاح');
-          } else {
-            this.handleError(res);
-          }
-        })
-      );
+        if (res.isSuccess) {
+          this.toast.success('تم إتمام الدفع بنجاح');
+          this.formValidationErrors.set({});
+        } else if (res.validationErrors) {
+          this.formValidationErrors.set(res.validationErrors);
+        } else {
+          this.handleError(res);
+        }
+      })
+    );
   }
 
   /* ---------------------------------------------
@@ -191,5 +203,6 @@ export class PaymentsProcessingFacade extends BaseFacade {
     this._repairPayment.set(null);
     this._isLoading.set(false);
     this._isPaying.set(false);
+    this.formValidationErrors.set({}); // ✅ مهم
   }
 }

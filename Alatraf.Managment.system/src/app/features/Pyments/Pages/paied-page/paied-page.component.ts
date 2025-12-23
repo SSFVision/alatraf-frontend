@@ -35,7 +35,7 @@ import { NgIf } from '@angular/common';
 export class PaiedPageComponent {
   private route = inject(ActivatedRoute);
   private destroyRef = inject(DestroyRef);
-  private processingFacade = inject(PaymentsProcessingFacade);
+   processingFacade = inject(PaymentsProcessingFacade);
 
   paymentId = signal<number | null>(null);
   paymentReference = signal<PaymentReference | null>(null);
