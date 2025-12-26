@@ -13,43 +13,6 @@
   max-height: none !important;
   min-height: none !important;
   box-sizing: border-box;
-
-  scrollbar-width: thin;
-  scrollbar-color: var(--primary-color) var(--background-color);
-}
-
-.box::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-  background: transparent;
-}
-
-.box::-webkit-scrollbar-track {
-  background: var(--background-color);
-  border-radius: 16px;
-}
-
-.box::-webkit-scrollbar-thumb {
-  background-color: var(--primary-color);
-  border-radius: 16px;
-  border: 2px solid var(--background-color);
-  opacity: 0.3;
-  transition: background-color 0.3s, opacity 0.3s;
-}
-
-.box::-webkit-scrollbar-thumb:hover,
-.box::-webkit-scrollbar-thumb:active {
-  background-color: var(--primary-color-hover);
-  opacity: 1;
-}
-
-.box::-webkit-scrollbar-corner {
-  background: var(--background-color);
-}
-
-/* عند مرور الماوس على .box سكروول بار يصبح أوضح */
-.box:hover::-webkit-scrollbar-thumb {
-  opacity: 0.7;
 }
 
 .center-content {

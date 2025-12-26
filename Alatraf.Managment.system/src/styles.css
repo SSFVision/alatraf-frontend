@@ -17,6 +17,43 @@
   box-sizing: border-box;
   font-family: "Cairo", sans-serif;
   direction: rtl;
+
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-color) var(--background-color);
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background: transparent;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--background-color);
+  border-radius: 16px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--primary-color);
+  border-radius: 16px;
+  border: 2px solid var(--background-color);
+  opacity: 0.3;
+  transition: background-color 0.3s, opacity 0.3s;
+}
+
+*::-webkit-scrollbar-thumb:hover,
+*::-webkit-scrollbar-thumb:active {
+  background-color: var(--primary-color-hover);
+  opacity: 1;
+}
+
+*::-webkit-scrollbar-corner {
+  background: var(--background-color);
+}
+
+/* عند مرور الماوس على .box سكروول بار يصبح أوضح */
+*:hover::-webkit-scrollbar-thumb {
+  opacity: 0.7;
 }
 
 body {
