@@ -9,11 +9,11 @@
   flex-direction: column;
   gap: 10px;
   overflow: hidden;
-  /* height: fit-content; */
+  height: auto !important;
+  max-height: none !important;
+  min-height: none !important;
   box-sizing: border-box;
-}
 
-.box {
   scrollbar-width: thin;
   scrollbar-color: var(--primary-color) var(--background-color);
 }
@@ -83,7 +83,6 @@
   transform: translateY(-50%);
   cursor: pointer;
 }
-
 
 .loader {
   width: 48px;
