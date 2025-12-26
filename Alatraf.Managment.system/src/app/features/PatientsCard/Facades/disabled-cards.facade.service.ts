@@ -124,9 +124,7 @@ export class DisabledCardsFacade
   }
 
   openAddPage(): void {
-    this.navCard.goToPatientSelectPage({
-      queryParams: { target: 'disabled-card' },
-    });
+    this.navCard.goToPatientsSelectForDisabledCard();
 
   }
 

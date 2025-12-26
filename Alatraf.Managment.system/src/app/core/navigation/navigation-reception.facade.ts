@@ -20,6 +20,9 @@ export class NavigationReceptionFacade {
   goToPatientsView(id: number | string, extras?: NavigationExtras): void {
     this.go(AppRoutes.reception.patients.view(id), extras);
   }
+    goToPatientsSelect(extras?: NavigationExtras): void {
+    this.go(AppRoutes.reception.patients.select, extras);
+  }
 
   goToTicketsCreate(
     patientId: number | string,
@@ -30,6 +33,12 @@ export class NavigationReceptionFacade {
 
   goToTicketsPrint(ticketId: number | string, extras?: NavigationExtras): void {
     this.go(AppRoutes.reception.tickets.print(ticketId), extras)
+  }
+goToPatientsAddStandalone(extras?: NavigationExtras): void {
+  this.go('/reception/patients-add', extras);
+}
+  goToPatientsEditStandalone(id: number | string, extras?: NavigationExtras): void {
+    this.go(`/reception/patients-edit/${id}`, extras);
   }
 
   private go(path: string | any[], extras?: NavigationExtras): void {

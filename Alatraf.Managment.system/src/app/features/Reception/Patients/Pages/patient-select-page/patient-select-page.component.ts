@@ -30,10 +30,12 @@ export class PatientSelectPageComponent implements OnInit {
   skeletonRows = Array.from({ length: 5 });
 
   ngOnInit(): void {
-    const targetParam = this.route.snapshot.queryParamMap.get('target');
-    if (targetParam === 'disabled-card') {
-      this.target.set('disabled-card');
-    }
+    this.route.queryParamMap.subscribe((params) => {
+      const targetParam = params.get('target');
+      if (targetParam === 'disabled-card') {
+        this.target.set('disabled-card');
+      }
+    });
 
     this.patientsFacade.loadPatients();
   }
@@ -47,12 +49,12 @@ export class PatientSelectPageComponent implements OnInit {
       this.cardsNav.goToCreateDisabledCardPage(patient.patientId);
     }
   }
-
   onAddPatient(): void {
-    this.receptionNav.goToPatientsAdd({
-      // queryParams: { redirect: 'select-patient' },
+    this.receptionNav.goToPatientsAddStandalone({
+      queryParams: { redirect: 'select-patient' ,
+              target: this.target(), 
 
-      queryParams: { redirect: this.target() },
+      },
     });
   }
 }

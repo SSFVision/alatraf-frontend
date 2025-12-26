@@ -18,6 +18,18 @@ export const ReceptionRoutes: Routes = [
       ).then((m) => m.PatientSelectPageComponent),
   },
   {
+    path: 'patients-add',
+    loadComponent: () =>
+      import('./Patients/Pages/patient-add-edit-page/patient-add-edit-page.component')
+        .then(m => m.PatientAddEditPageComponent),
+  },
+  {
+    path: 'patients-edit/:patientId',
+    loadComponent: () =>
+      import('./Patients/Pages/patient-add-edit-page/patient-add-edit-page.component')
+        .then(m => m.PatientAddEditPageComponent),
+  },
+  {
     path: 'tickets',
     loadChildren: () =>
       import('./Tickets/tickets.routes').then((m) => m.TicketsRoutes),

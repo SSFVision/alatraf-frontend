@@ -54,6 +54,12 @@ export class PatientCardsNavigationFacade {
   goToPatientSelectPage(extras?: NavigationExtras): void {
     this.go(AppRoutes.reception.patients.select, extras);
   }
+  goToPatientsSelectForDisabledCard(): void {
+  this.go(AppRoutes.reception.patients.select, {
+    queryParams: { target: 'disabled-card' },
+  });
+}
+
 
   // =========================
   // Private
