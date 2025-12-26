@@ -1,13 +1,14 @@
-@if (isLoading()) {
+@if (loadingItem()) {
   <div class="flex-center">
     <span class="loader"></span>
   </div>
   <p class="flex-center">جاري تحميل بيانات الطرف الصناعي...</p>
 } @else {
   <app-add-edit-industrial-part
-    [mode]="mode()"
+    [mode]="isEditMode() ? 'edit' : 'create'"
     [part]="part()"
     [units]="units()"
+    [saving]="saving()"
     (create)="onCreate($event)"
     (update)="onUpdate($event)"
     (delete)="onDelete($event)"
