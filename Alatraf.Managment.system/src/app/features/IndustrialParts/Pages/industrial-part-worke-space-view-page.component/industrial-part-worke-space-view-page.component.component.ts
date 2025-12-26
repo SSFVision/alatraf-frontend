@@ -120,9 +120,10 @@ export class IndustrialPartWorkeSpaceViewPageComponentComponent
   // ----------------------------------------------------
   onCreate(dto: CreateIndustrialPartRequest): void {
     this.isLoading.set(true);
-
+console.log("Created requet : ",dto);
     this.facade.createIndustrialPart(dto).subscribe((res) => {
       if (res.success && res.data) {
+  
         this.mode.set('edit');
         this.currentId.set(res.data.industrialPartId);
         this.facade.enterEditMode(res.data);

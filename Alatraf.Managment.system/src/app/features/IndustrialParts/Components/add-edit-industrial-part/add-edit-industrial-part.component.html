@@ -43,7 +43,6 @@
           formControlName="unitId"
           [compareWith]="compareUnitById"
         >
-          <option [ngValue]="null">-- اختر وحدة --</option>
 
           @for (unit of units; track unit.id) {
             <option [ngValue]="unit.id">{{ unit.name }}</option>
@@ -74,7 +73,7 @@
   <button type="button" class="btn secondary" (click)="addUnit()">+ إضافة وحدة</button>
 
   <div class="flex-center gap-16">
-    <button class="btn primary" type="submit" [disabled]="!canSubmit()">
+    <button class="btn primary" type="submit" >
       {{ mode === "edit" ? "تعديل" : "إضافة" }}
     </button>
 
