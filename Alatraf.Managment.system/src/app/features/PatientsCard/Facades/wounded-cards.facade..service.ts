@@ -118,9 +118,11 @@ export class WoundedCardsFacade
   }
 
   openWorkspace(cardId: number): void {
-   this.navCard.goToEditWoundedCardPage(cardId)
+    this.navCard.goToEditWoundedCardPage(cardId);
   }
-
+  openAddPage(): void {
+    this.navCard.goToCreateWoundedCardPage();
+  }
   // ---------------------------------------------
   // MAPPERS
   // ---------------------------------------------
@@ -128,11 +130,10 @@ export class WoundedCardsFacade
     return {
       id: dto.woundedCardId,
       cardNumber: dto.cardNumber,
-      expirationDate: dto.expirationDate,
+      disabilityType: dto.expirationDate,
       fullName: dto.fullName,
       isExpired: dto.isExpired,
-          cardTypeLabel: PatientCardType.Wounded,
-
+      cardTypeLabel: PatientCardType.Wounded,
     };
   }
 }
