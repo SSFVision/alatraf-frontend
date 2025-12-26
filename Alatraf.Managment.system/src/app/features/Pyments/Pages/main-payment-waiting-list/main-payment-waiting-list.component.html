@@ -1,4 +1,4 @@
-<main class="padding-32 row gap-16 padding-24">
+<div class="padding-32 row gap-16 padding-24">
   <!-- ===================================================== -->
   <!-- Waiting List -->
   <!-- ===================================================== -->
@@ -16,133 +16,83 @@
 
     <!-- Search -->
     <div class="search-box">
-      <img
-        src="assets/icons/search-icon.svg"
-        class="search-icon"
-        alt="search"
-      />
-      <input
-        type="text"
-        placeholder="بحث: اسم المريض أو الرقم"
-        #searchBox
-        (input)="onSearch(searchBox.value)"
-      />
+      <img src="assets/icons/search-icon.svg" class="search-icon" alt="search" />
+      <input type="text" placeholder="بحث: اسم المريض أو الرقم" #searchBox (input)="onSearch(searchBox.value)" />
     </div>
 
     <!-- Filters -->
     <div class="filters-container">
-      <button
-        class="filter-btn"
-        (click)="selectFilter(null)"
-        [class.active]="currentPaymentReference() === null"
-      >
+      <button class="filter-btn" (click)="selectFilter(null)" [class.active]="currentPaymentReference() === null">
         الكل
       </button>
 
-      <button
-        class="filter-btn"
-        (click)="selectFilter(PaymentReference.TherapyCardNew)"
-        [class.active]="
+      <button class="filter-btn" (click)="selectFilter(PaymentReference.TherapyCardNew)" [class.active]="
           currentPaymentReference() === PaymentReference.TherapyCardNew
-        "
-      >
+        ">
         علاج طبيعي
       </button>
 
-      <button
-        class="filter-btn"
-        (click)="selectFilter(PaymentReference.TherapyCardRenew)"
-        [class.active]="
+      <button class="filter-btn" (click)="selectFilter(PaymentReference.TherapyCardRenew)" [class.active]="
           currentPaymentReference() === PaymentReference.TherapyCardRenew
-        "
-      >
+        ">
         تجديد كرت علاج
       </button>
 
-      <button
-        class="filter-btn"
-        (click)="selectFilter(PaymentReference.TherapyCardDamagedReplacement)"
-        [class.active]="
+      <button class="filter-btn" (click)="selectFilter(PaymentReference.TherapyCardDamagedReplacement)" [class.active]="
           currentPaymentReference() ===
           PaymentReference.TherapyCardDamagedReplacement
-        "
-      >
+        ">
         بدل فاقد
       </button>
 
-      <button
-        class="filter-btn"
-        (click)="selectFilter(PaymentReference.Repair)"
-        [class.active]="currentPaymentReference() === PaymentReference.Repair"
-      >
+      <button class="filter-btn" (click)="selectFilter(PaymentReference.Repair)"
+        [class.active]="currentPaymentReference() === PaymentReference.Repair">
         اصلاحات فنية
       </button>
 
-      <button
-        class="filter-btn"
-        (click)="selectFilter(PaymentReference.Sales)"
-        [class.active]="currentPaymentReference() === PaymentReference.Sales"
-      >
+      <button class="filter-btn" (click)="selectFilter(PaymentReference.Sales)"
+        [class.active]="currentPaymentReference() === PaymentReference.Sales">
         المبيعات
       </button>
     </div>
 
-   <!-- Payment Status -->
-<div class="row gap-16 align-center padding-8">
-  <!-- New -->
-  <label class="radio-container">
-    <input
-      type="radio"
-      name="paymentStatus"
-      [checked]="isCompleted() === false"
-      (change)="setPaymentStatus(false)"
-    />
-    <span class="radio-checkmark"></span>
-    <span class="label-md">جديد</span>
-  </label>
+    <!-- Payment Status -->
+    <div class="row gap-16 align-center padding-8">
+      <!-- New -->
+      <label class="radio-container">
+        <input type="radio" name="paymentStatus" [checked]="isCompleted() === false"
+          (change)="setPaymentStatus(false)" />
+        <span class="radio-checkmark"></span>
+        <span class="label-md">جديد</span>
+      </label>
 
-  <!-- Completed -->
-  <label class="radio-container">
-    <input
-      type="radio"
-      name="paymentStatus"
-      [checked]="isCompleted() === true"
-      (change)="setPaymentStatus(true)"
-    />
-    <span class="radio-checkmark"></span>
-    <span class="label-md">مكتملة</span>
-  </label>
-</div>
+      <!-- Completed -->
+      <label class="radio-container">
+        <input type="radio" name="paymentStatus" [checked]="isCompleted() === true" (change)="setPaymentStatus(true)" />
+        <span class="radio-checkmark"></span>
+        <span class="label-md">مكتملة</span>
+      </label>
+    </div>
 
 
     <!-- Queue -->
-    <app-general-waiting-patient-queue
-      class="max-hight-712 column gap-16"
-      [patients]="patientsVM()"
-      [loading]="loading()"
-      (select)="select($event)"
-    >
+    <app-general-waiting-patient-queue class="max-hight-712 column gap-16" [patients]="patientsVM()"
+      [loading]="loading()" (select)="select($event)">
     </app-general-waiting-patient-queue>
   </div>
 
   <!-- ===================================================== -->
   <!-- Details / Empty State -->
   <!-- ===================================================== -->
- 
+
   @if (selectedPaymentId()) {
   <div class="box max-hight-800 gap-16">
     <router-outlet></router-outlet>
   </div>
   } @else {
   <div class="box max-hight-800 gap-16 flex-center">
-    <img
-      src="assets/images/bro.svg"
-      alt="مرحبا"
-      width="496.75"
-      height="512"
-      class="padding-32"
-    />
+    <img src="assets/images/bro.svg" alt="مرحبا" width="496.75" height="512" class="padding-32" />
     <p class="title-md primary-color-50">مرحباً بك</p>
   </div>
   }
-</main>
+</div>
