@@ -1,26 +1,28 @@
 @if (isLoading()) {
-<div class="flex-center">
-  <span class="loader"></span>
-</div>
-<p class="flex-center">جاري تحميل بيانات البطاقة...</p>
+  <div class="flex-center">
+    <span class="loader"></span>
+  </div>
+  <p class="flex-center">جاري تحميل بيانات البطاقة...</p>
 } @else {
-  
-  <h2 class="title-lg">
-بطاقة المريض
-</h2>
 
-  
-  @if (mode() === 'edit' && patientSummary()) {
-<app-patient-summary-header [patient]="patientSummary()!" />
-}
+  @if (!canRenderForm()) {
+    <p class="error">يجب اختيار مريض أولاً</p>
+  } @else {
 
-<app-disabled-card-form
-  [patientId]="5"
-  [mode]="mode()"
-  [card]="card()"
-  [saving]="saving()"
-  (create)="onCreate($event)"
-  (update)="onUpdate($event)"
-  (delete)="onDelete($event)"
-/>
+    @if (patientSummary()) {
+      <app-patient-summary-header
+        [patient]="patientSummary()!"
+      />
+    }
+
+    <app-disabled-card-form
+      [patientId]="patientId()!"
+      [mode]="mode()"
+      [card]="card()"
+      [saving]="saving()"
+      (create)="onCreate($event)"
+      (update)="onUpdate($event)"
+      (delete)="onDelete($event)"
+    />
+  }
 }

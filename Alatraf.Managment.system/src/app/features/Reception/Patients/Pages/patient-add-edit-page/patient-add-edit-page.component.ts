@@ -7,6 +7,7 @@ import { PatientsFacade } from '../../Services/patients.facade.service';
 import { UiLockService } from '../../../../../core/services/ui-lock.service';
 import { CreatePatientRequest } from '../../models/create-patient.request';
 import { UpdatePatientRequest } from '../../models/update-patient.request';
+import { ActivatedRoute, Router } from '@angular/router';
 
 // NEW DTOs
 
@@ -58,27 +59,29 @@ export class PatientAddEditPageComponent {
         });
     } else {
       // ===================== CREATE =====================
-      this.facade.createPatient(dto as CreatePatientRequest).subscribe((result) => {
-        if (result.success && !result.validationErrors) {
-          const newPatientId = this.facade.createdPatientId();
+      this.facade
+        .createPatient(dto as CreatePatientRequest)
+        .subscribe((result) => {
+          if (result.success && !result.validationErrors) {
+            const newPatientId = this.facade.createdPatientId();
 
-          this.dialogService
-            .confirmSuccess(ArabicSuccessMessages.saved)
-            .subscribe((confirm) => {
-              if (confirm && newPatientId) {
-                this.navReception.goToTicketsCreate(newPatientId);
-              }
-            });
+            this.dialogService
+              .confirmSuccess(ArabicSuccessMessages.saved)
+              .subscribe((confirm) => {
+                if (confirm && newPatientId) {
+                  this.navReception.goToTicketsCreate(newPatientId);
+                }
+              });
 
-          this.closeModal();
-          return;
-        }
+            this.closeModal();
+            return;
+          }
 
-        // Inline validation
-        if (result.validationErrors) {
-          this.facade.formValidationErrors.set(result.validationErrors);
-        }
-      });
+          // Inline validation
+          if (result.validationErrors) {
+            this.facade.formValidationErrors.set(result.validationErrors);
+          }
+        });
     }
   }
 

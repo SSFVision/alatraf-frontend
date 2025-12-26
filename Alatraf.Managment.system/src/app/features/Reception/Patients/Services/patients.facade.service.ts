@@ -1,10 +1,10 @@
+import { ApiResult } from './../../../../core/models/ApiResult';
 import { Injectable, inject, signal } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
 
 import { PatientService } from '../Services/patient.service';
 
-import { ApiResult } from '../../../../core/models/ApiResult';
 import { PaginatedList } from '../../../../core/models/Shared/paginated-list.model';
 import { PageRequest } from '../../../../core/models/Shared/page-request.model';
 
@@ -246,4 +246,32 @@ export class PatientsFacade extends BaseFacade {
     }
     this.toast.error('حدث خطأ أثناء تنفيذ عملية البحث.');
   }
+// ---------------------------------------------
+// SELECTED PATIENT
+// ---------------------------------------------
+
+private _loadingPatient = signal<boolean>(false);
+loadingPatient = this._loadingPatient.asReadonly();
+
+  loadPatientById(patientId: number): void {
+  this._selectedPatient.set(null);
+  this._loadingPatient.set(true);
+
+  this.patientService
+    .getPatientById(patientId)
+    .pipe(
+      tap((res) => {
+        if (res.isSuccess && res.data) {
+          this._selectedPatient.set(res.data);
+        } else {
+          this.toast.error('لم يتم العثور على بيانات المريض');
+          this._selectedPatient.set(null);
+        }
+
+        this._loadingPatient.set(false);
+      })
+    )
+    .subscribe();
+}
+
 }

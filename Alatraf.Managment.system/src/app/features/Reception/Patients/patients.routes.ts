@@ -30,4 +30,5 @@ export const PatientsRoutes: Routes = [
         '../Patients/Pages/patient-add-edit-page/patient-add-edit-page.component'
       ).then((m) => m.PatientAddEditPageComponent),
   },
+ 
 ];

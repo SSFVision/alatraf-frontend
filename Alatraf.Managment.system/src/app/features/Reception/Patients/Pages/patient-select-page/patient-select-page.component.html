@@ -1,0 +1,75 @@
+<main class="padding-80 column gap-32">
+  <!-- Header -->
+  <div class="row space-between">
+    <h1 class="title-lg">اختيار مريض</h1>
+
+    <button class="btn primary big-btn" (click)="onAddPatient()">
+      إضافة مريض
+    </button>
+  </div>
+
+  <!-- Search -->
+  <div class="search-box">
+    <img src="assets/icons/search-icon.svg" class="search-icon" alt="search" />
+    <input
+      #searchBox
+      type="text"
+      placeholder="بحث: اسم المريض أو الرقم"
+      (input)="onSearch(searchBox.value)"
+    />
+  </div>
+
+  <!-- Table -->
+  <div class="box">
+    <table>
+      <thead>
+        <tr>
+          <th class="title-sm">رقم المريض الطبي</th>
+          <th class="title-sm">رقم الهاتف</th>
+          <th class="th-expand title-sm">اسم المريض</th>
+          <th class="buttons"></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <!-- Loading -->
+        @if (loading()) { @for (i of skeletonRows; track i) {
+        <tr>
+          <td><app-skeleton width="70%" height="16px"></app-skeleton></td>
+          <td><app-skeleton width="70%" height="16px"></app-skeleton></td>
+          <td><app-skeleton width="90%" height="16px"></app-skeleton></td>
+          <td>
+            <app-skeleton width="60px" height="24px"></app-skeleton>
+          </td>
+        </tr>
+        } } @else { @if (patients().length === 0) {
+        <tr>
+          <td colspan="4" class="center-content padding-32">
+            لا يوجد مرضى مطابقون
+          </td>
+        </tr>
+        } @for (patient of patients(); track patient.patientId) {
+        <tr class="hover-row" (click)="selectPatient(patient)">
+          <td class="body-md">
+            {{ patient.personDto?.autoRegistrationNumber }}
+          </td>
+          <td class="body-md">
+            {{ patient.personDto?.phone }}
+          </td>
+          <td class="body-md">
+            {{ patient.personDto?.fullname }}
+          </td>
+          <td class="row gap-16">
+            <button
+              class="btn secondary small-btn"
+              (click)="selectPatient(patient); $event.stopPropagation()"
+            >
+              اختيار
+            </button>
+          </td>
+        </tr>
+        } }
+      </tbody>
+    </table>
+  </div>
+</main>

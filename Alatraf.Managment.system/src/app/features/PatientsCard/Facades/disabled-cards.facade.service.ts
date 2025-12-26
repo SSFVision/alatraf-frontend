@@ -15,7 +15,10 @@ import { AddDisabledCardRequest } from '../models/disabled-Models/add-disabled-c
 import { UpdateDisabledCardRequest } from '../models/disabled-Models/update-disabled-card.request';
 
 @Injectable({ providedIn: 'root' })
-export class DisabledCardsFacade extends BaseFacade implements PatientCardsFacade {
+export class DisabledCardsFacade
+  extends BaseFacade
+  implements PatientCardsFacade
+{
   private service = inject(DisabledCardsService);
   private navCard = inject(PatientCardsNavigationFacade);
 
@@ -40,7 +43,6 @@ export class DisabledCardsFacade extends BaseFacade implements PatientCardsFacad
   private _isLoading = signal<boolean>(false); // list loading
   isLoading = this._isLoading.asReadonly();
 
-  
   private _loadingItem = signal<boolean>(false);
   loadingItem = this._loadingItem.asReadonly();
 
@@ -65,7 +67,9 @@ export class DisabledCardsFacade extends BaseFacade implements PatientCardsFacad
             if (!res.isSuccess) this.toast.error('تعذر تحميل كروت ذوي الإعاقة');
           }),
           map((res) =>
-            res.isSuccess && res.data?.items ? res.data.items.map(this.toVm) : []
+            res.isSuccess && res.data?.items
+              ? res.data.items.map(this.toVm)
+              : []
           )
         ),
     null,
@@ -114,15 +118,16 @@ export class DisabledCardsFacade extends BaseFacade implements PatientCardsFacad
     this.load();
   }
 
-  // =========================
-  // NAVIGATION
-  // =========================
+
   openWorkspace(cardId: number): void {
     this.navCard.goToEditDisabledCardPage(cardId);
   }
 
   openAddPage(): void {
-    this.navCard.goToCreateDisabledCardPage();
+    this.navCard.goToPatientSelectPage({
+      queryParams: { target: 'disabled-card' },
+    });
+
   }
 
   // =========================
@@ -149,23 +154,25 @@ export class DisabledCardsFacade extends BaseFacade implements PatientCardsFacad
     return this.handleCreateOrUpdate(this.service.createDisabledCard(dto), {
       successMessage: 'تم إنشاء كرت ذوي الإعاقة بنجاح',
       defaultErrorMessage: 'فشل إنشاء الكرت. يرجى المحاولة لاحقاً.',
-    }).pipe(
-      tap((res) => {
-        if (res.success && res.data) {
-          this.formValidationErrors.set({});
+    })
+      .pipe(
+        tap((res) => {
+          if (res.success && res.data) {
+            this.formValidationErrors.set({});
 
-          this.addDisabledCardToList(res.data);
+            this.addDisabledCardToList(res.data);
 
-          this.enterEditMode(res.data);
+            this.enterEditMode(res.data);
 
-          // ✅ IMPORTANT: sync URL => go to edit/:id
-          this.navCard.goToEditDisabledCardPage(res.data.disabledCardId);
-        } else if (res.validationErrors) {
-          this.formValidationErrors.set(res.validationErrors);
-        }
-      }),
-      finalize(() => this._saving.set(false))
-    ).subscribe();
+            // ✅ IMPORTANT: sync URL => go to edit/:id
+            this.navCard.goToEditDisabledCardPage(res.data.disabledCardId);
+          } else if (res.validationErrors) {
+            this.formValidationErrors.set(res.validationErrors);
+          }
+        }),
+        finalize(() => this._saving.set(false))
+      )
+      .subscribe();
   }
 
   // =========================
@@ -250,9 +257,6 @@ export class DisabledCardsFacade extends BaseFacade implements PatientCardsFacad
       if (success) {
         // ✅ real-time list update
         this.removeDisabledCardFromList(card.id);
-
-        // ✅ navigate to create ONLY after confirm+success
-        this.navCard.goToCreateDisabledCardPage();
       }
     });
   }

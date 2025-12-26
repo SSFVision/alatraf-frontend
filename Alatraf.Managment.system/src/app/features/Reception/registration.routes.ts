@@ -11,6 +11,13 @@ export const ReceptionRoutes: Routes = [
     children: PatientsRoutes,
   },
   {
+    path: 'patients/select',
+    loadComponent: () =>
+      import(
+        './Patients/Pages/patient-select-page/patient-select-page.component'
+      ).then((m) => m.PatientSelectPageComponent),
+  },
+  {
     path: 'tickets',
     loadChildren: () =>
       import('./Tickets/tickets.routes').then((m) => m.TicketsRoutes),

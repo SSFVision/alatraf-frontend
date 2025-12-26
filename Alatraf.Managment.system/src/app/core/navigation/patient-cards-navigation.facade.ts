@@ -28,13 +28,14 @@ export class PatientCardsNavigationFacade {
     this.go(AppRoutes.patientCards.wounded.view(woundedCardId), extras);
   }
 
-
   goToDisabledCardsMainPage(extras?: NavigationExtras): void {
     this.go(AppRoutes.patientCards.disabled.root, extras);
   }
 
-  goToCreateDisabledCardPage(extras?: NavigationExtras): void {
-    this.go(AppRoutes.patientCards.disabled.create, extras);
+  goToCreateDisabledCardPage(patientId: number): void {
+    this.go(AppRoutes.patientCards.disabled.create, {
+      queryParams: { patientId },
+    });
   }
 
   goToEditDisabledCardPage(
@@ -49,6 +50,9 @@ export class PatientCardsNavigationFacade {
     extras?: NavigationExtras
   ): void {
     this.go(AppRoutes.patientCards.disabled.view(disabledCardId), extras);
+  }
+  goToPatientSelectPage(extras?: NavigationExtras): void {
+    this.go(AppRoutes.reception.patients.select, extras);
   }
 
   // =========================
