@@ -2,22 +2,32 @@
   {{ mode === "edit" ? "تعديل طرف صناعي" : "إضافة طرف صناعي" }}
 </h1>
 
-<form class="padding-LR-24 column gap-16" [formGroup]="form" (ngSubmit)="submit()">
+<form class="padding-LR-24 column gap-16" [formGroup]="form">
   <div class="width-100">
     <p class="title-md">بيانات الطرف</p>
     <span class="home-line"></span>
   </div>
 
   @if (mode === "edit") {
-    <div class="row flex-center">
-      <label class="label-lg">رقم الطرف</label>
-      <input class="label-lg" type="text" [value]="part?.industrialPartId" disabled />
-    </div>
+  <div class="row flex-center">
+    <label class="label-lg">رقم الطرف</label>
+    <input
+      class="label-lg"
+      type="text"
+      [value]="part?.industrialPartId"
+      disabled
+    />
+  </div>
   }
 
   <div class="row flex-center">
     <label class="label-lg">الاسم</label>
-    <input class="label-lg" type="text" formControlName="name" placeholder="اسم الطرف الصناعي" />
+    <input
+      class="label-lg"
+      type="text"
+      formControlName="name"
+      placeholder="اسم الطرف الصناعي"
+    />
   </div>
 
   <div class="row flex-center width-100">
@@ -36,50 +46,77 @@
   </div>
 
   <div formArrayName="units" class="column gap-12">
-    @for (unitCtrl of unitsArray.controls; track i; let i = $index) {
-      <div class="row flex-center gap-8 width-100" [formGroupName]="i">
-        <select
-          class="label-lg"
-          formControlName="unitId"
-          [compareWith]="compareUnitById"
-        >
-          <option [ngValue]="null">-- اختر وحدة --</option>
+    @for (unitCtrl of unitsArray.controls; let i = $index; track i) {
+    <div class="row flex-center gap-8 width-100" [formGroupName]="i">
+      <select
+        class="label-lg"
+        formControlName="unitId"
+        [compareWith]="compareUnitById"
+      >
+        <option [ngValue]="null">-- اختر وحدة --</option>
+        @for (unit of units; track unit.id) {
+        <option [ngValue]="unit.id">{{ unit.name }}</option>
+        }
+      </select>
 
-          @for (unit of units; track unit.id) {
-            <option [ngValue]="unit.id">{{ unit.name }}</option>
-          }
-        </select>
+      <input
+        class="label-lg"
+        type="number"
+        min="0"
+        step="0.01"
+        formControlName="price"
+        placeholder="السعر"
+      />
 
-        <input
-          class="label-lg"
-          type="number"
-          min="0"
-          step="0.01"
-          formControlName="price"
-          placeholder="السعر"
-        />
-
-        <button
-          type="button"
-          class="btn danger"
-          (click)="removeUnit(i)"
-          [disabled]="unitsArray.length === 1"
-        >
-          حذف
-        </button>
-      </div>
+      <button
+        type="button"
+        class="btn danger"
+        (click)="removeUnit(i)"
+        [disabled]="unitsArray.length === 1 || saving"
+      >
+        حذف
+      </button>
+    </div>
     }
   </div>
 
-  <button type="button" class="btn secondary" (click)="addUnit()">+ إضافة وحدة</button>
+  <button
+    type="button"
+    class="btn secondary"
+    (click)="addUnit()"
+    [disabled]="saving"
+  >
+    + إضافة وحدة
+  </button>
 
   <div class="flex-center gap-16">
-    <button class="btn primary" type="submit" [disabled]="!canSubmit()">
-      {{ mode === "edit" ? "تعديل" : "إضافة" }}
+    @if (mode === "create") {
+    <button
+      class="btn primary"
+      type="button"
+      (click)="submitCreate()"
+      [disabled]="!canCreate"
+    >
+      إضافة
+    </button>
+    } @else {
+    <button
+      class="btn primary"
+      type="button"
+      (click)="submitUpdate()"
+      [disabled]="!canUpdate"
+    >
+      تعديل
     </button>
 
-    @if (canDelete()) {
-      <button class="btn danger" type="button" (click)="onDelete()">حذف</button>
+    <button
+      class="btn danger"
+      type="button"
+      (click)="onDelete()"
+      [disabled]="!canDelete"
+    >
+      حذف
+    </button>
     }
   </div>
 </form>
