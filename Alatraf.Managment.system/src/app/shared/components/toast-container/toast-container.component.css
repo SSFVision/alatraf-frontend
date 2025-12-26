@@ -83,3 +83,7 @@
   background-color: var(--card-color);
   /* your dark navy */
 }
+
+.title-sm {
+  margin: auto 0px;
+}
