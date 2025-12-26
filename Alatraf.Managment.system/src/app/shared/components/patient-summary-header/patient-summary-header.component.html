@@ -1,0 +1,48 @@
+<div class="width-100">
+  <p class="title-md">بيانات المريض</p>
+  <span class="home-line"></span>
+</div>
+
+<div class="row flex-center margin_top">
+  <label class="label-lg">الاسم</label>
+  <input
+    class="label-lg"
+    type="text"
+    [value]="patient.fullName"
+    disabled
+    readonly
+  />
+</div>
+
+<div class="row flex-center margin_top">
+  <label class="label-lg">رقم الهاتف</label>
+  <input
+    class="label-lg"
+    type="text"
+    [value]="patient.phoneNumber ?? '-'"
+    disabled
+    readonly
+  />
+
+  <label class="label-lg">الجنس</label>
+  <input
+    class="label-lg"
+    type="text"
+    [value]="patient.gender ?? '-'"
+    disabled
+    readonly
+  />
+
+  <label class="label-lg">العمر</label>
+  <input
+    class="label-lg"
+    type="text"
+    [value]="patient.age != null ? patient.age + ' سنة' : '-'"
+    disabled
+    readonly
+  />
+</div>
+
+<div class="width-100">
+  <span class="home-line"></span>
+</div>

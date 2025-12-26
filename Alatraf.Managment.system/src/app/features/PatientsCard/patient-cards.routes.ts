@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { WorkspaceWelcomeComponent } from '../../shared/components/workspace-welcome/workspace-welcome.component';
 
 export const PATIENT_CARDS_ROUTES: Routes = [
   // {
@@ -24,6 +25,16 @@ export const PATIENT_CARDS_ROUTES: Routes = [
         (c) => c.DisabledCardsPageComponent
       ),
     children: [
+      {
+        path: '',
+        component: WorkspaceWelcomeComponent,
+        data: {
+          title: 'مرحباً بك في بطاقات ذوي الإعاقة',
+          subtitle: 'اختر بطاقة من القائمة أو أضف بطاقة جديدة',
+          
+        },
+      },
+
       {
         path: 'create',
         loadComponent: () =>

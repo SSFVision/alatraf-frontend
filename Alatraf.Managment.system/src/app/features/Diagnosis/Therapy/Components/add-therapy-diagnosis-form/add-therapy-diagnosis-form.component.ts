@@ -99,7 +99,7 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
       // programEndDate: [{ value: '', disabled: true }], // ⬅️ read-only
 
       numberOfSessions: [
-        { value: null, disabled: true }, // ⬅️ disabled initially
+        { value: null }, // ⬅️ disabled initially
         Validators.required,
       ],
 

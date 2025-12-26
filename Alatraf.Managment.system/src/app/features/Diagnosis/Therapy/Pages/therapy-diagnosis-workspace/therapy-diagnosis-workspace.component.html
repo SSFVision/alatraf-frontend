@@ -50,9 +50,12 @@
   (submitForm)="saveTherapyDiagnosis($event)"
 ></app-add-therapy-diagnosis-form>
 
-} @if (viewMode() === 'history') {
+} 
+@if (viewMode() === 'history') {
 <app-previous-therapy-card-diagnosis
   [items]="patientTherapyDiagnoisis()"
   (viewDetails)="onViewCard($event)"
 ></app-previous-therapy-card-diagnosis>
-} }
+} 
+
+}

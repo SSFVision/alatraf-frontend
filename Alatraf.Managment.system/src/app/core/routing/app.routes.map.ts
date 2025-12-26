@@ -11,6 +11,7 @@ export const AppRoutes = {
       root: 'reception/patients',
 
       add: 'reception/patients/add',
+      select: 'reception/patients/select',
 
       edit: (id: number | string) => `reception/patients/edit/${id}`,
 

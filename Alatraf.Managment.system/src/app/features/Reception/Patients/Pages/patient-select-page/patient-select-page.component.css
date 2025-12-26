@@ -1,0 +1,9 @@
+.hover-row {
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.hover-row:hover {
+  background-color: #f3f3f3; /* light gray background */
+  transform: scale(1.01); /* slight zoom */
+}
