@@ -2,93 +2,136 @@ import {
   Component,
   EventEmitter,
   Input,
-  Output,
   OnChanges,
+  Output,
   SimpleChanges,
+  inject,
+  signal,
 } from '@angular/core';
 import {
   FormBuilder,
-  FormGroup,
-  Validators,
   ReactiveFormsModule,
+  Validators
 } from '@angular/forms';
-import { DisabledCardDto } from '../../models/disabled-Models/disabled-card.dto';
 import { AddDisabledCardRequest } from '../../models/disabled-Models/add-disabled-card.request';
+import { DisabledCardDto } from '../../models/disabled-Models/disabled-card.dto';
 import { UpdateDisabledCardRequest } from '../../models/disabled-Models/update-disabled-card.request';
-import { NgIf } from '@angular/common';
-
+type DisabledCardFormMode = 'create' | 'edit';
 
 @Component({
   selector: 'app-disabled-card-form',
   standalone: true,
-  imports: [ReactiveFormsModule,NgIf],
+  imports: [ReactiveFormsModule],
   templateUrl: './disabled-card-form.component.html',
   styleUrl: './disabled-card-form.component.css',
 })
 export class DisabledCardFormComponent implements OnChanges {
+  private fb = inject(FormBuilder);
+
   // -----------------------------
   // INPUTS
   // -----------------------------
-  @Input() mode: 'create' | 'edit' = 'create';
+  @Input({ required: true }) mode: DisabledCardFormMode = 'create';
   @Input() card: DisabledCardDto | null = null;
-  @Input() isSubmitting = false;
-  @Input() validationErrors: Record<string, string[]> | null = null;
+  @Input() saving = false;
+
+  @Input({ required: true }) patientId!: number;
+
+  @Output() create = new EventEmitter<AddDisabledCardRequest>();
+  @Output() update = new EventEmitter<{
+    id: number;
+    dto: UpdateDisabledCardRequest;
+  }>();
+  @Output() delete = new EventEmitter<DisabledCardDto>();
+
+  canSubmit = signal(false);
+  canDelete = () => this.mode === 'edit';
 
   // -----------------------------
-  // OUTPUTS
+  // FORM
   // -----------------------------
-  @Output() submitCreate = new EventEmitter<AddDisabledCardRequest>();
-  @Output() submitUpdate = new EventEmitter<UpdateDisabledCardRequest>();
-  @Output() delete = new EventEmitter<void>();
+  form = this.fb.group({
+    cardNumber: this.fb.nonNullable.control('', Validators.required),
+    disabilityType: this.fb.nonNullable.control('', Validators.required),
+    issueDate: this.fb.nonNullable.control('', Validators.required),
+    cardImagePath: this.fb.control<string | null>(null),
+  });
 
-
-  form: FormGroup;
-
-  constructor(private fb: FormBuilder) {
-    this.form = this.fb.group({
-      cardNumber: ['', [Validators.required, Validators.minLength(3)]],
-      disabilityType: ['', [Validators.required, Validators.minLength(3)]],
-      issueDate: ['', Validators.required],
-      cardImagePath: [null],
+  constructor() {
+    this.form.valueChanges.subscribe(() => {
+      this.canSubmit.set(this.form.valid && this.form.dirty);
     });
   }
 
- 
+  // -----------------------------
+  // INPUT CHANGES
+  // -----------------------------
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['card']) {
-      if (this.card && this.mode === 'edit') {
-        this.form.patchValue({
-          cardNumber: this.card.cardNumber,
-          disabilityType: this.card.disabilityType,
-          issueDate: this.card.issueDate,
-          cardImagePath: this.card.cardImagePath ?? null,
-        });
-      } else {
-        this.form.reset();
-      }
-    }
-  }
-
-
-  submit(): void {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
+    if (this.mode === 'edit') {
+      if (!this.card) return;
+      this.enterEditForm(this.card);
       return;
     }
 
-    const value = this.form.getRawValue();
-
-    if (this.mode === 'edit') {
-      this.submitUpdate.emit(value as UpdateDisabledCardRequest);
-    } else {
-      this.submitCreate.emit(value as AddDisabledCardRequest);
-    }
+    this.enterCreateForm();
   }
 
   // -----------------------------
-  // DELETE HANDLER
+  // FORM MODES
   // -----------------------------
+  private enterEditForm(card: DisabledCardDto): void {
+    this.form.setValue({
+      cardNumber: card.cardNumber,
+      disabilityType: card.disabilityType,
+      issueDate: card.issueDate,
+      cardImagePath: card.cardImagePath ?? null,
+    });
+
+    this.form.markAsPristine();
+    this.canSubmit.set(false);
+  }
+
+  private enterCreateForm(): void {
+    this.form.reset({
+      cardNumber: '',
+      disabilityType: '',
+      issueDate: '',
+      cardImagePath: null,
+    });
+
+    this.form.markAsPristine();
+    this.canSubmit.set(false);
+  }
+
+  // -----------------------------
+  // SUBMIT / DELETE
+  // -----------------------------
+  submit(): void {
+    if (!this.canSubmit() || this.saving) return;
+
+    const base = {
+      patientId: this.patientId,
+      cardNumber: this.form.controls.cardNumber.value,
+      disabilityType: this.form.controls.disabilityType.value,
+      issueDate: this.form.controls.issueDate.value,
+      cardImagePath: this.form.controls.cardImagePath.value,
+    };
+
+    if (this.mode === 'edit') {
+      if (!this.card) return;
+
+      this.update.emit({
+        id: this.card.disabledCardId,
+        dto: base,
+      });
+      return;
+    }
+
+    this.create.emit(base);
+  }
+
   onDelete(): void {
-    this.delete.emit();
+    if (!this.card || this.saving) return;
+    this.delete.emit(this.card);
   }
 }
