@@ -1,16 +1,15 @@
-// patients-cards/disabled/models/disabled-card.dto.ts
-
 export interface DisabledCardDto {
   disabledCardId: number;
   cardNumber: string;
-  expirationDate: string; // DateOnly → ISO string (yyyy-MM-dd)
-    issueDate: string;      // ✅ ADDED
+  disabilityType: string;
+  issueDate: string;
 
   patientId: number;
   fullName: string;
-  age: number;            // ✅ ADDED
-  gender: string;         // ✅ ADDED
-  phoneNumber: string;    // ✅ ADDED
+  age: number;
+  gender: string;
+  phoneNumber: string;
+  address: string;
+
   cardImagePath?: string | null;
-  isExpired: boolean;
 }

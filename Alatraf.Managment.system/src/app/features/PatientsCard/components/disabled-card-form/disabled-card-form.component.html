@@ -1,0 +1,59 @@
+<h2 class="title-lg">معلومات البطاقة</h2>
+
+<form
+  class="padding-LR-24 column gap-16"
+  [formGroup]="form"
+  (ngSubmit)="submit()"
+>
+  <div class="width-100">
+    <p class="title-md">بيانات البطاقة</p>
+    <span class="home-line"></span>
+  </div>
+
+  <div class="row flex-center">
+    <label class="label-lg"> رقم البطاقة </label>
+    <input
+      class="label-lg"
+      type="text"
+      formControlName="cardNumber"
+    />
+  </div>
+
+  <div class="row flex-center">
+    <label class="label-lg"> نوع الإعاقة </label>
+    <input
+      class="label-lg"
+      type="text"
+      formControlName="disabilityType"
+    />
+  </div>
+
+  <div class="row flex-center">
+    <label class="label-lg"> تاريخ الإصدار </label>
+    <input
+      class="label-lg"
+      type="date"
+      formControlName="issueDate"
+    />
+  </div>
+
+  <div class="row gap-16 flex-center">
+    <button
+      class="btn secondary"
+      type="submit"
+      [disabled]="isSubmitting"
+    >
+      {{ mode === 'edit' ? 'تعديل' : 'إضافة' }}
+    </button>
+
+    <button
+      class="btn danger"
+      type="button"
+      *ngIf="mode === 'edit'"
+      (click)="onDelete()"
+      [disabled]="isSubmitting"
+    >
+      حذف
+    </button>
+  </div>
+</form>

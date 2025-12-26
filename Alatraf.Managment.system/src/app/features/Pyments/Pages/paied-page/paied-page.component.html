@@ -7,6 +7,14 @@
 
 <div class="row space-between sticky">
   <h1 class="title-lg">الحسابات</h1>
+  @if(therapyPayment()?.isCompleted || repairPayment()?.isCompleted){
+  <h1 class="title-lg">✅</h1>
+
+  }
+  @else {
+      <h1 class="title-lg">😕</h1>
+
+  }
   <button class="btn primary">طباعة</button>
 </div>
 
@@ -25,7 +33,7 @@
   [totalAmount]="totalAmount()"
   [disabled]="isSaveDisabled()"
   (submitPayment)="onSubmitPayment($event)"
-  >
+>
 </app-payment-actions>
 <!-- [backendErrors]="processingFacade.formValidationErrors" -->
 

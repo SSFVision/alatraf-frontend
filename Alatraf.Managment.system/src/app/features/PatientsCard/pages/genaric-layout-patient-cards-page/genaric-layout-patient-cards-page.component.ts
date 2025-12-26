@@ -26,23 +26,21 @@ export class GenaricLayoutPatientCardsPageComponent implements OnInit {
   @Input({ required: true })
   activeType!: PatientCardType;
 
-  // cards = this.facade.items!;
-  // isloading = this.facade.isLoading!;
+ 
   ngOnInit() {
     this.facade.load();
   }
-  selectedId = signal<number>(0);
+  canRoute = signal<boolean>(false);
   onSearch(term: string): void {
     this.facade.search(term);
   }
 
   onSelectCard(cardId: number): void {
-    this.selectedId.set(cardId);
+    this.canRoute.set(true);
     this.facade.openWorkspace(cardId);
   }
   private navigation = inject(PatientCardsNavigationFacade);
 
-  // expose enum to template
   readonly cardType = PatientCardType;
   switchType(type: PatientCardType): void {
     if (type === PatientCardType.Wounded) {
@@ -52,7 +50,9 @@ export class GenaricLayoutPatientCardsPageComponent implements OnInit {
     }
   }
   onAddCard(): void {
-    // هذا سيُربط لاحقًا مع Workspace Facade
-    // حاليًا نتركه فارغ أو TODO
+    
+    this.canRoute.set(true);
+
+    this.facade.openAddPage();
   }
 }

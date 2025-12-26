@@ -1,5 +1,5 @@
 <div class="toast-container">
-  <div class="toast" *ngFor="let t of toastService.toasts()" [class.success]="t.type === 'success'"
+  <div class="toast " *ngFor="let t of toastService.toasts()" [class.success]="t.type === 'success'"
     [class.error]="t.type === 'error'" [class.warning]="t.type === 'warning'" [class.info]="t.type === 'info'">
 
     <div class="row gap-16">
@@ -16,7 +16,7 @@
       </ng-container>
 
 
-      <p class="title-sm">{{ t.message }}</p>
+      <p class="title-sm ">{{ t.message }}</p>
     </div>
   </div>
 </div>
