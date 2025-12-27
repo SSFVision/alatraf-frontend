@@ -6,7 +6,7 @@ import {
   Injectable,
   Injector,
 } from '@angular/core';
-import { firstValueFrom, Observable, Subject } from 'rxjs';
+import { firstValueFrom, Observable, Subject, EMPTY } from 'rxjs'; // ✅ NEW
 import { DialogConfig, DialogType } from './DialogConfig';
 import {
   DialogResult,
@@ -18,38 +18,52 @@ import { UiLockService } from '../../../core/services/ui-lock.service';
   providedIn: 'root',
 })
 export class DialogService {
+
+  // ===============================
+  // ✅ NEW: prevent multiple dialogs
+  // ===============================
+  private isDialogOpen = false;
+
   constructor(
     private injector: Injector,
     private appRef: ApplicationRef,
-    private envInjector: EnvironmentInjector, // Angular 14+ dynamic creation
-        private uiLock: UiLockService            // 🔥 NEW
-
+    private envInjector: EnvironmentInjector,
+    private uiLock: UiLockService
   ) {}
 
   open(config: DialogConfig): Observable<DialogResult> {
+
+    // =====================================
+    // ✅ NEW GUARD (do NOT change logic)
+    // =====================================
+    if (this.isDialogOpen) {
+      return EMPTY; // prevent reopening dialog
+    }
+    this.isDialogOpen = true;
+
     const subject = new Subject<DialogResult>();
     this.uiLock.lock();
 
-    // create component dynamically
     const compRef = createComponent(SharedDialogComponent, {
       environmentInjector: this.envInjector,
       elementInjector: this.injector,
     });
 
-    // pass config
     compRef.instance.config = config;
 
-    // subscribe to closed event
     const sub = compRef.instance.closed.subscribe((res: DialogResult) => {
       subject.next(res);
       subject.complete();
       sub.unsubscribe();
       this.destroy(compRef);
-       this.uiLock.unlock();
+      this.uiLock.unlock();
 
+      // ===============================
+      // ✅ RESET FLAG WHEN CLOSED
+      // ===============================
+      this.isDialogOpen = false;
     });
 
-    // attach to app DOM
     this.appRef.attachView(compRef.hostView);
     const domElem = (compRef.hostView as any).rootNodes[0] as HTMLElement;
     document.body.appendChild(domElem);
@@ -72,7 +86,7 @@ export class DialogService {
   }
 
   async confirmPromise(config: DialogConfig): Promise<boolean> {
-    return firstValueFrom(this.confirm(config)); // resolves to boolean
+    return firstValueFrom(this.confirm(config));
   }
 
   confirmDelete(config: DialogConfig): Observable<boolean> {
