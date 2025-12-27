@@ -1,4 +1,3 @@
-
 <form
   class="padding-LR-24 column gap-16"
   [formGroup]="form"
@@ -30,18 +29,19 @@
       type="submit"
       [disabled]="!canSubmit() || saving"
     >
-      {{ mode === 'edit' ? 'تعديل' : 'إضافة' }}
+      {{ mode === "edit" ? "تعديل" : "إضافة" }}
     </button>
 
     @if (canDelete()) {
-      <button
-        class="btn danger"
-        type="button"
-        (click)="onDelete()"
-        [disabled]="saving"
-      >
-        حذف
-      </button>
+    <button
+      class="btn danger"
+      type="button"
+      (click)="onDelete(); $event.stopPropagation()"
+      [disabled]="saving"
+      tabindex="-1"
+    >
+      حذف
+    </button>
     }
   </div>
 </form>

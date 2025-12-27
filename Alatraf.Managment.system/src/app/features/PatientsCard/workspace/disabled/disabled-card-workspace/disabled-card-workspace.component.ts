@@ -3,6 +3,7 @@ import {
   OnDestroy,
   OnInit,
   computed,
+  effect,
   inject,
   signal,
 } from '@angular/core';
@@ -61,9 +62,7 @@ export class DisabledCardWorkspaceComponent implements OnInit, OnDestroy {
     return this.mode() === 'edit' || !!this.patientId();
   });
 
-  // ---------------------------------
-  // PATIENT SUMMARY (ONE SOURCE)
-  // ---------------------------------
+
   patientSummary = computed<PatientSummaryUiDto | null>(() => {
     if (this.mode() === 'edit') {
       const card = this.card();
@@ -74,9 +73,6 @@ export class DisabledCardWorkspaceComponent implements OnInit, OnDestroy {
     return patient ? this.mapPatientToSummary(patient) : null;
   });
 
-  // ---------------------------------
-  // LIFECYCLE
-  // ---------------------------------
   ngOnInit(): void {
     this.routeSub = this.route.paramMap.subscribe((params) => {
       const idParam = params.get('disabledCardId');
@@ -102,19 +98,33 @@ export class DisabledCardWorkspaceComponent implements OnInit, OnDestroy {
       }
     });
   }
+private syncPatientIdEffect = effect(() => {
+  if (this.mode() !== 'edit') return;
+
+  const card = this.card(); // ✅ read signal correctly
+
+  if (card?.patientId) {
+    this.patientId.set(card.patientId);
+  }
+});
+
 
   ngOnDestroy(): void {
     this.routeSub?.unsubscribe();
+      this.syncPatientIdEffect.destroy();
+
   }
 
   // ---------------------------------
   // ACTIONS
   // ---------------------------------
   onCreate(dto: AddDisabledCardRequest): void {
+    console.log("Creating disabled card with DTO:", dto);
     this.facade.createDisabledCard(dto);
   }
 
   onUpdate(payload: { id: number; dto: UpdateDisabledCardRequest }): void {
+    console.log("Updating disabled card with payload:", payload);
     this.facade.updateDisabledCard(payload.id, payload.dto).subscribe();
   }
 
@@ -130,6 +140,7 @@ export class DisabledCardWorkspaceComponent implements OnInit, OnDestroy {
   // MAPPING
   // ---------------------------------
   private mapCardToPatientSummary(card: DisabledCardDto): PatientSummaryUiDto {
+
     return {
       fullName: card.fullName,
       phoneNumber: card.phoneNumber,

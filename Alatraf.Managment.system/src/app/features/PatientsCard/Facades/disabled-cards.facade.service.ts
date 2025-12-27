@@ -118,14 +118,12 @@ export class DisabledCardsFacade
     this.load();
   }
 
-
   openWorkspace(cardId: number): void {
     this.navCard.goToEditDisabledCardPage(cardId);
   }
 
   openAddPage(): void {
     this.navCard.goToPatientsSelectForDisabledCard();
-
   }
 
   // =========================
@@ -219,7 +217,6 @@ export class DisabledCardsFacade
         if (res.success) {
           this.formValidationErrors.set({});
 
-          // ✅ real-time list update
           this.updateDisabledCardInList(disabledCardId, dto);
         } else if (res.validationErrors) {
           this.formValidationErrors.set(res.validationErrors);
@@ -232,8 +229,13 @@ export class DisabledCardsFacade
   // =========================
   // DELETE
   // =========================
+  private _isConfirmingDelete = signal(false);
+
   deleteDisabledCard(card: PatientCardListItemVm): void {
     if (!card?.id) return;
+    if (this._isConfirmingDelete()) return; // ⛔ prevent re-entry
+
+    this._isConfirmingDelete.set(true);
 
     const config = {
       title: 'حذف كرت ذوي الإعاقة',
@@ -251,11 +253,8 @@ export class DisabledCardsFacade
         successMessage: 'تم حذف الكرت بنجاح',
         defaultErrorMessage: 'فشل حذف الكرت. حاول لاحقاً.',
       }
-    ).subscribe((success) => {
-      if (success) {
-        // ✅ real-time list update
-        this.removeDisabledCardFromList(card.id);
-      }
+    ).subscribe(() => {
+      this._isConfirmingDelete.set(false); // ✅ reset after close
     });
   }
 

@@ -6,8 +6,7 @@ import { PatientsFacade } from '../../Services/patients.facade.service';
 import { PatientCardsNavigationFacade } from '../../../../../core/navigation/patient-cards-navigation.facade';
 import { NavigationReceptionFacade } from '../../../../../core/navigation/navigation-reception.facade';
 import { SkeletonComponent } from '../../../../../shared/components/skeleton/skeleton.component';
-
-type TargetFeature = 'disabled-card' | null;
+import { PatientSelectTarget } from '../../../../../shared/enums/patient-select-target.enum';
 
 @Component({
   selector: 'app-patient-select-page',
@@ -22,7 +21,7 @@ export class PatientSelectPageComponent implements OnInit {
   private cardsNav = inject(PatientCardsNavigationFacade);
   private receptionNav = inject(NavigationReceptionFacade);
 
-  target = signal<TargetFeature>(null);
+  target = signal<PatientSelectTarget | null>(null);
 
   patients = this.patientsFacade.patients;
   loading = this.patientsFacade.isLoading;
@@ -31,9 +30,10 @@ export class PatientSelectPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParamMap.subscribe((params) => {
-      const targetParam = params.get('target');
-      if (targetParam === 'disabled-card') {
-        this.target.set('disabled-card');
+      const targetParam = params.get('target') as PatientSelectTarget | null;
+
+      if (Object.values(PatientSelectTarget).includes(targetParam as any)) {
+        this.target.set(targetParam);
       }
     });
 
@@ -45,16 +45,24 @@ export class PatientSelectPageComponent implements OnInit {
   }
 
   selectPatient(patient: PatientDto): void {
-    if (this.target() === 'disabled-card') {
-      this.cardsNav.goToCreateDisabledCardPage(patient.patientId);
+    switch (this.target()) {
+      case PatientSelectTarget.DisabledCard:
+        this.cardsNav.goToCreateDisabledCardPage(patient.patientId);
+        break;
+
+      case PatientSelectTarget.WoundedCard:
+        // لاحقًا
+        break;
+
+      case PatientSelectTarget.Ticket:
+        // لاحقًا
+        break;
     }
   }
+
   onAddPatient(): void {
     this.receptionNav.goToPatientsAddStandalone({
-      queryParams: { redirect: 'select-patient' ,
-              target: this.target(), 
-
-      },
+      queryParams: { redirect: 'select-patient', target: this.target() },
     });
   }
 }
