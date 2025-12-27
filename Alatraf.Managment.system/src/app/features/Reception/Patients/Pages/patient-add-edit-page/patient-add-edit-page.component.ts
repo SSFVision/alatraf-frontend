@@ -8,6 +8,7 @@ import { UiLockService } from '../../../../../core/services/ui-lock.service';
 import { CreatePatientRequest } from '../../models/create-patient.request';
 import { UpdatePatientRequest } from '../../models/update-patient.request';
 import { ActivatedRoute, Router } from '@angular/router';
+import { PatientSelectTarget } from '../../../../../shared/enums/patient-select-target.enum';
 
 // NEW DTOs
 
@@ -30,14 +31,15 @@ export class PatientAddEditPageComponent {
   // this for redirect after save
   private route = inject(ActivatedRoute);
   private redirectTarget: string | null = null;
-  private featureTarget: string | null = null;
+private featureTarget: PatientSelectTarget | null = null;
 
   ngOnInit() {
     const id = Number(this.patientId());
 
     // read redirect query param
     this.redirectTarget = this.route.snapshot.queryParamMap.get('redirect');
-    this.featureTarget = this.route.snapshot.queryParamMap.get('target');
+this.featureTarget =
+  this.route.snapshot.queryParamMap.get('target') as PatientSelectTarget | null;
 
     if (!isNaN(id)) {
       this.facade.loadPatientForEdit(id);

@@ -219,7 +219,6 @@ export class DisabledCardsFacade
         if (res.success) {
           this.formValidationErrors.set({});
 
-          // ✅ real-time list update
           this.updateDisabledCardInList(disabledCardId, dto);
         } else if (res.validationErrors) {
           this.formValidationErrors.set(res.validationErrors);
@@ -253,8 +252,8 @@ export class DisabledCardsFacade
       }
     ).subscribe((success) => {
       if (success) {
-        // ✅ real-time list update
         this.removeDisabledCardFromList(card.id);
+      
       }
     });
   }

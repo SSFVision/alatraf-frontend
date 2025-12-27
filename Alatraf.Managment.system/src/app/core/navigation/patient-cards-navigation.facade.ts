@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Router, NavigationExtras } from '@angular/router';
 import { AppRoutes } from '../../core/routing/app.routes.map';
+import { PatientSelectTarget } from '../../shared/enums/patient-select-target.enum';
 
 @Injectable({ providedIn: 'root' })
 export class PatientCardsNavigationFacade {
@@ -54,12 +55,11 @@ export class PatientCardsNavigationFacade {
   goToPatientSelectPage(extras?: NavigationExtras): void {
     this.go(AppRoutes.reception.patients.select, extras);
   }
-  goToPatientsSelectForDisabledCard(): void {
+ goToPatientsSelectForDisabledCard(): void {
   this.go(AppRoutes.reception.patients.select, {
-    queryParams: { target: 'disabled-card' },
+    queryParams: { target: PatientSelectTarget.DisabledCard },
   });
 }
-
 
   // =========================
   // Private

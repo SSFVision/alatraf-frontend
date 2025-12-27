@@ -33,7 +33,7 @@
 
       <tbody>
         <!-- Loading -->
-        @if (loading()) { @for (i of skeletonRows; track i) {
+        @if (loading()) { @for (i of skeletonRows; track i ?? $index) {
         <tr>
           <td><app-skeleton width="70%" height="16px"></app-skeleton></td>
           <td><app-skeleton width="70%" height="16px"></app-skeleton></td>
@@ -48,7 +48,7 @@
             لا يوجد مرضى مطابقون
           </td>
         </tr>
-        } @for (patient of patients(); track patient.patientId) {
+        } @for (patient of patients(); track patient.patientId ?? $index) {
         <tr class="hover-row" (click)="selectPatient(patient)">
           <td class="body-md">
             {{ patient.personDto?.autoRegistrationNumber }}
