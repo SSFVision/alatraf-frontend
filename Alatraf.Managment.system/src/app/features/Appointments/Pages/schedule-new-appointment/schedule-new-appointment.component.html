@@ -1,31 +1,59 @@
-@if (isLoading()) {
+@if (isLoadingPatient()) {
 <div class="flex-center">
   <span class="loader"></span>
 </div>
 <p class="flex-center">جاري تحميل بيانات المريض...</p>
-
 } @else {
-
 <div class="row gap-16 sticky">
   <h1 class="title-lg">جدولة المواعيد</h1>
 </div>
+
+<!-- <app-patient-summary-header [patient]="summary" /> -->
+
 <app-header-patient-info [patient]="patient()!"></app-header-patient-info>
-
-<form class="padding-LR-24 column gap-16">
-  <div class="width-100">
-    <p class="title-md">بيانات الموعد</p>
-
-    <span class="home-line"></span>
+<div class="info-card-container">
+  <div *ngIf="isLoadingLastDay()" class="info-card">
+    <p>جاري تحميل معلومات اليوم...</p>
   </div>
 
-  <div class="row flex-center">
-    <label class="label-lg"> تاريخ الموعد </label>
-    <input class="label-lg" type="date" placeholder="" />
-  </div>
+  <ng-container *ngIf="!isLoadingLastDay()">
+    <div *ngIf="lastScheduledDay()" class="info-card">
+      <div class="card-header">
+        <p class="title-md">معلومات آخر يوم مجدول</p>
+      </div>
+      <div class="card-body">
+        <div class="info-item">
+          <i class="icon-calendar"></i>
+          <!-- Use the local computed signal for the date -->
+          <span><b>التاريخ:</b> {{ lastScheduledDayDate() }}</span>
+        </div>
 
-  <div class="flex-center">
-    <button class="btn primary label-md" type="button" (click)="Schedule()">حفظ</button>
-  </div>
-</form>
+        <div class="info-item">
+          <i class="icon-day"></i>
+          <span><b>اليوم:</b> {{ lastScheduledDayDayOfWeek() }}</span>
+        </div>
 
+        <div class="info-item">
+          <i class="icon-scheduled"></i>
+          <span><b>تم جدولتها:</b> {{ lastScheduledDayCount() }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="!lastScheduledDay()" class="info-card empty-state">
+      <p>لا توجد معلومات متاحة عن آخر يوم مجدول.</p>
+    </div>
+  </ng-container>
+</div>
+
+<!-- The new information ends here -->
+
+<ng-container *ngIf="!isLoadingLastDay() && lastScheduledDay()">
+  <app-schedule-appointment-form
+    [initialDate]="lastScheduledDay()?.date"
+    [isSaving]="isScheduling()"
+    [isCompleted]="isAppointmentCreated()"
+    (save)="onScheduleSubmit($event)"
+  ></app-schedule-appointment-form>
+</ng-container>
 }
