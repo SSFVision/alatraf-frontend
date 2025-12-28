@@ -32,6 +32,7 @@ export class MainApointmentWaitingPatientComponent {
   ngOnInit() {
     this.ticketFacade.updateFilters({
       departmentId: Department.Industrial,
+      status: TicketStatus.New,
       serviceId: ServiceType.Industrial,
     });
     this.ticketFacade.loadTickets();
@@ -44,10 +45,6 @@ export class MainApointmentWaitingPatientComponent {
   }
 
   OnSelectPatientTicket(ticket: TicketDto) {
-    this.toast.success(
-      'Loading patient appointment details ...' +
-        ticket.patient?.personDto?.fullname
-    );
     this.nav.goToSchedulaPage(ticket.ticketId);
   }
 }
