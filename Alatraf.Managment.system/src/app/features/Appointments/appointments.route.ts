@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { PERMISSIONS } from '../../core/auth/models/permissions.map';
 import { PermissionGuard } from '../../core/guards/permission.guard';
+import { WorkspaceWelcomeComponent } from '../../shared/components/workspace-welcome/workspace-welcome.component';
 
 export const AppointmentRoutes: Routes = [
   {
@@ -13,9 +14,17 @@ export const AppointmentRoutes: Routes = [
       ).then((m) => m.MainApointmentWaitingPatientComponent),
     children: [
       {
-        path: 'schedule/:patientId',
+        path: '',
+        component: WorkspaceWelcomeComponent,
+        data: {
+          title: 'مرحباً بك في   قائمة الإنتظار لجدولة المواعيد',
+          subtitle: 'اختر مريض من القائمة',
+        },
+      },
+      {
+        path: 'schedule/:ticketId',
         canActivate: [PermissionGuard],
-        data: { permission: PERMISSIONS.Appointment.ReSchedule },
+        data: { permission: PERMISSIONS.Appointment.Schedule },
         loadComponent: () =>
           import(
             './Pages/schedule-new-appointment/schedule-new-appointment.component'
@@ -23,12 +32,7 @@ export const AppointmentRoutes: Routes = [
       },
     ],
   },
-  
-  {
-    path: '',
-    redirectTo: 'appointments',
-    pathMatch: 'full',
-  },
+
   // {
   //   path: 'new/holiday',
   //   canActivate: [PermissionGuard],
@@ -38,6 +42,4 @@ export const AppointmentRoutes: Routes = [
   //       (m) => m.AddNewHolidayComponent
   //     ),
   // },
-
- 
 ];

@@ -11,12 +11,12 @@ export class AppointmentsNavigationFacade {
   }
 
   goToSchedulaPage(
-    patientId: number | string,
+    ticketId: number | string,
     extras?: NavigationExtras
   ): void {
     this.go(
       `${AppRoutes.Appointment.root}/${AppRoutes.Appointment.schedule(
-        patientId
+        ticketId
       )}`,
       extras
     );

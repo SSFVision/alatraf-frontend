@@ -1,0 +1,59 @@
+/* Main container for the card */
+.info-card-container {
+  padding: 16px 24px;
+}
+
+/* The card itself with shadow, border, and transitions */
+.info-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-top: 4px solid #4a90e2; /* A nice blue accent color */
+  transition: all 0.3s ease-in-out;
+}
+
+/* Hover effect to lift the card */
+.info-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* Header section of the card */
+.card-header {
+  padding: 16px 24px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.card-header .title-md {
+  margin: 0;
+  color: #333;
+}
+
+/* Body of the card, using a grid for alignment */
+.card-body {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 24px;
+}
+
+/* Each individual piece of information */
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 16px;
+  color: #555;
+}
+
+/* Styling for the icons */
+.info-item i {
+  font-size: 24px;
+  color: #4a90e2;
+  /* Basic icon styles, replace with your library's classes */
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background-size: contain;
+}
+

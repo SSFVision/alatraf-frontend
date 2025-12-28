@@ -3,12 +3,13 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { ToastService } from '../../../../core/services/toast.service';
 import { PatientService } from '../../../Reception/Patients/Services/patient.service';
-import { HeaderPatientInfoComponent } from '../../../../shared/components/header-patient-info/header-patient-info.component';
 import { PatientDto } from '../../../../core/models/Shared/patient.model';
+import { PatientSummaryHeaderComponent } from '../../../../shared/components/patient-summary-header/patient-summary-header.component';
+import { PatientSummaryUiDto } from '../../../../shared/models/patient-summary.ui-dto';
 
 @Component({
   selector: 'app-schedule-new-appointment',
-  imports: [HeaderPatientInfoComponent],
+  imports: [PatientSummaryHeaderComponent],
   templateUrl: './schedule-new-appointment.component.html',
   styleUrl: './schedule-new-appointment.component.css',
 })
@@ -25,12 +26,17 @@ export class ScheduleNewAppointmentComponent {
   ngOnInit(): void {
     this.listenToRouteChanges();
   }
-
+  summary: PatientSummaryUiDto = {
+    fullName: 'Waleed Awn',
+    phoneNumber: '123-456-7890',
+    gender: 'Male',
+    age: 30,
+  };
   private listenToRouteChanges() {
     this.route.paramMap
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((params) => {
-        const idParam = params.get('patientId');
+        const idParam = params.get('ticketId');
         const id = idParam ? Number(idParam) : NaN;
 
         if (!id || Number.isNaN(id)) {
