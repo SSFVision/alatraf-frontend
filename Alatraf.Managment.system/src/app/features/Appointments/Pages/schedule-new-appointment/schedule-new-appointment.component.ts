@@ -16,11 +16,11 @@ import { ScheduleAppointmentRequest } from '../../../Reception/Tickets/models/sc
 import { TicketService } from '../../../Reception/Tickets/ticket.service';
 import { ScheduleAppointmentFormComponent } from '../../components/schedule-appointment-form/schedule-appointment-form.component';
 import { finalize } from 'rxjs';
+import { TicketFacade } from '../../../Reception/Tickets/tickets.facade.service';
 
 @Component({
   selector: 'app-schedule-new-appointment',
   standalone: true,
-  // --- FIX: Corrected the imports array ---
   imports: [
     CommonModule, // Use CommonModule instead of NgIf and NgModule
     HeaderPatientInfoComponent,
@@ -40,6 +40,7 @@ export class ScheduleNewAppointmentComponent {
 
   patient = signal<PatientDto | null>(null);
   isLoadingPatient = signal(true);
+  isAppointmentCreated = signal(false);
 
   isLoadingLastDay = computed(() => this.appointmentFacade.isLoadingLastDay());
 
@@ -66,14 +67,18 @@ export class ScheduleNewAppointmentComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((params) => {
         const idParam = params.get('ticketId');
+        const patientIdParm = params.get('patientId');
+        this.isAppointmentCreated.set(false);
+
         const id = idParam ? Number(idParam) : NaN;
-        if (!id || Number.isNaN(id)) {
+        const patientId = patientIdParm ? Number(patientIdParm) : NaN;
+        if (!id || Number.isNaN(id) || !patientId || Number.isNaN(patientId)) {
           this.patient.set(null);
           this.isLoadingPatient.set(false);
           return;
         }
         this._ticketId.set(id);
-        this.loadPatientData(3);
+        this.loadPatientData(patientId);
         this.appointmentFacade.loadLastScheduledDay();
       });
   }
@@ -94,11 +99,12 @@ export class ScheduleNewAppointmentComponent {
   schedule() {
     this.toast.info('Schedule feature will be here soon');
   }
-  isScheduling = signal(false); 
-  private ticketService = inject(TicketService); 
+  isScheduling = signal(false);
+  private ticketService = inject(TicketService);
+  ticketFacade = inject(TicketFacade);
 
   onScheduleSubmit(requestDto: ScheduleAppointmentRequest): void {
-    if (this.isScheduling()) return;
+    if (this.isScheduling() || this.isAppointmentCreated()) return; // Also guard if already completed
 
     const currentPatient = this.patient();
     if (!currentPatient || !this._ticketId()) {
@@ -119,7 +125,9 @@ export class ScheduleNewAppointmentComponent {
       .pipe(finalize(() => this.isScheduling.set(false)))
       .subscribe((res) => {
         if (res.isSuccess && res.data) {
-        
+          this.isAppointmentCreated.set(true);
+          this.ticketFacade.loadTickets();
+
           this.toast.success('تم إنشاء الموعد بنجاح!');
         } else {
           this.toast.error(

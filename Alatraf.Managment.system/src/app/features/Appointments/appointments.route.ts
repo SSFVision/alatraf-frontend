@@ -22,7 +22,7 @@ export const AppointmentRoutes: Routes = [
         },
       },
       {
-        path: 'schedule/:ticketId',
+        path: 'schedule/:ticketId/patient/:patientId',
         canActivate: [PermissionGuard],
         data: { permission: PERMISSIONS.Appointment.Schedule },
         loadComponent: () =>

@@ -135,7 +135,7 @@ export const AppRoutes = {
   Appointment: {
     root: 'appointments',
     addHoliday: 'new/holiday',
-    schedule: (ticketId: number | string) => `schedule/${ticketId}`,
+    schedule: (ticketId: number | string,patientId: number | string) => `schedule/${ticketId}/patient/${patientId}`,
     reschedule: (patientId: number | string) => `reschedule/${patientId}`,
   },
   medicalPrograms: {

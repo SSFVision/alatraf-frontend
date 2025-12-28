@@ -12,7 +12,8 @@ import { CommonModule } from '@angular/common';
 export class ScheduleAppointmentFormComponent {
 private fb = inject(FormBuilder);
   @Input() initialDate: string | null | undefined;
-  
+    @Input() isCompleted: boolean = false;
+
   @Input() isSaving: boolean = false;
 
   @Output() save = new EventEmitter<ScheduleAppointmentRequest>();
