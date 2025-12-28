@@ -42,7 +42,7 @@
         type="number"
         formControlName="paidAmount"
         appPositiveNumber
-        (blur)="form.controls['paidAmount']?.markAsTouched()"
+        (blur)="form.controls['paidAmount'].markAsTouched()"
       />
 
       <!-- Backend -->
@@ -71,7 +71,7 @@
         type="number"
         formControlName="discount"
         appPositiveNumber
-        (blur)="form.controls['discount']?.markAsTouched()"
+        (blur)="form.controls['discount'].markAsTouched()"
       />
 
       <!-- Backend -->
@@ -111,7 +111,7 @@
         type="text"
         formControlName="voucherNumber"
         appPositiveNumber
-        (blur)="form.controls['voucherNumber']?.markAsTouched()"
+        (blur)="form.controls['voucherNumber'].markAsTouched()"
       />
 
       <div

@@ -216,8 +216,8 @@ export class DisabledCardsFacade
       tap((res) => {
         if (res.success) {
           this.formValidationErrors.set({});
-
-          this.updateDisabledCardInList(disabledCardId, dto);
+          this.load();
+          // this.updateDisabledCardInList(disabledCardId, dto);
         } else if (res.validationErrors) {
           this.formValidationErrors.set(res.validationErrors);
         }
