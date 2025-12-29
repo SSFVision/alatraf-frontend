@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Router, NavigationExtras } from '@angular/router';
 import { AppRoutes } from '../../core/routing/app.routes.map';
+import { PatientSelectTarget } from '../../shared/enums/patient-select-target.enum';
 
 @Injectable({ providedIn: 'root' })
 export class PatientCardsNavigationFacade {
@@ -28,13 +29,14 @@ export class PatientCardsNavigationFacade {
     this.go(AppRoutes.patientCards.wounded.view(woundedCardId), extras);
   }
 
-
   goToDisabledCardsMainPage(extras?: NavigationExtras): void {
     this.go(AppRoutes.patientCards.disabled.root, extras);
   }
 
-  goToCreateDisabledCardPage(extras?: NavigationExtras): void {
-    this.go(AppRoutes.patientCards.disabled.create, extras);
+  goToCreateDisabledCardPage(patientId: number): void {
+    this.go(AppRoutes.patientCards.disabled.create, {
+      queryParams: { patientId },
+    });
   }
 
   goToEditDisabledCardPage(
@@ -50,6 +52,14 @@ export class PatientCardsNavigationFacade {
   ): void {
     this.go(AppRoutes.patientCards.disabled.view(disabledCardId), extras);
   }
+  goToPatientSelectPage(extras?: NavigationExtras): void {
+    this.go(AppRoutes.reception.patients.select, extras);
+  }
+ goToPatientsSelectForDisabledCard(): void {
+  this.go(AppRoutes.reception.patients.select, {
+    queryParams: { target: PatientSelectTarget.DisabledCard },
+  });
+}
 
   // =========================
   // Private

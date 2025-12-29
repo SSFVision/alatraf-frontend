@@ -1,0 +1,47 @@
+<form
+  class="padding-LR-24 column gap-16"
+  [formGroup]="form"
+  (ngSubmit)="submit()"
+>
+  <div class="width-100">
+    <p class="title-md">بيانات البطاقة</p>
+    <span class="home-line"></span>
+  </div>
+
+  <div class="row flex-center">
+    <label class="label-lg">رقم البطاقة</label>
+    <input class="label-lg" type="text" formControlName="cardNumber" />
+  </div>
+
+  <div class="row flex-center">
+    <label class="label-lg">نوع الإعاقة</label>
+    <input class="label-lg" type="text" formControlName="disabilityType" />
+  </div>
+
+  <div class="row flex-center">
+    <label class="label-lg">تاريخ الإصدار</label>
+    <input class="label-lg" type="date" formControlName="issueDate" />
+  </div>
+
+  <div class="flex-center gap-16">
+    <button
+      class="btn primary"
+      type="submit"
+      [disabled]="!canSubmit() || saving"
+    >
+      {{ mode === "edit" ? "تعديل" : "إضافة" }}
+    </button>
+
+    @if (canDelete()) {
+    <button
+      class="btn danger"
+      type="button"
+      (click)="onDelete(); $event.stopPropagation()"
+      [disabled]="saving"
+      tabindex="-1"
+    >
+      حذف
+    </button>
+    }
+  </div>
+</form>

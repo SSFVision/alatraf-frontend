@@ -1,27 +1,29 @@
-
-<h2 class="title-lg">معلومات البطاقة</h2>
-
-<form class="padding-LR-24 column gap-16">
-  <div class="width-100">
-    <p class="title-md">بيانات البطاقة</p>
-
-    <span class="home-line"></span>
+@if (isLoading() ) {
+  <div class="flex-center">
+    <span class="loader"></span>
   </div>
+  <p class="flex-center">جاري تحميل بيانات البطاقة...</p>
+} @else {
 
-  <div class="row flex-center">
-    <label class="label-lg"> رقم البطاقة </label>
-    <input class="label-lg" type="text" placeholder="" />
-  </div>
+  @if (!canRenderForm()) {
+    <p class="error">يجب اختيار مريض أولاً</p>
+  } @else {
 
-  <div class="row flex-center">
-    <label class="label-lg"> تاريخ الإصدار </label>
-    <input class="label-lg" type="date" placeholder="" />
-    <label class="label-lg"> تاريخ الإنتهاء </label>
-    <input class="label-lg" type="date" placeholder="" />
-  </div>
+    @if (patientSummary()) {
+      <app-patient-summary-header
+        [patient]="patientSummary()!"
+      />
+    }
 
-  <div class="row gap-16 flex-center">
-    <button class="btn secondary">تعديل</button>
-    <button class="btn danger">حذف</button>
-  </div>
-</form>
+
+    <app-disabled-card-form
+      [patientId]="patientId()!"
+      [mode]="mode()"
+      [card]="card()"
+      [saving]="saving()"
+      (create)="onCreate($event)"
+      (update)="onUpdate($event)"
+      (delete)="onDelete($event)"
+    />
+  }
+}

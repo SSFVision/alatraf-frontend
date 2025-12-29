@@ -81,32 +81,22 @@ export class AddEditMedicalProgramComponent implements OnInit {
       this.canSubmit.set(false);
     });
 
-    // ---------------------------------------------
-    // ENABLE SUBMIT ONLY WHEN USER CHANGES SOMETHING
-    // ---------------------------------------------
+ 
     this.form.valueChanges.subscribe(() => {
       this.canSubmit.set(this.form.valid && this.form.dirty);
     });
   }
 
-  // ---------------------------------------------
-  // INIT (LOAD DATA HERE)
-  // ---------------------------------------------
+
   ngOnInit(): void {
     this.sectionsFacade.setDepartment(Department.Therapy);
-    this.sectionsFacade.resetAndLoad(); // 👈 أفضل من loadSections
-  }
+    this.sectionsFacade.resetAndLoad();}
 
-  // ---------------------------------------------
-  // SEARCH SECTIONS
-  // ---------------------------------------------
+ 
   onSearchSection(term: string) {
     this.sectionsFacade.search(term);
   }
 
-  // ---------------------------------------------
-  // SUBMIT
-  // ---------------------------------------------
   submit() {
     if (!this.canSubmit()) return;
 
@@ -150,9 +140,7 @@ export class AddEditMedicalProgramComponent implements OnInit {
     }
   }
 
-  // ---------------------------------------------
-  // DELETE
-  // ---------------------------------------------
+
   delete() {
     const program = this.facade.selectedMedicalProgram();
     if (!program) return;

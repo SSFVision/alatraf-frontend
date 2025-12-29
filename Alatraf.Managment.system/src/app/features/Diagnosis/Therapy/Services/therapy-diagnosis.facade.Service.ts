@@ -155,6 +155,7 @@ export class TherapyDiagnosisFacade extends BaseFacade {
 
   loadingPatientTherapyDiagnoisis = signal<boolean>(false);
   loadPatientTherapyDiagnoisis(patientId: number) {
+    console.log(" Loading therapy diagnosis for patient ID:", patientId);
     this.loadingPatientTherapyDiagnoisis.set(true);
     this.patientService
       .GetPatientTherapyCardsById(patientId)
@@ -172,7 +173,7 @@ export class TherapyDiagnosisFacade extends BaseFacade {
 
           this.loadingPatientTherapyDiagnoisis.set(false);
         })
-      )
+      ).subscribe();
      
   }
 }

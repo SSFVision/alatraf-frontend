@@ -11,6 +11,7 @@ export const AppRoutes = {
       root: 'reception/patients',
 
       add: 'reception/patients/add',
+      select: 'reception/patients/select',
 
       edit: (id: number | string) => `reception/patients/edit/${id}`,
 
@@ -52,7 +53,7 @@ export const AppRoutes = {
     paied: (paymentId: number | string, paymentReference: number | string) =>
       `paid/${paymentId}/${paymentReference}`,
   },
-    patientCards: {
+  patientCards: {
     root: 'patient-cards',
 
     wounded: {
@@ -84,7 +85,6 @@ export const AppRoutes = {
     },
   },
 
-
   therapyCards: {
     root: 'therapy-cards',
     details: (cardId: number | string) => `therapy-cards/${cardId}`,
@@ -99,7 +99,8 @@ export const AppRoutes = {
         `therapy-cards/${therapyCardId}/sessions/edit/${sessionId}`,
     },
     doctors: {
-      viewDoctorAssigments: (doctorId: number | string) => `therapy-cards/doctors/${doctorId}/assigments`,
+      viewDoctorAssigments: (doctorId: number | string) =>
+        `therapy-cards/doctors/${doctorId}/assigments`,
     },
   },
   repairCards: {
@@ -134,7 +135,7 @@ export const AppRoutes = {
   Appointment: {
     root: 'appointments',
     addHoliday: 'new/holiday',
-    schedule: (patientId: number | string) => `schedule/${patientId}`,
+    schedule: (ticketId: number | string,patientId: number | string) => `schedule/${ticketId}/patient/${patientId}`,
     reschedule: (patientId: number | string) => `reschedule/${patientId}`,
   },
   medicalPrograms: {
@@ -194,19 +195,18 @@ export const AppRoutes = {
     root: 'dashboard',
   },
   users: {
-  root: 'users',
+    root: 'users',
 
-  list: 'users',
+    list: 'users',
 
-  create: 'create',
+    create: 'create',
 
-  edit: (userId: number | string) => `edit/${userId}`,
+    edit: (userId: number | string) => `edit/${userId}`,
 
-  view: (userId: number | string) => `view/${userId}`,
+    view: (userId: number | string) => `view/${userId}`,
 
-  permissions: (userId: number | string) => `${userId}/permissions`,
-},
-
+    permissions: (userId: number | string) => `${userId}/permissions`,
+  },
 
   management: {
     root: 'management',

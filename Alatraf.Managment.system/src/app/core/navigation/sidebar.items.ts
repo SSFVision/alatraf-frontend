@@ -142,7 +142,7 @@ export const MENU_CONFIG: MenuCategory[] = [
         label: 'بطائق المرضى',
         icon: 'assets/icons/user-icon-w.svg',
         activeIcon: 'assets/icons/user-icon-b.svg',
-        route: AppRoutes.patientCards.wounded.root,
+        route: AppRoutes.patientCards.disabled.root,
         requiredPermissions: [PERMISSIONS.PATIENTS.ADD],
       },
     ],

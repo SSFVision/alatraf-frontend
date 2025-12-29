@@ -11,6 +11,8 @@ import {
 import { TicketFilterRequest } from './models/ticket-filter.model';
 import { PaginatedList } from '../../../core/models/Shared/paginated-list.model';
 import { PageRequest } from '../../../core/models/Shared/page-request.model';
+import { AppointmentDto } from '../../Appointments/Models/appointment.dto';
+import { ScheduleAppointmentRequest } from './models/schedule-appointment.request';
 
 @Injectable({
   providedIn: 'root',
@@ -67,5 +69,18 @@ getTickets(
     const headers = new HttpHeaders().set('X-Enable-Loader', 'true');
 
     return this.put<void>(`${this.endpoint}/${ticketId}`, dto, headers);
+  }
+
+  scheduleAppointment(
+    ticketId: number,
+    dto: ScheduleAppointmentRequest
+  ): Observable<ApiResult<AppointmentDto>> {
+    const headers = new HttpHeaders().set('X-Enable-Loader', 'true');
+    // The endpoint is built by appending to the specific ticket's resource URL
+    return this.post<AppointmentDto>(
+      `${this.endpoint}/${ticketId}/appointment`, 
+      dto, 
+      headers
+    );
   }
 }

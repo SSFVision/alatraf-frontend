@@ -13,16 +13,22 @@
       <img src="assets/icons/search-icon.svg" class="search-icon" alt="search" />
       <input type="text" placeholder="بحث: اسم المريض او رقمه" (input)="onSearch($any($event.target).value)" />
     </div>
-    <div class="filters-container">
-      <button class="filter-btn" [class.active]="activeType === cardType.Wounded"
-        (click)="switchType(cardType.Wounded)">
+    <!-- <div class="filters-container">
+      <button
+        class="filter-btn"
+        [class.active]="activeType === cardType.Wounded"
+        (click)="switchType(cardType.Wounded)"
+      >
         الجرحى
       </button>
-      <button class="filter-btn" [class.active]="activeType === cardType.Disabled"
-        (click)="switchType(cardType.Disabled)">
+      <button
+        class="filter-btn"
+        [class.active]="activeType === cardType.Disabled"
+        (click)="switchType(cardType.Disabled)"
+      >
         المعاقين
       </button>
-    </div>
+    </div> -->
 
     <app-patient-cards-list class="max-hight-712 column gap-16" [items]="facade.items()" [loading]="facade.isLoading()"
       (select)="onSelectCard($event)"></app-patient-cards-list>
@@ -34,15 +40,25 @@
       </button>
     </div>
   </div>
-
-  @if (selectedId()) {
+  <!-- 
+  @if (canRoute()) {
   <div class="box max-hight-800 gap-16">
     <router-outlet></router-outlet>
   </div>
   } @else {
   <div class="box max-hight-800 gap-16 flex-center">
-    <img src="assets/images/bro.svg" alt="مرحبا" width="496.75" height="512" class="padding-32" />
+    <img
+      src="assets/images/bro.svg"
+      alt="مرحبا"
+      width="496.75"
+      height="512"
+      class="padding-32"
+    />
     <p class="title-md primary-color-50">مرحباً بك</p>
   </div>
-  }
+  } -->
+
+  <div class="box max-hight-800 gap-16">
+    <router-outlet></router-outlet>
+  </div>
 </div>

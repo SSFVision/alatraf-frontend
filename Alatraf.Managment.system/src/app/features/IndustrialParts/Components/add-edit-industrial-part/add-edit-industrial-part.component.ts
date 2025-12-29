@@ -6,7 +6,7 @@ import {
   EventEmitter,
   OnChanges,
   SimpleChanges,
-  signal,
+  inject,
 } from '@angular/core';
 import {
   FormArray,
@@ -20,8 +20,6 @@ import { UpdateIndustrialPartRequest } from '../../models/update-industrial-part
 import { IndustrialPartDto } from '../../../../core/models/industrial-parts/industrial-partdto';
 
 type IndustrialPartFormMode = 'create' | 'edit';
-
-// If you have a Unit DTO type, import it. Otherwise keep it minimal.
 type UnitOption = { id: number; name: string };
 
 @Component({
@@ -32,102 +30,126 @@ type UnitOption = { id: number; name: string };
   styleUrl: './add-edit-industrial-part.component.css',
 })
 export class AddEditIndustrialPartComponent implements OnChanges {
-  private fb = new FormBuilder();
+  private fb = inject(FormBuilder);
 
-  // -----------------------------
-  // INPUTS (from Workspace)
-  // -----------------------------
+  // ----------------------------------------------------
+  // INPUTS
+  // ----------------------------------------------------
   @Input({ required: true }) mode: IndustrialPartFormMode = 'create';
   @Input() part: IndustrialPartDto | null = null;
   @Input() units: UnitOption[] = [];
+  @Input() saving = false;
 
-  // -----------------------------
-  // OUTPUTS (to Workspace)
-  // -----------------------------
+  // ----------------------------------------------------
+  // OUTPUTS
+  // ----------------------------------------------------
   @Output() create = new EventEmitter<CreateIndustrialPartRequest>();
-  @Output() update = new EventEmitter<{ id: number; dto: UpdateIndustrialPartRequest }>();
+  @Output() update = new EventEmitter<{
+    id: number;
+    dto: UpdateIndustrialPartRequest;
+  }>();
   @Output() delete = new EventEmitter<IndustrialPartDto>();
 
-  // -----------------------------
-  // UI STATE
-  // -----------------------------
-  canDelete = signal(false);
-  canSubmit = signal(false);
-
-  // -----------------------------
+  // ----------------------------------------------------
   // FORM
-  // -----------------------------
+  // ----------------------------------------------------
   form = this.fb.group({
     name: this.fb.nonNullable.control('', Validators.required),
     description: this.fb.control<string | null>(null),
-    units: this.fb.array([]),
+    units: this.fb.array([]), // rows are validated inside
   });
 
   get unitsArray(): FormArray {
     return this.form.controls.units as FormArray;
   }
 
-  // ✅ compareWith to avoid select issues
-  compareUnitById = (a: number | null, b: number | null): boolean => a === b;
+  // ----------------------------------------------------
+  // INTERNAL GUARDS (to avoid rebuilding form on units load)
+  // ----------------------------------------------------
+  private lastMode: IndustrialPartFormMode | null = null;
+  private lastPartId: number | null = null;
 
-  constructor() {
-    this.form.valueChanges.subscribe(() => {
-      this.canSubmit.set(this.form.valid && this.form.dirty);
-    });
+  // ----------------------------------------------------
+  // DERIVED UI STATE
+  // ----------------------------------------------------
+  /** Create: enable when required fields are filled (valid) */
+  get canCreate(): boolean {
+    return this.mode === 'create' && this.form.valid && !this.saving;
   }
 
-  // -----------------------------
-  // ngOnChanges (now it's useful!)
-  // -----------------------------
+  /** Edit: enable only when user changed something (dirty) AND still valid */
+  get canUpdate(): boolean {
+    return this.mode === 'edit' && this.form.valid && this.form.dirty && !this.saving;
+  }
+
+  get showEditButtons(): boolean {
+    return this.mode === 'edit';
+  }
+
+  get canDelete(): boolean {
+    return this.mode === 'edit' && !!this.part && !this.saving;
+  }
+
+  compareUnitById = (a: number | null, b: number | null): boolean => a === b;
+
+  // ----------------------------------------------------
+  // INPUT CHANGES
+  // ----------------------------------------------------
   ngOnChanges(changes: SimpleChanges): void {
-    // When mode/part/units change, rebuild correctly.
-    // Critical rule: Only build EDIT form when:
-    // - mode === 'edit'
-    // - part exists
-    // - units options are loaded (so select can match)
+    // ✅ Only rebuild when it makes sense:
+    // - mode changed
+    // - OR editing a different part id
+    const currentPartId = this.part?.industrialPartId ?? null;
+    const modeChanged = this.lastMode !== this.mode;
+    const partChanged = this.mode === 'edit' && currentPartId !== this.lastPartId;
+
     if (this.mode === 'edit') {
+      // Wait until we actually have part + units options
       if (!this.part) return;
       if (!this.units || this.units.length === 0) return;
 
-      this.enterEditForm(this.part);
-      return;
+      if (modeChanged || partChanged) {
+        this.enterEditForm(this.part);
+      }
+    } else {
+      // create mode
+      if (modeChanged) {
+        this.enterCreateForm();
+      }
+      // IMPORTANT: do NOT rebuild form when units list arrives while creating
+      // because user may have started typing already.
     }
 
-    // Create mode
-    this.enterCreateForm();
+    this.lastMode = this.mode;
+    this.lastPartId = currentPartId;
   }
 
-  // -----------------------------
+  // ----------------------------------------------------
   // FORM MODES
-  // -----------------------------
+  // ----------------------------------------------------
   private enterEditForm(part: IndustrialPartDto): void {
-    // No form.reset with dynamic FormArray
     this.form.controls.name.setValue(part.name);
     this.form.controls.description.setValue(part.description ?? null);
 
     this.rebuildUnitsForm(part.industrialPartUnits ?? []);
 
+    // Mark pristine so Update is disabled until user changes something
     this.form.markAsPristine();
-    this.canDelete.set(true);
-    this.canSubmit.set(false);
   }
 
   private enterCreateForm(): void {
-    this.form.controls.name.setValue('');
-    this.form.controls.description.setValue(null);
+    this.form.reset();
 
     this.unitsArray.clear();
     this.unitsArray.push(this.createUnitRow());
 
+    // In create, pristine is fine; button uses valid only
     this.form.markAsPristine();
-    this.canDelete.set(false);
-    this.canSubmit.set(false);
   }
 
   private rebuildUnitsForm(units: any[]): void {
     this.unitsArray.clear();
 
-    // If backend can send empty list, keep at least one row
     if (!units || units.length === 0) {
       this.unitsArray.push(this.createUnitRow());
       return;
@@ -138,7 +160,7 @@ export class AddEditIndustrialPartComponent implements OnChanges {
         this.fb.group({
           unitId: [u.unitId ?? null, Validators.required],
           price: [
-            u.pricePerUnit ?? 0,
+            u.pricePerUnit ?? null,
             [Validators.required, Validators.min(0)],
           ],
         })
@@ -149,53 +171,56 @@ export class AddEditIndustrialPartComponent implements OnChanges {
   private createUnitRow() {
     return this.fb.group({
       unitId: [null, Validators.required],
-      price: [0, [Validators.required, Validators.min(0)]],
+      price: [null, [Validators.required, Validators.min(0)]],
     });
   }
 
-  // -----------------------------
+  // ----------------------------------------------------
   // UI ACTIONS
-  // -----------------------------
+  // ----------------------------------------------------
   addUnit(): void {
     this.unitsArray.push(this.createUnitRow());
+    // Adding a row is a user action -> should enable Update in edit
+    this.form.markAsDirty();
   }
 
   removeUnit(index: number): void {
     if (this.unitsArray.length > 1) {
       this.unitsArray.removeAt(index);
+      this.form.markAsDirty();
     }
   }
 
-  // -----------------------------
-  // SUBMIT
-  // -----------------------------
-  submit(): void {
-    if (!this.canSubmit()) return;
+  // ----------------------------------------------------
+  // SUBMIT / DELETE
+  // ----------------------------------------------------
+  submitCreate(): void {
+    if (!this.canCreate) return;
 
-    const dtoBase = {
+    const dto: CreateIndustrialPartRequest = {
       name: this.form.controls.name.value,
       description: this.form.controls.description.value ?? null,
       units: this.unitsArray.value,
     };
 
-    if (this.mode === 'edit') {
-      const id = this.part?.industrialPartId;
-      if (!id) return;
-
-      const dto: UpdateIndustrialPartRequest = dtoBase;
-      this.update.emit({ id, dto });
-      return;
-    }
-
-    const dto: CreateIndustrialPartRequest = dtoBase;
     this.create.emit(dto);
   }
 
-  // -----------------------------
-  // DELETE
-  // -----------------------------
-  onDelete(): void {
+  submitUpdate(): void {
+    if (!this.canUpdate) return;
     if (!this.part) return;
-    this.delete.emit(this.part);
+
+    const dto: UpdateIndustrialPartRequest = {
+      name: this.form.controls.name.value,
+      description: this.form.controls.description.value ?? null,
+      units: this.unitsArray.value,
+    };
+
+    this.update.emit({ id: this.part.industrialPartId, dto });
+  }
+
+  onDelete(): void {
+    if (!this.canDelete) return;
+    this.delete.emit(this.part!);
   }
 }

@@ -7,6 +7,8 @@ import { PatientsFacade } from '../../Services/patients.facade.service';
 import { UiLockService } from '../../../../../core/services/ui-lock.service';
 import { CreatePatientRequest } from '../../models/create-patient.request';
 import { UpdatePatientRequest } from '../../models/update-patient.request';
+import { ActivatedRoute, Router } from '@angular/router';
+import { PatientSelectTarget } from '../../../../../shared/enums/patient-select-target.enum';
 
 // NEW DTOs
 
@@ -26,9 +28,18 @@ export class PatientAddEditPageComponent {
 
   isEditMode = this.facade.isEditMode;
   patientInfo = this.facade.selectedPatient;
+  // this for redirect after save
+  private route = inject(ActivatedRoute);
+  private redirectTarget: string | null = null;
+private featureTarget: PatientSelectTarget | null = null;
 
   ngOnInit() {
     const id = Number(this.patientId());
+
+    // read redirect query param
+    this.redirectTarget = this.route.snapshot.queryParamMap.get('redirect');
+this.featureTarget =
+  this.route.snapshot.queryParamMap.get('target') as PatientSelectTarget | null;
 
     if (!isNaN(id)) {
       this.facade.loadPatientForEdit(id);
@@ -58,27 +69,39 @@ export class PatientAddEditPageComponent {
         });
     } else {
       // ===================== CREATE =====================
-      this.facade.createPatient(dto as CreatePatientRequest).subscribe((result) => {
-        if (result.success && !result.validationErrors) {
-          const newPatientId = this.facade.createdPatientId();
+      this.facade
+        .createPatient(dto as CreatePatientRequest)
+        .subscribe((result) => {
+          if (result.success && !result.validationErrors) {
+            const newPatientId = this.facade.createdPatientId();
 
-          this.dialogService
-            .confirmSuccess(ArabicSuccessMessages.saved)
-            .subscribe((confirm) => {
-              if (confirm && newPatientId) {
+            this.dialogService
+              .confirmSuccess(ArabicSuccessMessages.saved)
+              .subscribe((confirm) => {
+                if (!confirm || !newPatientId) return;
+
+                if (this.redirectTarget === 'select-patient') {
+                  this.navReception.goToPatientsSelect({
+                    queryParams: {
+                      target: this.featureTarget,
+                    },
+                  });
+                  return;
+                }
+
+                // existing behavior
                 this.navReception.goToTicketsCreate(newPatientId);
-              }
-            });
+              });
 
-          this.closeModal();
-          return;
-        }
+            this.closeModal();
+            return;
+          }
 
-        // Inline validation
-        if (result.validationErrors) {
-          this.facade.formValidationErrors.set(result.validationErrors);
-        }
-      });
+          // Inline validation
+          if (result.validationErrors) {
+            this.facade.formValidationErrors.set(result.validationErrors);
+          }
+        });
     }
   }
 
@@ -88,6 +111,16 @@ export class PatientAddEditPageComponent {
 
   private closeModal() {
     this.uiLock.unlock();
-    this.navReception.goToPatientsList();
+
+    if (this.redirectTarget === 'select-patient') {
+      this.navReception.goToPatientsSelect({
+        queryParams: {
+          target: this.featureTarget,
+        },
+      });
+      return;
+    } 
+      this.navReception.goToPatientsList();
+    
   }
 }

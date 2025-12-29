@@ -11,11 +11,13 @@ export class AppointmentsNavigationFacade {
   }
 
   goToSchedulaPage(
+    ticketId: number | string,
     patientId: number | string,
     extras?: NavigationExtras
   ): void {
     this.go(
       `${AppRoutes.Appointment.root}/${AppRoutes.Appointment.schedule(
+        ticketId,
         patientId
       )}`,
       extras
@@ -32,9 +34,7 @@ export class AppointmentsNavigationFacade {
       extras
     );
   }
-  goToAddNewHolidayPage(
-    extras?: NavigationExtras
-  ): void {
+  goToAddNewHolidayPage(extras?: NavigationExtras): void {
     this.go(
       `${AppRoutes.Appointment.root}/${AppRoutes.Appointment.addHoliday}`,
       extras

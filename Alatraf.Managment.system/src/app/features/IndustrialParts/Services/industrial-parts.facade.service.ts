@@ -1,5 +1,5 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { map, tap } from 'rxjs/operators';
+import { finalize, map, tap } from 'rxjs/operators';
 
 import { ApiResult } from '../../../core/models/ApiResult';
 import { IndustrialPartDto } from '../../../core/models/industrial-parts/industrial-partdto';
@@ -11,6 +11,7 @@ import { CreateIndustrialPartRequest } from '../models/create-industrial-part.re
 import { UpdateIndustrialPartRequest } from '../models/update-industrial-part.request';
 import { IndustrialPartFilterRequest } from '../models/industrial-part-filter.request';
 import { IndustrialPartsManagementService } from './industrial-parts-management.service';
+import { IndustrialPartsNavigationFacade } from '../../../core/navigation/industrial-parts-navigation.facade';
 
 @Injectable({ providedIn: 'root' })
 export class IndustrialPartsFacade extends BaseFacade {
@@ -19,8 +20,8 @@ export class IndustrialPartsFacade extends BaseFacade {
   constructor() {
     super();
   }
-private _isLoading = signal<boolean>(false);
-isLoading = this._isLoading.asReadonly();
+  private _isLoading = signal<boolean>(false);
+  isLoading = this._isLoading.asReadonly();
 
   private _industrialParts = signal<IndustrialPartDto[]>([]);
   industrialParts = this._industrialParts.asReadonly();
@@ -58,10 +59,8 @@ isLoading = this._isLoading.asReadonly();
         ),
     null,
     (items) => {
-      
-      this._industrialParts.set(items)
-    this._isLoading.set(false);
-
+      this._industrialParts.set(items);
+      this._isLoading.set(false);
     }
   );
 
@@ -71,7 +70,7 @@ isLoading = this._isLoading.asReadonly();
   search(term: string) {
     this._filters.update((f) => ({ ...f, searchTerm: term }));
     this._pageRequest.update((p) => ({ ...p, page: 1 }));
-         this._isLoading.set(true);
+    this._isLoading.set(true);
 
     this.searchManager.search(term);
   }
@@ -95,7 +94,7 @@ isLoading = this._isLoading.asReadonly();
   }
 
   loadIndustrialParts() {
-      this._isLoading.set(true);
+    this._isLoading.set(true);
 
     this.service
       .getIndustrialPartsWithFilters(this._filters(), this._pageRequest())
@@ -109,8 +108,7 @@ isLoading = this._isLoading.asReadonly();
             this.totalCount.set(0);
             this.handleLoadIndustrialPartsError(result);
           }
-            this._isLoading.set(false);
-
+          this._isLoading.set(false);
         })
       )
       .subscribe();
@@ -131,9 +129,22 @@ isLoading = this._isLoading.asReadonly();
     this._industrialParts.set([]);
     this.totalCount.set(0);
   }
+  private _loadingItem = signal<boolean>(false);
+  loadingItem = this._loadingItem.asReadonly();
 
-  
-  createIndustrialPart(dto: CreateIndustrialPartRequest) {
+  private _saving = signal<boolean>(false);
+  saving = this._saving.asReadonly();
+  createIndustrialPart(
+    dto: CreateIndustrialPartRequest,
+    options?: CrudRefreshOptions
+  ) {
+    const opts: Required<CrudRefreshOptions> = {
+      refreshList: options?.refreshList ?? true,
+      refreshSelected: options?.refreshSelected ?? false,
+    };
+
+    this._saving.set(true);
+
     return this.handleCreateOrUpdate(this.service.createIndustrialPart(dto), {
       successMessage: 'تم إنشاء القطعة الصناعية بنجاح',
       defaultErrorMessage: 'فشل إنشاء القطعة الصناعية. يرجى المحاولة لاحقاً.',
@@ -141,20 +152,26 @@ isLoading = this._isLoading.asReadonly();
       tap((res) => {
         if (res.success && res.data) {
           this.formValidationErrors.set({});
-          this.loadIndustrialParts();
 
-          // this.applyIndustrialPartMutation({
-          //   type: 'create',
-          //   item: res.data,
-          // });
+          this.applyIndustrialPartMutation({
+            type: 'create',
+            item: res.data,
+          });
+          this.navigation.goToEditIndustrialPartPage(res.data.industrialPartId);
+          if (opts.refreshSelected) {
+            this.loadIndustrialPartForEdit(res.data.industrialPartId);
+          }
         } else if (res.validationErrors) {
           this.formValidationErrors.set(res.validationErrors);
         }
-      })
+      }),
+      finalize(() => this._saving.set(false))
     );
   }
 
   updateIndustrialPart(id: number, dto: UpdateIndustrialPartRequest) {
+    this._saving.set(true);
+
     return this.handleCreateOrUpdate(
       this.service.updateIndustrialPart(id, dto),
       {
@@ -165,63 +182,21 @@ isLoading = this._isLoading.asReadonly();
       tap((res) => {
         if (res.success) {
           this.formValidationErrors.set({});
-          this.loadIndustrialParts();
-          // this.applyIndustrialPartMutation({
-          //   type: 'update',
-          //   id,
-          //   changes: dto,
-          // });
+
+          this.applyIndustrialPartMutation({
+            type: 'update',
+            id,
+            changes: dto,
+          });
         } else if (res.validationErrors) {
           this.formValidationErrors.set(res.validationErrors);
         }
-      })
+      }),
+      finalize(() => this._saving.set(false))
     );
   }
 
-  // ======================================================
-  // SELECTED + EDIT MODE
-  // ======================================================
-  private _selectedIndustrialPart = signal<IndustrialPartDto | null>(null);
-  selectedIndustrialPart = this._selectedIndustrialPart.asReadonly();
-
-  isEditMode = signal<boolean>(false);
-
-  enterCreateMode(): void {
-    this.isEditMode.set(false);
-    this._selectedIndustrialPart.set(null);
-    this.formValidationErrors.set({});
-  }
-
-  enterEditMode(part: IndustrialPartDto): void {
-    this.isEditMode.set(true);
-    this._selectedIndustrialPart.set(part);
-  }
-
-  loadIndustrialPartForEdit(id: number): void {
-    this.isEditMode.set(true);
-    this._selectedIndustrialPart.set(null);
-
-    this.service
-      .getIndustrialPartById(id)
-      .pipe(
-        tap((result: ApiResult<IndustrialPartDto>) => {
-          if (result.isSuccess && result.data) {
-            this._selectedIndustrialPart.set(result.data);
-            this.formValidationErrors.set({});
-          } else {
-            this.toast.error(
-              result.errorDetail ?? 'لم يتم العثور على القطعة الصناعية'
-            );
-            this.enterCreateMode();
-          }
-        })
-      )
-      .subscribe();
-  }
-
-  // ======================================================
-  // DELETE
-  // ======================================================
+  private navigation = inject(IndustrialPartsNavigationFacade);
   deleteIndustrialPart(part: IndustrialPartDto): void {
     if (!part?.industrialPartId) return;
 
@@ -243,18 +218,58 @@ isLoading = this._isLoading.asReadonly();
       }
     ).subscribe((success) => {
       if (success) {
-        this.loadIndustrialParts()
-        // this.applyIndustrialPartMutation({
-        //   type: 'delete',
-        //   id: part.industrialPartId,
-        // });
+        // ✅ REAL-TIME LIST UPDATE
+        this.applyIndustrialPartMutation({
+          type: 'delete',
+          id: part.industrialPartId,
+        });
+
+        // ✅ NAVIGATE ONLY AFTER CONFIRMATION + SUCCESS
+        this.navigation.goToCreateIndustrialPartPage();
       }
     });
   }
 
-  // ======================================================
-  // MUTATION HANDLER
-  // ======================================================
+  private _selectedIndustrialPart = signal<IndustrialPartDto | null>(null);
+  selectedIndustrialPart = this._selectedIndustrialPart.asReadonly();
+
+  isEditMode = signal<boolean>(false);
+
+  enterCreateMode(): void {
+    this.isEditMode.set(false);
+    this._selectedIndustrialPart.set(null);
+    this.formValidationErrors.set({});
+  }
+
+  enterEditMode(part: IndustrialPartDto): void {
+    this.isEditMode.set(true);
+    this._selectedIndustrialPart.set(part);
+  }
+
+  loadIndustrialPartForEdit(id: number): void {
+    this.isEditMode.set(true);
+    this._selectedIndustrialPart.set(null);
+    this._loadingItem.set(true);
+
+    this.service
+      .getIndustrialPartById(id)
+      .pipe(
+        tap((result: ApiResult<IndustrialPartDto>) => {
+          if (result.isSuccess && result.data) {
+            this._selectedIndustrialPart.set(result.data);
+            this.formValidationErrors.set({});
+          } else {
+            this.toast.error(
+              result.errorDetail ?? 'لم يتم العثور على القطعة الصناعية'
+            );
+            this.enterCreateMode();
+          }
+        }),
+        finalize(() => this._loadingItem.set(false))
+      )
+      .subscribe();
+  }
+
   private applyIndustrialPartMutation(mutation: IndustrialPartMutation): void {
     switch (mutation.type) {
       case 'create': {
@@ -294,9 +309,6 @@ isLoading = this._isLoading.asReadonly();
     }
   }
 
-  // ======================================================
-  // ERROR HANDLING
-  // ======================================================
   private handleLoadIndustrialPartsError(result: ApiResult<any>) {
     const err = this.extractError(result);
     if (err.type === 'validation' || err.type === 'business') {
@@ -307,9 +319,6 @@ isLoading = this._isLoading.asReadonly();
   }
 }
 
-// ======================================================
-// MUTATION TYPE
-// ======================================================
 type IndustrialPartMutation =
   | { type: 'create'; item: IndustrialPartDto }
   | {
@@ -318,3 +327,7 @@ type IndustrialPartMutation =
       changes: Partial<IndustrialPartDto>;
     }
   | { type: 'delete'; id: number };
+type CrudRefreshOptions = {
+  refreshList?: boolean; // default: true
+  refreshSelected?: boolean; // default: true
+};
