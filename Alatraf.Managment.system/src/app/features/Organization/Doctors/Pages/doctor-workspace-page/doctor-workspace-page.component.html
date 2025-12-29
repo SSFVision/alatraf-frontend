@@ -1,46 +1,9 @@
-<div class="max-hight-712 column gap-16">
-  <h2 class="title-lg">الأطباء</h2>
-
-  <div class="width-100">
-    <p class="title-md">بيانات الطبيب</p>
-
-    <span class="home-line"></span>
-  </div>
-
-  <div class="row flex-center">
-    <label class="label-lg"> الاسم </label>
-    <input class="label-lg" type="text" placeholder="" />
-    <label class="label-lg"> الرقم الوظيفي </label>
-    <input class="label-lg" type="text" placeholder="" />
-  </div>
-
-  <div class="row flex-center">
-    <label class="label-lg"> القسم </label>
-    <select class="label-lg">
-      <option value="cardiology"></option>
-      <option value="neurology">الأعصاب</option>
-      <option value="orthopedics">العظام</option>
-    </select>
-
-    <label class="label-lg"> الغرفة </label>
-    <select class="label-lg">
-      <option value="101"></option>
-      <option value="102">102</option>
-      <option value="103">103</option>
-    </select>
-  </div>
-
-  <div class="row flex-center">
-    <label class="label-lg"> الحالة </label>
-    <select class="label-lg">
-      <option></option>
-      <option>نشط</option>
-      <option>غير نشط</option>
-    </select>
-  </div>
-
-  <div class="row gap-16 flex-center">
-    <button class="btn secondary" disabled>تعديل</button>
-    <button class="btn danger">حذف</button>
-  </div>
-</div>
+<app-add-edit-doctor-form
+  [isEditMode]="doctorFacade.isEditMode()"
+  [selectedDoctor]="doctorFacade.selectedDoctor()"
+  [departments]="departmentsFacade.departments()"
+  [validationErrors]="doctorFacade.formValidationErrors()"
+  (save)="onSave($event)"
+  [isSaving]="isSaving()"
+  (delete)="onDeleteDoctor($event)"
+></app-add-edit-doctor-form>

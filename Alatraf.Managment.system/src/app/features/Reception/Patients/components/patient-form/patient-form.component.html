@@ -44,44 +44,23 @@
       <input
         class="label-lg"
         type="text"
-        (keypress)="allowOnlyNumbers($event)"
         formControlName="phone"
-        (input)="onPhoneInput()"
+        (input)="formatPhoneNumberInput(getControl('phone'))"
+        (keypress)="preventNonNumericInput($event)"
         (blur)="form.controls['phone'].markAsTouched()"
       />
-
-      <!-- When user must type text -->
-      <div
-        class="error-message label-lg"
-        *ngIf="
-          form.controls['phone'].touched &&
-          form.controls['phone'].hasError('required')
-        "
-      >
-        يجب إدخال رقم الهاتف بشكل صحيح ويبدا 77و78و73.
+      <div class="error-message label-lg" *ngIf="hasBackendError('phone')">
+        {{ getBackendError("phone") }}
       </div>
-
-      <!-- If text is too long -->
-      <div
-        class="error-message label-lg"
-        *ngIf="
-          form.controls['phone'].touched &&
-          form.controls['phone'].hasError('maxlength')
-        "
-      >
-        يجب ألا يزيد رقم الهاتف عن 9 أرقام.
+      @if (hasFrontendError('phone')) { @if (getControl('phone')?.invalid &&
+      getControl('phone')?.touched) { @if
+      (getControl('phone')?.hasError('required')) {
+      <div class="error-message label-lg">رقم الهاتف مطلوب.</div>
+      } @if (getControl('phone')?.hasError('yemeniPhoneNumber')) {
+      <div class="error-message label-lg">
+        {{ getControl("phone")?.getError("yemeniPhoneNumber").message }}
       </div>
-
-      <!-- If user types non-digits -->
-      <div
-        class="error-message label-lg"
-        *ngIf="
-          form.controls['phone'].touched &&
-          form.controls['phone'].hasError('pattern')
-        "
-      >
-        يجب إدخال أرقام فقط.
-      </div>
+      } } }
     </div>
 
     <!-- الجنس + تاريخ الميلاد -->

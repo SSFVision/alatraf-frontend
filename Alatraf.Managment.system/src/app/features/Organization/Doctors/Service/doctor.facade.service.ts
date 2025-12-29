@@ -14,6 +14,9 @@ import { DoctorListItemDto } from '../Models/doctor-list-item.dto';
 import { DoctorDto } from '../Models/doctor.dto';
 import { DoctorsFilterRequest } from '../Models/doctors-filter.request';
 import { UpdateDoctorRequest } from '../Models/update-doctor.request';
+import { DoctorWorkloadCardVM } from '../../../../shared/models/doctor-workload-card.vm';
+import { DoctorsNavigationFacade } from '../../../../core/navigation/doctors-navigation.facade';
+import { ChangeGenderToBoolean } from '../../../../core/utils/person.validators';
 
 @Injectable({ providedIn: 'root' })
 export class DoctorFacade extends BaseFacade {
@@ -28,8 +31,6 @@ export class DoctorFacade extends BaseFacade {
   private _isLoading = signal<boolean>(false);
   isLoading = this._isLoading.asReadonly();
 
-
-  
   hasActiveFilters = computed(() => {
     const f = this._filters();
     return !!(
@@ -56,16 +57,14 @@ export class DoctorFacade extends BaseFacade {
 
   private _pageRequest = signal<PageRequest>({
     page: 1,
-    pageSize: 10,
+    pageSize: 30,
   });
   pageRequest = this._pageRequest.asReadonly();
 
   totalCount = signal<number>(0);
   formValidationErrors = signal<Record<string, string[]>>({});
 
-  // ---------------------------------------------
-  // SEARCH MANAGER
-  // ---------------------------------------------
+  private doctorNav = inject(DoctorsNavigationFacade);
   private searchManager = new SearchManager<DoctorListItemDto[]>(
     (term: string) =>
       this.service
@@ -84,9 +83,6 @@ export class DoctorFacade extends BaseFacade {
     }
   );
 
-  // ---------------------------------------------
-  // SEARCH & FILTERS
-  // ---------------------------------------------
   search(term: string) {
     this._filters.update((f) => ({ ...f, search: term }));
     this._pageRequest.update((p) => ({ ...p, page: 1 }));
@@ -95,16 +91,22 @@ export class DoctorFacade extends BaseFacade {
   }
 
   updateFilters(newFilters: Partial<DoctorsFilterRequest>) {
+    // if (this._doctors().length === 0) return;
+
     this._filters.update((f) => ({ ...f, ...newFilters }));
     this._pageRequest.update((p) => ({ ...p, page: 1 }));
+    this.loadDoctors();
   }
 
   setDepartment(departmentId: number | null) {
+    // if (this._doctors().length === 0) return;
+
     this._filters.update((f) => ({
       ...f,
       departmentId: departmentId ?? null,
     }));
     this._pageRequest.update((p) => ({ ...p, page: 1 }));
+    this.loadDoctors();
   }
 
   setSection(sectionId: number | null) {
@@ -156,7 +158,7 @@ export class DoctorFacade extends BaseFacade {
             this.handleLoadDoctorsError(res);
           }
         }),
-        finalize(() => this._isLoading.set(true))
+        finalize(() => this._isLoading.set(false))
       )
       .subscribe();
   }
@@ -173,7 +175,7 @@ export class DoctorFacade extends BaseFacade {
       sortDir: 'desc',
     });
 
-    this._pageRequest.set({ page: 1, pageSize: 10 });
+    this._pageRequest.set({ page: 1, pageSize: 30 });
     this._doctors.set([]);
     this.totalCount.set(0);
   }
@@ -187,6 +189,8 @@ export class DoctorFacade extends BaseFacade {
         if (res.success && res.data) {
           this.formValidationErrors.set({});
           this.loadDoctors();
+          this.enterEditMode(res.data);
+          this.doctorNav.goToEditDoctorPage(res.data.doctorId);
         } else if (res.validationErrors) {
           this.formValidationErrors.set(res.validationErrors);
         }
@@ -203,13 +207,43 @@ export class DoctorFacade extends BaseFacade {
         if (res.success) {
           this.formValidationErrors.set({});
           this.loadDoctors();
+          // this.updateDoctorInList(id, dto);
         } else if (res.validationErrors) {
           this.formValidationErrors.set(res.validationErrors);
         }
       })
     );
   }
+  endDoctorAssignmentLikeDelete(doctor: DoctorDto): void {
+    const doctorId = doctor.doctorId;
+    const config = {
+      title: 'إنهاء تعيين الطبيب',
+      message: 'هل أنت متأكد من رغبتك في إنهاء تعيين هذا الطبيب؟',
+      payload: {
+        'رقم الطبيب': doctorId,
+        'اسم الطبيب': doctor.personDto?.fullname,
+      },
+    };
 
+    this.confirmAndDelete(
+      config,
+      () => this.service.endDoctorAssignment(doctorId), // The API call to make
+      {
+        successMessage: 'تم إنهاء تعيين الطبيب بنجاح',
+        defaultErrorMessage: 'فشل إنهاء التعيين. حاول لاحقاً.',
+      }
+    ).subscribe((success) => {
+      if (success) {
+        this.updateDoctorAssignmentInList(doctorId, {
+          isActiveAssignment: false,
+          sectionId: null,
+          sectionName: null,
+          roomId: null,
+          roomName: null,
+        });
+      }
+    });
+  }
   private _selectedDoctor = signal<DoctorDto | null>(null);
   selectedDoctor = this._selectedDoctor.asReadonly();
 
@@ -243,9 +277,7 @@ export class DoctorFacade extends BaseFacade {
       .subscribe();
   }
 
-  // ---------------------------------------------
-  // ASSIGNMENTS
-  // ---------------------------------------------
+
   assignDoctorToSection(doctorId: number, dto: AssignDoctorToSectionRequest) {
     return this.handleCreateOrUpdate(
       this.service.assignDoctorToSection(doctorId, dto),
@@ -289,25 +321,6 @@ export class DoctorFacade extends BaseFacade {
       })
     );
   }
-  // endDoctorAssignment(doctorId: number) {
-  //   return this.handleCreateOrUpdate(
-  //     this.service.endDoctorAssignment(doctorId),
-  //     {
-  //       successMessage: 'تم إنهاء تعيين الطبيب بنجاح',
-  //       defaultErrorMessage: 'فشل إنهاء تعيين الطبيب',
-  //     }
-  //   ).pipe(
-  //     tap((res) => {
-  //       if (res.success) {
-  //         this._doctors.update((list) =>
-  //           list.map((d) =>
-  //             d.doctorId === doctorId ? { ...d, isActiveAssignment: false } : d
-  //           )
-  //         );
-  //       }
-  //     })
-  //   );
-  // }
 
   // ---------------------------------------------
   // ERROR HANDLING
@@ -330,7 +343,8 @@ export class DoctorFacade extends BaseFacade {
       list.map((d) =>
         d.doctorId === doctorId
           ? {
-              ...d,
+              ...d, // Keep existing properties like sectionName, roomName, etc.
+              fullName: dto.fullname,
               specialization: dto.specialization,
               departmentId: dto.departmentId,
             }
@@ -338,15 +352,9 @@ export class DoctorFacade extends BaseFacade {
       )
     );
 
-    const selected = this._selectedDoctor();
-    if (selected?.doctorId === doctorId) {
-      this._selectedDoctor.set({
-        ...selected,
-        specialization: dto.specialization,
-        departmentId: dto.departmentId,
-      });
-    }
+    
   }
+
   private removeDoctorFromList(doctorId: number) {
     this._doctors.update((list) => list.filter((d) => d.doctorId !== doctorId));
     this.totalCount.update((c) => Math.max(0, c - 1));
