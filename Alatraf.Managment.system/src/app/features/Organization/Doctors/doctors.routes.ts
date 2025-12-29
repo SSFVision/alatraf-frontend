@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { PERMISSIONS } from '../../../core/auth/models/permissions.map';
 import { PermissionGuard } from '../../../core/guards/permission.guard';
+import { WorkspaceWelcomeComponent } from '../../../shared/components/workspace-welcome/workspace-welcome.component';
 
 export const DoctorsRoutes: Routes = [
   {
@@ -13,6 +14,14 @@ export const DoctorsRoutes: Routes = [
       ),
 
     children: [
+      {
+        path: '',
+        component: WorkspaceWelcomeComponent,
+        data: {
+          title: 'مرحباً بك في   إدارة الأطباء',
+          subtitle: 'اختر طبيب من القائمة أو أضف طبيب جديدة',
+        },
+      },
       {
         path: 'edit/:doctorId',
         canActivate: [PermissionGuard],

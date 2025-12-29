@@ -19,7 +19,7 @@ export function formatTicketStatus(status: string  ): string {
 
   switch (status.toLowerCase()) {
     case 'new': return 'جديد';
-    case 'pause': return 'موقوف';
+    case 'pause': return 'في الانتظار';
     case 'continue': return 'مستمر';
     case 'completed': return 'مكتمل';
     case 'cancelled': return 'ملغي';

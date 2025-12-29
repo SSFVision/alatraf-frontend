@@ -291,25 +291,20 @@ isLoadingNextPage = this._isLoadingNextPage.asReadonly();
 
 
 loadNextPage(): void {
-  // 🔒 منع التكرار أثناء التحميل
   if (this._isLoadingNextPage()) return;
 
   const currentItems = this._sections();
   const total = this.totalCount();
   const { page, pageSize } = this._pageRequest();
 
-  // 1️⃣ لا يوجد المزيد من البيانات
   if (currentItems.length >= total) return;
 
-  // 2️⃣ حساب آخر صفحة
   const lastPage = Math.ceil(total / pageSize);
 
-  // 3️⃣ لا تطلب صفحات خارج النطاق
   if (page >= lastPage) return;
 
   const nextPage = page + 1;
 
-  // 🔒 قفل التحميل
   this._isLoadingNextPage.set(true);
 
   this.service

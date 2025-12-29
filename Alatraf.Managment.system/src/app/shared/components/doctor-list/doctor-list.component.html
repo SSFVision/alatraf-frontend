@@ -1,0 +1,47 @@
+<!-- Shows a loader while the facade is fetching data -->
+@if (loading()) {
+<div class="flex-center">
+  <span class="loader"></span>
+  <span class="body-md primary-color-50 margin-left-8"> جاري التحميل... </span>
+</div>
+} @else {
+  <!-- Shows an empty state message if no doctors are returned -->
+  @if (!doctors() || doctors().length === 0) {
+  <div class="empty-state">
+    <img src="assets/images/amico.svg" alt="no doctors" class="empty-icon" />
+    <p class="body-md primary-color-50">
+        لا يوجد أطباء متاحين حالياً
+    </p>
+  </div>
+  }
+
+  <!-- Loops through and displays each doctor card -->
+  @for (doctor of doctors(); track doctor.doctorId) {
+  <div
+    class="card cursor-pointer primary-card row space-between"
+    [class.selected]="selectedId() === doctor.doctorId"
+    (click)="onSelect(doctor)"
+  >
+    <!-- Doctor Name & Department -->
+    <div class="column gap-4">
+      <p class="body-md">
+        د/ {{ doctor.fullName }}
+      </p>
+      @if (doctor.departmentName) {
+        <p class="body-sm primary-color-50">
+          {{ doctor.departmentName }}
+        </p>
+      }
+    </div>
+
+    <!-- Doctor ID Circle -->
+    <!-- <div class="primary-color-background WH-40 flex-center border-radius-20">
+      <h2 class="title-md white-color margin-auto">
+        {{ doctor.doctorId }}
+      </h2>
+    </div> -->
+    
+  </div>
+  }
+}
+
