@@ -12,10 +12,11 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import {
+  AbstractControl,
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
-  Validators
+  Validators,
 } from '@angular/forms';
 
 import { PatientsFacade } from '../../Services/patients.facade.service';
@@ -25,6 +26,13 @@ import {
   PatientType,
 } from '../../../../../core/models/Shared/patient.model';
 import { FormValidationState } from '../../../../../core/utils/form-validation-state';
+import {
+  ChangeGenderToBoolean,
+  FormatDateForInput,
+  formatPhoneNumberInput,
+  preventNonNumericInput,
+  yemeniPhoneNumberValidator,
+} from '../../../../../core/utils/person.validators';
 import { CreatePatientRequest } from '../../models/create-patient.request';
 
 @Component({
@@ -47,11 +55,12 @@ export class PatientFormComponent implements OnChanges, OnInit {
   form!: FormGroup;
   private validationState!: FormValidationState;
 
-  constructor() {}
+  preventNonNumericInput = preventNonNumericInput;
+  formatPhoneNumberInput = formatPhoneNumberInput;
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      fullname: ['',Validators.required],
+      fullname: ['', Validators.required],
       gender: [true, Validators.required],
       birthdate: [null, Validators.required],
       phone: [
@@ -59,8 +68,7 @@ export class PatientFormComponent implements OnChanges, OnInit {
         [
           Validators.required,
           Validators.maxLength(9),
-          Validators.pattern(/^\d{9}$/),
-          Validators.pattern(/^(77|78|73|71|70)\d{7}$/),
+          yemeniPhoneNumberValidator(),
         ],
       ],
       address: ['', Validators.required],
@@ -81,30 +89,18 @@ export class PatientFormComponent implements OnChanges, OnInit {
 
     this.validationState.clearOnEdit();
   }
-  allowOnlyNumbers(event: KeyboardEvent) {
-    const char = event.key;
-
-    // Allow only digits
-    if (!/^\d$/.test(char)) {
-      event.preventDefault();
-    }
-  }
-  onPhoneInput() {
-    const control = this.form.controls['phone'];
-    control.setValue(control.value.replace(/\D/g, '').slice(0, 9), {
-      emitEvent: false,
-    });
+  getControl(name: string): AbstractControl | null {
+    return this.form.get(name);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['patient'] && this.patient() && this.form) {
       const p = this.patient() as PatientDto;
 
-      // Auto-registration number removed; everything else stays
       this.form.patchValue({
         fullname: p.personDto?.fullname ?? '',
-        gender: this.toBooleanGender(p.personDto?.gender),
-        birthdate: this.formatDate(p.personDto?.birthdate),
+        gender: ChangeGenderToBoolean(p.personDto?.gender),
+        birthdate: FormatDateForInput(p.personDto?.birthdate),
         phone: p.personDto?.phone ?? '',
         address: p.personDto?.address ?? '',
         nationalNo: p.personDto?.nationalNo ?? '',
@@ -117,7 +113,6 @@ export class PatientFormComponent implements OnChanges, OnInit {
     if (this.form.valid) {
       const dto = { ...this.form.value };
 
-      // Convert empty string to null for the backend
       if (dto.birthdate === '') {
         dto.birthdate = null;
       }

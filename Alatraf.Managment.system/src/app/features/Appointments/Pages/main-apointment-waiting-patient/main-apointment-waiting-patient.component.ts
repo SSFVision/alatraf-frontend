@@ -31,7 +31,7 @@ export class MainApointmentWaitingPatientComponent {
 
   ngOnInit() {
     this.ticketFacade.updateFilters({
-      departmentId: Department.Industrial,
+      // status: TicketStatus.New,
       serviceId: ServiceType.Industrial,
     });
     this.ticketFacade.loadTickets();

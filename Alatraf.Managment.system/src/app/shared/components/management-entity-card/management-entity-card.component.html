@@ -10,7 +10,6 @@
   style="overflow-y: auto; max-height: 712px"
   (scroll)="onScroll($event)"
 >
-  <!-- 🟡 EMPTY STATE (only after loading finished) -->
   @if (!items() || items().length === 0) {
   <div class="empty-state">
     <img src="assets/images/amico.svg" alt="no items" class="empty-icon" />
@@ -39,7 +38,6 @@
   </div>
   } }
 
-  <!-- ⬇️ LOAD MORE LOADER (scroll pagination) -->
   @if (loadingMore()) {
   <div class="flex-center padding-16">
     <span class="loader"></span>

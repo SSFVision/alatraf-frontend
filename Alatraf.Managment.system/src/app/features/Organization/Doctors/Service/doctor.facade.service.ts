@@ -14,6 +14,7 @@ import { DoctorListItemDto } from '../Models/doctor-list-item.dto';
 import { DoctorDto } from '../Models/doctor.dto';
 import { DoctorsFilterRequest } from '../Models/doctors-filter.request';
 import { UpdateDoctorRequest } from '../Models/update-doctor.request';
+import { DoctorWorkloadCardVM } from '../../../../shared/models/doctor-workload-card.vm';
 
 @Injectable({ providedIn: 'root' })
 export class DoctorFacade extends BaseFacade {
@@ -28,8 +29,6 @@ export class DoctorFacade extends BaseFacade {
   private _isLoading = signal<boolean>(false);
   isLoading = this._isLoading.asReadonly();
 
-
-  
   hasActiveFilters = computed(() => {
     const f = this._filters();
     return !!(
@@ -88,6 +87,8 @@ export class DoctorFacade extends BaseFacade {
   // SEARCH & FILTERS
   // ---------------------------------------------
   search(term: string) {
+    // if (this._doctors().length === 0) return;
+
     this._filters.update((f) => ({ ...f, search: term }));
     this._pageRequest.update((p) => ({ ...p, page: 1 }));
     this._isLoading.set(true);
@@ -95,16 +96,24 @@ export class DoctorFacade extends BaseFacade {
   }
 
   updateFilters(newFilters: Partial<DoctorsFilterRequest>) {
+    // if (this._doctors().length === 0) return;
+
     this._filters.update((f) => ({ ...f, ...newFilters }));
     this._pageRequest.update((p) => ({ ...p, page: 1 }));
+    this.loadDoctors();
+
   }
 
   setDepartment(departmentId: number | null) {
+    // if (this._doctors().length === 0) return;
+
     this._filters.update((f) => ({
       ...f,
       departmentId: departmentId ?? null,
     }));
     this._pageRequest.update((p) => ({ ...p, page: 1 }));
+  this.loadDoctors();
+  
   }
 
   setSection(sectionId: number | null) {
@@ -156,7 +165,7 @@ export class DoctorFacade extends BaseFacade {
             this.handleLoadDoctorsError(res);
           }
         }),
-        finalize(() => this._isLoading.set(true))
+        finalize(() => this._isLoading.set(false))
       )
       .subscribe();
   }

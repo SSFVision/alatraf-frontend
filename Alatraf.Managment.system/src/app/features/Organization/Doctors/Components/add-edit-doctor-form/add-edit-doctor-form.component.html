@@ -1,0 +1,168 @@
+<form
+  [formGroup]="form"
+  (ngSubmit)="submit()"
+  class="max-hight-712 column gap-24"
+>
+  <h2 class="title-lg">
+    @if (isEditMode()) { <span>تعديل بيانات الطبيب</span> } @else {
+    <span>إضافة طبيب جديد</span> }
+  </h2>
+
+  <div class="width-100">
+    <p class="title-md">بيانات الطبيب</p>
+    <span class="home-line"></span>
+  </div>
+
+  <div class="row flex-center">
+    <label class="label-lg">الاسم</label>
+    <input
+      class="label-lg"
+      type="text"
+      placeholder="ادخل اسم الطبيب كاملاً"
+      formControlName="fullname"
+    />
+    <!-- Backend Validation -->
+    <div class="error-message label-lg" *ngIf="hasBackendError('fullname')">
+      {{ getBackendError("fullname") }}
+    </div>
+    <!-- Only frontend errors are shown for now -->
+    @if (hasFrontendError('fullname')) { @if
+    (getControl('fullname')?.hasError('required')) {
+    <div class="error-message label-lg">الاسم مطلوب.</div>
+    } @if (getControl('fullname')?.hasError('minlength')) {
+    <div class="error-message label-lg">
+      الاسم يجب أن يكون 3 أحرف على الأقل.
+    </div>
+    } }
+  </div>
+
+  <div class="row flex-center">
+    <label class="label-lg">رقم الهوية</label>
+    <input
+      class="label-lg"
+      type="text"
+      placeholder="ادخل رقم الهوية"
+      formControlName="nationalNo"
+    />
+    <div class="error-message label-lg" *ngIf="hasBackendError('nationalNo')">
+      {{ getBackendError("nationalNo") }}
+    </div>
+    @if (hasFrontendError('nationalNo')) { @if
+    (getControl('nationalNo')?.hasError('required')) {
+    <div class="error-message label-lg">الرقم القومي مطلوب.</div>
+    } @if (getControl('nationalNo')?.hasError('pattern')) {
+    <div class="error-message label-lg">
+      الرقم القومي يجب أن يحتوي على أرقام فقط.
+    </div>
+    } }
+  </div>
+
+  <div class="row flex-center">
+    <label class="label-lg">رقم الهاتف</label>
+    <input
+      class="label-lg"
+      type="text"
+      formControlName="phone"
+      (input)="formatPhoneNumberInput(getControl('phone'))"
+      (keypress)="preventNonNumericInput($event)"
+      (blur)="form.controls['phone'].markAsTouched()"
+    />
+    <div class="error-message label-lg" *ngIf="hasBackendError('phone')">
+      {{ getBackendError("phone") }}
+    </div>
+    @if (hasFrontendError('phone')) { @if (getControl('phone')?.invalid &&
+    getControl('phone')?.touched) { @if
+    (getControl('phone')?.hasError('required')) {
+    <div class="error-message label-lg">رقم الهاتف مطلوب.</div>
+    } @if (getControl('phone')?.hasError('yemeniPhoneNumber')) {
+    <div class="error-message label-lg">
+      {{ getControl("phone")?.getError("yemeniPhoneNumber").message }}
+    </div>
+    } } }
+  </div>
+
+  <div class="row flex-center">
+    <label class="label-lg">الجنس</label>
+    <select class="label-lg" formControlName="gender">
+      <option [ngValue]="true">ذكر</option>
+      <option [ngValue]="false">أنثى</option>
+    </select>
+    <label class="label-lg">تاريخ الميلاد</label>
+    <input class="label-lg" type="date" formControlName="birthdate" />
+
+    <div class="error-message label-lg" *ngIf="hasBackendError('birthdate')">
+      {{ getBackendError("birthdate") }}
+    </div>
+
+    @if (hasFrontendError('birthdate')) { @if
+    (getControl('birthdate')?.hasError('required')) {
+    <div class="error-message label-lg">تاريخ الميلاد مطلوب.</div>
+    } }
+  </div>
+
+  <div class="row flex-center">
+    <label class="label-lg">العنوان</label>
+    <input
+      class="label-lg"
+      type="text"
+      placeholder="ادخل عنوان الطبيب"
+      formControlName="address"
+    />
+    <div class="error-message label-lg" *ngIf="hasBackendError('address')">
+      {{ getBackendError("address") }}
+    </div>
+    @if (hasFrontendError('address')) {
+    <div class="error-message label-lg">العنوان مطلوب.</div>
+    }
+  </div>
+
+  <div class="row flex-center">
+    <label class="label-lg">التخصص</label>
+    <input
+      class="label-lg"
+      type="text"
+      placeholder="ادخل تخصص الطبيب"
+      formControlName="specialization"
+    />
+
+    <div
+      class="error-message label-lg"
+      *ngIf="hasBackendError('specialization')"
+    >
+      {{ getBackendError("specialization") }}
+    </div>
+    @if (hasFrontendError('specialization')) {
+    <div class="error-message label-lg">التخصص مطلوب.</div>
+    }
+  </div>
+
+  <div class="row flex-center">
+    <label class="label-lg">القسم</label>
+    <select class="label-lg" formControlName="departmentId">
+      <option [ngValue]="null" disabled>اختر القسم...</option>
+      @for(dept of departments(); track dept.id) {
+      <option [value]="dept.id">{{ dept.name }}</option>
+      }
+    </select>
+    <div class="error-message label-lg" *ngIf="hasBackendError('departmentId')">
+      {{ getBackendError("departmentId") }}
+    </div>
+    @if (hasFrontendError('departmentId')) {
+    <div class="error-message label-lg">يجب اختيار قسم.</div>
+    }
+  </div>
+
+  <div class="row gap-16 flex-center padding-top-16">
+    <button
+      type="submit"
+      class="btn primary"
+      [disabled]="form.invalid || isSaving()"
+    >
+      @if (isSaving()) { <span>جاري الحفظ...</span> } @else { @if (isEditMode())
+      { <span>حفظ التعديلات</span> } @else { <span>حفظ</span> } }
+    </button>
+    @if (isEditMode()) {
+    <button type="button" class="btn danger">حذف</button>
+    }
+  </div>
+</form>
