@@ -8,11 +8,13 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+
+  flex: 1;
+  /* ← يأخذ الباقي فقط */
   overflow: hidden;
-  height: auto !important;
-  max-height: none !important;
-  min-height: none !important;
+  /* أو auto */
   box-sizing: border-box;
+
 }
 
 .center-content {
