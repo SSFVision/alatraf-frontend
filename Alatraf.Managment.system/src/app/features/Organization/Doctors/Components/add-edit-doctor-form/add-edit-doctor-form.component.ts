@@ -1,12 +1,14 @@
 import { CommonModule } from '@angular/common';
 import {
   Component,
+  computed,
   effect,
   EnvironmentInjector,
   inject,
   input,
   output,
   runInInjectionContext,
+  signal,
 } from '@angular/core';
 import {
   AbstractControl,
@@ -46,6 +48,7 @@ export class AddEditDoctorFormComponent {
   validationErrors = input<Record<string, string[]>>({});
   isSaving = input<boolean>(false);
   save = output<CreateDoctorRequest | UpdateDoctorRequest>();
+  delete = output<DoctorDto>();
 
   form!: FormGroup;
   private validationState!: FormValidationState;
@@ -56,20 +59,23 @@ export class AddEditDoctorFormComponent {
 
   ngOnInit(): void {
     this.initForm();
-
     this.validationState = new FormValidationState(
       this.form,
       this.doctorFacade.formValidationErrors
     );
+
     runInInjectionContext(this.env, () => {
       effect(() => {
         const doctor = this.selectedDoctor();
         if (this.isEditMode() && doctor) {
           this.populateForm(doctor);
-        } else {
-          this.initForm();
         }
+        //  else {
+        //   // this.initForm();
+        //   this.form.reset();
+        // }
       });
+
       effect(() => {
         this.validationState.apply();
       });
@@ -80,7 +86,7 @@ export class AddEditDoctorFormComponent {
   private initForm(): void {
     this.form = this.fb.group({
       fullname: ['', [Validators.required, Validators.minLength(3)]],
-      nationalNo: ['', [Validators.required]], // Allow one or more digits
+      nationalNo: ['', [Validators.required]],
       phone: [
         '',
         [
@@ -98,19 +104,23 @@ export class AddEditDoctorFormComponent {
     });
   }
   private populateForm(doctor: DoctorDto): void {
-    this.form.patchValue({
+    const formData = {
       fullname: doctor.personDto?.fullname,
       nationalNo: doctor.personDto?.nationalNo,
       phone: doctor.personDto?.phone,
       birthdate: FormatDateForInput(doctor.personDto?.birthdate),
       address: doctor.personDto?.address,
-      gender: ChangeGenderToBoolean(doctor.personDto?.gender)??false,
-
+      gender: ChangeGenderToBoolean(doctor.personDto?.gender) ?? false,
       specialization: doctor.specialization,
       departmentId: doctor.departmentId,
-    });
+    };
+
+    this.form.patchValue(formData, { emitEvent: false });
+
+    this.form.markAsPristine();
+    this.form.markAsUntouched();
   }
- 
+
   getBackendError(controlName: string): string | null {
     return this.validationState.getBackendError(controlName);
   }
@@ -138,5 +148,10 @@ export class AddEditDoctorFormComponent {
     } else {
       this.form.markAllAsTouched();
     }
+  }
+
+  onDeleteDoctor() {
+    const doctor = this.selectedDoctor();
+    if (doctor !== null) this.delete.emit(doctor);
   }
 }

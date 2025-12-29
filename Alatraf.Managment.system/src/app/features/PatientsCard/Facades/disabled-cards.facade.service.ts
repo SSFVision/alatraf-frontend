@@ -160,7 +160,6 @@ export class DisabledCardsFacade
 
             this.enterEditMode(res.data);
 
-            // ✅ IMPORTANT: sync URL => go to edit/:id
             this.navCard.goToEditDisabledCardPage(res.data.disabledCardId);
           } else if (res.validationErrors) {
             this.formValidationErrors.set(res.validationErrors);

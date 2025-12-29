@@ -57,29 +57,29 @@
     } }
   </div>
 
-  <div class="row flex-center">
-    <label class="label-lg">رقم الهاتف</label>
-    <input
-      class="label-lg"
-      type="text"
-      formControlName="phone"
-      (input)="formatPhoneNumberInput(getControl('phone'))"
-      (keypress)="preventNonNumericInput($event)"
-      (blur)="form.controls['phone'].markAsTouched()"
-    />
-    <div class="error-message label-lg" *ngIf="hasBackendError('phone')">
-      {{ getBackendError("phone") }}
+<div class="row flex-center">
+      <label class="label-lg">رقم الهاتف</label>
+      <input
+        class="label-lg"
+        type="text"
+        formControlName="phone"
+        (input)="formatPhoneNumberInput(getControl('phone'))"
+        (keypress)="preventNonNumericInput($event)"
+        (blur)="form.controls['phone'].markAsTouched()"
+      />
+      <div class="error-message label-lg" *ngIf="hasBackendError('phone')">
+        {{ getBackendError("phone") }}
+      </div>
+      @if (hasFrontendError('phone')) { @if (getControl('phone')?.invalid &&
+      getControl('phone')?.touched) { @if
+      (getControl('phone')?.hasError('required')) {
+      <div class="error-message label-lg">رقم الهاتف مطلوب.</div>
+      } @if (getControl('phone')?.hasError('yemeniPhoneNumber')) {
+      <div class="error-message label-lg">
+        {{ getControl("phone")?.getError("yemeniPhoneNumber").message }}
+      </div>
+      } } }
     </div>
-    @if (hasFrontendError('phone')) { @if (getControl('phone')?.invalid &&
-    getControl('phone')?.touched) { @if
-    (getControl('phone')?.hasError('required')) {
-    <div class="error-message label-lg">رقم الهاتف مطلوب.</div>
-    } @if (getControl('phone')?.hasError('yemeniPhoneNumber')) {
-    <div class="error-message label-lg">
-      {{ getControl("phone")?.getError("yemeniPhoneNumber").message }}
-    </div>
-    } } }
-  </div>
 
   <div class="row flex-center">
     <label class="label-lg">الجنس</label>
@@ -153,16 +153,17 @@
   </div>
 
   <div class="row gap-16 flex-center padding-top-16">
+   
     <button
       type="submit"
       class="btn primary"
-      [disabled]="form.invalid || isSaving()"
+      [disabled]="form.invalid || isSaving() || (isEditMode() && form.pristine)"
     >
       @if (isSaving()) { <span>جاري الحفظ...</span> } @else { @if (isEditMode())
       { <span>حفظ التعديلات</span> } @else { <span>حفظ</span> } }
     </button>
     @if (isEditMode()) {
-    <button type="button" class="btn danger">حذف</button>
+    <button type="button" class="btn danger" (click)="onDeleteDoctor()">حذف</button>
     }
   </div>
 </form>

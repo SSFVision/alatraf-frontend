@@ -6,7 +6,7 @@ import {
   input,
   output,
   Output,
-  signal
+  signal,
 } from '@angular/core';
 import { DoctorListItemDto } from '../../../features/Organization/Doctors/Models/doctor-list-item.dto';
 
@@ -23,14 +23,12 @@ export class DoctorListComponent {
   selectedId = signal<number | null>(null);
   doctorSelectedId = output<number>();
 
-
   onSelect(doctor: DoctorListItemDto): void {
     this.selectedId.set(doctor.doctorId);
     this.doctorSelectedId.emit(doctor.doctorId);
   }
 
   gitDectorDepartment(DepartmentId: number): string {
-
-      return  DepartmentId === 1 ? 'فني' : 'علاج ';
+    return DepartmentId === 1 ? 'فني' : 'علاج ';
   }
 }

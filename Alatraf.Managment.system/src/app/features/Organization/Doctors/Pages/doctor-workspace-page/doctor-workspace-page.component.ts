@@ -8,6 +8,7 @@ import { DepartmentsFacade } from '../../../Departments/departments.facade.servi
 import { CreateDoctorRequest } from '../../Models/create-doctor.request';
 import { UpdateDoctorRequest } from '../../Models/update-doctor.request';
 import { ToastService } from '../../../../../core/services/toast.service';
+import { DoctorDto } from '../../Models/doctor.dto';
 
 @Component({
   selector: 'app-doctor-workspace-page',
@@ -20,6 +21,7 @@ export class DoctorWorkspacePageComponent implements OnInit {
   private route = inject(ActivatedRoute);
   doctorFacade = inject(DoctorFacade);
   departmentsFacade = inject(DepartmentsFacade);
+  private toastService = inject(ToastService);
   isSaving = signal(false);
   ngOnInit(): void {
     this.lisonToRouteParamsChange();
@@ -43,6 +45,8 @@ export class DoctorWorkspacePageComponent implements OnInit {
     if (this.doctorFacade.isEditMode()) {
       const doctorId = this.doctorFacade.selectedDoctor()?.doctorId;
       if (doctorId) {
+              console.log('updated request payload:', payload);
+
         this.doctorFacade
           .updateDoctor(doctorId, payload)
           .pipe(finalize(() => this.isSaving.set(false)))
@@ -67,5 +71,9 @@ export class DoctorWorkspacePageComponent implements OnInit {
         // }
         ();
     }
+  }
+  onDeleteDoctor(doctor: DoctorDto) {
+    this.toastService.warning('حذف الطبيب غير مفعّل حالياً.');
+    // this.doctorFacade.deleteDoctor(doctor);
   }
 }

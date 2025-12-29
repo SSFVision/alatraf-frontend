@@ -5,4 +5,5 @@
   [validationErrors]="doctorFacade.formValidationErrors()"
   (save)="onSave($event)"
   [isSaving]="isSaving()"
+  (delete)="onDeleteDoctor($event)"
 ></app-add-edit-doctor-form>
