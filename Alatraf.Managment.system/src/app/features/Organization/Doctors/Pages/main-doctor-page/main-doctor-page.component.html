@@ -3,11 +3,7 @@
     <h2 class="title-md">الأطباء</h2>
 
     <div class="search-box">
-      <img
-        src="assets/icons/search-icon.svg"
-        class="search-icon"
-        alt="search"
-      />
+      <img src="assets/icons/search-icon.svg" class="search-icon" alt="search" />
       <input type="text" placeholder="بحث: اسم المستخدم أو الرقم" />
     </div>
 
@@ -18,8 +14,7 @@
     </div>
 
     <div class="max-hight-712 column gap-16">
-      <div class="card primary-card" (click)="OnSelectedDoctor(1)"
-          [class.selected]="selectedId() === 1">
+      <div class="card primary-card" (click)="OnSelectedDoctor(1)" [class.selected]="selectedId() === 1">
         <p class="body-md">منذر الحكيمي</p>
         <div class="row space-between">
           <p class="body-sm primary-color-50">رقم الطبيب: 1</p>
@@ -28,8 +23,7 @@
         </div>
       </div>
 
-      <div class="card primary-card" (click)="OnSelectedDoctor(2)"
-          [class.selected]="selectedId() === 2">
+      <div class="card primary-card" (click)="OnSelectedDoctor(2)" [class.selected]="selectedId() === 2">
         <p class="body-md">خالد الجباري</p>
         <div class="row space-between">
           <p class="body-sm primary-color-50">رقم الطبيب: 2</p>
@@ -39,23 +33,17 @@
       </div>
     </div>
     <div class="flex-center">
-      <button class="btn primary"  (click)="goToAddUser()">إضافة طبيب جديد</button>
+      <button class="btn primary" (click)="goToAddUser()">إضافة طبيب جديد</button>
     </div>
   </div>
 
-   @if (canRout() ) {
+  @if (canRout() ) {
   <div class="box max-hight-800 gap-16">
     <router-outlet></router-outlet>
   </div>
   } @else {
   <div class="box max-hight-800 gap-16 flex-center">
-    <img
-      src="assets/images/bro.svg"
-      alt="مرحبا"
-      width="496.75"
-      height="512"
-      class="padding-32"
-    />
+    <img src="assets/images/bro.svg" alt="مرحبا" width="496.75" height="512" class="padding-32" />
     <p class="title-md primary-color-50">مرحباً بك</p>
   </div>
   }

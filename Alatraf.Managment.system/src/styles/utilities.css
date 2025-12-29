@@ -106,7 +106,7 @@
 
 .max-hight-712 {
   max-height: 712px;
-  min-height: 50px;
+  min-height: 100px;
   overflow-y: auto;
 }
 
@@ -136,6 +136,6 @@
 
 .max-hight-360 {
   max-height: 340px;
-  min-height: 340px;
+  min-height: 200px;
   overflow-y: auto;
 }

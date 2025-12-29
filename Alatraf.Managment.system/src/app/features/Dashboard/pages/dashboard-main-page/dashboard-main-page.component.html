@@ -1,8 +1,8 @@
-<main class="paddind-24">
+<div class="paddind-24">
   <h1 class="headline-md">لوحة التحكم الرئيسية</h1>
   <p class="title-sm primary-color-50">نظرة عامة على أنشطة المركز</p>
 
-   <div class="cards">
+  <div class="cards">
     <div class="card blue-card">
       <h3 class="title-sm">إجمالي المرضـى</h3>
 
@@ -58,29 +58,29 @@
         <span class="title-sm">اليوم السبت</span>
       </div>
     </div>
-  </div> 
+  </div>
 
 
 
   <span class="home-line"></span>
 
-  <div class="row">
+  <div class="row gap-16">
+
     <div class="recent-operations">
-      <h3 class="title-sm">العمليات الأخيرة</h3>
+      <h3 class="title-md">العمليات الأخيرة</h3>
       <div class="table-wrapper">
         <table>
           <thead>
             <tr>
               <th class="title-sm">اسم المريض</th>
+              <th class="th-expand title-sm"> العملية </th>
               <th class="buttons"></th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>
-                <p class="body-md">محمد علي صالح الشيباني</p>
-                <p class="body-sm primary-color-50">تشخيص جديد</p>
-              </td>
+              <td class="body-md">محمد علي صالح الشيباني</td>
+              <td class="body-md">تشخيص جديد</td>
               <td class="row gap-16">
                 <button class="btn primary icon">
                   <img src="assets/icons/eye-icon.svg" alt="عرض" />
@@ -94,10 +94,8 @@
               </td>
             </tr>
             <tr>
-              <td>
-                <p class="body-md">غالب سعيد مسعد الرياشي</p>
-                <p class="body-sm primary-color-50">إصدار كرت إصلاح فني</p>
-              </td>
+              <td class="body-md">غالب سعيد مسعد الرياشي</td>
+              <td class="body-md">إصدار كرت إصلاح فني</td>
               <td class="row gap-16">
                 <button class="btn primary icon">
                   <img src="assets/icons/eye-icon.svg" alt="عرض" />
@@ -111,10 +109,8 @@
               </td>
             </tr>
             <tr>
-              <td>
-                <p class="body-md">مسروور فرحان صالح النهمي</p>
-                <p class="body-sm primary-color-50">بدل فاقد</p>
-              </td>
+              <td class="body-md">مسروور فرحان صالح النهمي</td>
+              <td class="body-md">بدل فاقد</td>
               <td class="row gap-16">
                 <button class="btn primary icon">
                   <img src="assets/icons/eye-icon.svg" alt="عرض" />
@@ -128,10 +124,8 @@
               </td>
             </tr>
             <tr>
-              <td>
-                <p class="body-md">عبدالغفور غالب شرف العزاني</p>
-                <p class="body-sm primary-color-50">تجديد كرت علاج طبيعي</p>
-              </td>
+              <td class="body-md">عبدالغفور غالب شرف العزاني</td>
+              <td class="body-md">تجديد كرت علاج طبيعي</td>
               <td class="row gap-16">
                 <button class="btn primary icon">
                   <img src="assets/icons/eye-icon.svg" alt="عرض" />
@@ -145,10 +139,8 @@
               </td>
             </tr>
             <tr>
-              <td>
-                <p class="body-md">صالحة عبدالله محمد نعمان</p>
-                <p class="body-sm primary-color-50">تجديد كرت علاج طبيعي</p>
-              </td>
+              <td class="body-md">صالحة عبدالله محمد نعمان</td>
+              <td class="body-md">تجديد كرت علاج طبيعي</td>
               <td class="row gap-16">
                 <button class="btn primary icon">
                   <img src="assets/icons/eye-icon.svg" alt="عرض" />
@@ -162,10 +154,8 @@
               </td>
             </tr>
             <tr>
-              <td>
-                <p class="body-md">نجيب سمير محمد غالب البدّاوي</p>
-                <p class="body-sm primary-color-50">إصدار كرت فني</p>
-              </td>
+              <td class="body-md">نجيب سمير محمد غالب البدّاوي</td>
+              <td class="body-md">إصدار كرت فني</td>
               <td class="row gap-16">
                 <button class="btn primary icon">
                   <img src="assets/icons/eye-icon.svg" alt="عرض" />
@@ -184,12 +174,25 @@
     </div>
 
     <div class="quick-access">
-      <h3 class="title-sm">الوصول السـريع</h3>
+      <h3 class="title-md">الوصول السـريع</h3>
 
-      <div class="column">
-        <button class="title-md btn secondary" (click)="goToUserPage()">  إدارة المستخدمين</button>
-        <button class="title-md btn secondary">إضافة مريض جديد</button>
+      <div class="max-hight-712">
+
+        <div class="flex-center">
+          <button class="btn secondary" (click)="goToUserPage()">
+            إدارة المستخدمين
+          </button>
+        </div>
+
+        <div class="flex-center">
+          <button class="btn secondary">إضافة مريض جديد</button>
+        </div>
+
+        <div class="flex-center">
+          <button class="btn secondary">إضافة تشخيص جديد</button>
+        </div>
+
       </div>
     </div>
   </div>
-</main>
+</div>

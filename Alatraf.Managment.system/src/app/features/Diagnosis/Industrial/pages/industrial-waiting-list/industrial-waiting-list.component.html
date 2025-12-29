@@ -1,4 +1,4 @@
-<main class="padding-32 row gap-16 padding-24">
+<div class="padding-32 row gap-16 padding-24">
   <div class="box max-width-324 culumn gap-24 max-hight-800">
     <!-- Header -->
     <div class="row space-between">
@@ -13,74 +13,43 @@
 
     <!-- Search box -->
     <div class="search-box">
-      <img
-        src="assets/icons/search-icon.svg"
-        class="search-icon"
-        alt="search"
-      />
-      <input
-        type="text"
-        placeholder="بحث: اسم المريض أو الرقم"
-        #searchBox
-        (input)="onSearch(searchBox.value)"
-      />
+      <img src="assets/icons/search-icon.svg" class="search-icon" alt="search" />
+      <input type="text" placeholder="بحث: اسم المريض أو الرقم" #searchBox (input)="onSearch(searchBox.value)" />
     </div>
 
     <!-- Service Filters -->
     <div class="filters-container">
       <!-- ALL -->
-      <button
-        class="filter-btn"
-        [class.active]="activeService() === null"
-        (click)="filterByService(null)"
-      >
+      <button class="filter-btn" [class.active]="activeService() === null" (click)="filterByService(null)">
         الكل
       </button>
 
       <!-- أطراف صناعية -->
-      <button
-        class="filter-btn"
-        [class.active]="activeService() === ServiceType.Industrial"
-        (click)="filterByService(ServiceType.Industrial)"
-      >
+      <button class="filter-btn" [class.active]="activeService() === ServiceType.Industrial"
+        (click)="filterByService(ServiceType.Industrial)">
         أطراف صناعية
       </button>
 
       <!-- مبيعات -->
-      <button
-        class="filter-btn"
-        [class.active]="activeService() === ServiceType.Sales"
-        (click)="filterByService(ServiceType.Sales)"
-      >
+      <button class="filter-btn" [class.active]="activeService() === ServiceType.Sales"
+        (click)="filterByService(ServiceType.Sales)">
         مبيعات
       </button>
 
       <!-- إصلاحات -->
-      <button
-        class="filter-btn"
-        [class.active]="activeService() === ServiceType.Repairs"
-        (click)="filterByService(ServiceType.Repairs)"
-      >
+      <button class="filter-btn" [class.active]="activeService() === ServiceType.Repairs"
+        (click)="filterByService(ServiceType.Repairs)">
         إصلاحات
       </button>
     </div>
 
     <!-- Waiting list -->
-    <app-waiting-patient-card
-      class="max-hight-712 column gap-16"
-      [tickets]="tickets()"
-      (select)="select($event)"
-      [loading]="loading()"
-    ></app-waiting-patient-card>
+    <app-waiting-patient-card class="max-hight-712 column gap-16" [tickets]="tickets()" (select)="select($event)"
+      [loading]="loading()"></app-waiting-patient-card>
 
     <!-- Pagination Component -->
-    <app-pagination
-      [page]="pageRequest().page"
-      [pageSize]="pageRequest().pageSize"
-      [totalCount]="totalCount()"
-      (pageChange)="ticketFacade.setPage($event)"
-      (pageSizeChange)="ticketFacade.setPageSize($event)"
-    ></app-pagination>
+    <app-pagination [page]="pageRequest().page" [pageSize]="pageRequest().pageSize" [totalCount]="totalCount()"
+      (pageChange)="ticketFacade.setPage($event)" (pageSizeChange)="ticketFacade.setPageSize($event)"></app-pagination>
   </div>
 
   <!-- Right section -->
@@ -90,14 +59,8 @@
   </div>
   } @else {
   <div class="box max-hight-800 gap-16 flex-center">
-    <img
-      src="assets/images/bro.svg"
-      alt="اضافة تشخيص"
-      width="496.75"
-      height="512"
-      class="padding-32"
-    />
+    <img src="assets/images/bro.svg" alt="اضافة تشخيص" width="496.75" height="512" class="padding-32" />
     <p class="title-md primary-color-50">مرحباً بك</p>
   </div>
   }
-</main>
+</div>
