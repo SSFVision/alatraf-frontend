@@ -9,6 +9,9 @@
   flex-direction: column;
   gap: 10px;
 
+  max-height: none !important;
+  min-height: none !important;
+
   flex: 1;
   /* ← يأخذ الباقي فقط */
   overflow: hidden;
