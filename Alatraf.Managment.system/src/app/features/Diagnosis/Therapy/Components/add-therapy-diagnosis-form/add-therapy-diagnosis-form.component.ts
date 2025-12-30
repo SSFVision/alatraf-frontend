@@ -41,6 +41,7 @@ import { MedicalProgramDto } from '../../../../../core/models/medical-programs/m
 import { FormValidationState } from '../../../../../core/utils/form-validation-state';
 import { InjuryDto } from '../../../../../core/models/injuries/injury.dto';
 import { TherapyDiagnosisFacade } from '../../Services/therapy-diagnosis.facade.Service';
+import { min } from 'rxjs';
 
 @Component({
   selector: 'app-add-therapy-diagnosis-form',
@@ -70,10 +71,8 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
   @Output() submitForm = new EventEmitter<
     CreateTherapyCardRequest | UpdateTherapyCardRequest
   >();
+  today = new Date().toISOString().split('T')[0];
 
-  // --------------------------
-  // Options
-  // --------------------------
   injuryReasonsOptions: MultiSelectOption[] = [];
   injurySidesOptions: MultiSelectOption[] = [];
   injuryTypesOptions: MultiSelectOption[] = [];
@@ -93,16 +92,10 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
       injuryReasons: [[] as number[], Validators.required],
       injurySides: [[] as number[], Validators.required],
       injuryTypes: [[] as number[], Validators.required],
-
-      programStartDate: ['', Validators.required],
-      programEndDate: ['', Validators.required],
-      // programEndDate: [{ value: '', disabled: true }], // ⬅️ read-only
-
-      numberOfSessions: [
-        { value: null }, // ⬅️ disabled initially
-        Validators.required,
-      ],
-
+      programStartDate: [, Validators.required, min()],
+      
+      programEndDate: [{ value: '', disabled: true }],
+      numberOfSessions: [{ value: null, disabled: true }, Validators.required],
       therapyCardType: [TherapyCardType.General, Validators.required],
       notes: [''],
 
@@ -127,26 +120,7 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
 
   private validationState!: FormValidationState;
 
-  // ngOnInit(): void {
-  //   this.validationState = new FormValidationState(
-  //     this.form,
-  //     this.facade.formValidationErrors
-  //   );
-
-  //   runInInjectionContext(this.env, () => {
-  //     effect(() => {
-  //       this.validationState.apply();
-  //     });
-  //   });
-
-  //   this.validationState.clearOnEdit();
-
-  //   if (!this.editMode()) {
-  //     this.addProgramRow();
-  //   }
-  // }
   ngOnInit(): void {
-    // الموجود عندك
     this.validationState = new FormValidationState(
       this.form,
       this.facade.formValidationErrors
@@ -164,26 +138,20 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
       this.addProgramRow();
     }
 
-    // ===============================
-    // 🔹 NEW LOGIC
-    // ===============================
     this.form.get('programStartDate')?.valueChanges.subscribe((startDate) => {
       const sessionsCtrl = this.form.get('numberOfSessions');
+      const startDateAsDate = new Date(startDate);
 
-      if (startDate) {
-        sessionsCtrl?.enable();
+      if (startDate && !isNaN(startDateAsDate.getTime())) {
+        sessionsCtrl?.enable({ emitEvent: false });
       } else {
-        sessionsCtrl?.disable();
-        sessionsCtrl?.reset();
-        this.form.get('programEndDate')?.reset();
+        sessionsCtrl?.disable({ emitEvent: false });
+        sessionsCtrl?.reset(null, { emitEvent: false });
       }
-    });
-
-    this.form.get('numberOfSessions')?.valueChanges.subscribe(() => {
       this.updateProgramEndDate();
     });
 
-    this.form.get('programStartDate')?.valueChanges.subscribe(() => {
+    this.form.get('numberOfSessions')?.valueChanges.subscribe(() => {
       this.updateProgramEndDate();
     });
   }
@@ -213,10 +181,7 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
       this.patchEditForm(this.existingTherapyCard);
     }
   }
-  private toDateOnly(value: string | null | undefined): string | null {
-    if (!value) return null;
-    return value.split('T')[0]; // "2025-12-01T00:00:00" → "2025-12-01"
-  }
+
   private formatDate(date: string | null | undefined): string | null {
     if (!date) return null;
 
@@ -236,37 +201,6 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
         return TherapyCardType.General;
     }
   }
-
-  // private patchEditForm(card: TherapyCardDiagnosisDto) {
-  //   this.form.patchValue({
-  //     diagnosisText: card.diagnosisId,
-  //     injuryDate: card.injuryDate,
-  //     injuryReasons: card.injuryReasons.map((x) => x.id),
-  //     injurySides: card.injurySides.map((x) => x.id),
-  //     injuryTypes: card.injuryTypes.map((x) => x.id),
-  //     programStartDate: card.programStartDate,
-  //     programEndDate: card.programEndDate,
-
-  //     therapyCardType: this.mapArabicTypeToEnum(card.therapyCardType),
-  //     notes: card.notes ?? '',
-  //   });
-
-  //   this.programs.clear();
-
-  //   (card.programs ?? []).forEach((p) => {
-  //     this.programs.push(
-  //       this.fb.group({
-  //         medicalProgramId: [p.medicalProgramId, Validators.required],
-  //         duration: [p.duration, Validators.required],
-  //         notes: [p.notes ?? ''],
-  //       })
-  //     );
-  //   });
-  // }
-
-  // --------------------------
-  // Validators
-  // --------------------------
 
   private patchEditForm(card: TherapyCardDiagnosisDto) {
     this.form.patchValue({
@@ -313,9 +247,6 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
     return hasDuplicate ? { duplicateProgram: true } : null;
   }
 
-  // --------------------------
-  // Error helpers
-  // --------------------------
   FrontendError(field: string): boolean {
     const c = this.form.get(field);
     return c ? c.invalid && c.touched : false;
@@ -344,16 +275,13 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
     this.programs.removeAt(i);
   }
 
-  // --------------------------
-  // Submit
-  // --------------------------
   onSubmit() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
 
-    const v = this.form.value;
+    const v = this.form.getRawValue(); // Use getRawValue() to include disabled controls
 
     if (this.editMode()) {
       const dto: UpdateTherapyCardRequest = {
@@ -391,27 +319,27 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges {
       this.submitForm.emit(dto);
     }
   }
-
   private updateProgramEndDate() {
     const start = this.form.get('programStartDate')?.value;
     const sessions = this.form.get('numberOfSessions')?.value;
+    const endDateCtrl = this.form.get('programEndDate');
+    const startDate = new Date(start);
 
-    if (!start || !sessions || sessions <= 0) {
-      this.form.get('programEndDate')?.reset();
+    if (isNaN(startDate.getTime()) || !sessions || sessions <= 0) {
+      endDateCtrl?.reset('', { emitEvent: false }); // Reset if conditions aren't met
       return;
     }
-
-    const startDate = new Date(start);
     const endDate = new Date(startDate);
     endDate.setDate(startDate.getDate() + Number(sessions));
 
-    const iso = endDate.toISOString().split('T')[0];
-    this.form.get('programEndDate')?.setValue(iso, { emitEvent: false });
-  }
-isSpecialCardType(): boolean {
-  const v = this.form.get('therapyCardType')?.value;
-  return Number(v) === TherapyCardType.Special;
-}
+    const isoString = endDate.toISOString().split('T')[0];
 
+    endDateCtrl?.setValue(isoString, { emitEvent: false });
+  }
+
+  isSpecialCardType(): boolean {
+    const v = this.form.get('therapyCardType')?.value;
+    return Number(v) === TherapyCardType.Special;
+  }
 
 }

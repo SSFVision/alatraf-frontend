@@ -49,26 +49,20 @@
     </div>
   </div>
 
-  <!-- Injury Types -->
   <div class="row flex-center">
     <label class="label-lg">نوع الإصابة</label>
-
     <app-multi-select formControlName="injuryTypes" [options]="injuryTypesOptions"
       placeholder="اختر النوع"></app-multi-select>
-
     <div class="error-message label-lg" *ngIf="hasBackendError('injuryTypes')">
       {{ getBackendError("injuryTypes") }}
     </div>
-
     <div class="error-message label-lg" *ngIf="hasFrontendError('injuryTypes')">
       نوع الإصابة مطلوب
     </div>
   </div>
-
-  <!-- Injury Date -->
   <div class="row flex-center">
     <label class="label-lg">تاريخ الإصابة</label>
-    <input class="label-lg" type="date" formControlName="injuryDate" />
+    <input class="label-lg" type="date" formControlName="injuryDate" [max]="today" />
 
     <div class="error-message label-lg" *ngIf="hasBackendError('injuryDate')">
       {{ getBackendError("injuryDate") }}
@@ -79,39 +73,16 @@
     </div>
   </div>
 
-  <!-- Program dates -->
-  <!-- <div class="row flex-center">
-    <label class="label-lg">تاريخ بداية البرنامج</label>
-    <input class="label-lg" type="date" formControlName="programStartDate" />
-
-    <div class="error-message label-lg" *ngIf="hasBackendError('programStartDate')">
-      {{ getBackendError('programStartDate') }}
-    </div>
-
-    <div class="error-message label-lg" *ngIf="hasFrontendError('programStartDate')">
-      تاريخ البداية مطلوب
-    </div>
-
-    <label class="label-lg">تاريخ نهاية البرنامج</label>
-    <input class="label-lg" type="date" formControlName="programEndDate" />
-
-    <div class="error-message label-lg" *ngIf="hasBackendError('programEndDate')">
-      {{ getBackendError('programEndDate') }}
-    </div>
-
-    <div class="error-message label-lg" *ngIf="hasFrontendError('programEndDate')">
-      تاريخ النهاية مطلوب
-    </div>
-  </div> -->
+ 
   <div class="row flex-center">
     <label class="label-lg">تاريخ بداية البرنامج</label>
-    <input class="label-lg" type="date" formControlName="programStartDate" />
+    <input class="label-lg" type="date" formControlName="programStartDate"  [min]="today"/>
 
     <div class="error-message label-lg" *ngIf="hasBackendError('programStartDate')">
       {{ getBackendError("programStartDate") }}
     </div>
 
-    <div class="error-message label-lg" *ngIf="hasFrontendError('programStartDate')">
+    <div class="error-message label-lg" *ngIf="hasFrontendError('programStartDate')" >
       تاريخ البداية مطلوب
     </div>
 
@@ -123,14 +94,11 @@
     <div class="error-message label-lg" *ngIf="hasFrontendError('numberOfSessions')">
       عدد الجلسات مطلوب
     </div>
-
-    <!-- <label class="label-lg">تاريخ نهاية البرنامج</label>
-    <input class="label-lg" type="date" formControlName="programEndDate" /> -->
     <label class="label-lg" *ngIf="!isSpecialCardType()">
       تاريخ نهاية البرنامج
     </label>
 
-    <input *ngIf="!isSpecialCardType()" class="label-lg" type="date" formControlName="programEndDate" readonly />
+    <input *ngIf="!isSpecialCardType()" class="label-lg" type="date" formControlName="programEndDate" readonly  />
 
     <div class="error-message label-lg" *ngIf="hasBackendError('programEndDate')">
       {{ getBackendError("programEndDate") }}
@@ -258,7 +226,6 @@
   </div>
 
   <div class="flex-center gap-16" *ngIf="editMode()">
-    <!-- غير مفعل إلى أن يتم التعديل -->
     <button class="btn primary label-md" type="submit">حفظ التعديلات</button>
 
     <button class="btn danger label-md" disabled>حذف التشخيص</button>
