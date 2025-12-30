@@ -20,9 +20,10 @@
   margin: auto;
 }
 
-.flex-center button:not(.icon) {
+.flex-center button.btn:not(.icon) {
   margin-top: 16px;
 }
+
 
 .row {
   display: flex;
@@ -101,11 +102,11 @@
 /* box styling */
 
 .max-width-324 {
-  max-width: 250px;
+  max-width: 260px;
 }
 
 .max-hight-712 {
-  max-height: 712px;
+  max-height: 600px;
   min-height: 100px;
   overflow-y: auto;
 }
