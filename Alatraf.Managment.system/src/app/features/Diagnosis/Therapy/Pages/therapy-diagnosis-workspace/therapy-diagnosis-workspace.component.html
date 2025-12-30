@@ -5,57 +5,39 @@
 <p class="flex-center">جاري تحميل بيانات المريض...</p>
 
 } @else { @if (!isEditMode()) {
-<div class="row gap-16 sticky">
-  <h1
-    class="title-lg cursor-pointer"
-    (click)="switchToAdd()"
-    [class.primary-color-50]="viewMode() !== 'add'"
-  >
+<div class="row gap-16">
+  <h1 class="title-lg cursor-pointer" (click)="switchToAdd()" [class.primary-color-50]="viewMode() !== 'add'">
     إضافة تشخيص
   </h1>
 
-  <h1
-    [class.primary-color-50]="viewMode() !== 'history'"
-    class="title-lg cursor-pointer"
-    (click)="switchToHistory()"
-  >
+  <h1 [class.primary-color-50]="viewMode() !== 'history'" class="title-lg cursor-pointer" (click)="switchToHistory()">
     التشخيصات السابقة
   </h1>
 </div>
 } @else {
 
-<div class="row space-between sticky">
+<div class="row space-between">
   <h1 class="title-lg cursor-pointer">تعديل تشخيص</h1>
-  <img
-    src="assets/icons/close-icon.svg"
-    alt="إغلاق"
-    class="close-icon"
-    (click)="switchToHistory()"
-  />
+  <img src="assets/icons/close-icon.svg" alt="إغلاق" class="close-icon" (click)="switchToHistory()" />
 </div>
 }
-<app-header-patient-info
-  [patient]="ticket()?.patient!"
-></app-header-patient-info>
 
-@if(viewMode() === 'add') {
-<app-add-therapy-diagnosis-form
-  [ticketId]="ticket()?.ticketId!"
-  [injuryReasons]="injuryReasons()"
-  [injurySides]="injurySides()"
-  [injuryTypes]="injuryTypes()"
-  [medicalPrograms]="medicalPrograms()"
-  [editMode]="isEditMode()"
-  [existingTherapyCard]="existingCard()"
-  (submitForm)="saveTherapyDiagnosis($event)"
-></app-add-therapy-diagnosis-form>
+<div class="max-hight-712 column gap-16 padding-LR-24">
 
-} 
-@if (viewMode() === 'history') {
-<app-previous-therapy-card-diagnosis
-  [items]="patientTherapyDiagnoisis()"
-  (viewDetails)="onViewCard($event)"
-></app-previous-therapy-card-diagnosis>
-} 
 
+  <app-header-patient-info [patient]="ticket()?.patient!"></app-header-patient-info>
+
+  @if(viewMode() === 'add') {
+  <app-add-therapy-diagnosis-form [ticketId]="ticket()?.ticketId!" [injuryReasons]="injuryReasons()"
+    [injurySides]="injurySides()" [injuryTypes]="injuryTypes()" [medicalPrograms]="medicalPrograms()"
+    [editMode]="isEditMode()" [existingTherapyCard]="existingCard()"
+    (submitForm)="saveTherapyDiagnosis($event)"></app-add-therapy-diagnosis-form>
+
+  }
+  @if (viewMode() === 'history') {
+  <app-previous-therapy-card-diagnosis [items]="patientTherapyDiagnoisis()"
+    (viewDetails)="onViewCard($event)"></app-previous-therapy-card-diagnosis>
+  }
+
+</div>
 }

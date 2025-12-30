@@ -4,45 +4,18 @@
 </div>
 <div class="row flex-center margin_top">
   <label class="label-lg"> الاسم </label>
-  <input
-    class="label-lg"
-    type="text"
-    [value]="patient()!.personDto?.fullname"
-    disabled
-    readonly
-  />
+  <input class="label-lg" type="text" [value]="patient()!.personDto?.fullname" disabled readonly />
 </div>
 
 <div class="row flex-center margin_top">
   <label class="label-lg"> رقم المريض </label>
-  <input
-    class="label-lg"
-    type="text"
-    [value]="patient()!.personDto?.phone"
-    disabled
-    readonly
-  />
+  <input class="label-lg" type="text" [value]="patient()!.personDto?.phone" disabled readonly />
 
   <label class="label-lg"> الجنس </label>
-  <input
-    class="label-lg"
-    type="text"
-    [value]="patient()!.personDto?.gender"
-    disabled
-    readonly
-  />
-    <!-- [value]="patient()!.gender ? 'ذكر' : ' انثى'" -->
+  <input class="label-lg" type="text" [value]="patient()!.personDto?.gender" disabled readonly />
+  <!-- [value]="patient()!.gender ? 'ذكر' : ' انثى'" -->
 
   <label class="label-lg"> العمر </label>
-  <input
-    class="label-lg"
-    type="text"
-    [value]="getAgeFromBirthdate(patient()!.personDto?.birthdate) + '   سنة'  "
-    disabled
-    readonly
-  />
-</div>
-
-<div class="width-100">
-  <span class="home-line"></span>
+  <input class="label-lg" type="text" [value]="getAgeFromBirthdate(patient()!.personDto?.birthdate) + '   سنة'  "
+    disabled readonly />
 </div>
