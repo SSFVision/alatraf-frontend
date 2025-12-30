@@ -22,7 +22,6 @@ export class PositiveNumberDirective {
 
   @HostListener('keydown', ['$event'])
   onKeyDown(event: KeyboardEvent): void {
-    // منع e, +, -, --
     if (['e', 'E', '+', '-'].includes(event.key)) {
       event.preventDefault();
     }

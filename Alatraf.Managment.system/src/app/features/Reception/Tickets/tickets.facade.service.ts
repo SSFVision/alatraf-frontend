@@ -169,7 +169,6 @@ export class TicketFacade extends BaseFacade {
         if (res.success && res.data) {
           this.createdTicketId.set(res.data.ticketId);
           this.formValidationErrors.set({});
-          this.loadTickets();
         } else if (res.validationErrors) {
           this.formValidationErrors.set(res.validationErrors);
         }
