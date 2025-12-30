@@ -135,7 +135,8 @@ export const AppRoutes = {
   Appointment: {
     root: 'appointments',
     addHoliday: 'new/holiday',
-    schedule: (ticketId: number | string,patientId: number | string) => `schedule/${ticketId}/patient/${patientId}`,
+    schedule: (ticketId: number | string, patientId: number | string) =>
+      `schedule/${ticketId}/patient/${patientId}`,
     reschedule: (patientId: number | string) => `reschedule/${patientId}`,
   },
   medicalPrograms: {
@@ -173,14 +174,11 @@ export const AppRoutes = {
   },
   doctors: {
     root: 'doctors',
-
     list: 'doctors',
-
     create: 'create',
-
     edit: (doctorId: number | string) => `edit/${doctorId}`,
-
     view: (doctorId: number | string) => `view/${doctorId}`,
+    assign: (doctorId: number | string) => `assign/${doctorId}`,
   },
   rooms: {
     root: 'rooms',

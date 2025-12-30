@@ -154,4 +154,6 @@ export class AddEditDoctorFormComponent {
     const doctor = this.selectedDoctor();
     if (doctor !== null) this.delete.emit(doctor);
   }
+
+
 }

@@ -1,18 +1,18 @@
 import {
   Component,
   computed,
-  inject,
-  signal,
-  OnInit,
   DestroyRef,
   effect,
+  inject,
+  OnInit,
+  signal,
 } from '@angular/core';
 import {
+  FormArray,
   FormBuilder,
   FormGroup,
-  FormArray,
-  Validators,
   ReactiveFormsModule,
+  Validators,
 } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
@@ -21,17 +21,16 @@ import { PreviousTherapySessionsHistoryComponent } from '../../Components/previo
 
 import { TherapySessionsFacade } from '../../services/therapy-sessions.facade.service';
 
-import { SessionDto } from '../../Models/session.dto';
+import { CommonModule, NgFor } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   PatientDto,
   PatientType,
 } from '../../../../core/models/Shared/patient.model';
-import { DiagnosisProgramDto } from '../../../Diagnosis/Therapy/Models/therapy-card-diagnosis.dto';
-import { OrganizationService } from '../../../Organization/organization.service';
-import { DepartmentSectionDto } from '../../../Organization/Models/department-section.dto';
 import { Department } from '../../../Diagnosis/Shared/enums/department.enum';
-import { CommonModule, NgFor } from '@angular/common';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { DiagnosisProgramDto } from '../../../Diagnosis/Therapy/Models/therapy-card-diagnosis.dto';
+import { DepartmentSectionDto } from '../../../Organization/Models/department-section.dto';
+import { OrganizationService } from '../../../Organization/organization.service';
 
 @Component({
   selector: 'app-sessions-mangment',

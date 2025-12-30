@@ -1,19 +1,20 @@
-import { finalize } from 'rxjs';
+import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { DoctorFacade } from '../../Service/doctor.facade.service';
-import { CommonModule } from '@angular/common';
-import { AddEditDoctorFormComponent } from '../../Components/add-edit-doctor-form/add-edit-doctor-form.component';
-import { DepartmentsFacade } from '../../../Departments/departments.facade.service';
-import { CreateDoctorRequest } from '../../Models/create-doctor.request';
-import { UpdateDoctorRequest } from '../../Models/update-doctor.request';
+import { finalize } from 'rxjs';
 import { ToastService } from '../../../../../core/services/toast.service';
+import { DepartmentsFacade } from '../../../Departments/departments.facade.service';
+import { AddEditDoctorFormComponent } from '../../Components/add-edit-doctor-form/add-edit-doctor-form.component';
+import { CreateDoctorRequest } from '../../Models/create-doctor.request';
 import { DoctorDto } from '../../Models/doctor.dto';
+import { UpdateDoctorRequest } from '../../Models/update-doctor.request';
+import { DoctorFacade } from '../../Service/doctor.facade.service';
+import { AssignDoctorSectionComponent } from "../assign-doctor-section/assign-doctor-section.component";
 
 @Component({
   selector: 'app-doctor-workspace-page',
   standalone: true,
-  imports: [CommonModule, AddEditDoctorFormComponent],
+  imports: [CommonModule, AddEditDoctorFormComponent, AssignDoctorSectionComponent],
   templateUrl: './doctor-workspace-page.component.html',
   styleUrl: './doctor-workspace-page.component.css',
 })
@@ -22,6 +23,7 @@ export class DoctorWorkspacePageComponent implements OnInit {
   doctorFacade = inject(DoctorFacade);
   departmentsFacade = inject(DepartmentsFacade);
   private toastService = inject(ToastService);
+  isAssignPage = signal(false);
   isSaving = signal(false);
   ngOnInit(): void {
     this.lisonToRouteParamsChange();
@@ -45,7 +47,7 @@ export class DoctorWorkspacePageComponent implements OnInit {
     if (this.doctorFacade.isEditMode()) {
       const doctorId = this.doctorFacade.selectedDoctor()?.doctorId;
       if (doctorId) {
-              console.log('updated request payload:', payload);
+        console.log('updated request payload:', payload);
 
         this.doctorFacade
           .updateDoctor(doctorId, payload)
@@ -75,5 +77,12 @@ export class DoctorWorkspacePageComponent implements OnInit {
   onDeleteDoctor(doctor: DoctorDto) {
     this.toastService.warning('حذف الطبيب غير مفعّل حالياً.');
     // this.doctorFacade.deleteDoctor(doctor);
+  }
+
+  switchToAssign() {
+    this.isAssignPage.set(true);
+  }
+  switchToEdit(){
+    this.isAssignPage.set(false);
   }
 }

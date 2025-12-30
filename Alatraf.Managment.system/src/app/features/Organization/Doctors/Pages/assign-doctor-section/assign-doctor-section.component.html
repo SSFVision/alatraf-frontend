@@ -1,0 +1,56 @@
+<div class="max-hight-712 column gap-16">
+  <div class="width-100">
+    <p class="title-md">بيانات الطبيب</p>
+
+    <span class="home-line"></span>
+  </div>
+
+  <div class="row flex-center">
+    <label class="label-lg"> الاسم </label>
+    <input
+      class="label-lg"
+      type="text"
+      placeholder=""
+      [value]="selectedDoctor()?.personDto?.fullname"
+      readonly
+    />
+    <label class="label-lg"> الرقم الوظيفي </label>
+    <input
+      class="label-lg"
+      type="text"
+      placeholder=""
+      [value]="selectedDoctor()?.doctorId"
+      readonly
+    />
+  </div>
+  <form class="max-hight-712 column gap-24">
+    <div class="row flex-center">
+      <label class="label-lg"> القسم </label>
+      <select class="label-lg">
+        <option value="cardiology"></option>
+        <option value="neurology">الأعصاب</option>
+        <option value="orthopedics">العظام</option>
+      </select>
+
+      <label class="label-lg"> الغرفة </label>
+      <select class="label-lg">
+        <option value="101"></option>
+        <option value="102">102</option>
+        <option value="103">103</option>
+      </select>
+    </div>
+
+    <div class="row flex-center">
+      <label class="label-lg"> الحالة </label>
+      <select class="label-lg">
+        <option></option>
+        <option>نشط</option>
+        <option>غير نشط</option>
+      </select>
+    </div>
+
+    <div class="row gap-16 flex-center">
+      <button class="btn secondary" disabled>تعديل</button>
+    </div>
+  </form>
+</div>
