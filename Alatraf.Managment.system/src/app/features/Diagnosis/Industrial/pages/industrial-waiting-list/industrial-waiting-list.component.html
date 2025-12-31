@@ -1,4 +1,4 @@
-<div class="padding-32 row gap-16 padding-24">
+<div class="row gap-16">
   <div class="box max-width-324 culumn gap-24 max-hight-800">
     <!-- Header -->
     <div class="row space-between">
@@ -48,19 +48,20 @@
       [loading]="loading()"></app-waiting-patient-card>
 
     <!-- Pagination Component -->
-    <app-pagination [page]="pageRequest().page" [pageSize]="pageRequest().pageSize" [totalCount]="totalCount()"
-      (pageChange)="ticketFacade.setPage($event)" (pageSizeChange)="ticketFacade.setPageSize($event)"></app-pagination>
+    <!-- <app-pagination [page]="pageRequest().page" [pageSize]="pageRequest().pageSize" [totalCount]="totalCount()"
+      (pageChange)="ticketFacade.setPage($event)" (pageSizeChange)="ticketFacade.setPageSize($event)"></app-pagination> -->
   </div>
 
   <!-- Right section -->
-  @if (selectedTicket()) {
   <div class="box max-hight-800 gap-16">
+    @if (selectedTicket()) {
     <router-outlet></router-outlet>
+    } @else {
+
+    <div class="empty-state">
+      <img src="assets/images/bro.svg" class="empty-state_image" alt="اضافة تشخيص" width="496.75" height="512" />
+      <p class="title-md primary-color-50">مرحباً بك</p>
+    </div>
+    }
   </div>
-  } @else {
-  <div class="box max-hight-800 gap-16 flex-center">
-    <img src="assets/images/bro.svg" alt="اضافة تشخيص" width="496.75" height="512" class="padding-32" />
-    <p class="title-md primary-color-50">مرحباً بك</p>
-  </div>
-  }
 </div>
