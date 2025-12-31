@@ -91,9 +91,9 @@ private sessionsFacade = inject(TherapySessionsFacade);
     this.doctorWorkloadFacade.setTherapistsPage(page);
   }
 
-  OnSelectDoctor(doctorId: number): void {
-    this.selectedDoctorId.set(doctorId);
-    this.navTherapyCard.goToTherapyDoctorsListPage(doctorId);
+  OnSelectDoctor(doctorSectionRoomId: number): void {
+    this.selectedDoctorId.set(doctorSectionRoomId);
+    this.navTherapyCard.goToTherapyDoctorsListPage(doctorSectionRoomId);
   }
 
 }

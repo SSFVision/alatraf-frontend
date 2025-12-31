@@ -1,0 +1,33 @@
+@if (loading()) {
+<div class="flex-center padding-32">
+  <span class="loader"></span>
+  <span class="body-md primary-color-50 margin-left-8"> جاري التحميل... </span>
+</div>
+} @else { @if ( (!sessions() || sessions().length === 0)) {
+<div class="empty-state">
+  <img src="assets/images/amico.svg" alt="no patients" class="empty-icon" />
+  <p class="body-md primary-color-50">
+    لا يوجد مرضى جلسات مسندة لهذا الطبيب حالياً
+  </p>
+</div>
+} @for (session of sessions(); track session.sessionProgramId) {
+
+<div class="flex-parent">
+  <div class="flex-child card primary-card" (click)="onCardClick(session)">
+    <p class="body-md">
+      {{ session.patientName }}
+    </p>
+    <p class="body-sm primary-color-50">
+      رقم البطاقة: {{ session.therapyCardId }}
+    </p>
+    <div class="row gap-16">
+      <p class="body-sm primary-color-50">
+        {{ session.programName }}
+      </p>
+      <p class="body-sm primary-color-50">
+        {{ session.sessionDate | date : "shortDate" }}
+      </p>
+    </div>
+  </div>
+</div>
+} }

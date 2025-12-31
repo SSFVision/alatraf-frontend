@@ -148,16 +148,15 @@ export class DoctorWorkloadFacade extends BaseFacade {
           })
         ),
     null,
-    (items) =>
-    {
-          this._isLoadingTherapists.set(false);
+    (items) => {
+      this._isLoadingTherapists.set(false);
 
-      this._therapists.set(items)
+      this._therapists.set(items);
     }
   );
 
   loadTherapists(): void {
-              this._isLoadingTherapists.set(true);
+    this._isLoadingTherapists.set(true);
 
     this.service
       .getTherapistsDropdown(this._therapistFilters(), this._therapistPage())
@@ -172,7 +171,7 @@ export class DoctorWorkloadFacade extends BaseFacade {
             this.handleDropdownError(res);
           }
         }),
-         finalize(() => {
+        finalize(() => {
           this._isLoadingTherapists.set(false);
         })
       )
@@ -180,7 +179,7 @@ export class DoctorWorkloadFacade extends BaseFacade {
   }
 
   searchTherapists(term: string): void {
-            this._isLoadingTherapists.set(true);
+    this._isLoadingTherapists.set(true);
 
     this._therapistFilters.update((f) => ({ ...f, searchTerm: term }));
     this._therapistPage.update((p) => ({ ...p, page: 1 }));

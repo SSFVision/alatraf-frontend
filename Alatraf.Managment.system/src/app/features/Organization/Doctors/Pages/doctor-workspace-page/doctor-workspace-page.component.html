@@ -1,3 +1,35 @@
+
+
+
+@if (loadingSelectedDoctor()) {
+<div class="flex-center">
+  <span class="loader"></span>
+</div>
+<p class="flex-center">جاري تحميل بيانات الطبيب...</p>
+} @else {
+
+<div class="row space-between sticky">
+  @if (doctorFacade.isEditMode()) {
+  <h1 class="title-lg">
+    <span>تعديل بيانات الطبيب</span>
+  </h1>
+  @if (!isAssignPage()) {
+  <button class="btn primary" (click)="switchToAssign()">ِAssign</button>
+  } @else {
+  <img
+    src="assets/icons/close-icon.svg"
+    alt="إغلاق"
+    class="close-icon"
+    (click)="switchToEdit()"
+  />
+
+  } } @else {
+  <h2>إضافة طبيب جديد</h2>
+  }
+</div>
+
+@if (!isAssignPage()) {
+
 <app-add-edit-doctor-form
   [isEditMode]="doctorFacade.isEditMode()"
   [selectedDoctor]="doctorFacade.selectedDoctor()"
@@ -6,4 +38,8 @@
   (save)="onSave($event)"
   [isSaving]="isSaving()"
   (delete)="onDeleteDoctor($event)"
-></app-add-edit-doctor-form>
+></app-add-edit-doctor-form
+>} @else {
+<app-assign-doctor-section [selectedDoctor]="doctorFacade.selectedDoctor()"></app-assign-doctor-section>
+}
+}

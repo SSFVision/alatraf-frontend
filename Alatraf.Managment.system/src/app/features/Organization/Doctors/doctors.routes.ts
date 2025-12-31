@@ -1,3 +1,4 @@
+import { DoctorAssigmentsPageComponent } from './Pages/doctor-assigments-page/doctor-assigments-page.component';
 import { Routes } from '@angular/router';
 import { PERMISSIONS } from '../../../core/auth/models/permissions.map';
 import { PermissionGuard } from '../../../core/guards/permission.guard';
@@ -40,15 +41,15 @@ export const DoctorsRoutes: Routes = [
             './Pages/doctor-workspace-page/doctor-workspace-page.component'
           ).then((m) => m.DoctorWorkspacePageComponent),
       },
-      // {
-      //   path: 'view/:doctorId',
-      //   canActivate: [PermissionGuard],
-      //   data: { permission: PERMISSIONS.Doctors.VIEW },
-      //   loadComponent: () =>
-      //     import(
-      //       './Pages/doctor-workspace-page/doctor-workspace-page.component'
-      //     ).then((m) => m.DoctorWorkspacePageComponent),
-      // },
+      {
+        path: 'assign/:doctorId',
+        canActivate: [PermissionGuard],
+        data: { permission: PERMISSIONS.Doctors.VIEW },
+        loadComponent: () =>
+          import(
+            './Pages/doctor-assigments-page/doctor-assigments-page.component'
+          ).then((m) => m.DoctorAssigmentsPageComponent),
+      },
     ],
   },
 

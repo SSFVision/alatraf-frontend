@@ -18,14 +18,12 @@ import { TechnicianDto } from '../Models/technicians/technician.dto';
 import { TherapistFilterRequest } from '../Models/therapists/therapist-filter.request';
 import { TherapistDto } from '../Models/therapists/therapist.dto';
 
-
 @Injectable({
   providedIn: 'root',
 })
 export class DoctorService extends BaseApiService {
   private readonly endpoint = 'http://localhost:2003/api/v1/doctors';
 
- 
   getDoctors(
     filters: DoctorsFilterRequest,
     pagination: PageRequest
@@ -55,9 +53,7 @@ export class DoctorService extends BaseApiService {
   // -----------------------------
   // POST: Create Doctor
   // -----------------------------
-  createDoctor(
-    dto: CreateDoctorRequest
-  ): Observable<ApiResult<DoctorDto>> {
+  createDoctor(dto: CreateDoctorRequest): Observable<ApiResult<DoctorDto>> {
     const headers = new HttpHeaders().set('X-Enable-Loader', 'true');
     return this.post<DoctorDto>(this.endpoint, dto, headers);
   }
@@ -76,9 +72,7 @@ export class DoctorService extends BaseApiService {
   // -----------------------------
   // PATCH: End Doctor Assignment
   // -----------------------------
-  endDoctorAssignment(
-    doctorId: number
-  ): Observable<ApiResult<void>> {
+  endDoctorAssignment(doctorId: number): Observable<ApiResult<void>> {
     const headers = new HttpHeaders().set('X-Enable-Loader', 'true');
     return this.patch<void>(
       `${this.endpoint}/end-assignment/${doctorId}`,
@@ -117,51 +111,50 @@ export class DoctorService extends BaseApiService {
     );
   }
 
-
   getTechniciansDropdown(
-  filters: TechnicianFilterRequest,
-  pagination: PageRequest
-): Observable<ApiResult<PaginatedList<TechnicianDto>>> {
-  let params = new HttpParams()
-    .set('page', pagination.page)
-    .set('pageSize', pagination.pageSize);
+    filters: TechnicianFilterRequest,
+    pagination: PageRequest
+  ): Observable<ApiResult<PaginatedList<TechnicianDto>>> {
+    let params = new HttpParams()
+      .set('page', pagination.page)
+      .set('pageSize', pagination.pageSize);
 
-  if (filters) {
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value !== null && value !== undefined && value !== '') {
-        params = params.set(key, value as any);
-      }
-    });
+    if (filters) {
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== null && value !== undefined && value !== '') {
+          params = params.set(key, value as any);
+        }
+      });
+    }
+
+    return this.get<PaginatedList<TechnicianDto>>(
+      `${this.endpoint}/technicians`,
+      params
+    );
   }
 
-  return this.get<PaginatedList<TechnicianDto>>(
-    `${this.endpoint}/technicians`,
-    params
-  );
-}
+  // -----------------------------
+  // GET: Therapists Dropdown
+  // -----------------------------
+  getTherapistsDropdown(
+    filters: TherapistFilterRequest,
+    pagination: PageRequest
+  ): Observable<ApiResult<PaginatedList<TherapistDto>>> {
+    let params = new HttpParams()
+      .set('page', pagination.page)
+      .set('pageSize', pagination.pageSize);
 
-// -----------------------------
-// GET: Therapists Dropdown
-// -----------------------------
-getTherapistsDropdown(
-  filters: TherapistFilterRequest,
-  pagination: PageRequest
-): Observable<ApiResult<PaginatedList<TherapistDto>>> {
-  let params = new HttpParams()
-    .set('page', pagination.page)
-    .set('pageSize', pagination.pageSize);
+    if (filters) {
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== null && value !== undefined && value !== '') {
+          params = params.set(key, value as any);
+        }
+      });
+    }
 
-  if (filters) {
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value !== null && value !== undefined && value !== '') {
-        params = params.set(key, value as any);
-      }
-    });
+    return this.get<PaginatedList<TherapistDto>>(
+      `${this.endpoint}/therapists`,
+      params
+    );
   }
-
-  return this.get<PaginatedList<TherapistDto>>(
-    `${this.endpoint}/therapists`,
-    params
-  );
-}
 }

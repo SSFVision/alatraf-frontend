@@ -1,25 +1,23 @@
 import {
   Component,
   inject,
-  signal,
-  OnInit,
-  effect,
   OnDestroy,
+  OnInit,
+  signal
 } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavigationDiagnosisFacade } from '../../../../../core/navigation/navigation-diagnosis.facade';
+import { PatientCardComponent } from '../../../../../shared/components/waiting-patient-card/waiting-patient-card.component';
 import {
   TicketDto,
   TicketStatus,
 } from '../../../../Reception/Tickets/models/ticket.model';
 import { TicketFacade } from '../../../../Reception/Tickets/tickets.facade.service';
-import { PaginationComponent } from '../../../../../shared/components/pagination/pagination.component';
 import { Department, ServiceType } from '../../../Shared/enums/department.enum';
-import { PatientCardComponent } from '../../../../../shared/components/waiting-patient-card/waiting-patient-card.component';
 
 @Component({
   selector: 'app-therapy-waiting-list',
-  imports: [RouterOutlet, PaginationComponent, PatientCardComponent],
+  imports: [RouterOutlet, PatientCardComponent],
   templateUrl: './therapy-waiting-list.component.html',
   styleUrl: './therapy-waiting-list.component.css',
 })

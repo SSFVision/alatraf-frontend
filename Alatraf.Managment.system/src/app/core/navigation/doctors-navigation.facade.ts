@@ -38,6 +38,15 @@ export class DoctorsNavigationFacade {
     );
   }
 
+  goToAssignDoctorPage(
+    doctorId: number | string,
+    extras?: NavigationExtras
+  ): void {
+    this.go(
+      `${AppRoutes.doctors.root}/${AppRoutes.doctors.assign(doctorId)}`,
+      extras
+    );
+  }
   private go(path: string | any[], extras?: NavigationExtras): void {
     this.router.navigate(Array.isArray(path) ? path : [path], extras);
   }

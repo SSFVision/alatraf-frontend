@@ -1,7 +1,6 @@
-import { DoctorAssigmentsPageComponent } from './../Organization/Doctors/Pages/doctor-assigments-page/doctor-assigments-page.component';
 import { Routes } from '@angular/router';
-import { PermissionGuard } from '../../core/guards/permission.guard';
 import { PERMISSIONS } from '../../core/auth/models/permissions.map';
+import { PermissionGuard } from '../../core/guards/permission.guard';
 
 export const TherapyCardsRoutes: Routes = [
   {
@@ -24,13 +23,13 @@ export const TherapyCardsRoutes: Routes = [
           ),
       },
       {
-        path: 'doctors/:doctorId/assigments',
+        path: 'doctors/:doctorSectionRoomId/assigments',
         canActivate: [PermissionGuard],
         data: { permission: PERMISSIONS.Doctors.VIEW },
         loadComponent: () =>
           import(
-            '../Organization/Doctors/Pages/doctor-assigments-page/doctor-assigments-page.component'
-          ).then((m) => m.DoctorAssigmentsPageComponent),
+            './Pages/therapist-doctor-assigments/therapist-doctor-assigments.component'
+          ).then((m) => m.TherapistDoctorAssigmentsComponent),
       },
     ],
   },

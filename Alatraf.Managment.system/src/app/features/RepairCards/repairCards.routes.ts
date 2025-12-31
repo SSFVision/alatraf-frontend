@@ -23,13 +23,13 @@ export const RepairCardsRoutes: Routes = [
           ).then((m) => m.RepairCardAssignmentsWorkspaceComponent),
       },
       {
-        path: 'doctors/:doctorId',
+        path: 'doctors/:doctorSectionRoomId',
         canActivate: [PermissionGuard],
         data: { permission: PERMISSIONS.Doctors.VIEW },
         loadComponent: () =>
           import(
-            '../Organization/Doctors/Pages/doctor-workspace-page/doctor-workspace-page.component'
-          ).then((m) => m.DoctorWorkspacePageComponent),
+            './Pages/technician-doctor-assignments/technician-doctor-assignments.component'
+          ).then((m) => m.TechnicianDoctorAssignmentsComponent),
       },
       // ================= ASSIGN WHOLE CARD =================
       // {

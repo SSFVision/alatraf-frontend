@@ -43,10 +43,10 @@ export class TherapyCardsNavigationFacade {
   }
 
   goToTherapyDoctorsListPage(
-    doctorId: number | string,
+    doctorSectionRoomId: number | string,
     extras?: NavigationExtras
   ): void {
-    this.go(`${AppRoutes.therapyCards.doctors.viewDoctorAssigments(doctorId)}`, extras);
+    this.go(`${AppRoutes.therapyCards.doctors.viewDoctorAssigments(doctorSectionRoomId)}`, extras);
   }
 
   // ================= INTERNAL =================

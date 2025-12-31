@@ -81,8 +81,8 @@ export class MainRepairCardsWaitingListComponent {
     this.doctorWorkloadFacade.searchTechnicians(term);
   }
 
-  OnSelectDoctor(doctorId: number): void {
-    this.SelectedDoctorId.set(doctorId);
-    this.navRepairCard.goToRepairDoctorsListPage(doctorId);
+  OnSelectDoctor(doctorSectionRoomId: number): void {
+    this.SelectedDoctorId.set(doctorSectionRoomId);
+    this.navRepairCard.goToRepairDoctorsListPage(doctorSectionRoomId);
   }
 }

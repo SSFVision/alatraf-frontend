@@ -99,8 +99,8 @@ export const AppRoutes = {
         `therapy-cards/${therapyCardId}/sessions/edit/${sessionId}`,
     },
     doctors: {
-      viewDoctorAssigments: (doctorId: number | string) =>
-        `therapy-cards/doctors/${doctorId}/assigments`,
+      viewDoctorAssigments: (doctorSectionRoomId: number | string) =>
+        `therapy-cards/doctors/${doctorSectionRoomId}/assigments`,
     },
   },
   repairCards: {
@@ -122,7 +122,7 @@ export const AppRoutes = {
         `repair-cards/${repairCardId}/assignments/assign-parts`,
     },
     doctors: {
-      view: (doctorId: number | string) => `repair-cards/doctors/${doctorId}`,
+      viewIndustrialParts: (doctorSectionRoomId: number | string) => `repair-cards/doctors/${doctorSectionRoomId}`,
     },
     // عمليات سريعة (عادة dialogs أو inline forms)
     status: (repairCardId: number | string) =>
@@ -135,7 +135,8 @@ export const AppRoutes = {
   Appointment: {
     root: 'appointments',
     addHoliday: 'new/holiday',
-    schedule: (ticketId: number | string,patientId: number | string) => `schedule/${ticketId}/patient/${patientId}`,
+    schedule: (ticketId: number | string, patientId: number | string) =>
+      `schedule/${ticketId}/patient/${patientId}`,
     reschedule: (patientId: number | string) => `reschedule/${patientId}`,
   },
   medicalPrograms: {
@@ -173,14 +174,11 @@ export const AppRoutes = {
   },
   doctors: {
     root: 'doctors',
-
     list: 'doctors',
-
     create: 'create',
-
     edit: (doctorId: number | string) => `edit/${doctorId}`,
-
     view: (doctorId: number | string) => `view/${doctorId}`,
+    assign: (doctorId: number | string) => `assign/${doctorId}`,
   },
   rooms: {
     root: 'rooms',

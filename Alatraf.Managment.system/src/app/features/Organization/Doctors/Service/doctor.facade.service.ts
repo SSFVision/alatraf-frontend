@@ -1,12 +1,12 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
-import { tap, map, finalize } from 'rxjs/operators';
+import { finalize, map, tap } from 'rxjs/operators';
 
-import { BaseFacade } from '../../../../core/utils/facades/base-facade';
 import { ApiResult } from '../../../../core/models/ApiResult';
 import { PageRequest } from '../../../../core/models/Shared/page-request.model';
+import { BaseFacade } from '../../../../core/utils/facades/base-facade';
 import { SearchManager } from '../../../../core/utils/search-manager';
 
-import { DoctorService } from './doctor.service';
+import { DoctorsNavigationFacade } from '../../../../core/navigation/doctors-navigation.facade';
 import { AssignDoctorToSectionRoomRequest } from '../Models/assign-doctor-to-section-room.request';
 import { AssignDoctorToSectionRequest } from '../Models/assign-doctor-to-section.request';
 import { CreateDoctorRequest } from '../Models/create-doctor.request';
@@ -14,9 +14,7 @@ import { DoctorListItemDto } from '../Models/doctor-list-item.dto';
 import { DoctorDto } from '../Models/doctor.dto';
 import { DoctorsFilterRequest } from '../Models/doctors-filter.request';
 import { UpdateDoctorRequest } from '../Models/update-doctor.request';
-import { DoctorWorkloadCardVM } from '../../../../shared/models/doctor-workload-card.vm';
-import { DoctorsNavigationFacade } from '../../../../core/navigation/doctors-navigation.facade';
-import { ChangeGenderToBoolean } from '../../../../core/utils/person.validators';
+import { DoctorService } from './doctor.service';
 
 @Injectable({ providedIn: 'root' })
 export class DoctorFacade extends BaseFacade {
@@ -246,6 +244,8 @@ export class DoctorFacade extends BaseFacade {
   }
   private _selectedDoctor = signal<DoctorDto | null>(null);
   selectedDoctor = this._selectedDoctor.asReadonly();
+  private _loadingSelectedDoctor =  signal<boolean>(false);
+  LoadingselectedDoctor = this._loadingSelectedDoctor.asReadonly();
 
   isEditMode = signal<boolean>(false);
 
@@ -262,12 +262,14 @@ export class DoctorFacade extends BaseFacade {
   }
 
   loadDoctorForEdit(id: number): void {
+    this._loadingSelectedDoctor.set(true);
     this.service
       .getDoctorById(id)
       .pipe(
         tap((res: ApiResult<DoctorDto>) => {
           if (res.isSuccess && res.data) {
             this.enterEditMode(res.data);
+            this._loadingSelectedDoctor.set(false);
           } else {
             this.toast.error(res.errorDetail ?? 'لم يتم العثور على الطبيب');
             this.enterCreateMode();
@@ -310,13 +312,13 @@ export class DoctorFacade extends BaseFacade {
     ).pipe(
       tap((res) => {
         if (res.success) {
-          this.updateDoctorAssignmentInList(doctorId, {
-            isActiveAssignment: false,
-            sectionId: null,
-            sectionName: null,
-            roomId: null,
-            roomName: null,
-          });
+          // this.updateDoctorAssignmentInList(doctorId, {
+          //   isActiveAssignment: false,
+          //   sectionId: null,
+          //   sectionName: null,
+          //   roomId: null,
+          //   roomName: null,
+          // });
         }
       })
     );

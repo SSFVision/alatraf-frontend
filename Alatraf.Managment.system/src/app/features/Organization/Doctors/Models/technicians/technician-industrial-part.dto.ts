@@ -2,8 +2,9 @@ export interface TechnicianIndustrialPartDto {
   diagnosisIndustrialPartId: number;
   industrialPartUnitId: number;
   quantity: number;
-  industrialPartName?: string | null;
+  industrialPartName: string | null;
+  unitName: string | null;
   repairCardId: number;
-  patientName?: string | null;
-  patientPhoneNumber?: string | null;
+  patientName: string | null;
+  patientPhoneNumber: string | null;
 }

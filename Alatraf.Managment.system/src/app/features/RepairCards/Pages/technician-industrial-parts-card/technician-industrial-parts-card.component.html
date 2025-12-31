@@ -1,0 +1,31 @@
+@if (loading()) {
+<div class="flex-center padding-32">
+  <span class="loader"></span>
+  <span class="body-md primary-color-50 margin-left-8"> جاري التحميل... </span>
+</div>
+} @else { @if ( (!parts() || parts().length === 0)) {
+<div class="empty-state">
+  <img src="assets/images/amico.svg" alt="no patients" class="empty-icon" />
+  <p class="body-md primary-color-50">
+    لا يوجد مرضى جلسات مسندة لهذا الطبيب حالياً
+  </p>
+</div>
+} @for (part of parts(); track part.diagnosisIndustrialPartId) {
+
+<div class="flex-parent">
+  <div class="flex-child card primary-card" (click)="onCardClick(part)">
+    <p class="body-md">
+      {{ part.patientName }}
+    </p>
+    <p class="body-sm primary-color-50">
+      رقم البطاقة: {{ part.industrialPartUnitId }}
+    </p>
+    <div class="row gap-16">
+     
+      <p class="body-sm primary-color-50">
+        {{ part.unitName }}
+      </p>
+    </div>
+  </div>
+</div>
+} }

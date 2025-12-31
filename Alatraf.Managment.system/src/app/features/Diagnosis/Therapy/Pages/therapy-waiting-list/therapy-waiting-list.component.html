@@ -13,51 +13,83 @@
 
     <!-- Search box -->
     <div class="search-box">
-      <img src="assets/icons/search-icon.svg" class="search-icon" alt="search" />
-      <input type="text" placeholder="بحث: اسم المريض أو الرقم" #searchBox (input)="onSearch(searchBox.value)" />
+      <img
+        src="assets/icons/search-icon.svg"
+        class="search-icon"
+        alt="search"
+      />
+      <input
+        type="text"
+        placeholder="بحث: اسم المريض أو الرقم"
+        #searchBox
+        (input)="onSearch(searchBox.value)"
+      />
     </div>
 
     <!-- Service Filters -->
     <div class="filters-container">
       <!-- ALL services in therapy -->
-      <button class="filter-btn" [class.active]="activeService() === null" (click)="filterByService(null)">
+      <button
+        class="filter-btn"
+        [class.active]="activeService() === null"
+        (click)="filterByService(null)"
+      >
         الكل
       </button>
 
       <!-- علاج طبيعي -->
-      <button class="filter-btn" [class.active]="activeService() === ServiceType.Therapy"
-        (click)="filterByService(ServiceType.Therapy)">
+      <button
+        class="filter-btn"
+        [class.active]="activeService() === ServiceType.Therapy"
+        (click)="filterByService(ServiceType.Therapy)"
+      >
         علاج طبيعي
       </button>
 
       <!-- أعصاب -->
-      <button class="filter-btn" [class.active]="activeService() === ServiceType.Nerves"
-        (click)="filterByService(ServiceType.Nerves)">
+      <button
+        class="filter-btn"
+        [class.active]="activeService() === ServiceType.Nerves"
+        (click)="filterByService(ServiceType.Nerves)"
+      >
         أعصاب
       </button>
 
       <!-- عظام -->
-      <button class="filter-btn" [class.active]="activeService() === ServiceType.Orthopedics"
-        (click)="filterByService(ServiceType.Orthopedics)">
+      <button
+        class="filter-btn"
+        [class.active]="activeService() === ServiceType.Orthopedics"
+        (click)="filterByService(ServiceType.Orthopedics)"
+      >
         عظام
       </button>
 
       <!-- تجديد كروت -->
-      <button class="filter-btn" [class.active]="activeService() === ServiceType.TherapyCardRenew"
-        (click)="filterByService(ServiceType.TherapyCardRenew)">
+      <button
+        class="filter-btn"
+        [class.active]="activeService() === ServiceType.TherapyCardRenew"
+        (click)="filterByService(ServiceType.TherapyCardRenew)"
+      >
         تجديد كروت
       </button>
 
       <!-- بدل فاقد -->
-      <button class="filter-btn" [class.active]="activeService() === ServiceType.TherapyLostCard"
-        (click)="filterByService(ServiceType.TherapyLostCard)">
+      <button
+        class="filter-btn"
+        [class.active]="activeService() === ServiceType.TherapyLostCard"
+        (click)="filterByService(ServiceType.TherapyLostCard)"
+      >
         بدل فاقد
       </button>
     </div>
 
     <!-- Waiting list -->
-    <app-waiting-patient-card class="max-hight-712 column gap-16" [tickets]="tickets()" (select)="select($event)"
-      [loading]="loading()"></app-waiting-patient-card>
+    <app-waiting-patient-card
+      class="max-hight-712 column gap-16"
+      [tickets]="tickets()"
+      (select)="select($event)"
+      [loading]="loading()"
+    ></app-waiting-patient-card>
 
     <!-- Pagination Component -->
     <!-- <app-pagination [page]="pageRequest().page" [pageSize]="pageRequest().pageSize" [totalCount]="totalCount()"
@@ -68,10 +100,15 @@
   <div class="box max-hight-800 gap-16">
     @if (selectedTicket()) {
     <router-outlet></router-outlet>
-    }
-    @else {
+    } @else {
     <div class="empty-state">
-      <img src="assets/images/bro.svg" class="empty-state_image" alt="اضافة تشخيص" width="496.75" height="512" />
+      <img
+        src="assets/images/bro.svg"
+        class="empty-state_image"
+        alt="اضافة تشخيص"
+        width="496.75"
+        height="512"
+      />
       <p class="title-md primary-color-50">مرحباً بك</p>
     </div>
     }
