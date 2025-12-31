@@ -1,0 +1,38 @@
+
+ <div class="width-100">
+    <h1 class="title-lg">الطبيب المعالج</h1>
+  </div>
+<div class="space-between">
+  <!-- Left Side: Doctor and Assignment Info -->
+  <div>
+    <p class="body-md">د / {{ doctorName() }}</p>
+    <div class="row gap-16">
+      <p class="body-sm flex-center primary-color-50">
+        قسم: {{ sectionName() }}
+      </p>
+
+      <!-- Conditionally display the room only if it exists -->
+      @if (roomName()) {
+      <p class="body-sm flex-center primary-color-50">
+        الغرفة رقم: {{ roomName() }}
+      </p>
+      }
+
+      <button class="btn primary icon" (click)="onSettingsClick()">
+        <img src="assets/icons/setting.svg" alt="عرض التفاصيل" />
+      </button>
+    </div>
+  </div>
+
+  <!-- Right Side: Item Count -->
+  <div>
+    <div class="row gap-16">
+      <p class="body-md flex-center">{{ itemCountLabel() }}</p>
+      <div
+        class="primary-color-background WH-40 flex-center border-radius-20"
+      >
+        <h2 class="title-md white-color margin-auto">{{ itemCount() }}</h2>
+      </div>
+    </div>
+  </div>
+</div>

@@ -99,8 +99,8 @@ export const AppRoutes = {
         `therapy-cards/${therapyCardId}/sessions/edit/${sessionId}`,
     },
     doctors: {
-      viewDoctorAssigments: (doctorId: number | string) =>
-        `therapy-cards/doctors/${doctorId}/assigments`,
+      viewDoctorAssigments: (doctorSectionRoomId: number | string) =>
+        `therapy-cards/doctors/${doctorSectionRoomId}/assigments`,
     },
   },
   repairCards: {
@@ -122,7 +122,7 @@ export const AppRoutes = {
         `repair-cards/${repairCardId}/assignments/assign-parts`,
     },
     doctors: {
-      view: (doctorId: number | string) => `repair-cards/doctors/${doctorId}`,
+      viewIndustrialParts: (doctorSectionRoomId: number | string) => `repair-cards/doctors/${doctorSectionRoomId}`,
     },
     // عمليات سريعة (عادة dialogs أو inline forms)
     status: (repairCardId: number | string) =>

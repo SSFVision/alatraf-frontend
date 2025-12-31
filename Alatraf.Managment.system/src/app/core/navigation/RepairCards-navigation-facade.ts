@@ -59,10 +59,10 @@ export class RepairCardsNavigationFacade {
     this.go(AppRoutes.repairCards.deliveryTime(cardId), extras);
   }
   goToRepairDoctorsListPage(
-    doctorId: number | string,
+    doctorSectionRoomId: number | string,
     extras?: NavigationExtras
   ): void {
-    this.go(`${AppRoutes.repairCards.doctors.view(doctorId)}`, extras);
+    this.go(`${AppRoutes.repairCards.doctors.viewIndustrialParts(doctorSectionRoomId)}`, extras);
   }
   // ================= INTERNAL =================
   private go(path: string | any[], extras?: NavigationExtras): void {

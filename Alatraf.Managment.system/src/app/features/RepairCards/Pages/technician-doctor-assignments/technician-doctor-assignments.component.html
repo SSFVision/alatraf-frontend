@@ -1,0 +1,41 @@
+<div class="max-hight-712 column gap-16">
+  @if (loadingTechnicianData() && !technicianHeader()) {
+  <div class="flex-center">
+    <span class="loader"></span>
+    <p>...جاري تحميل بيانات الطبيب</p>
+  </div>
+  } @else if (technicianHeader()) {
+  <app-doctor-header-info
+    [doctorName]="technicianHeader()?.doctorName"
+    [sectionName]="technicianHeader()?.sectionName"
+    [itemCount]="techniciandoctorFacade.industrialParts().length"
+    itemCountLabel="عدد حالات اليوم"
+  ></app-doctor-header-info>
+  <div>
+    <div class="search-box">
+      <img
+        src="assets/icons/search-icon.svg"
+        class="search-icon"
+        alt="search"
+      />
+      <input
+        type="text"
+        placeholder="بحث: اسم المريض أو الرقم"
+        #searchInput
+        (input)="onSearch(searchInput.value)"
+      />
+    </div>
+  </div>
+
+
+  <!-- class="flex-parent" -->
+  <app-technician-industrial-parts-card
+  [parts]="techniciandoctorFacade.industrialParts()"
+  [loading]="loadingTechnicianData()"
+  (partClicked)="onpartCardClick($event)"
+  ></app-technician-industrial-parts-card>
+  <!-- </div> -->
+  } @else {
+  <p>لم يتم العثور على بيانات الطبيب.</p>
+  }
+</div>
