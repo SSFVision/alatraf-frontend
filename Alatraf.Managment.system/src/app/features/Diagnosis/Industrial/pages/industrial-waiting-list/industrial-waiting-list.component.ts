@@ -1,15 +1,17 @@
 import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavigationDiagnosisFacade } from '../../../../../core/navigation/navigation-diagnosis.facade';
-import { PaginationComponent } from '../../../../../shared/components/pagination/pagination.component';
-import { TicketDto, TicketStatus } from '../../../../Reception/Tickets/models/ticket.model';
+import { PatientCardComponent } from '../../../../../shared/components/waiting-patient-card/waiting-patient-card.component';
+import {
+  TicketDto,
+  TicketStatus,
+} from '../../../../Reception/Tickets/models/ticket.model';
 import { TicketFacade } from '../../../../Reception/Tickets/tickets.facade.service';
-import { ServiceType, Department } from '../../../Shared/enums/department.enum';
-import { PatientCardComponent } from "../../../../../shared/components/waiting-patient-card/waiting-patient-card.component";
+import { Department, ServiceType } from '../../../Shared/enums/department.enum';
 
 @Component({
   selector: 'app-industrial-waiting-list',
-  imports: [RouterOutlet, PaginationComponent, PatientCardComponent],
+  imports: [RouterOutlet, PatientCardComponent],
   templateUrl: './industrial-waiting-list.component.html',
   styleUrl: './industrial-waiting-list.component.css',
 })
@@ -28,7 +30,10 @@ export class IndustrialWaitingListComponent implements OnInit, OnDestroy {
   totalCount = this.ticketFacade.totalCount;
 
   ngOnInit() {
-    this.ticketFacade.updateFilters({departmentId:Department.Industrial,status:TicketStatus.New});
+    this.ticketFacade.updateFilters({
+      departmentId: Department.Industrial,
+      status: TicketStatus.New,
+    });
     this.ticketFacade.loadTickets();
   }
   ngOnDestroy() {

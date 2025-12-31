@@ -21,6 +21,7 @@ import { AssignDoctorSectionComponent } from "../assign-doctor-section/assign-do
 export class DoctorWorkspacePageComponent implements OnInit {
   private route = inject(ActivatedRoute);
   doctorFacade = inject(DoctorFacade);
+  loadingSelectedDoctor = this.doctorFacade.LoadingselectedDoctor;
   departmentsFacade = inject(DepartmentsFacade);
   private toastService = inject(ToastService);
   isAssignPage = signal(false);
