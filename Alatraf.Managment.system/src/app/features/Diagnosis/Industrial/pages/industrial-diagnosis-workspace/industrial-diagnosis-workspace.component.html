@@ -1,51 +1,34 @@
 @if (isLoading()) {
-  <div class="flex-center">
-    <span class="loader"></span>
-  </div>
-  <p class="flex-center">جاري تحميل بيانات المريض...</p>
+<div class="flex-center">
+  <span class="loader"></span>
+</div>
+<p class="flex-center">جاري تحميل بيانات المريض...</p>
 }
 @else {
-  <div class="row gap-16 sticky">
-    <h1
-      class="title-lg cursor-pointer"
-      (click)="switchToAdd()"
-      [class.primary-color-50]="viewMode() !== 'add'"
-    >
-      إضافة تشخيص
-    </h1>
+<div class="row gap-16">
+  <h1 class="title-lg cursor-pointer" (click)="switchToAdd()" [class.primary-color-50]="viewMode() !== 'add'">
+    إضافة تشخيص
+  </h1>
 
-    <h1
-      class="title-lg cursor-pointer"
-      [class.primary-color-50]="viewMode() !== 'history'"
-      (click)="switchToHistory()"
-    >
-      التشخيصات السابقة
-    </h1>
-  </div>
+  <h1 class="title-lg cursor-pointer" [class.primary-color-50]="viewMode() !== 'history'" (click)="switchToHistory()">
+    التشخيصات السابقة
+  </h1>
+</div>
 
-  <app-header-patient-info
-    [patient]="ticket()?.patient!"
-  ></app-header-patient-info>
+<div class="max-hight-712 gap-16 padding-LR-24">
+
+  <app-header-patient-info [patient]="ticket()?.patient!"></app-header-patient-info>
 
   @if (viewMode() === 'add') {
-    <app-add-industrial-diagnosis-form
-      [ticketId]="ticket()?.ticketId!"
-      [injuryReasons]="injuryReasons()"
-      [injurySides]="injurySides()"
-      [injuryTypes]="injuryTypes()"
-      [industrialParts]="industrialParts()"
-      [editMode]="isEditMode()"
-      [existingRepairCard]="existingCard()"
-      (submitForm)="saveIndustrialDiagnosis($event)"
-    >
-    </app-add-industrial-diagnosis-form>
+  <app-add-industrial-diagnosis-form [ticketId]="ticket()?.ticketId!" [injuryReasons]="injuryReasons()"
+    [injurySides]="injurySides()" [injuryTypes]="injuryTypes()" [industrialParts]="industrialParts()"
+    [editMode]="isEditMode()" [existingRepairCard]="existingCard()" (submitForm)="saveIndustrialDiagnosis($event)">
+  </app-add-industrial-diagnosis-form>
   }
 
   @if (viewMode() === 'history') {
-    <app-previous-industrial-diagnosis
-      [items]="industrialHistoryItems"
-      (viewDetails)="openHistoryDetails($event)"
-    >
-    </app-previous-industrial-diagnosis>
+  <app-previous-industrial-diagnosis [items]="industrialHistoryItems" (viewDetails)="openHistoryDetails($event)">
+  </app-previous-industrial-diagnosis>
   }
+</div>
 }

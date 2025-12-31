@@ -1,8 +1,4 @@
-<form
-  class="padding-LR-24 column gap-16"
-  [formGroup]="form"
-  (ngSubmit)="onSubmit()"
->
+<form class="column gap-16" [formGroup]="form" (ngSubmit)="onSubmit()">
   <div class="width-100">
     <p class="title-md">بيانات التشخيص</p>
     <span class="home-line"></span>
@@ -11,25 +7,15 @@
   <!-- Diagnosis -->
   <div class="row flex-center width-100">
     <label class="label-lg">التشخيص</label>
-    <textarea
-      rows="2"
-      class="label-lg"
-      formControlName="diagnosisText"
-    ></textarea>
+    <textarea rows="2" class="label-lg" formControlName="diagnosisText"></textarea>
 
     <!-- Backend validation -->
-    <div
-      class="error-message label-lg"
-      *ngIf="hasBackendError('diagnosisText')"
-    >
+    <div class="error-message label-lg" *ngIf="hasBackendError('diagnosisText')">
       {{ getBackendError("diagnosisText") }}
     </div>
 
     <!-- Frontend Validation -->
-    <div
-      class="error-message label-lg"
-      *ngIf="hasFrontendError('diagnosisText')"
-    >
+    <div class="error-message label-lg" *ngIf="hasFrontendError('diagnosisText')">
       التشخيص مطلوب
     </div>
   </div>
@@ -37,34 +23,22 @@
   <!-- Injury Reasons + Injury Sides -->
   <div class="row flex-center">
     <label class="label-lg">أسباب الإصابة</label>
-    <app-multi-select
-      formControlName="injuryReasons"
-      [options]="injuryReasonsOptions"
-      placeholder="اختر الأسباب"
-    ></app-multi-select>
+    <app-multi-select formControlName="injuryReasons" [options]="injuryReasonsOptions"
+      placeholder="اختر الأسباب"></app-multi-select>
 
     <!-- Backend error -->
-    <div
-      class="error-message label-lg"
-      *ngIf="hasBackendError('injuryReasons')"
-    >
+    <div class="error-message label-lg" *ngIf="hasBackendError('injuryReasons')">
       {{ getBackendError("injuryReasons") }}
     </div>
 
     <!-- Frontend -->
-    <div
-      class="error-message label-lg"
-      *ngIf="hasFrontendError('injuryReasons')"
-    >
+    <div class="error-message label-lg" *ngIf="hasFrontendError('injuryReasons')">
       أسباب الإصابة مطلوبة
     </div>
 
     <label class="label-lg">جهة الإصابة</label>
-    <app-multi-select
-      formControlName="injurySides"
-      [options]="injurySidesOptions"
-      placeholder="اختر الجهة"
-    ></app-multi-select>
+    <app-multi-select formControlName="injurySides" [options]="injurySidesOptions"
+      placeholder="اختر الجهة"></app-multi-select>
 
     <!-- Backend -->
     <div class="error-message label-lg" *ngIf="hasBackendError('injurySides')">
@@ -80,11 +54,8 @@
   <!-- Injury Types -->
   <div class="row flex-center">
     <label class="label-lg">نوع الإصابة</label>
-    <app-multi-select
-      formControlName="injuryTypes"
-      [options]="injuryTypesOptions"
-      placeholder="اختر النوع"
-    ></app-multi-select>
+    <app-multi-select formControlName="injuryTypes" [options]="injuryTypesOptions"
+      placeholder="اختر النوع"></app-multi-select>
 
     <!-- Backend -->
     <div class="error-message label-lg" *ngIf="hasBackendError('injuryTypes')">
@@ -145,38 +116,25 @@
       <tr [formGroup]="row">
         <!-- Part -->
         <td>
-          <select
-            class="label-lg"
-            formControlName="industrialPartId"
-            (change)="onPartChange(i)"
-          >
+          <select class="label-lg" formControlName="industrialPartId" (change)="onPartChange(i)">
             <option [ngValue]="null">اختر القطعة</option>
-            <option
-              *ngFor="let p of industrialPartsDropdown"
-              [ngValue]="p.value"
-            >
+            <option *ngFor="let p of industrialPartsDropdown" [ngValue]="p.value">
               {{ p.label }}
             </option>
           </select>
 
           <!-- Frontend Error -->
-          <div
-            class="error-message label-lg"
-            *ngIf="
+          <div class="error-message label-lg" *ngIf="
               row.get('industrialPartId')?.invalid &&
               row.get('industrialPartId')?.touched
-            "
-          >
+            ">
             القطعة مطلوبة
           </div>
 
           <!-- Backend Error -->
-          <div
-            class="error-message label-lg"
-            *ngIf="
+          <div class="error-message label-lg" *ngIf="
               hasBackendError('industrialParts[' + i + '].industrialPartId')
-            "
-          >
+            ">
             {{ getBackendError("industrialParts[" + i + "].industrialPartId") }}
           </div>
         </td>
@@ -185,63 +143,39 @@
         <td>
           <select class="label-lg" formControlName="unitId">
             <option [ngValue]="null">اختر الوحدة</option>
-            <option
-              *ngFor="let u of getUnitsOptionsForRow(i)"
-              [ngValue]="u.value"
-            >
+            <option *ngFor="let u of getUnitsOptionsForRow(i)" [ngValue]="u.value">
               {{ u.label }}
             </option>
           </select>
 
           <!-- Frontend Error -->
-          <div
-            class="error-message label-lg"
-            *ngIf="row.get('unitId')?.invalid && row.get('unitId')?.touched"
-          >
+          <div class="error-message label-lg" *ngIf="row.get('unitId')?.invalid && row.get('unitId')?.touched">
             الوحدة مطلوبة
           </div>
 
           <!-- Backend Error -->
-          <div
-            class="error-message label-lg"
-            *ngIf="hasBackendError('industrialParts[' + i + '].unitId')"
-          >
+          <div class="error-message label-lg" *ngIf="hasBackendError('industrialParts[' + i + '].unitId')">
             {{ getBackendError("industrialParts[" + i + "].unitId") }}
           </div>
         </td>
 
         <!-- Quantity -->
         <td>
-          <input
-            class="label-lg"
-            type="number"
-            min="1"
-            formControlName="quantity"
-          />
+          <input class="label-lg" type="number" min="1" formControlName="quantity" />
 
-          <div
-            class="error-message label-lg"
-            *ngIf="row.get('quantity')?.invalid && row.get('quantity')?.touched"
-          >
+          <div class="error-message label-lg" *ngIf="row.get('quantity')?.invalid && row.get('quantity')?.touched">
             الكمية مطلوبة ويجب أن تكون رقمًا أكبر من 0
           </div>
 
-          <div
-            class="error-message label-lg"
-            *ngIf="hasBackendError('industrialParts[' + i + '].quantity')"
-          >
+          <div class="error-message label-lg" *ngIf="hasBackendError('industrialParts[' + i + '].quantity')">
             {{ getBackendError("industrialParts[" + i + "].quantity") }}
           </div>
         </td>
 
         <!-- Remove -->
         <td>
-          <button
-            *ngIf="industrialPartsForm.length > 1"
-            type="button"
-            class="btn danger icon"
-            (click)="removePartRow(i)"
-          >
+          <button *ngIf="industrialPartsForm.length > 1" type="button" class="btn danger icon"
+            (click)="removePartRow(i)">
             ✕
           </button>
         </td>
@@ -251,15 +185,12 @@
   </table>
 
   <!-- Duplicate Part Error -->
-  <div
-    *ngIf="industrialPartsForm.errors?.['duplicatePart']"
-    class="error-message label-lg flex-center"
-  >
+  <div *ngIf="industrialPartsForm.errors?.['duplicatePart']" class="error-message label-lg flex-center">
     لا يمكن اختيار نفس القطعة مع نفس الوحدة أكثر من مرة
   </div>
 
   <!-- Add part -->
-  <div class="flex-end">
+  <div class="flex-center">
     <button class="btn primary" type="button" (click)="addPartRow()">
       + إضافة قطعة
     </button>
