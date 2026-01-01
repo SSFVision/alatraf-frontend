@@ -38,13 +38,9 @@ export class PaymentsProcessingFacade extends BaseFacade {
   private _isPaying = signal<boolean>(false);
   isPaying = this._isPaying.asReadonly();
 
-  /** ✅ Backend validation errors (NEW) */
   formValidationErrors = signal<Record<string, string[]>>({});
 
-  /* ---------------------------------------------
-   * LOAD PAYMENT DETAILS
-   * --------------------------------------------- */
-
+  
   loadTherapyPayment(
     paymentId: number,
     paymentReference: PaymentReference

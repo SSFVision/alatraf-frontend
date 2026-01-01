@@ -46,6 +46,10 @@ export class MainPaymentWaitingListComponent {
   // referenceType: payment.paymentReference, // enum
 
   ngOnInit(): void {
+    this.isCompleted.set(false);
+    this.paymentsFacade.updateFilters({
+      isCompleted: false,
+    });
     this.paymentsFacade.loadPaymentsWaitingList();
   }
 
@@ -80,5 +84,7 @@ export class MainPaymentWaitingListComponent {
     this.paymentsFacade.updateFilters({
       isCompleted,
     });
+        this.paymentsFacade.loadPaymentsWaitingList();
+
   }
 }
