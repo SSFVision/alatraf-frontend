@@ -1,8 +1,8 @@
-import { Component, forwardRef, inject, OnInit, Pipe, signal } from '@angular/core';
+import { CommonModule, NgFor } from '@angular/common';
+import { Component, forwardRef, inject, OnInit, signal } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { ServiceService } from '../../../features/Reception/Services/service.service';
-import { ServiceDto } from '../../../mocks/services/service.model';
-import { CommonModule, NgFor, NgIf,  } from '@angular/common';
+import { ServiceDto } from '../../../core/models/Shared/service.model';
+import { OrganizationServiceService } from '../../../features/Organization/Services/Service/service.service';
 
 @Component({
   selector: 'app-service-select',
@@ -21,7 +21,7 @@ export class ServiceSelectComponent implements OnInit, ControlValueAccessor {
   services = signal<ServiceDto[]>([]);
   disabled = false;
 
-  private serviceApi = inject(ServiceService);
+  private serviceApi = inject(OrganizationServiceService);
 
   private onChange = (value: any) => {};
   private onTouched = () => {};

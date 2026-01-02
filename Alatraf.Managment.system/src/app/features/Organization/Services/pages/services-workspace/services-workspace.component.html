@@ -1,0 +1,10 @@
+@if (isLoading()) {
+<div class="flex-center">
+  <span class="loader"></span>
+</div>
+<p class="flex-center">جاري تحميل بيانات الخدمة...</p>
+} @else {
+
+<app-add-edit-service-page></app-add-edit-service-page>
+
+}
