@@ -1,23 +1,23 @@
 import {
   Component,
-  Input,
-  Output,
-  EventEmitter,
-  OnChanges,
-  SimpleChanges,
-  inject,
-  effect,
-  runInInjectionContext,
   EnvironmentInjector,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+  effect,
+  inject,
+  runInInjectionContext,
 } from '@angular/core';
 
 import {
+  AbstractControl,
+  FormArray,
   FormBuilder,
   FormGroup,
-  Validators,
-  FormArray,
   ReactiveFormsModule,
-  AbstractControl,
+  Validators,
 } from '@angular/forms';
 
 import { CommonModule, NgIf } from '@angular/common';
@@ -28,19 +28,17 @@ import {
 } from '../../../../../shared/components/multi-select/multi-select.component';
 
 import {
-  CreateRepairCardRequest,
-  RepairCardIndustrialPartRequest,
+  CreateRepairCardRequest
 } from '../../Models/create-repair-card.request';
 
 import {
-  UpdateRepairCardRequest,
-  UpdateRepairCardIndustrialPartRequest,
+  UpdateRepairCardRequest
 } from '../../Models/update-repair-card.request';
 
-import { RepairCardDiagnosisDto } from '../../Models/repair-card-diagnosis.dto';
 import { IndustrialPartDto } from '../../../../../core/models/industrial-parts/industrial-partdto';
 import { InjuryDto } from '../../../../../core/models/injuries/injury.dto';
 import { FormValidationState } from '../../../../../core/utils/form-validation-state';
+import { RepairCardDiagnosisDto } from '../../Models/repair-card-diagnosis.dto';
 import { RepairCardDiagnosisFacade } from '../../Services/repair-card-diagnosis.facade.service';
 
 @Component({

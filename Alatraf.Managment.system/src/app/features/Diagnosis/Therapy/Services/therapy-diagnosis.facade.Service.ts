@@ -155,7 +155,6 @@ export class TherapyDiagnosisFacade extends BaseFacade {
 
   loadingPatientTherapyDiagnoisis = signal<boolean>(false);
   loadPatientTherapyDiagnoisis(patientId: number) {
-    console.log(" Loading therapy diagnosis for patient ID:", patientId);
     this.loadingPatientTherapyDiagnoisis.set(true);
     this.patientService
       .GetPatientTherapyCardsById(patientId)
@@ -163,7 +162,7 @@ export class TherapyDiagnosisFacade extends BaseFacade {
         tap((result) => {
           if (result.isSuccess && result.data) {
             this._patientTherapyDiagnoisis.set(result.data);
-            this.toast.success('✅ previous disgonsed returnd sucess fully ');
+            this.toast.success(' previous disgonsed returnd sucess fully ');
           } else {
             this._patientTherapyDiagnoisis.set([]);
             this.toast.error(
