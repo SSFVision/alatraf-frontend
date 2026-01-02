@@ -285,21 +285,30 @@
     لا يمكن اختيار نفس البرنامج العلاجي أكثر من مرة
   </div>
 
-  <div class="flex-center">
-    <button class="btn primary" type="button" (click)="addProgramRow()">
-      + إضافة برنامج
-    </button>
+  <div
+    *ngIf="programs.errors?.['atLeastOneProgram']"
+    class="error-message label-lg flex-center"
+  >
+    يجب إضافة برنامج علاجي واحد على الأقل
   </div>
 
+  <!-- Program rows are now auto-appended when the last row is completed -->
+
   <div class="flex-center" *ngIf="!editMode()">
-    <button class="btn primary label-md" type="submit" [disabled]="form.invalid">حفظ</button>
+    <button
+      class="btn primary label-md"
+      type="submit"
+      [disabled]="form.invalid || submitting()"
+    >
+      حفظ
+    </button>
   </div>
 
   <div class="flex-center gap-16" *ngIf="editMode()">
     <button
       class="btn primary label-md"
       type="submit"
-      [disabled]="form.pristine"
+      [disabled]="form.pristine || submitting()"
     >
       حفظ التعديلات
     </button>

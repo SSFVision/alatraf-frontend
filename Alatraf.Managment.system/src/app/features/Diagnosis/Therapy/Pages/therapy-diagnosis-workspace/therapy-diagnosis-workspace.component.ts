@@ -7,6 +7,7 @@ import {
   inject,
   runInInjectionContext,
   signal,
+  ViewChild,
 } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -58,6 +59,9 @@ export class TherapyDiagnosisWorkspaceComponent implements OnInit {
   loadingpatientTherapyDiagnoisis =
     this.therapyFacade.loadingPatientTherapyDiagnoisis;
 
+  @ViewChild(AddTherapyDiagnosisFormComponent)
+  private formComp?: AddTherapyDiagnosisFormComponent;
+
   ngOnInit(): void {
     this.therapyFacade.loadLookups();
     this.listenToRouteChanges();
@@ -72,8 +76,6 @@ export class TherapyDiagnosisWorkspaceComponent implements OnInit {
       }
     });
   }
-
-
 
   private listenToRouteChanges() {
     this.route.paramMap
@@ -96,7 +98,6 @@ export class TherapyDiagnosisWorkspaceComponent implements OnInit {
   switchToHistory() {
     this.isEditMode.set(false);
     this.viewMode.set('history');
-    
   }
 
   onViewCard(patientDiagnosis: TherapyCardDiagnosisDto) {
@@ -109,6 +110,9 @@ export class TherapyDiagnosisWorkspaceComponent implements OnInit {
   saveTherapyDiagnosis(
     dto: CreateTherapyCardRequest | UpdateTherapyCardRequest
   ) {
+    // disable form to prevent duplicate submits
+    this.formComp?.startSubmitting();
+
     if (this.isEditMode() && this.existingCard() !== null) {
       this.therapyFacade
         .updateTherapyCard(
@@ -120,6 +124,8 @@ export class TherapyDiagnosisWorkspaceComponent implements OnInit {
             this.therapyFacade.formValidationErrors.set(
               result.validationErrors
             );
+            // re-enable form so user can correct
+            this.formComp?.stopSubmitting();
           }
         });
     } else {
@@ -130,7 +136,10 @@ export class TherapyDiagnosisWorkspaceComponent implements OnInit {
             this.therapyFacade.formValidationErrors.set(
               result.validationErrors
             );
+            // re-enable form so user can correct
+            this.formComp?.stopSubmitting();
           }
+          // on success we keep form disabled to prevent further edits
         });
     }
   }

@@ -1,4 +1,3 @@
-
 import {
   Component,
   Input,
@@ -12,6 +11,7 @@ import {
   effect,
   runInInjectionContext,
   input,
+  signal,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -101,6 +101,7 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges, OnDestroy {
       programs: this.fb.array<FormGroup>([], {
         validators: [
           AddTherapyDiagnosisFormComponent.noDuplicateProgramsValidator,
+          AddTherapyDiagnosisFormComponent.atLeastOneProgramValidator,
         ],
       }),
     },
@@ -109,6 +110,7 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges, OnDestroy {
 
   private destroy$ = new Subject<void>();
   private validationState!: FormValidationState;
+  submitting = signal(false);
 
   ngOnInit(): void {
     this.validationState = new FormValidationState(
@@ -124,6 +126,9 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges, OnDestroy {
 
     this.validationState.clearOnEdit();
     if (!this.editMode()) {
+      // default program start date to today and enable sessions input
+      this.form.patchValue({ programStartDate: this.today });
+      this.form.get('numberOfSessions')?.enable({ emitEvent: false });
       this.addProgramRow();
     }
     this.setupFormSubscriptions();
@@ -170,7 +175,27 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges, OnDestroy {
     const request = this.editMode()
       ? this.createUpdateDto(v)
       : this.createCreateDto(v);
+    // disable the form immediately to prevent duplicate submits
+    this.startSubmitting();
     this.submitForm.emit(request);
+  }
+
+  startSubmitting() {
+    this.submitting.set(true);
+    try {
+      this.form.disable({ emitEvent: false });
+    } catch {
+      /* ignore */
+    }
+  }
+
+  stopSubmitting() {
+    this.submitting.set(false);
+    try {
+      this.form.enable({ emitEvent: false });
+    } catch {
+      /* ignore */
+    }
   }
 
   isSpecialCardType(): boolean {
@@ -210,7 +235,7 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges, OnDestroy {
   }
 
   addProgramRow() {
-    this.programs.push(this.createProgramRow());
+    this.programs.push(this.createProgramRow(false));
   }
 
   removeProgramRow(i: number) {
@@ -239,6 +264,25 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges, OnDestroy {
       .subscribe(() => {
         this.updateProgramEndDate();
       });
+
+    // Auto-add a new program row when the last row's required fields are filled
+    this.programs.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      const len = this.programs.length;
+      if (len === 0) return;
+      const last = this.programs.at(len - 1);
+      const med = last.get('medicalProgramId')?.value;
+      const dur = last.get('duration')?.value;
+
+      const lastIsValid =
+        !!med && !!dur && !isNaN(Number(dur)) && Number(dur) > 0;
+
+      if (lastIsValid) {
+        // attach validators to the completed row so it's validated as part of the form
+        this.ensureRowValidators(last as FormGroup);
+        // append a new empty row without validators
+        this.addProgramRow();
+      }
+    });
   }
 
   private updateProgramEndDate(): void {
@@ -258,12 +302,24 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges, OnDestroy {
     });
   }
 
-  private createProgramRow(): FormGroup {
+  private createProgramRow(withValidators = true): FormGroup {
     return this.fb.group({
-      medicalProgramId: [null, Validators.required],
-      duration: [null, [Validators.required, Validators.min(1)]],
+      medicalProgramId: [null, withValidators ? Validators.required : []],
+      duration: [
+        null,
+        withValidators ? [Validators.required, Validators.min(1)] : [],
+      ],
       notes: [''],
     });
+  }
+
+  private ensureRowValidators(row: FormGroup) {
+    const med = row.get('medicalProgramId');
+    const dur = row.get('duration');
+    med?.setValidators(Validators.required);
+    dur?.setValidators([Validators.required, Validators.min(1)]);
+    med?.updateValueAndValidity({ emitEvent: false });
+    dur?.updateValueAndValidity({ emitEvent: false });
   }
 
   private patchEditForm(card: TherapyCardDiagnosisDto) {
@@ -296,6 +352,10 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges, OnDestroy {
   }
 
   private createCreateDto(v: any): CreateTherapyCardRequest {
+    const programs = (v.programs || []).filter(
+      (p: any) => p && p.medicalProgramId != null && p.duration != null
+    );
+
     return {
       TicketId: this.ticketId,
       DiagnosisText: v.diagnosisText,
@@ -307,11 +367,15 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges, OnDestroy {
       ProgramEndDate: v.programEndDate,
       numberOfSessions: v.numberOfSessions,
       TherapyCardType: v.therapyCardType,
-      Programs: v.programs,
+      Programs: programs,
       Notes: v.notes ?? null,
     };
   }
   private createUpdateDto(v: any): UpdateTherapyCardRequest {
+    const programs = (v.programs || []).filter(
+      (p: any) => p && p.medicalProgramId != null && p.duration != null
+    );
+
     return {
       TicketId: this.ticketId,
       DiagnosisText: v.diagnosisText,
@@ -323,7 +387,7 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges, OnDestroy {
       ProgramEndDate: v.programEndDate,
       numberOfSessions: v.numberOfSessions,
       TherapyCardType: v.therapyCardType,
-      Programs: v.programs,
+      Programs: programs,
       Notes: v.notes ?? null,
     };
   }
@@ -365,6 +429,18 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges, OnDestroy {
       .filter((v) => v != null && v !== '');
     const hasDuplicate = new Set(ids).size !== ids.length;
     return hasDuplicate ? { duplicateProgram: true } : null;
+  }
+
+  private static atLeastOneProgramValidator(
+    control: AbstractControl
+  ): ValidationErrors | null {
+    const formArray = control as FormArray;
+    const hasOne = formArray.controls.some((c) => {
+      const med = c.get('medicalProgramId')?.value;
+      const dur = c.get('duration')?.value;
+      return med != null && med !== '' && dur != null && dur !== '';
+    });
+    return hasOne ? null : { atLeastOneProgram: true };
   }
 
   private static noFutureDatesValidator(

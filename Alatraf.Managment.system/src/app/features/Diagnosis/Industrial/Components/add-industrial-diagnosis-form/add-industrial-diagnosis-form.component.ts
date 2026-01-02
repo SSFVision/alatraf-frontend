@@ -1,24 +1,30 @@
 import {
   Component,
-  Input,
-  Output,
-  EventEmitter,
-  OnChanges,
-  SimpleChanges,
-  inject,
-  effect,
-  runInInjectionContext,
   EnvironmentInjector,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  OnDestroy,
+  Output,
+  SimpleChanges,
+  effect,
+  inject,
+  runInInjectionContext,
+  signal,
 } from '@angular/core';
 
 import {
+  AbstractControl,
+  FormArray,
   FormBuilder,
   FormGroup,
-  Validators,
-  FormArray,
   ReactiveFormsModule,
-  AbstractControl,
+  ValidationErrors,
+  Validators,
 } from '@angular/forms';
+
+import { Subscription } from 'rxjs';
 
 import { CommonModule, NgIf } from '@angular/common';
 
@@ -27,30 +33,26 @@ import {
   MultiSelectOption,
 } from '../../../../../shared/components/multi-select/multi-select.component';
 
-import {
-  CreateRepairCardRequest,
-  RepairCardIndustrialPartRequest,
-} from '../../Models/create-repair-card.request';
+import { CreateRepairCardRequest } from '../../Models/create-repair-card.request';
 
-import {
-  UpdateRepairCardRequest,
-  UpdateRepairCardIndustrialPartRequest,
-} from '../../Models/update-repair-card.request';
+import { UpdateRepairCardRequest } from '../../Models/update-repair-card.request';
 
-import { RepairCardDiagnosisDto } from '../../Models/repair-card-diagnosis.dto';
 import { IndustrialPartDto } from '../../../../../core/models/industrial-parts/industrial-partdto';
 import { InjuryDto } from '../../../../../core/models/injuries/injury.dto';
 import { FormValidationState } from '../../../../../core/utils/form-validation-state';
+import { RepairCardDiagnosisDto } from '../../Models/repair-card-diagnosis.dto';
 import { RepairCardDiagnosisFacade } from '../../Services/repair-card-diagnosis.facade.service';
 
 @Component({
   selector: 'app-add-industrial-diagnosis-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, NgIf,MultiSelectComponent],
+  imports: [CommonModule, ReactiveFormsModule, NgIf, MultiSelectComponent],
   templateUrl: './add-industrial-diagnosis-form.component.html',
   styleUrl: './add-industrial-diagnosis-form.component.css',
 })
-export class AddIndustrialDiagnosisFormComponent implements OnChanges {
+export class AddIndustrialDiagnosisFormComponent
+  implements OnChanges, OnInit, OnDestroy
+{
   private fb = inject(FormBuilder);
   private facade = inject(RepairCardDiagnosisFacade);
   private env = inject(EnvironmentInjector);
@@ -89,17 +91,19 @@ export class AddIndustrialDiagnosisFormComponent implements OnChanges {
   // Form
   // --------------------------
   form: FormGroup = this.fb.group({
-    diagnosisText: ['', [ Validators.required,Validators.maxLength(2000)]],
-    injuryDate: ['',  Validators.required],
-
-    injuryReasons: [[] as number[],Validators.required],
-    injurySides: [[] as number[],Validators.required],
-    injuryTypes: [[] as number[],Validators.required],
+    diagnosisText: ['', [Validators.required, Validators.maxLength(2000)]],
+    injuryDate: ['', [Validators.required, this.noFutureDatesValidator]],
+    injuryReasons: [[] as number[], Validators.required],
+    injurySides: [[] as number[], Validators.required],
+    injuryTypes: [[] as number[], Validators.required],
 
     notes: [''],
 
     industrialParts: this.fb.array<FormGroup>([], {
-      validators: [this.noDuplicatePartsValidator.bind(this),Validators.required],
+      validators: [
+        this.noDuplicatePartsValidator.bind(this),
+        this.atLeastOnePartValidator.bind(this),
+      ],
     }),
   });
 
@@ -110,16 +114,18 @@ export class AddIndustrialDiagnosisFormComponent implements OnChanges {
     return this.form.get('industrialParts') as FormArray<FormGroup>;
   }
 
-  private createIndustrialPartRow(): FormGroup {
+  private createIndustrialPartRow(withValidators = true): FormGroup {
     return this.fb.group({
-      industrialPartId: [null, Validators.required],
-      unitId: [null, Validators.required],
-      quantity: [1, [Validators.required, Validators.min(1)]],
+      industrialPartId: withValidators ? [null, Validators.required] : [null],
+      unitId: withValidators ? [null, Validators.required] : [null],
+      quantity: withValidators
+        ? [1, [Validators.required, Validators.min(1)]]
+        : [1],
     });
   }
 
   addPartRow() {
-    this.industrialPartsForm.push(this.createIndustrialPartRow());
+    this.industrialPartsForm.push(this.createIndustrialPartRow(true));
   }
 
   removePartRow(i: number) {
@@ -128,13 +134,18 @@ export class AddIndustrialDiagnosisFormComponent implements OnChanges {
 
   private validationState!: FormValidationState;
 
+  private partsValueSub?: Subscription;
+  submitting = signal(false);
+  saved = signal(false);
+  today = new Date().toISOString().slice(0, 10);
+
   ngOnInit(): void {
     this.validationState = new FormValidationState(
       this.form,
       this.facade.formValidationErrors
     );
 
-   runInInjectionContext(this.env, () => {
+    runInInjectionContext(this.env, () => {
       effect(() => {
         this.validationState.apply();
       });
@@ -142,11 +153,18 @@ export class AddIndustrialDiagnosisFormComponent implements OnChanges {
 
     this.validationState.clearOnEdit();
 
-
     // في وضع الإنشاء نضمن وجود صف واحد على الأقل
+    // Default injury date to today in create mode
     if (!this.editMode) {
-      this.addPartRow();
+      // Start with a trailing empty row (no validators) so Save isn't blocked
+      this.industrialPartsForm.clear();
+      this.industrialPartsForm.push(this.createIndustrialPartRow(false));
     }
+
+    // Watch parts array changes to auto-attach validators and append trailing row
+    this.partsValueSub = this.industrialPartsForm.valueChanges.subscribe(() => {
+      this.ensureTrailingRowValidators();
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -188,7 +206,7 @@ export class AddIndustrialDiagnosisFormComponent implements OnChanges {
       injuryReasons: (card.injuryReasons ?? []).map((x) => x.id),
       injurySides: (card.injurySides ?? []).map((x) => x.id),
       injuryTypes: (card.injuryTypes ?? []).map((x) => x.id),
-      Notes:'empety not loadded from the backend ',
+      Notes: 'empety not loadded from the backend ',
     });
 
     // Populate industrialParts rows
@@ -206,8 +224,95 @@ export class AddIndustrialDiagnosisFormComponent implements OnChanges {
 
     // لو ما في ولا صف من الـ backend نضيف واحد
     if (this.industrialPartsForm.length === 0) {
-      this.addPartRow();
+      // add trailing empty row (no validators)
+      this.industrialPartsForm.push(this.createIndustrialPartRow(false));
     }
+  }
+
+  private ensureTrailingRowValidators() {
+    const len = this.industrialPartsForm.length;
+    if (len === 0) return;
+
+    const lastIndex = len - 1;
+    const last = this.industrialPartsForm.at(lastIndex);
+    if (!last) return;
+
+    const partId = last.get('industrialPartId')?.value;
+    const unitId = last.get('unitId')?.value;
+    const quantity = last.get('quantity')?.value;
+
+    const hasData = !!(
+      partId ||
+      unitId ||
+      (quantity !== null && quantity !== undefined)
+    );
+
+    // If last row has the required pieces filled, ensure validators and append a new empty row
+    if (partId && unitId) {
+      last.get('industrialPartId')?.setValidators(Validators.required);
+      last.get('unitId')?.setValidators(Validators.required);
+      last
+        .get('quantity')
+        ?.setValidators([Validators.required, Validators.min(1)]);
+
+      last
+        .get('industrialPartId')
+        ?.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+      last
+        .get('unitId')
+        ?.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+      last
+        .get('quantity')
+        ?.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+
+      // If it's the last row, append an empty trailing row without validators
+      if (lastIndex === this.industrialPartsForm.length - 1) {
+        this.industrialPartsForm.push(this.createIndustrialPartRow(false));
+      }
+    } else if (!hasData) {
+      // If row is empty, ensure controls don't have validators so it doesn't block submit
+      last.get('industrialPartId')?.setValidators(null);
+      last.get('unitId')?.setValidators(null);
+      last.get('quantity')?.setValidators(null);
+
+      last
+        .get('industrialPartId')
+        ?.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+      last
+        .get('unitId')
+        ?.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+      last
+        .get('quantity')
+        ?.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+    }
+  }
+
+  private atLeastOnePartValidator(control: AbstractControl): any {
+    const fa = control as FormArray;
+    const hasCompleted = fa.controls.some((c) => {
+      const partId = c.get('industrialPartId')?.value;
+      const unitId = c.get('unitId')?.value;
+      return !!(partId && unitId);
+    });
+
+    return hasCompleted ? null : { atLeastOnePart: true };
+  }
+
+  ngOnDestroy(): void {
+    this.partsValueSub?.unsubscribe();
+  }
+
+  startSubmitting() {
+    this.submitting.set(true);
+  }
+
+  stopSubmitting() {
+    this.submitting.set(false);
+  }
+
+  markSaved() {
+    this.saved.set(true);
+    this.submitting.set(false);
   }
 
   // --------------------------
@@ -279,40 +384,58 @@ export class AddIndustrialDiagnosisFormComponent implements OnChanges {
   // Submit
   // --------------------------
   onSubmit() {
-  if (this.form.invalid) {
-    this.form.markAllAsTouched();
-    return;
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    const v = this.form.value;
+
+    // filter out trailing empty rows (those without partId/unitId)
+    const parts = (v.industrialParts ?? []).filter(
+      (p: any) => p.industrialPartId && p.unitId
+    );
+
+    if (this.editMode) {
+      const dto: UpdateRepairCardRequest = {
+        ticketId: this.ticketId,
+        diagnosisText: v.diagnosisText,
+        injuryDate: v.injuryDate,
+        injuryReasons: v.injuryReasons,
+        injurySides: v.injurySides,
+        injuryTypes: v.injuryTypes,
+        industrialParts: parts,
+        notes: v.notes ?? null,
+      };
+
+      this.submitForm.emit(dto);
+    } else {
+      const dto: CreateRepairCardRequest = {
+        ticketId: this.ticketId,
+        diagnosisText: v.diagnosisText,
+        injuryDate: v.injuryDate,
+        injuryReasons: v.injuryReasons,
+        injurySides: v.injurySides,
+        injuryTypes: v.injuryTypes,
+        industrialParts: parts,
+        notes: v.notes ?? null,
+      };
+      this.startSubmitting();
+      this.submitForm.emit(dto);
+    }
   }
-
-  const v = this.form.value;
-
-  if (this.editMode) {
-    const dto: UpdateRepairCardRequest = {
-      ticketId: this.ticketId,
-      diagnosisText: v.diagnosisText,
-      injuryDate: v.injuryDate,
-      injuryReasons: v.injuryReasons,
-      injurySides: v.injurySides,
-      injuryTypes: v.injuryTypes,
-      industrialParts: v.industrialParts,
-      notes: v.notes ?? null,
-    };
-
-    this.submitForm.emit(dto);
-  } else {
-    const dto: CreateRepairCardRequest = {
-      ticketId: this.ticketId,
-      diagnosisText: v.diagnosisText,
-      injuryDate: v.injuryDate,
-      injuryReasons: v.injuryReasons,
-      injurySides: v.injurySides,
-      injuryTypes: v.injuryTypes,
-      industrialParts: v.industrialParts,
-      notes: v.notes ?? null,
-    };
-
-    this.submitForm.emit(dto);
+  private noFutureDatesValidator(
+    control: AbstractControl
+  ): ValidationErrors | null {
+    const selectedDate = new Date(control.value);
+    if (isNaN(selectedDate.getTime())) {
+      return null;
+    }
+    const today = new Date();
+    today.setHours(23, 59, 59, 999);
+    if (selectedDate.getTime() > today.getTime()) {
+      return { futureDate: true };
+    }
+    return null;
   }
-}
-
 }
