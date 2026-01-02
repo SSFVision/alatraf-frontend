@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class CacheService {
-
   get<T>(key: string): T | null {
     try {
       const raw = localStorage.getItem(key);
@@ -30,8 +29,19 @@ export class CacheService {
     localStorage.clear();
   }
 
+  /**
+   * Clear multiple keys from cache. Useful for logout flows.
+   */
+  clearKeys(keys: string[]): void {
+    if (!keys || keys.length === 0) return;
+    try {
+      keys.forEach((k) => this.clear(k));
+    } catch (err) {
+      console.error('❌ CacheService: Failed to clear keys', err);
+    }
+  }
+
   has(key: string): boolean {
     return localStorage.getItem(key) !== null;
   }
 }
-

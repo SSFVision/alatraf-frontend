@@ -5,6 +5,8 @@ import { tap, switchMap, catchError } from 'rxjs';
 import { AuthService } from './auth.service';
 import { TokenStorageFacade } from './token-storage/token-storage.facade';
 import { SessionStore } from './session.store';
+import { CacheService } from '../services/cache.service';
+import { ALL_CACHE_KEYS } from '../constants/cache-keys.constants';
 
 import { LoginRequest } from './models/login-request.model';
 import { RefreshTokenRequest } from './models/refresh-token-request.model';
@@ -18,6 +20,7 @@ export class AuthFacade {
   private tokenStorage = inject(TokenStorageFacade);
   private sessionStore = inject(SessionStore);
   private navigation = inject(NavigationAuthFacade);
+  private cache = inject(CacheService);
 
   // -------------------------------------------------------
   // 1. LOGIN FLOW
@@ -80,6 +83,13 @@ export class AuthFacade {
     // Clear all state & storage
     this.tokenStorage.clear();
     this.sessionStore.clear();
+
+    // Clear application caches (but keep token storage logic separate)
+    try {
+      this.cache.clearKeys(ALL_CACHE_KEYS);
+    } catch (err) {
+      console.error('Failed to clear cache keys on logout', err);
+    }
 
     // Navigate to login page
     this.navigation.goToLogin({ replaceUrl: true });

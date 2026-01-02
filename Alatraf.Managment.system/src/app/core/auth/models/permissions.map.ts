@@ -87,6 +87,12 @@ IndustrialParts: {
     EDIT: 'Sections.Edit',
     DELETE: 'Sections.Delete',
   },
+  Services: {
+    VIEW: 'Services.View',
+    CREATE: 'Services.Create',
+    EDIT: 'Services.Edit',
+    DELETE: 'Services.Delete',
+  },
   Doctors: {
     VIEW: 'Doctors.View',
     CREATE: 'Doctors.Create',

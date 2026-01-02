@@ -105,6 +105,13 @@ export const APP_ROUTES: Routes = [
           ),
       },
       {
+        path: AppRoutes.services.root,
+        loadChildren: () =>
+          import('./features/Organization/Services/services.routes').then(
+            (m) => m.ServicesRoutes
+          ),
+      },
+      {
         path: AppRoutes.doctors.root,
         loadChildren: () =>
           import('./features/Organization/Doctors/doctors.routes').then(

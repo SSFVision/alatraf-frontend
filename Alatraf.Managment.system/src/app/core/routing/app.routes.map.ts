@@ -122,7 +122,8 @@ export const AppRoutes = {
         `repair-cards/${repairCardId}/assignments/assign-parts`,
     },
     doctors: {
-      viewIndustrialParts: (doctorSectionRoomId: number | string) => `repair-cards/doctors/${doctorSectionRoomId}`,
+      viewIndustrialParts: (doctorSectionRoomId: number | string) =>
+        `repair-cards/doctors/${doctorSectionRoomId}`,
     },
     // عمليات سريعة (عادة dialogs أو inline forms)
     status: (repairCardId: number | string) =>
@@ -171,6 +172,17 @@ export const AppRoutes = {
     edit: (sectionId: number | string) => `edit/${sectionId}`,
 
     view: (sectionId: number | string) => `view/${sectionId}`,
+  },
+  services: {
+    root: 'services',
+
+    list: 'services',
+
+    create: 'create',
+
+    edit: (serviceId: number | string) => `edit/${serviceId}`,
+
+    view: (serviceId: number | string) => `view/${serviceId}`,
   },
   doctors: {
     root: 'doctors',
