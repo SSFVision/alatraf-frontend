@@ -111,7 +111,7 @@ export class PaymentsWaitingListFacade extends BaseFacade {
     if (this._filters().searchTerm) {
       this.searchManager.search(this._filters().searchTerm!);
     } else {
-      this.loadPaymentsWaitingList();
+      return;
     }
   }
 

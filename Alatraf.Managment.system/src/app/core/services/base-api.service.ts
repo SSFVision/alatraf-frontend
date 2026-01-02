@@ -1,5 +1,5 @@
 // import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, delay } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
@@ -12,7 +12,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 export class BaseApiService {
   protected baseUrl = environment.apiBaseUrl;
 
-  constructor(protected http: HttpClient) {}
+  constructor(@Inject(HttpClient) protected http: HttpClient) {}
 
   // protected buildUrl(endpoint: string): string {
   //   if (!endpoint.startsWith('/')) endpoint = `/${endpoint}`;

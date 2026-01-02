@@ -58,7 +58,6 @@ export class PaymentActionsComponent {
   form: FormGroup = this.fb.group({
     accountKind: [null, Validators.required],
 
-    // 🔒 ثابتة – لا تُحذف
     totalAmount: [{ value: 0, disabled: true }],
     discount: [
       null,
@@ -73,16 +72,14 @@ export class PaymentActionsComponent {
     netAmount: [{ value: 0, disabled: true }],
   });
   formValidationErrors = signal<Record<string, string[]>>({});
-   validationState!: FormValidationState;
+  validationState!: FormValidationState;
 
   constructor() {
-    /** عند تغيير نوع الحساب */
     this.form.get('accountKind')!.valueChanges.subscribe((kind) => {
       this.selectedAccountKind.set(kind);
       this.buildFormForAccountKind(kind);
     });
 
-    /** عند تغيير الخصم → احسب الإجمالي */
     this.form.get('discount')!.valueChanges.subscribe((discount) => {
       this.recalculateNetAmount(discount);
     });
@@ -103,13 +100,13 @@ export class PaymentActionsComponent {
     if (this.totalAmount != null) {
       this.form.patchValue({
         totalAmount: this.totalAmount,
-        netAmount: this.totalAmount,
       });
+      const discount = this.form.get('discount')?.value ?? null;
+      this.recalculateNetAmount(discount);
     }
   }
 
   private buildFormForAccountKind(kind: AccountKind | null): void {
-    // احذف الكنترولز الديناميكية فقط
     Object.keys(this.form.controls).forEach((controlName) => {
       if (
         !['accountKind', 'totalAmount', 'discount', 'netAmount'].includes(
@@ -168,7 +165,6 @@ export class PaymentActionsComponent {
     const safePercent = Math.min(Math.max(percent, 0), 100);
 
     const net = total - (total * safePercent) / 100;
-
     this.form.patchValue({ netAmount: Math.max(net, 0) }, { emitEvent: false });
   }
 
