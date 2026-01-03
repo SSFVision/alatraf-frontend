@@ -10,6 +10,7 @@ import { CreateSectionRequest } from '../Models/create-section.request';
 import { SectionFilterRequest } from '../Models/section-filter.request';
 import { SectionDto } from '../Models/section.dto';
 import { UpdateSectionRequest } from '../Models/update-section.request';
+import { AssignNewRoomsToSectionDto } from '../Models/assign-new-rooms-to-section.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -61,4 +62,18 @@ export class SectionService extends BaseApiService {
       headers
     );
   }
+
+  assignNewRoomsToSection(
+  sectionId: number,
+  dto: AssignNewRoomsToSectionDto
+): Observable<ApiResult<void>> {
+  const headers = new HttpHeaders().set('X-Enable-Loader', 'true');
+
+  return this.post<void>(
+    `${this.endpoint}/${sectionId}/rooms`,
+    dto,
+    headers
+  );
+}
+
 }

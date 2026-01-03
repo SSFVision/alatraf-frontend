@@ -3,12 +3,12 @@
   <span class="loader"></span>
   <span class="body-md primary-color-50 margin-left-8"> جاري التحميل... </span>
 </div>
-} @else { @if ( (!sessions() || sessions().length === 0)) {
+} @else { 
+  
+  @if ( (!sessions() || sessions().length === 0)) {
 <div class="empty-state">
   <img src="assets/images/amico.svg" alt="no patients" class="empty-icon" />
-  <p class="body-md primary-color-50">
-    لا يوجد مرضى جلسات مسندة لهذا الطبيب حالياً
-  </p>
+  <p class="body-md primary-color-50">لا يوجد جلسات مسندة لهذا الطبيب حالياً</p>
 </div>
 } @for (session of sessions(); track session.sessionProgramId) {
 

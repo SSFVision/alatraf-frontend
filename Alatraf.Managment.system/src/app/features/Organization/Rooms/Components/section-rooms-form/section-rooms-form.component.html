@@ -1,0 +1,51 @@
+<div class="box dialog">
+  <!-- Header -->
+  <div class="modal-header">
+    <h2>بيانات القسم</h2>
+    <img
+      src="assets/icons/close-icon.svg"
+      alt="إغلاق"
+      (click)="onClose()"
+      class="close-icon cursor-pointer"
+    />
+  </div>
+
+  <span class="home-line"></span>
+  <div class="row flex-center">
+    <label class="label-lg">اسم القسم</label>
+    <input class="label-lg" type="text" [value]="section()?.name" readonly />
+  </div>
+
+  <div class="rooms-card">
+    <div class="rooms-header">الغرف الخاصة بالقسم</div>
+
+    <form class="rooms-list" [formGroup]="form">
+      <div
+        class="raw flex-center"
+        *ngFor="let roomCtrl of rooms.controls; let i = index"
+      >
+        <input
+          type="text"
+          class="input room-input"
+          [formControl]="roomControl(i)"
+          placeholder="اسم الغرفة"
+        />
+
+        <td>
+          <button
+            *ngIf="rooms.length > 1"
+            type="button"
+            class="btn danger icon"
+            (click)="removeRoom(i)"
+          >
+            ✕
+          </button>
+        </td>
+      </div>
+    </form>
+  </div>
+
+  <div class="actions">
+    <button type="button" class="btn primary" (click)="onSave()">حفظ</button>
+  </div>
+</div>

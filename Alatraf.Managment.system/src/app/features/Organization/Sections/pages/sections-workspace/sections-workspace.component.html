@@ -1,11 +1,24 @@
 @if (isLoading()) {
-  <div class="flex-center">
-    <span class="loader"></span>
-  </div>
-  <p class="flex-center">جاري تحميل بيانات القسم...</p>
+<div class="flex-center">
+  <span class="loader"></span>
+</div>
+<p class="flex-center">جاري تحميل بيانات القسم...</p>
 } @else {
 
-<app-add-edit-section-page 
-></app-add-edit-section-page>
+<app-add-edit-section-page></app-add-edit-section-page>
 
-}
+@if (isEditMode()) {
+
+<div class="flex-center">
+  <button class="btn primary" (click)="onAddNewRoomToSection()">
+    اضافة غرف جديدة للقسم
+  </button>
+</div>
+} @if (openAddNewRoomToSectionDialog()) {
+<app-section-rooms-form
+  [section]="Selectedsection()"
+  (close)="OnCloseAddForm()"
+  (save)="OnSaveNewRooms($event)"
+></app-section-rooms-form>
+
+} }
