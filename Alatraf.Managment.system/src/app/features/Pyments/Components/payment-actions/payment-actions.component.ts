@@ -141,7 +141,7 @@ export class PaymentActionsComponent {
 
     if (config.showDisabledCardId) {
       this.form.addControl(
-        'disabledCardId',
+        'cardNumber',
         this.fb.control(null, [Validators.required, Validators.min(1)])
       );
     }
@@ -204,7 +204,7 @@ export class PaymentActionsComponent {
         this.submitPayment.emit({
           accountKind: AccountKind.Disabled,
           payload: {
-            disabledCardId: value.disabledCardId,
+            cardNumber: value.cardNumber,
             notes: value.notes ?? null,
           },
         });
