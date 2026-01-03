@@ -34,13 +34,7 @@ export const MENU_CONFIG: MenuCategory[] = [
         requiredPermissions: [PERMISSIONS.PATIENTS.ADD],
       },
       
-      {
-        label: 'إدارة المواعيد',
-        icon: 'assets/icons/prosthetic-foot-w.svg',
-        activeIcon: 'assets/icons/prosthetic-foot-b.svg',
-        route: AppRoutes.Appointment.root,
-        requiredPermissions: [PERMISSIONS.Appointment.VIEW],
-      },
+      
     ],
   },
 

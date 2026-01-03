@@ -72,7 +72,12 @@
       </select>
 
       <label class="label-lg">تاريخ الميلاد</label>
-      <input class="label-lg" type="date" formControlName="birthdate" />
+      <input
+        class="label-lg"
+        type="date"
+        formControlName="birthdate"
+        [max]="maxDate"
+      />
 
       <div class="error-message label-lg" *ngIf="hasBackendError('birthdate')">
         {{ getBackendError("birthdate") }}
