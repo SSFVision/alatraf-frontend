@@ -39,10 +39,20 @@
       {{ isEditMode() ? "تعديل" : "إضافة" }}
     </button>
 
-    @if (canDelete()) {
+    <!-- @if (canDelete()) {
     <button class="btn danger" type="button" (click)="delete()" tabindex="-1">
       حذف
     </button>
-    }
+    } -->
   </div>
 </form>
+@if (isEditMode()) {
+<app-section-rooms-table
+  [rooms]="rooms()"
+  [loading]="roomsLoading()"
+  (editRoom)="onEditRoom($event)"
+  (deleteRoom)="onDeleteRoom($event)"
+  (addRoom)="onAddRoom()"
+></app-section-rooms-table>
+
+}

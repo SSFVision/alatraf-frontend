@@ -165,7 +165,7 @@ export class PaiedPageComponent {
       case AccountKind.Disabled:
         this.processingFacade
           .payDisabled(paymentId, {
-            disabledCardId: event.payload?.disabledCardId,
+            cardNumber: event.payload?.cardNumber,
             notes: event.payload?.notes ?? null,
           })
           .subscribe((res) => {

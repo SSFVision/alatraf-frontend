@@ -57,10 +57,10 @@ export class MainServicesPageComponent {
   }
 
   goToAddService() {
-    this.selectedId.set(null);
-    this.addMode.set(true);
-    this.facade.enterCreateMode();
-    this.nav.goToCreateServicePage();
+    // this.selectedId.set(null);
+    // this.addMode.set(true);
+    // this.facade.enterCreateMode();
+    // this.nav.goToCreateServicePage();
   }
 
   onSearch(term: string) {

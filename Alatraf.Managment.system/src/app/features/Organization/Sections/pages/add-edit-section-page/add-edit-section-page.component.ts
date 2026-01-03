@@ -8,11 +8,18 @@ import { CreateSectionRequest } from '../../Models/create-section.request';
 import { UpdateSectionRequest } from '../../Models/update-section.request';
 import { DepartmentsFacade } from '../../../Departments/departments.facade.service';
 import { SectionsNavigationFacade } from '../../../../../core/navigation/sections-navigation.facade';
+import { SectionRoomsTableComponent } from '../../../../../shared/components/section-rooms-table/section-rooms-table.component';
+import { SectionRoomsFacade } from '../../Service/section-rooms.facade.service';
+import { SectionRoomsFormComponent } from '../../../Rooms/Components/section-rooms-form/section-rooms-form.component';
 
 @Component({
   selector: 'app-add-edit-section-page',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    SectionRoomsTableComponent,
+  ],
   templateUrl: './add-edit-section-page.component.html',
   styleUrl: './add-edit-section-page.component.css',
 })
@@ -20,10 +27,13 @@ export class AddEditSectionPageComponent {
   private fb = inject(FormBuilder);
   private facade = inject(SectionsFacade);
   private departmentsFacade = inject(DepartmentsFacade);
-private nav = inject(SectionsNavigationFacade);
+  private nav = inject(SectionsNavigationFacade);
+  roomsFacade = inject(SectionRoomsFacade);
+  Selectedsection = this.facade.selectedSection;
 
-  // ---------------------------------------------
-  // STATE (SAME AS MEDICAL PROGRAM)
+  rooms = this.roomsFacade.rooms;
+  roomsLoading = this.roomsFacade.isLoading;
+
   // ---------------------------------------------
   isEditMode = this.facade.isEditMode;
   canDelete = signal(false);
@@ -62,7 +72,7 @@ private nav = inject(SectionsNavigationFacade);
 
       this.form.markAsPristine();
       this.form.enable();
-            this.form.controls.departmentId.disable({ emitEvent: false });
+      this.form.controls.departmentId.disable({ emitEvent: false });
 
       this.canDelete.set(true);
       this.canSubmit.set(false);
@@ -128,7 +138,7 @@ private nav = inject(SectionsNavigationFacade);
 
       this.facade.createSection(createDto).subscribe((res) => {
         if (res.success && res.data) {
-    this.nav.goToEditSectionPage(res.data.id);
+          this.nav.goToEditSectionPage(res.data.id);
           this.form.markAsPristine();
           this.canDelete.set(true);
           this.canSubmit.set(false);
@@ -146,4 +156,16 @@ private nav = inject(SectionsNavigationFacade);
 
     this.facade.deleteSection(section);
   }
+  onEditRoom(room: any) {
+    console.log('Edit room', room);
+  }
+
+  onDeleteRoom(roomId: number) {
+    console.log('Delete room', roomId);
+  }
+
+  onAddRoom() {
+    console.log('Add room');
+  }
+ 
 }

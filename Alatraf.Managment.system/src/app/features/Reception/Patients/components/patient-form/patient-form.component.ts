@@ -47,6 +47,7 @@ export class PatientFormComponent implements OnChanges, OnInit {
   close = output();
   save = output<CreatePatientRequest>();
   mode = input.required<boolean>();
+maxDate = new Date().toISOString().split('T')[0];
 
   private facade = inject(PatientsFacade);
   private fb = inject(FormBuilder);

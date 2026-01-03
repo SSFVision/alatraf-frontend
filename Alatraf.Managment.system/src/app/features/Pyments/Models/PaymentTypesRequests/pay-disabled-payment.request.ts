@@ -1,5 +1,4 @@
-
 export interface PayDisabledPaymentRequest {
-  disabledCardId: number;
+  cardNumber: string;
   notes?: string | null;
 }

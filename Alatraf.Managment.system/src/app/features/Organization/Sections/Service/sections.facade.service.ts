@@ -12,6 +12,7 @@ import { SectionFilterRequest } from '../Models/section-filter.request';
 import { CreateSectionRequest } from '../Models/create-section.request';
 import { UpdateSectionRequest } from '../Models/update-section.request';
 import { SectionService } from './section.service';
+import { AssignNewRoomsToSectionDto } from '../Models/assign-new-rooms-to-section.dto';
 
 @Injectable({ providedIn: 'root' })
 export class SectionsFacade extends BaseFacade {
@@ -48,25 +49,24 @@ export class SectionsFacade extends BaseFacade {
   // SEARCH MANAGER
   // ---------------------------------------------
   private searchManager = new SearchManager<SectionDto[]>(
-  (term: string) =>
-    this.service
-      .getSections(
-        { ...this._filters(), searchTerm: term },
-        this._pageRequest()
-      )
-      .pipe(
-        tap((res) => {
-          if (!res.isSuccess) this.handleLoadSectionsError(res);
-        }),
-        map((res) => (res.isSuccess && res.data?.items ? res.data.items : []))
-      ),
-  null,
-  (items) => {
-    this._sections.set(items);
-    this._isLoading.set(false);
-  }
-);
-
+    (term: string) =>
+      this.service
+        .getSections(
+          { ...this._filters(), searchTerm: term },
+          this._pageRequest()
+        )
+        .pipe(
+          tap((res) => {
+            if (!res.isSuccess) this.handleLoadSectionsError(res);
+          }),
+          map((res) => (res.isSuccess && res.data?.items ? res.data.items : []))
+        ),
+    null,
+    (items) => {
+      this._sections.set(items);
+      this._isLoading.set(false);
+    }
+  );
 
   // ---------------------------------------------
   // SEARCH & FILTERS
@@ -74,29 +74,27 @@ export class SectionsFacade extends BaseFacade {
   search(term: string) {
     this._filters.update((f) => ({ ...f, searchTerm: term }));
     this._pageRequest.update((p) => ({ ...p, page: 1 }));
-      this._isLoading.set(true);
+    this._isLoading.set(true);
 
     this.searchManager.search(term);
   }
 
- updateFilters(newFilters: Partial<SectionFilterRequest>) {
-  this._filters.update((f) => ({ ...f, ...newFilters }));
-  this._pageRequest.update((p) => ({ ...p, page: 1 }));
-  this.loadSections();
-}
+  updateFilters(newFilters: Partial<SectionFilterRequest>) {
+    this._filters.update((f) => ({ ...f, ...newFilters }));
+    this._pageRequest.update((p) => ({ ...p, page: 1 }));
+    this.loadSections();
+  }
 
+  setDepartment(departmentId: number | null) {
+    this._filters.update((f) => ({
+      ...f,
+      departmentId: departmentId ?? null,
+    }));
 
-setDepartment(departmentId: number | null) {
-  this._filters.update((f) => ({
-    ...f,
-    departmentId: departmentId ?? null,
-  }));
+    this._pageRequest.update((p) => ({ ...p, page: 1 }));
 
-  this._pageRequest.update((p) => ({ ...p, page: 1 }));
-
-  this.loadSections(); // loadSections يضبط loading
-}
-
+    this.loadSections(); // loadSections يضبط loading
+  }
 
   setPage(page: number) {
     this._pageRequest.update((p) => ({ ...p, page }));
@@ -108,31 +106,30 @@ setDepartment(departmentId: number | null) {
     this.loadSections();
   }
 
-private _isLoading = signal<boolean>(false);
-isLoading = this._isLoading.asReadonly();
+  private _isLoading = signal<boolean>(false);
+  isLoading = this._isLoading.asReadonly();
 
-loadSections() {
-  this._isLoading.set(true);
+  loadSections() {
+    this._isLoading.set(true);
 
-  this.service
-    .getSections(this._filters(), this._pageRequest())
-    .pipe(
-      tap((res) => {
-        if (res.isSuccess && res.data?.items) {
-          this._sections.set(res.data.items);
-          this.totalCount.set(res.data.totalCount ?? 0);
-        } else {
-          this._sections.set([]);
-          this.totalCount.set(0);
-          this.handleLoadSectionsError(res);
-        }
+    this.service
+      .getSections(this._filters(), this._pageRequest())
+      .pipe(
+        tap((res) => {
+          if (res.isSuccess && res.data?.items) {
+            this._sections.set(res.data.items);
+            this.totalCount.set(res.data.totalCount ?? 0);
+          } else {
+            this._sections.set([]);
+            this.totalCount.set(0);
+            this.handleLoadSectionsError(res);
+          }
 
-        this._isLoading.set(false);
-      })
-    )
-    .subscribe();
-}
-
+          this._isLoading.set(false);
+        })
+      )
+      .subscribe();
+  }
 
   resetFilters() {
     this._filters.set({
@@ -265,8 +262,7 @@ loadSections() {
       this._selectedSection.set({
         ...selected,
         name: dto.name,
-                      // departmentId: dto.departmentId,
-
+        // departmentId: dto.departmentId,
       });
     }
   }
@@ -285,78 +281,94 @@ loadSections() {
     this.toast.error('تعذر تحميل الأقسام. يرجى المحاولة لاحقاً.');
   }
 
+  private _isLoadingNextPage = signal(false);
+  isLoadingNextPage = this._isLoadingNextPage.asReadonly();
 
-private _isLoadingNextPage = signal(false);
-isLoadingNextPage = this._isLoadingNextPage.asReadonly();
+  loadNextPage(): void {
+    if (this._isLoadingNextPage()) return;
 
+    const currentItems = this._sections();
+    const total = this.totalCount();
+    const { page, pageSize } = this._pageRequest();
 
-loadNextPage(): void {
-  if (this._isLoadingNextPage()) return;
+    if (currentItems.length >= total) return;
 
-  const currentItems = this._sections();
-  const total = this.totalCount();
-  const { page, pageSize } = this._pageRequest();
+    const lastPage = Math.ceil(total / pageSize);
 
-  if (currentItems.length >= total) return;
+    if (page >= lastPage) return;
 
-  const lastPage = Math.ceil(total / pageSize);
+    const nextPage = page + 1;
 
-  if (page >= lastPage) return;
+    this._isLoadingNextPage.set(true);
 
-  const nextPage = page + 1;
-
-  this._isLoadingNextPage.set(true);
-
-  this.service
-    .getSections(this._filters(), {
-      ...this._pageRequest(),
-      page: nextPage,
-    })
-    .pipe(
-      tap((res) => {
-        if (!res.isSuccess) {
-          this.handleLoadSectionsError(res);
-          return;
-        }
-
-        const newItems = res.data?.items ?? [];
-        if (newItems.length === 0) return;
-
-        // append بدون تكرار
-        this._sections.update((current) => {
-          const existingIds = new Set(current.map((x) => x.id));
-          const uniqueNewItems = newItems.filter(
-            (item) => !existingIds.has(item.id)
-          );
-          return [...current, ...uniqueNewItems];
-        });
-
-        // تحديث الصفحة فقط بعد نجاح التحميل
-        this._pageRequest.update((p) => ({
-          ...p,
-          page: nextPage,
-        }));
-      }),
-      // 🔓 فتح القفل مهما حصل
-      tap({
-        finalize: () => this._isLoadingNextPage.set(false),
+    this.service
+      .getSections(this._filters(), {
+        ...this._pageRequest(),
+        page: nextPage,
       })
-    )
-    .subscribe();
-}
+      .pipe(
+        tap((res) => {
+          if (!res.isSuccess) {
+            this.handleLoadSectionsError(res);
+            return;
+          }
 
+          const newItems = res.data?.items ?? [];
+          if (newItems.length === 0) return;
 
-resetAndLoad(): void {
-  this._pageRequest.set({
-    page: 1,
-    pageSize: this._pageRequest().pageSize,
-  });
+          // append بدون تكرار
+          this._sections.update((current) => {
+            const existingIds = new Set(current.map((x) => x.id));
+            const uniqueNewItems = newItems.filter(
+              (item) => !existingIds.has(item.id)
+            );
+            return [...current, ...uniqueNewItems];
+          });
 
-  this._sections.set([]);
-  this.totalCount.set(0);
+          // تحديث الصفحة فقط بعد نجاح التحميل
+          this._pageRequest.update((p) => ({
+            ...p,
+            page: nextPage,
+          }));
+        }),
+        // 🔓 فتح القفل مهما حصل
+        tap({
+          finalize: () => this._isLoadingNextPage.set(false),
+        })
+      )
+      .subscribe();
+  }
 
-  this.loadSections();
-}
+  resetAndLoad(): void {
+    this._pageRequest.set({
+      page: 1,
+      pageSize: this._pageRequest().pageSize,
+    });
 
+    this._sections.set([]);
+    this.totalCount.set(0);
 
+    this.loadSections();
+  }
+
+  // Add this method inside the SectionsFacade class
+  assignNewRoomsToSection(sectionId: number, dto: AssignNewRoomsToSectionDto) {
+    if (!sectionId) return;
+
+    this._isLoading.set(true); // optional, show loader
+
+    return this.service.assignNewRoomsToSection(sectionId, dto).pipe(
+      tap((res) => {
+        if (res.isSuccess) {
+          this.toast.success('تم تعيين الغرف الجديدة للقسم بنجاح');
+        } else {
+          const err = this.extractError(res);
+          this.toast.error('فشل تعيين الغرف الجديدة للقسم');
+        }
+      }),
+      tap({
+        finalize: () => this._isLoading.set(false), // unlock loader
+      })
+    );
+  }
 }
