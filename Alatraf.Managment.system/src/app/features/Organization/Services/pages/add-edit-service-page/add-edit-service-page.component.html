@@ -22,7 +22,7 @@
   <div class="row flex-center">
     <label class="label-lg">القسم الرئيسي</label>
 
-    <select class="label-lg" formControlName="departmentId">
+    <select class="label-lg" formControlName="departmentId"  >
       <option [ngValue]="null">-- اختر قسم --</option>
 
       @for (dept of departments(); track dept.id) {

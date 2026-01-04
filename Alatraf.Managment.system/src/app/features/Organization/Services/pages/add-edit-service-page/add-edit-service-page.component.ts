@@ -42,7 +42,8 @@ export class AddEditServicePageComponent implements OnInit, OnDestroy {
   // ---------------------------------------------
   form = this.fb.group({
     name: this.fb.nonNullable.control('', Validators.required),
-    departmentId: this.fb.nonNullable.control<number | null>(null),
+    // departmentId: this.fb.nonNullable.control<number | null>(null),
+    departmentId: this.fb.nonNullable.control({ value: null, disabled: true }),
     price: this.fb.nonNullable.control<number | null>(null),
   });
 
@@ -92,11 +93,13 @@ export class AddEditServicePageComponent implements OnInit, OnDestroy {
     this.form.patchValue({
       name: service.name,
       departmentId: service.departmentId ?? null,
+
       price: service.price ?? null,
     });
 
     this.form.markAsPristine();
     this.form.enable();
+    this.form.controls.departmentId.disable();
   }
 
   private resetFormForCreateMode(): void {
