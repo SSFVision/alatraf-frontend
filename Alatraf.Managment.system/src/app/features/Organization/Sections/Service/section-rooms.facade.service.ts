@@ -8,6 +8,8 @@ import { SectionRoomDto } from '../../Models/section-room.dto';
 import { OrganizationService } from '../../organization.service';
 import { AssignNewRoomsToSectionDto } from '../Models/assign-new-rooms-to-section.dto';
 import { SectionService } from './section.service';
+import { RoomsFacade } from '../../Rooms/Services/room.facade.service';
+import { RoomService } from '../../Rooms/Services/room.service';
 
 @Injectable({ providedIn: 'root' })
 export class SectionRoomsFacade extends BaseFacade {
@@ -37,8 +39,8 @@ export class SectionRoomsFacade extends BaseFacade {
     if (!sectionId) return;
 
     // prevent unnecessary reload
-    if (this._sectionId() === sectionId && this._rooms().length) return;
-
+    // if (this._sectionId() === sectionId && this._rooms().length) return;
+    console.log('start load rooms for section id:', sectionId);
     this._sectionId.set(sectionId);
     this._isLoading.set(true);
 
@@ -70,31 +72,55 @@ export class SectionRoomsFacade extends BaseFacade {
   }
 
   assignNewRooms(roomNames: string[]): void {
-  const sectionId = this._sectionId();
-  if (!sectionId || roomNames.length === 0) return;
+    const sectionId = this._sectionId();
+    if (!sectionId || roomNames.length === 0) return;
 
-  const dto: AssignNewRoomsToSectionDto = {
-    roomNames,
-  };
+    const dto: AssignNewRoomsToSectionDto = {
+      roomNames,
+    };
 
-  this._isLoading.set(true);
+    this._isLoading.set(true);
 
-  this.sectionService
-    .assignNewRoomsToSection(sectionId, dto)
-    .pipe(
-      tap((res: ApiResult<void>) => {
-        if (res.isSuccess) {
-          this.toast.success('تمت إضافة الغرف بنجاح');
-          this.loadBySectionId(sectionId); // 🔄 reload rooms
-        } else {
-          this.toast.error(
-            res.errorDetail ?? 'فشل إضافة الغرف للقسم'
-          );
-          this._isLoading.set(false);
-        }
-      })
-    )
-    .subscribe();
-}
+    this.sectionService
+      .assignNewRoomsToSection(sectionId, dto)
+      .pipe(
+        tap((res: ApiResult<void>) => {
+          if (res.isSuccess) {
+            this.toast.success('تمت إضافة الغرف بنجاح');
+            this.loadBySectionId(sectionId); // 🔄 reload rooms
+          } else {
+            this.toast.error(res.errorDetail ?? 'فشل إضافة الغرف للقسم');
+            this._isLoading.set(false);
+          }
+        })
+      )
+      .subscribe();
+  }
 
+  private roomService = inject(RoomService);
+
+  deleteRoomFromSpecificSection(room: SectionRoomDto, sectionId: number) {
+    if (!room?.roomId) return;
+
+    const config = {
+      title: 'حذف الغرفة',
+      message: 'هل أنت متأكد من حذف الغرفة التالية؟',
+      payload: { الاسم: room.roomName },
+    };
+
+    this.confirmAndDelete(
+      config,
+      () => this.roomService.deleteRoom(room.roomId),
+      {
+        successMessage: 'تم حذف الغرفة بنجاح',
+        defaultErrorMessage: 'فشل حذف الغرفة. حاول لاحقاً.',
+      }
+    ).subscribe((success) => {
+      if (success) {
+        console.log('Room deleted successfully', sectionId);
+
+        this.loadBySectionId(sectionId);
+      }
+    });
+  }
 }

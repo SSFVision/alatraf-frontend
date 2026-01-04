@@ -21,11 +21,11 @@
       <tr *ngFor="let room of rooms()">
         <td class="body-md">{{ room.roomName }}</td>
         <td class="row gap-16">
-          <button class="btn primary icon" (click)="onEdit(room)">
+          <!-- <button class="btn primary icon" (click)="onEdit(room)">
             <img src="assets/icons/pencil-icon.svg" alt="تعديل" />
-          </button>
+          </button> -->
 
-          <button class="btn danger icon" (click)="onDelete(room.roomId)">
+          <button class="btn danger icon" (click)="onDelete(room)">
             <img src="assets/icons/trash-icon.svg" alt="حذف" />
           </button>
         </td>

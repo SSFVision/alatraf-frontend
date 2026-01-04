@@ -5,6 +5,7 @@ import { AddEditSectionPageComponent } from '../add-edit-section-page/add-edit-s
 import { SectionRoomsFacade } from '../../Service/section-rooms.facade.service';
 import { SectionRoomsFormComponent } from '../../../Rooms/Components/section-rooms-form/section-rooms-form.component';
 import { AssignNewRoomsToSectionDto } from '../../Models/assign-new-rooms-to-section.dto';
+import { SectionRoomDto } from '../../../Models/section-room.dto';
 
 @Component({
   selector: 'app-sections-workspace',
@@ -47,11 +48,13 @@ export class SectionsWorkspaceComponent {
   }
   OnCloseAddForm() {
     this.openAddNewRoomToSectionDialog.set(false);
-    this.facade.loadSectionForEdit(this.Selectedsection()!.id);
+    this.roomsFacade.loadBySectionId(this.Selectedsection()!.id);
   }
   OnSaveNewRooms(newRooms: AssignNewRoomsToSectionDto) {
     this.facade
       .assignNewRoomsToSection(this.Selectedsection()!.id, newRooms)
-      ?.subscribe();
+      ?.subscribe((res) => {});
   }
+
+  OnEditRoom(room: SectionRoomDto) {}
 }

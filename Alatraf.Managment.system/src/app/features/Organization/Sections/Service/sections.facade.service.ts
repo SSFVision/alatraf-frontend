@@ -13,6 +13,8 @@ import { CreateSectionRequest } from '../Models/create-section.request';
 import { UpdateSectionRequest } from '../Models/update-section.request';
 import { SectionService } from './section.service';
 import { AssignNewRoomsToSectionDto } from '../Models/assign-new-rooms-to-section.dto';
+import { RoomService } from '../../Rooms/Services/room.service';
+import { SectionRoomDto } from '../../Models/section-room.dto';
 
 @Injectable({ providedIn: 'root' })
 export class SectionsFacade extends BaseFacade {
@@ -371,4 +373,5 @@ export class SectionsFacade extends BaseFacade {
       })
     );
   }
+ 
 }
