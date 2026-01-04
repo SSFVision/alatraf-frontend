@@ -77,7 +77,7 @@ export class DoctorWorkspacePageComponent implements OnInit {
   }
   onDeleteDoctor(doctor: DoctorDto) {
     this.toastService.warning('حذف الطبيب غير مفعّل حالياً.');
-    // this.doctorFacade.deleteDoctor(doctor);
+    // this.doctorFacade.endDoctorAssignmentLikeDelete(doctor);
   }
 
   switchToAssign() {

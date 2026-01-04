@@ -103,6 +103,7 @@ export class AddEditDoctorFormComponent {
       departmentId: [null, [Validators.required]],
     });
   }
+
   private populateForm(doctor: DoctorDto): void {
     const formData = {
       fullname: doctor.personDto?.fullname,
@@ -116,6 +117,11 @@ export class AddEditDoctorFormComponent {
     };
 
     this.form.patchValue(formData, { emitEvent: false });
+  if (doctor.hasAssignments ) {
+    this.form.get('departmentId')?.disable({ emitEvent: false });
+  } else {
+    this.form.get('departmentId')?.enable({ emitEvent: false });
+  }
 
     this.form.markAsPristine();
     this.form.markAsUntouched();
@@ -138,13 +144,13 @@ export class AddEditDoctorFormComponent {
   }
 
   submit(): void {
-    const dto = { ...this.form.value };
+    const dto = { ...this.form.getRawValue() };
 
     if (dto.birthdate === '') {
       dto.birthdate = null;
     }
     if (this.form.valid) {
-      this.save.emit(this.form.value);
+      this.save.emit(dto);
     } else {
       this.form.markAllAsTouched();
     }
@@ -154,6 +160,4 @@ export class AddEditDoctorFormComponent {
     const doctor = this.selectedDoctor();
     if (doctor !== null) this.delete.emit(doctor);
   }
-
-
 }

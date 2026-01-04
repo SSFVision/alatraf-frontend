@@ -126,7 +126,6 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges, OnDestroy {
 
     this.validationState.clearOnEdit();
     if (!this.editMode()) {
-      // default program start date to today and enable sessions input
       this.form.patchValue({ programStartDate: this.today });
       this.form.get('numberOfSessions')?.enable({ emitEvent: false });
       this.addProgramRow();

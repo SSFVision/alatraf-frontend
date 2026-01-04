@@ -298,8 +298,10 @@
     <button
       class="btn primary label-md"
       type="submit"
-      [disabled]="form.invalid || submitting()"
-    >
+      [disabled]=" submitting()"
+      >
+      <!-- [disabled]="form.invalid || submitting()" -->
+
       حفظ
     </button>
   </div>

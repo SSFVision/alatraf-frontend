@@ -8,4 +8,5 @@ export interface DoctorDto {
   sectionId?: number;
   roomId?: number;
   isActive: boolean;
+  hasAssignments: boolean;
 }

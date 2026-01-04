@@ -45,12 +45,17 @@ export class IndustrialWaitingListComponent implements OnInit, OnDestroy {
 
   filterByService(serviceId: number | null) {
     this.activeService.set(serviceId);
+
     this.ticketFacade.updateFilters({
       departmentId: Department.Industrial,
       serviceId: serviceId ?? undefined,
+      status:serviceId===ServiceType.Industrial? TicketStatus.Continue:TicketStatus.New,
     });
+
     this.ticketFacade.setPage(1);
   }
+
+  
   select(ticket: TicketDto) {
     this.selectedTicket.set(ticket);
     this.navDiagnos.goToIndustrialCreate(ticket.ticketId);
