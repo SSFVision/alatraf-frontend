@@ -1,47 +1,40 @@
-import { Component, effect, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, effect, inject, output, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { SectionsFacade } from '../../Service/sections.facade.service';
 
-import { CreateSectionRequest } from '../../Models/create-section.request';
-import { UpdateSectionRequest } from '../../Models/update-section.request';
-import { DepartmentsFacade } from '../../../Departments/departments.facade.service';
 import { SectionsNavigationFacade } from '../../../../../core/navigation/sections-navigation.facade';
 import { SectionRoomsTableComponent } from '../../../../../shared/components/section-rooms-table/section-rooms-table.component';
+import { DepartmentsFacade } from '../../../Departments/departments.facade.service';
+import { SectionRoomDto } from '../../../Models/section-room.dto';
+import { CreateSectionRequest } from '../../Models/create-section.request';
+import { UpdateSectionRequest } from '../../Models/update-section.request';
 import { SectionRoomsFacade } from '../../Service/section-rooms.facade.service';
-import { SectionRoomsFormComponent } from '../../../Rooms/Components/section-rooms-form/section-rooms-form.component';
 
 @Component({
   selector: 'app-add-edit-section-page',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    SectionRoomsTableComponent,
-  ],
+  imports: [CommonModule, ReactiveFormsModule, SectionRoomsTableComponent],
   templateUrl: './add-edit-section-page.component.html',
   styleUrl: './add-edit-section-page.component.css',
 })
 export class AddEditSectionPageComponent {
   private fb = inject(FormBuilder);
-  private facade = inject(SectionsFacade);
+  private sectionfacade = inject(SectionsFacade);
   private departmentsFacade = inject(DepartmentsFacade);
   private nav = inject(SectionsNavigationFacade);
-  roomsFacade = inject(SectionRoomsFacade);
-  Selectedsection = this.facade.selectedSection;
+  sectionRoomsFacade = inject(SectionRoomsFacade);
+  Selectedsection = this.sectionfacade.selectedSection;
 
-  rooms = this.roomsFacade.rooms;
-  roomsLoading = this.roomsFacade.isLoading;
+  rooms = this.sectionRoomsFacade.rooms;
+  roomsLoading = this.sectionRoomsFacade.isLoading;
+  editRoom = output<SectionRoomDto>();
 
-  // ---------------------------------------------
-  isEditMode = this.facade.isEditMode;
+  isEditMode = this.sectionfacade.isEditMode;
   canDelete = signal(false);
   canSubmit = signal(false);
 
-  // ---------------------------------------------
-  // FORM
-  // ---------------------------------------------
   form = this.fb.group({
     name: this.fb.nonNullable.control('', Validators.required),
     departmentId: this.fb.nonNullable.control<number | null>(
@@ -53,16 +46,10 @@ export class AddEditSectionPageComponent {
   departments = this.departmentsFacade.departments;
 
   constructor() {
-    // ---------------------------------------------
-    // LOAD DEPARTMENTS (no pagination / no search)
-    // ---------------------------------------------
     this.departmentsFacade.loadDepartments();
 
-    // ---------------------------------------------
-    // EDIT MODE → PATCH FORM
-    // ---------------------------------------------
     effect(() => {
-      const section = this.facade.selectedSection();
+      const section = this.sectionfacade.selectedSection();
       if (!section) return;
 
       this.form.patchValue({
@@ -78,9 +65,6 @@ export class AddEditSectionPageComponent {
       this.canSubmit.set(false);
     });
 
-    // ---------------------------------------------
-    // CREATE MODE → RESET FORM
-    // ---------------------------------------------
     effect(() => {
       if (this.isEditMode()) return;
 
@@ -96,17 +80,11 @@ export class AddEditSectionPageComponent {
       this.canSubmit.set(false);
     });
 
-    // ---------------------------------------------
-    // ENABLE SUBMIT ONLY WHEN USER CHANGES SOMETHING
-    // ---------------------------------------------
     this.form.valueChanges.subscribe(() => {
       this.canSubmit.set(this.form.valid && this.form.dirty);
     });
   }
 
-  // ---------------------------------------------
-  // SUBMIT
-  // ---------------------------------------------
   submit() {
     if (!this.canSubmit()) return;
 
@@ -114,7 +92,7 @@ export class AddEditSectionPageComponent {
     const departmentId = this.form.controls.departmentId.value!;
 
     if (this.isEditMode()) {
-      const section = this.facade.selectedSection();
+      const section = this.sectionfacade.selectedSection();
       if (!section) return;
 
       const updateDto: UpdateSectionRequest = {
@@ -122,21 +100,23 @@ export class AddEditSectionPageComponent {
         // departmentId
       };
 
-      this.facade.updateSection(section.id, updateDto).subscribe((res) => {
-        if (res.success) {
-          this.form.disable();
-          this.form.markAsPristine();
-          this.canSubmit.set(false);
-          this.canDelete.set(true);
-        }
-      });
+      this.sectionfacade
+        .updateSection(section.id, updateDto)
+        .subscribe((res) => {
+          if (res.success) {
+            this.form.disable();
+            this.form.markAsPristine();
+            this.canSubmit.set(false);
+            this.canDelete.set(true);
+          }
+        });
     } else {
       const createDto: CreateSectionRequest = {
         name,
         departmentId,
       };
 
-      this.facade.createSection(createDto).subscribe((res) => {
+      this.sectionfacade.createSection(createDto).subscribe((res) => {
         if (res.success && res.data) {
           this.nav.goToEditSectionPage(res.data.id);
           this.form.markAsPristine();
@@ -147,25 +127,20 @@ export class AddEditSectionPageComponent {
     }
   }
 
-  // ---------------------------------------------
-  // DELETE
-  // ---------------------------------------------
   delete() {
-    const section = this.facade.selectedSection();
+    const section = this.sectionfacade.selectedSection();
     if (!section) return;
 
-    this.facade.deleteSection(section);
+    this.sectionfacade.deleteSection(section);
   }
-  onEditRoom(room: any) {
-    console.log('Edit room', room);
-  }
-
-  onDeleteRoom(roomId: number) {
-    console.log('Delete room', roomId);
+  onEditRoom(room: SectionRoomDto) {
+    this.editRoom.emit(room);
   }
 
-  onAddRoom() {
-    console.log('Add room');
+  onDeleteRoom(sectionRoom: SectionRoomDto) {
+    this.sectionRoomsFacade.deleteRoomFromSpecificSection(
+      sectionRoom,
+      this.Selectedsection()?.id!
+    );
   }
- 
 }

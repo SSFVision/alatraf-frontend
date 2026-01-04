@@ -153,7 +153,7 @@ export class TicketFacade extends BaseFacade {
 
     this._pageRequest.set({
       page: 1,
-      pageSize: 5,
+      pageSize: 20,
     });
 
     this._tickets.set([]);
