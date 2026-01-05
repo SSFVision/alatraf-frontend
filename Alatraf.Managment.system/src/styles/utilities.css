@@ -103,6 +103,18 @@
 
 .max-width-324 {
   max-width: 260px;
+  position: relative;
+}
+
+.row .max-width-324>.max-hight-712 {
+  max-height: 462px;
+  height: 462px;
+  overflow-y: auto;
+}
+
+.column>.max-width-324>.box>.max-hight-712 {
+  max-height: 260px;
+  overflow-y: auto;
 }
 
 .max-hight-712 {

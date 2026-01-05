@@ -5,11 +5,7 @@
 </div>
 } @else {
 
-<div
-  class="column gap-16"
-  style="overflow-y: auto; max-height: 712px"
-  (scroll)="onScroll($event)"
->
+<div class="max-hight-712 column gap-16 column gap-16" (scroll)="onScroll($event)">
   @if (!items() || items().length === 0) {
   <div class="empty-state">
     <img src="assets/images/amico.svg" alt="no items" class="empty-icon" />
@@ -18,11 +14,8 @@
   }
 
   @else { @for (item of items(); track item.id; let i = $index) {
-  <div
-    class="card primary-card cursor-pointer column gap-8"
-    [class.selected]="selectedId() === item.id"
-    (click)="onSelect(item.id)"
-  >
+  <div class="card primary-card cursor-pointer column gap-8" [class.selected]="selectedId() === item.id"
+    (click)="onSelect(item.id)">
     <!-- optional counter (testing) -->
     <p class="body-sm neutral-color-60">#{{ i + 1 }}</p>
 
