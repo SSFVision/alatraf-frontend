@@ -34,7 +34,7 @@ export const APP_ROUTES: Routes = [
             (m) => m.DASHBOARD_ROUTES
           ),
       },
-       {
+      {
         path: AppRoutes.users.root,
         loadChildren: () =>
           import('./features/UsersMangment/users.routes').then(
@@ -69,6 +69,7 @@ export const APP_ROUTES: Routes = [
             (m) => m.AppointmentRoutes
           ),
       },
+
       {
         path: AppRoutes.therapyCards.root,
         loadChildren: () =>

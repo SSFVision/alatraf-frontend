@@ -10,6 +10,12 @@ export class AppointmentsNavigationFacade {
     this.go(AppRoutes.Appointment.root, extras);
   }
 
+  goToManageAppointmentPage(extras?: NavigationExtras): void {
+    this.go(
+      `${AppRoutes.Appointment.root}/${AppRoutes.Appointment.manage}`,
+      extras
+    );
+  }
   goToSchedulaPage(
     ticketId: number | string,
     patientId: number | string,
@@ -23,6 +29,7 @@ export class AppointmentsNavigationFacade {
       extras
     );
   }
+
   goToReSchedulaPage(
     patientId: number | string,
     extras?: NavigationExtras
@@ -36,7 +43,19 @@ export class AppointmentsNavigationFacade {
   }
   goToAddNewHolidayPage(extras?: NavigationExtras): void {
     this.go(
-      `${AppRoutes.Appointment.root}/${AppRoutes.Appointment.addHoliday}`,
+      `${AppRoutes.Appointment.root}/${AppRoutes.Appointment.manage}/${AppRoutes.Appointment.addHoliday}`,
+      extras
+    );
+  }
+
+  goToChangeAppointmentStatus(
+    appointmentId: number | string,
+    extras?: NavigationExtras
+  ): void {
+    this.go(
+      `${AppRoutes.Appointment.root}/${AppRoutes.Appointment.changeStatus(
+        appointmentId
+      )}`,
       extras
     );
   }

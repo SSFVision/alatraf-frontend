@@ -38,9 +38,11 @@ export class AppointmentsFacade extends BaseFacade {
   });
   filters = this._filters.asReadonly();
 
+ pagSize=30;
+
   private _pageRequest = signal<PageRequest>({
     page: 1,
-    pageSize: 10,
+    pageSize: this.pagSize,
   });
   pageRequest = this._pageRequest.asReadonly();
 
@@ -109,7 +111,7 @@ export class AppointmentsFacade extends BaseFacade {
       sortColumn: 'AttendDate',
       sortDirection: 'asc',
     });
-    this._pageRequest.set({ page: 1, pageSize: 10 });
+    this._pageRequest.set({ page: 1, pageSize: this.pagSize });
     this._appointments.set([]);
     this.totalCount.set(0);
   }
@@ -144,7 +146,7 @@ export class AppointmentsFacade extends BaseFacade {
       tap((res) => {
         if (res.success) {
           this.formValidationErrors.set({});
-          this.updateAppointmentInList(id, { status: AppointmentStatus[dto.status] });
+          // this.updateAppointmentInList(id, { status: AppointmentStatus[dto.status] });
         } else if (res.validationErrors) {
           this.formValidationErrors.set(res.validationErrors);
         }
