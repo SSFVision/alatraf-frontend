@@ -1,0 +1,44 @@
+@if (loading()) {
+<div class="flex-center padding-32">
+  <span class="loader"></span>
+  <span class="body-md primary-color-50 margin-left-8"> جاري التحميل... </span>
+</div>
+} @else{ @if ( (!appointments() || appointments().length === 0)) {
+<div class="empty-state">
+  <img src="assets/images/waiting.svg" alt="no patients" class="empty-icon" />
+  <p class="body-md primary-color-50">لا يوجد مواعيد مجدولة حالياً</p>
+</div>
+} @for (appointment of appointments(); track appointment.id) {
+
+<div
+  class="card cursor-pointer"
+  [class.primary]="appointment.status === appointmentsStatus.Attended"
+  [class.yellow-card]="appointment.status === appointmentsStatus.Scheduled"
+  [class.green-card]="appointment.status === appointmentsStatus.Today"
+  [class.red-card]="
+    appointment.status === appointmentsStatus.Cancelled ||
+    appointment.status === appointmentsStatus.Absent
+  "
+  [class.selected]="selectedId() === appointment.id"
+  (click)="onSelect(appointment)"
+>
+  <p class="body-md">
+    {{ appointment.patientName }}
+  </p>
+
+  <div class="row gap-16">
+    <p class="body-sm primary-color-50">
+      {{ appointment.dayOfWeek }}
+    </p>
+
+    <p class="body-sm primary-color-50">
+      {{ appointment.attendDate | date : "longDate" }}
+    </p>
+  </div>
+
+  <p class="body-sm primary-color-50">
+    الحالة : {{ ChangeAppointmentStatusToArabic(appointment.status) }}
+  </p>
+</div>
+
+} }

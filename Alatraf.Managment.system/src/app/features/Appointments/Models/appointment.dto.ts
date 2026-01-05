@@ -1,3 +1,5 @@
+import { AppointmentStatus } from "./appointment-status.enum";
+
 export interface AppointmentDto {
   id: number;
   ticketId: number;
@@ -6,7 +8,7 @@ export interface AppointmentDto {
   attendDate: string; // ISO date string e.g., "2024-12-25"
   createdAt: string;  // ISO date string e.g., "2024-12-25"
   dayOfWeek: string;
-  status: string; // Consider using AppointmentStatus enum for stricter typing
+  status: AppointmentStatus; // Consider using AppointmentStatus enum for stricter typing
   notes?: string;
   isAppointmentTomorrow: boolean;
 }

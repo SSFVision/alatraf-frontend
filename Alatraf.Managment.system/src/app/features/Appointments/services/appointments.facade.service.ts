@@ -22,7 +22,6 @@ export class AppointmentsFacade extends BaseFacade {
     super();
   }
 
-
   private _appointments = signal<AppointmentDto[]>([]);
   appointments = this._appointments.asReadonly();
 
@@ -38,9 +37,11 @@ export class AppointmentsFacade extends BaseFacade {
   });
   filters = this._filters.asReadonly();
 
+  pagSize = 30;
+
   private _pageRequest = signal<PageRequest>({
     page: 1,
-    pageSize: 10,
+    pageSize: this.pagSize,
   });
   pageRequest = this._pageRequest.asReadonly();
 
@@ -50,9 +51,21 @@ export class AppointmentsFacade extends BaseFacade {
   totalCount = signal<number>(0);
   formValidationErrors = signal<Record<string, string[]>>({});
 
-
   private _selectedAppointment = signal<AppointmentDto | null>(null);
   selectedAppointment = this._selectedAppointment.asReadonly();
+
+  getAppointmentById(id: number) {
+    return this.service.getAppointmentById(id).pipe(
+      tap((res) => {
+        if (res.isSuccess && res.data) {
+          this._selectedAppointment.set(res.data);
+        } else {
+          this._selectedAppointment.set(null);
+          this.toast.error(res.errorDetail ?? 'Appointment not found.');
+        }
+      })
+    );
+  }
 
   private searchManager = new SearchManager<AppointmentDto[]>(
     (term: string) =>
@@ -73,7 +86,6 @@ export class AppointmentsFacade extends BaseFacade {
       this._isLoading.set(false);
     }
   );
-
 
   search(term: string) {
     this._filters.update((f) => ({ ...f, searchTerm: term }));
@@ -109,11 +121,10 @@ export class AppointmentsFacade extends BaseFacade {
       sortColumn: 'AttendDate',
       sortDirection: 'asc',
     });
-    this._pageRequest.set({ page: 1, pageSize: 10 });
+    this._pageRequest.set({ page: 1, pageSize: this.pagSize });
     this._appointments.set([]);
     this.totalCount.set(0);
   }
-
 
   loadAppointments() {
     this._isLoading.set(true);
@@ -135,16 +146,21 @@ export class AppointmentsFacade extends BaseFacade {
       .subscribe();
   }
 
-
-  changeAppointmentStatus(id: number, dto: ChangeAppointmentStatusRequest) {
-    return this.handleCreateOrUpdate(this.service.changeAppointmentStatus(id, dto), {
-      successMessage: 'Appointment status updated successfully.',
-      defaultErrorMessage: 'Failed to update status. Please try again.',
-    }).pipe(
+  changeAppointmentStatus(
+    appointmentId: number,
+    dto: ChangeAppointmentStatusRequest
+  ) {
+    return this.handleCreateOrUpdate(
+      this.service.changeAppointmentStatus(appointmentId, dto),
+      {
+        successMessage: 'Appointment status updated successfully.',
+        defaultErrorMessage: 'Failed to update status. Please try again.',
+      }
+    ).pipe(
       tap((res) => {
         if (res.success) {
           this.formValidationErrors.set({});
-          this.updateAppointmentInList(id, { status: AppointmentStatus[dto.status] });
+          this.updateAppointmentInList(appointmentId, { status: dto.status });
         } else if (res.validationErrors) {
           this.formValidationErrors.set(res.validationErrors);
         }
@@ -153,10 +169,13 @@ export class AppointmentsFacade extends BaseFacade {
   }
 
   rescheduleAppointment(id: number, dto: RescheduleAppointmentRequest) {
-    return this.handleCreateOrUpdate(this.service.rescheduleAppointment(id, dto), {
-      successMessage: 'Appointment rescheduled successfully.',
-      defaultErrorMessage: 'Failed to reschedule. Please try again.',
-    }).pipe(
+    return this.handleCreateOrUpdate(
+      this.service.rescheduleAppointment(id, dto),
+      {
+        successMessage: 'Appointment rescheduled successfully.',
+        defaultErrorMessage: 'Failed to reschedule. Please try again.',
+      }
+    ).pipe(
       tap((res) => {
         if (res.success) {
           this.formValidationErrors.set({});
@@ -168,10 +187,9 @@ export class AppointmentsFacade extends BaseFacade {
     );
   }
 
-  
   private _lastScheduledDay = signal<AppointmentDaySummaryDto | null>(null);
   lastScheduledDay = this._lastScheduledDay.asReadonly();
-  
+
   private _isLoadingLastDay = signal<boolean>(false);
   isLoadingLastDay = this._isLoadingLastDay.asReadonly();
 
@@ -208,7 +226,10 @@ export class AppointmentsFacade extends BaseFacade {
             this._nextValidDay.set(res.data);
           } else {
             this._nextValidDay.set(null);
-            this.toast.error(res.errorDetail ?? 'Could not find the next valid appointment day.');
+            this.toast.error(
+              res.errorDetail ??
+                'Could not find the next valid appointment day.'
+            );
           }
         }),
         finalize(() => this._isLoadingNextDay.set(false))
@@ -220,13 +241,12 @@ export class AppointmentsFacade extends BaseFacade {
   // PRIVATE HELPERS
   // ---------------------------------------------
 
-  private updateAppointmentInList(id: number, changes: Partial<AppointmentDto>) {
-    this._appointments.update(list =>
-      list.map(appt =>
-        appt.id === id
-          ? { ...appt, ...changes }
-          : appt
-      )
+  private updateAppointmentInList(
+    id: number,
+    changes: Partial<AppointmentDto>
+  ) {
+    this._appointments.update((list) =>
+      list.map((appt) => (appt.id === id ? { ...appt, ...changes } : appt))
     );
 
     const selected = this._selectedAppointment();
@@ -234,7 +254,7 @@ export class AppointmentsFacade extends BaseFacade {
       this._selectedAppointment.set({ ...selected, ...changes });
     }
   }
-  
+
   private handleLoadAppointmentsError(result: ApiResult<any>) {
     const err = this.extractError(result);
     if (err.type === 'validation' || err.type === 'business') {

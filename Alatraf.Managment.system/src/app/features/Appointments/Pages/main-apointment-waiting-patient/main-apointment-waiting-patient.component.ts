@@ -3,10 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { AppointmentsNavigationFacade } from '../../../../core/navigation/Appointments-navigation.facade';
 import { ToastService } from '../../../../core/services/toast.service';
 import { PatientCardComponent } from '../../../../shared/components/waiting-patient-card/waiting-patient-card.component';
-import {
-  Department,
-  ServiceType,
-} from '../../../Diagnosis/Shared/enums/department.enum';
+import { ServiceType } from '../../../Diagnosis/Shared/enums/department.enum';
 import {
   TicketDto,
   TicketStatus,
@@ -31,8 +28,8 @@ export class MainApointmentWaitingPatientComponent {
 
   ngOnInit() {
     this.ticketFacade.updateFilters({
-      // status: TicketStatus.New,
       serviceId: ServiceType.Industrial,
+      // status: TicketStatus.New,
     });
     this.ticketFacade.loadTickets();
   }
@@ -44,6 +41,8 @@ export class MainApointmentWaitingPatientComponent {
   }
 
   OnSelectPatientTicket(ticket: TicketDto) {
-    this.nav.goToSchedulaPage(ticket.ticketId,ticket.patient?.patientId!);
+    this.nav.goToSchedulaPage(ticket.ticketId, ticket.patient?.patientId!);
   }
+
+
 }

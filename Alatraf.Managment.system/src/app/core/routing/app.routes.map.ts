@@ -135,9 +135,13 @@ export const AppRoutes = {
 
   Appointment: {
     root: 'appointments',
+    waaitngPatients: 'waiting-patients',
+    manage: 'manage',
+    changeStatus: (appointmentId: number | string) =>
+      `manage/change-status/${appointmentId}`,
     addHoliday: 'new/holiday',
     schedule: (ticketId: number | string, patientId: number | string) =>
-      `schedule/${ticketId}/patient/${patientId}`,
+      `waiting-patients/schedule/${ticketId}/patient/${patientId}`,
     reschedule: (patientId: number | string) => `reschedule/${patientId}`,
   },
   medicalPrograms: {
