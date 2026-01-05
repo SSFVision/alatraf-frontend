@@ -1,22 +1,21 @@
+import { CommonModule } from '@angular/common'; // <-- FIX: Import CommonModule for NgIf and DatePipe
 import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
-import { CommonModule } from '@angular/common'; // <-- FIX: Import CommonModule for NgIf and DatePipe
 
 // Core and Shared Imports
 import { PatientDto } from '../../../../core/models/Shared/patient.model';
 import { ToastService } from '../../../../core/services/toast.service';
 import { HeaderPatientInfoComponent } from '../../../../shared/components/header-patient-info/header-patient-info.component';
-import { PatientSummaryUiDto } from '../../../../shared/models/patient-summary.ui-dto';
 
 // Feature-specific Imports
+import { finalize } from 'rxjs';
 import { PatientService } from '../../../Reception/Patients/Services/patient.service';
-import { AppointmentsFacade } from '../../services/appointments.facade.service';
 import { ScheduleAppointmentRequest } from '../../../Reception/Tickets/models/schedule-appointment.request';
 import { TicketService } from '../../../Reception/Tickets/ticket.service';
-import { ScheduleAppointmentFormComponent } from '../../components/schedule-appointment-form/schedule-appointment-form.component';
-import { finalize } from 'rxjs';
 import { TicketFacade } from '../../../Reception/Tickets/tickets.facade.service';
+import { ScheduleAppointmentFormComponent } from '../../components/schedule-appointment-form/schedule-appointment-form.component';
+import { AppointmentsFacade } from '../../services/appointments.facade.service';
 
 @Component({
   selector: 'app-schedule-new-appointment',

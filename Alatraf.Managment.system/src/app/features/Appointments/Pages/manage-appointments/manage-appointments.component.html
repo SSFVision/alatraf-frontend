@@ -24,10 +24,41 @@
     </div>
 
     <div class="filters-container">
-      <button class="filter-btn active">الكل</button>
-      <button class="filter-btn">مجدولة</button>
-      <button class="filter-btn">اليوم</button>
-      <button class="filter-btn">متأخر</button>
+      <button
+        class="filter-btn"
+        [class.active]="selectedFilter() === undefined"
+        (click)="setFilter(undefined)"
+      >
+        الكل
+      </button>
+      <button
+        class="filter-btn"
+        [class.active]="selectedFilter() === AppointmentStatus.Scheduled"
+        (click)="setFilter(AppointmentStatus.Scheduled)"
+      >
+        مجدولة
+      </button>
+      <button
+        class="filter-btn"
+        [class.active]="selectedFilter() === AppointmentStatus.Today"
+        (click)="setFilter(AppointmentStatus.Today)"
+      >
+        اليوم
+      </button>
+      <button
+        class="filter-btn"
+        [class.active]="selectedFilter() === AppointmentStatus.Absent"
+        (click)="setFilter(AppointmentStatus.Absent)"
+      >
+        متأخر
+      </button>
+      <button
+        class="filter-btn"
+        [class.active]="selectedFilter() === AppointmentStatus.Cancelled"
+        (click)="setFilter(AppointmentStatus.Cancelled)"
+      >
+        ملغي
+      </button>
     </div>
     <app-waiting-appointment-card
       class="max-hight-712 column gap-16"
@@ -37,13 +68,13 @@
     ></app-waiting-appointment-card>
   </div>
 
-  <!-- <div class="gap-24"> -->
-    <!-- <button class="btn big-btn primary lable-lg" (click)="onAddHoliday()">
+  <!-- <div class=" column gap-16 ">
+    <button class="btn big-btn primary lable-lg" (click)="onAddHoliday()">
       إضافة إجازة
     </button> -->
 
-    <div class="box max-hight-800 gap-16">
-      <router-outlet></router-outlet>
-    </div>
+  <div class="box max-hight-800 gap-16">
+    <router-outlet></router-outlet>
+  </div>
   <!-- </div> -->
 </main>

@@ -12,11 +12,13 @@
 
 <div
   class="card cursor-pointer"
-
-  [class.primary]="appointment.status === appointmentsStatus.Scheduled"
-  [class.yellow-card]="appointment.status === appointmentsStatus.Today"
-  [class.green-card]="appointment.status === appointmentsStatus.Cancelled"
-  [class.red-card]="appointment.status === appointmentsStatus.Attended"
+  [class.primary]="appointment.status === appointmentsStatus.Attended"
+  [class.yellow-card]="appointment.status === appointmentsStatus.Scheduled"
+  [class.green-card]="appointment.status === appointmentsStatus.Today"
+  [class.red-card]="
+    appointment.status === appointmentsStatus.Cancelled ||
+    appointment.status === appointmentsStatus.Absent
+  "
   [class.selected]="selectedId() === appointment.id"
   (click)="onSelect(appointment)"
 >
@@ -24,14 +26,13 @@
     {{ appointment.patientName }}
   </p>
 
-
   <div class="row gap-16">
     <p class="body-sm primary-color-50">
       {{ appointment.dayOfWeek }}
     </p>
 
     <p class="body-sm primary-color-50">
-      {{ appointment.attendDate | date : "short" }}
+      {{ appointment.attendDate | date : "longDate" }}
     </p>
   </div>
 

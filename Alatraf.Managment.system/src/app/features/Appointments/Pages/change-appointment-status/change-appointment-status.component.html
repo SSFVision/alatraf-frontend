@@ -1,5 +1,39 @@
-<!-- Empty page for changing appointment status. Build your HTML here. -->
-<div class="box padding-24">
-  <h2 class="title-md">صفحة تعديل حالة الموعد</h2>
-  <!-- content to be implemented by developer -->
+<div class="page-shell">
+  <h1 class="title">تحديث حالة الموعد</h1>
+
+  <ng-container *ngIf="selectedAppointment() as appt; else emptyState">
+    <div class="summary">
+      <div>
+        <p class="patient">{{ appt.patientName || "مريض غير مُسمى" }}</p>
+        <p class="meta" *ngIf="appt.ticketId">
+          رقم التذكرة: {{ appt.ticketId }}
+        </p>
+      </div>
+      <div class="meta">تاريخ الحضور: {{ appt.attendDate }}</div>
+    </div>
+
+    <div class="status-flow">
+      <ng-container *ngFor="let step of flow; let last = last">
+        <button
+          class="flow-node"
+          [class.active]="appt.status === step"
+          [class.disabled]="isOptionDisabled(step)"
+          [disabled]="isOptionDisabled(step) || actionLoading()"
+          (click)="changeStatus(step)"
+        >
+          <span class="node-label">{{ statusLabel(step) }}</span>
+        </button>
+        <span class="arrow" *ngIf="!last">→</span>
+      </ng-container>
+    </div>
+
+    <p class="loading" *ngIf="actionLoading()">جاري تحديث الحالة...</p>
+  </ng-container>
+
+  <ng-template #emptyState>
+    <div class="empty">
+      <p class="patient">لا توجد بيانات للموعد</p>
+      <p class="meta">اختر موعدًا أو تأكد من رابط الصفحة.</p>
+    </div>
+  </ng-template>
 </div>
