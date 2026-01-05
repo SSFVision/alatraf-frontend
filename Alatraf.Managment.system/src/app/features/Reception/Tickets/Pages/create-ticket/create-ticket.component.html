@@ -1,55 +1,47 @@
 <div class="backdrop" (click)="onClose()"></div>
 
 <div class="box dialog">
- 
-  @if (isLoading()) {
-<div class="flex-center">
-  <span class="loader"></span>
-</div>
-<p class="flex-center">جاري تحميل بيانات المريض...</p>
 
-} @else {
-  
-  
+  @if (isLoading()) {
+  <div class="flex-center">
+    <span class="loader"></span>
+  </div>
+  <p class="flex-center">جاري تحميل بيانات المريض...</p>
+
+  } @else {
+
+
   <div class="space-between sticky">
     <h2 class="title-lg">اصدار تذكرة خدمة</h2>
-    <img
-      src="assets/icons/close-icon.svg"
-      class="close-icon"
-      (click)="onClose()"
-    />
+    <img src="assets/icons/close-icon.svg" class="close-icon" (click)="onClose()" />
   </div>
   <div>
     <p class="title-md">بيانات المريض</p>
     <span class="home-line"></span>
   </div>
-  <app-patient-summary-card
-    [patient]="patient"
-  ></app-patient-summary-card>
+  <app-patient-summary-card [patient]="patient"></app-patient-summary-card>
 
   <div class="width-100 mt-20">
     <p class="title-md">بيانات الخدمة</p>
     <span class="home-line"></span>
   </div>
 
-  <form
-    class="padding-LR-24 column gap-16"
-    [formGroup]="form"
-    (ngSubmit)="onCreateTicket()"
-  >
+  <form class="padding-LR-24 column gap-16" [formGroup]="form" (ngSubmit)="onCreateTicket()">
 
-  <div class="row flex-center" >
+    <div class="row flex-center">
 
- 
-    <app-service-select class="row flex-center" formControlName="serviceId">
-    </app-service-select>
-<div *ngIf="isInvalid('serviceId')" class="error-message">
-      اختر واحدة من الخدمات
+
+      <app-service-select class="row flex-center" formControlName="serviceId">
+      </app-service-select>
+      <div *ngIf="isInvalid('serviceId')" class="error-message">
+        اختر واحدة من الخدمات
+      </div>
     </div>
-  </div>
-   
-    <!--  -->
-    <button class="btn primary label-md" type="submit" [disabled]="isInvalid('serviceId') || isSaved"  >حفظ و طباعة</button>
+
+    <div class="flex-center">
+      <button class="btn primary label-md" type="submit" [disabled]="isInvalid('serviceId') || isSaved">حفظ و
+        طباعة</button>
+    </div>
   </form>
-}
+  }
 </div>
