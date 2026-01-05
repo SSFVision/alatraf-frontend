@@ -120,7 +120,7 @@ export const MENU_CONFIG: MenuCategory[] = [
       },
 
       {
-        label: 'إدارة المواعيد',
+        label: 'جدولة المواعيد',
         icon: 'assets/icons/prosthetic-foot-w.svg',
         activeIcon: 'assets/icons/prosthetic-foot-b.svg',
         route: AppRoutes.Appointment.root,

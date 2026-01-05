@@ -44,6 +44,10 @@ export class MainApointmentWaitingPatientComponent {
   }
 
   OnSelectPatientTicket(ticket: TicketDto) {
-    this.nav.goToSchedulaPage(ticket.ticketId,ticket.patient?.patientId!);
+    
+  this.nav.goToSchedulaPage(ticket.ticketId,ticket.patient?.patientId!);
+  }
+  onAddHoliday() {
+    this.nav.goToAddNewHolidayPage();
   }
 }

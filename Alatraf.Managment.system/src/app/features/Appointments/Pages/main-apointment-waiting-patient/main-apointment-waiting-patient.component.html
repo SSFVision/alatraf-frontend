@@ -9,17 +9,30 @@
       </div>
     </div>
     <div class="search-box">
-      <img src="assets/icons/search-icon.svg" class="search-icon" alt="search" />
-      <input type="text" placeholder="بحث: اسم المريض أو الرقم" #searchBox (input)="onSearch(searchBox.value)" />
+      <img
+        src="assets/icons/search-icon.svg"
+        class="search-icon"
+        alt="search"
+      />
+      <input
+        type="text"
+        placeholder="بحث: اسم المريض أو الرقم"
+        #searchBox
+        (input)="onSearch(searchBox.value)"
+      />
     </div>
 
-    <app-waiting-patient-card class="max-hight-712 column gap-16" [tickets]="tickets()"
-      (select)="OnSelectPatientTicket($event)" [loading]="isloading()"></app-waiting-patient-card>
+    <app-waiting-patient-card
+      class="max-hight-712 column gap-16"
+      [tickets]="tickets()"
+      (select)="OnSelectPatientTicket($event)"
+      [loading]="isloading()"
+    ></app-waiting-patient-card>
   </div>
-  <!-- <div class="column gap-24"> -->
-
-  <div class="box max-hight-800 gap-16">
-    <router-outlet></router-outlet>
+  <div class="  gap-24">
+    <button class="btn big-btn primary lable-lg" (click)="onAddHoliday()">إضافة إجازة</button>
+    <div class="box max-hight-800 gap-16">
+      <router-outlet></router-outlet>
+    </div>
   </div>
-  <!-- </div> -->
 </div>
