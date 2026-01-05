@@ -1,3 +1,11 @@
+<div class="width-100">
+  <p class="title-md">
+    بيانات البرامج العلاجية
+  </p>
+
+  <span class="home-line"></span>
+</div>
+
 <table class="no-shadow">
   <thead>
     <tr>
@@ -9,27 +17,27 @@
 
   <tbody>
     @if (data.diagnosisPrograms.length) {
-      @for (program of data.diagnosisPrograms; track $index) {
-        <tr>
-          <td class="label-lg">
-            {{ program.programName }}
-          </td>
+    @for (program of data.diagnosisPrograms; track $index) {
+    <tr>
+      <td class="label-lg">
+        {{ program.programName }}
+      </td>
 
-          <td class="label-lg">
-            {{ program.duration }}
-          </td>
+      <td class="label-lg">
+        {{ program.duration }}
+      </td>
 
-          <td class="label-lg">
-            {{ program.notes || '—' }}
-          </td>
-        </tr>
-      }
+      <td class="label-lg">
+        {{ program.notes || '—' }}
+      </td>
+    </tr>
+    }
     } @else {
-      <tr>
-        <td colspan="3" class="label-lg text-center padding-16">
-          لا توجد برامج علاجية
-        </td>
-      </tr>
+    <tr>
+      <td colspan="3" class="label-lg text-center padding-16">
+        لا توجد برامج علاجية
+      </td>
+    </tr>
     }
   </tbody>
 </table>

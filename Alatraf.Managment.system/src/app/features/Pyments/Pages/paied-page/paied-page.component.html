@@ -5,22 +5,20 @@
 <p class="flex-center">جاري تحميل بيانات الدفع...</p>
 } @else {
 
-<div class="row space-between sticky">
+<div class="row space-between">
   <h1 class="title-lg">الحسابات</h1>
-  @if(therapyPayment()?.isCompleted || repairPayment()?.isCompleted){
-  <h1 class="title-lg">✅</h1>
 
+  <!-- @if(therapyPayment()?.isCompleted || repairPayment()?.isCompleted){
+    <h1 class="title-lg">✅</h1>
   }
   @else {
-      <h1 class="title-lg">😕</h1>
-
-  }
-  <button class="btn primary">طباعة</button>
+     } -->
+  <button class="btn primary" [disabled]="therapyPayment()?.isCompleted || repairPayment()?.isCompleted">
+    طباعة
+  </button>
 </div>
 
-<ng-container
-  *ngIf="paymentType() === 'therapy' && therapyPayment() as therapy"
->
+<ng-container *ngIf="paymentType() === 'therapy' && therapyPayment() as therapy">
   <app-therapy-payment-details [data]="therapy"></app-therapy-payment-details>
 </ng-container>
 
@@ -28,12 +26,8 @@
   <app-repair-payment-details [data]="repair"></app-repair-payment-details>
 </ng-container>
 
-<app-payment-actions
-  [allowedAccountKinds]="allowedAccountKinds()"
-  [totalAmount]="totalAmount()"
-  [disabled]="isSaveDisabled()"
-  (submitPayment)="onSubmitPayment($event)"
->
+<app-payment-actions [allowedAccountKinds]="allowedAccountKinds()" [totalAmount]="totalAmount()"
+  [disabled]="isSaveDisabled()" (submitPayment)="onSubmitPayment($event)">
 </app-payment-actions>
 <!-- [backendErrors]="processingFacade.formValidationErrors" -->
 
