@@ -44,21 +44,23 @@ export class IndustrialPartsManagementService extends BaseApiService {
   }
 
   getIndustrialParts(): Observable<ApiResult<IndustrialPartDto[]>> {
-    const cached = this.cache.get<IndustrialPartDto[]>(
-      CACHE_KEYS.INDUSTRIAL_PARTS
-    );
+    // const cached = this.cache.get<IndustrialPartDto[]>(
+    //   CACHE_KEYS.INDUSTRIAL_PARTS
+    // );
 
-    if (cached) {
-      return of(ApiResult.success(cached));
-    }
+    // if (cached) {
+    //   return of(ApiResult.success(cached));
+    // }
 
-    return this.get<IndustrialPartDto[]>(this.industrialPartsUrl).pipe(
-      tap((res) => {
-        if (res.isSuccess && res.data) {
-          this.cache.set(CACHE_KEYS.INDUSTRIAL_PARTS, res.data);
-        }
-      })
-    );
+    return this.get<IndustrialPartDto[]>(this.industrialPartsUrl)
+    
+    // .pipe(
+    //   tap((res) => {
+    //     if (res.isSuccess && res.data) {
+    //       this.cache.set(CACHE_KEYS.INDUSTRIAL_PARTS, res.data);
+    //     }
+    //   })
+    // );
   }
  getIndustrialPartById(
     id: number
@@ -70,23 +72,28 @@ export class IndustrialPartsManagementService extends BaseApiService {
   createIndustrialPart(
     request: CreateIndustrialPartRequest
   ): Observable<ApiResult<IndustrialPartDto>> {
-    return this.post<IndustrialPartDto>(this.industrialPartsUrl, request).pipe(
-      tap(() => this.cache.clear(CACHE_KEYS.INDUSTRIAL_PARTS))
-    );
+    return this.post<IndustrialPartDto>(this.industrialPartsUrl, request)
+    
+    // .pipe(
+    //   tap(() => this.cache.clear(CACHE_KEYS.INDUSTRIAL_PARTS))
+    // );
   }
 
   updateIndustrialPart(
     id: number,
     request: UpdateIndustrialPartRequest
   ): Observable<ApiResult<void>> {
-    return this.put<void>(`${this.industrialPartsUrl}/${id}`, request).pipe(
-      tap(() => this.cache.clear(CACHE_KEYS.INDUSTRIAL_PARTS))
-    );
+    return this.put<void>(`${this.industrialPartsUrl}/${id}`, request)
+    
+    // .pipe(
+    //   tap(() => this.cache.clear(CACHE_KEYS.INDUSTRIAL_PARTS))
+    // );
   }
 
   deleteIndustrialPart(id: number): Observable<ApiResult<void>> {
-    return this.delete<void>(`${this.industrialPartsUrl}/${id}`).pipe(
-      tap(() => this.cache.clear(CACHE_KEYS.INDUSTRIAL_PARTS))
-    );
+    return this.delete<void>(`${this.industrialPartsUrl}/${id}`)
+    // .pipe(
+    //   tap(() => this.cache.clear(CACHE_KEYS.INDUSTRIAL_PARTS))
+    // );
   }
 }

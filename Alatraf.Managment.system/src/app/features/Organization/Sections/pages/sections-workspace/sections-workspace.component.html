@@ -5,7 +5,9 @@
 <p class="flex-center">جاري تحميل بيانات القسم...</p>
 } @else {
 
-<app-add-edit-section-page></app-add-edit-section-page>
+<app-add-edit-section-page
+  (editRoom)="OnEditRoom($event)"
+></app-add-edit-section-page>
 
 @if (isEditMode()) {
 

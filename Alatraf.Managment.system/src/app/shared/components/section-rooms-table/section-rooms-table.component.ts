@@ -1,3 +1,4 @@
+import { SectionDto } from './../../../features/Organization/Sections/Models/section.dto';
 import { NgFor } from '@angular/common';
 import { Component, EventEmitter, input, Output } from '@angular/core';
 import { SectionRoomDto } from '../../../features/Organization/Models/section-room.dto';
@@ -13,16 +14,15 @@ export class SectionRoomsTableComponent {
  rooms=input<SectionRoomDto[]>([]);
 
   @Output() editRoom = new EventEmitter<SectionRoomDto>();
-  @Output() deleteRoom = new EventEmitter<number>();
-  @Output() addRoom = new EventEmitter<void>();
+  @Output() deleteRoom = new EventEmitter<SectionRoomDto>();
   loading = input<boolean>(false);
  
   onEdit(room: SectionRoomDto): void {
     this.editRoom.emit(room);
   }
 
-  onDelete(roomId: number): void {
-    this.deleteRoom.emit(roomId);
+  onDelete(sectionRoom: SectionRoomDto): void {
+    this.deleteRoom.emit(sectionRoom);
   }
 
  

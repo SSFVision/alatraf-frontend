@@ -6,12 +6,12 @@ import {
 } from '@angular/common/http';
 import { inject } from '@angular/core';
 
+import { catchError, delay, map, of } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { handleErrorResponse } from '../errors/helpers/handle-error-response';
+import { handleException } from '../errors/helpers/handle-exception';
 import { ApiResult } from '../models/ApiResult';
 import { ToastService } from '../services/toast.service';
-import { catchError, delay, map, of } from 'rxjs';
-import { handleException } from '../errors/helpers/handle-exception';
-import { handleErrorResponse } from '../errors/helpers/handle-error-response';
 
 function isAuthEndpoint(url: string): boolean {
   return (
@@ -26,7 +26,7 @@ export const apiResponseInterceptor: HttpInterceptorFn = (req, next) => {
     return next(req);
   }
   return next(req).pipe(
-    // delay(1000),
+    // delay(1500),
     map((event: HttpEvent<any>) => {
       if (event instanceof HttpResponse) {
         const body = event.body;

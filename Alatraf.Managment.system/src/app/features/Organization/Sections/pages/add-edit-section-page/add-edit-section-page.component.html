@@ -12,13 +12,11 @@
     <span class="home-line"></span>
   </div>
 
-  <!-- NAME -->
   <div class="row flex-center">
     <label class="label-lg">الاسم</label>
     <input class="label-lg" type="text" formControlName="name" />
   </div>
 
-  <!-- DEPARTMENT -->
   <div class="row flex-center">
     <label class="label-lg">القسم الرئيسي</label>
 
@@ -33,7 +31,6 @@
     </select>
   </div>
 
-  <!-- ACTIONS -->
   <div class="flex-center gap-16">
     <button class="btn primary" type="submit" [disabled]="!canSubmit()">
       {{ isEditMode() ? "تعديل" : "إضافة" }}
@@ -42,8 +39,7 @@
     <!-- @if (canDelete()) {
     <button class="btn danger" type="button" (click)="delete()" tabindex="-1">
       حذف
-    </button>
-    } -->
+    </button> } -->
   </div>
 </form>
 @if (isEditMode()) {
@@ -52,7 +48,5 @@
   [loading]="roomsLoading()"
   (editRoom)="onEditRoom($event)"
   (deleteRoom)="onDeleteRoom($event)"
-  (addRoom)="onAddRoom()"
 ></app-section-rooms-table>
-
 }

@@ -3,8 +3,6 @@
   (ngSubmit)="submit()"
   class="max-hight-712 column gap-24"
 >
- 
-
   <div class="width-100">
     <p class="title-md">بيانات الطبيب</p>
     <span class="home-line"></span>
@@ -54,29 +52,29 @@
     } }
   </div>
 
-<div class="row flex-center">
-      <label class="label-lg">رقم الهاتف</label>
-      <input
-        class="label-lg"
-        type="text"
-        formControlName="phone"
-        (input)="formatPhoneNumberInput(getControl('phone'))"
-        (keypress)="preventNonNumericInput($event)"
-        (blur)="form.controls['phone'].markAsTouched()"
-      />
-      <div class="error-message label-lg" *ngIf="hasBackendError('phone')">
-        {{ getBackendError("phone") }}
-      </div>
-      @if (hasFrontendError('phone')) { @if (getControl('phone')?.invalid &&
-      getControl('phone')?.touched) { @if
-      (getControl('phone')?.hasError('required')) {
-      <div class="error-message label-lg">رقم الهاتف مطلوب.</div>
-      } @if (getControl('phone')?.hasError('yemeniPhoneNumber')) {
-      <div class="error-message label-lg">
-        {{ getControl("phone")?.getError("yemeniPhoneNumber").message }}
-      </div>
-      } } }
+  <div class="row flex-center">
+    <label class="label-lg">رقم الهاتف</label>
+    <input
+      class="label-lg"
+      type="text"
+      formControlName="phone"
+      (input)="formatPhoneNumberInput(getControl('phone'))"
+      (keypress)="preventNonNumericInput($event)"
+      (blur)="form.controls['phone'].markAsTouched()"
+    />
+    <div class="error-message label-lg" *ngIf="hasBackendError('phone')">
+      {{ getBackendError("phone") }}
     </div>
+    @if (hasFrontendError('phone')) { @if (getControl('phone')?.invalid &&
+    getControl('phone')?.touched) { @if
+    (getControl('phone')?.hasError('required')) {
+    <div class="error-message label-lg">رقم الهاتف مطلوب.</div>
+    } @if (getControl('phone')?.hasError('yemeniPhoneNumber')) {
+    <div class="error-message label-lg">
+      {{ getControl("phone")?.getError("yemeniPhoneNumber").message }}
+    </div>
+    } } }
+  </div>
 
   <div class="row flex-center">
     <label class="label-lg">الجنس</label>
@@ -135,7 +133,10 @@
 
   <div class="row flex-center">
     <label class="label-lg">القسم</label>
-    <select class="label-lg" formControlName="departmentId">
+    <select
+      class="label-lg"
+      formControlName="departmentId"
+    >
       <option [ngValue]="null" disabled>اختر القسم...</option>
       @for(dept of departments(); track dept.id) {
       <option [value]="dept.id">{{ dept.name }}</option>
@@ -150,7 +151,6 @@
   </div>
 
   <div class="row gap-16 flex-center padding-top-16">
-   
     <button
       type="submit"
       class="btn primary"
@@ -160,7 +160,9 @@
       { <span>حفظ التعديلات</span> } @else { <span>حفظ</span> } }
     </button>
     @if (isEditMode()) {
-    <button type="button" class="btn danger" (click)="onDeleteDoctor()">حذف</button>
+    <button type="button" class="btn danger" (click)="onDeleteDoctor()">
+      حذف
+    </button>
     }
   </div>
 </form>
