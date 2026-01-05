@@ -1,9 +1,6 @@
-<main class="padding-32 row gap-16 padding-24">
+<div class="row gap-16">
   <!-- LEFT SIDE: LIST -->
-  <div
-    class="box max-width-324 culumn gap-24 max-hight-800"
-    id="therapy-program-list-container"
-  >
+  <div class="box max-width-324 culumn gap-24 max-hight-800" id="therapy-program-list-container">
     <div class="row space-between">
       <h2 class="title-md">البرامج العلاجية</h2>
 
@@ -15,25 +12,13 @@
     </div>
     <!-- SEARCH -->
     <div class="search-box">
-      <img
-        src="assets/icons/search-icon.svg"
-        class="search-icon"
-        alt="search"
-      />
-      <input
-        type="text"
-        placeholder="بحث: اسم البرنامج أو الرقم"
-        (input)="onSearch($any($event.target).value)"
-      />
+      <img src="assets/icons/search-icon.svg" class="search-icon" alt="search" />
+      <input type="text" placeholder="بحث: اسم البرنامج أو الرقم" (input)="onSearch($any($event.target).value)" />
     </div>
 
     <!-- LIST -->
-    <app-management-entity-card
-      class="max-hight-712 column gap-16"
-      [items]="card()"
-      [loading]="loading()"
-      (select)="onCardSelected($event)"
-    ></app-management-entity-card>
+    <app-management-entity-card class="max-hight-712 column gap-16" [items]="card()" [loading]="loading()"
+      (select)="onCardSelected($event)"></app-management-entity-card>
 
     <!-- ADD BUTTON -->
     <div class="flex-center">
@@ -50,14 +35,8 @@
   </div>
   } @else {
   <div class="box max-hight-800 gap-16 flex-center">
-    <img
-      src="assets/images/bro.svg"
-      alt="مرحبا"
-      width="496.75"
-      height="512"
-      class="padding-32"
-    />
+    <img src="assets/images/bro.svg" alt="مرحبا" width="496.75" height="512" class="padding-32" />
     <p class="title-md primary-color-50">مرحباً بك</p>
   </div>
   }
-</main>
+</div>
