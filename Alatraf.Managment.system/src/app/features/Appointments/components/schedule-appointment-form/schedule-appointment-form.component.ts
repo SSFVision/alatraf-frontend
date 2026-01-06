@@ -25,30 +25,19 @@ export class ScheduleAppointmentFormComponent {
   @Input() isSaving: boolean = false;
 
   @Output() save = new EventEmitter<ScheduleAppointmentRequest>();
- formatToDDMMYYYY(date: string): string {
-  return formatDate(date, 'dd/MM/yyyy', 'en-GB');
-}
+  formatToDDMMYYYY(date: string): string {
+    console.log('initialDate', date);
+    return formatDate(date, 'dd/MM/yyyy', 'en-GB');
+  }
 
   form = this.fb.group({
-    // requestedDate: [{ value: '', disabled: true }],
     notes: ['', Validators.maxLength(1000)],
   });
-
-  // ngOnChanges(changes: SimpleChanges): void {
-  //   if (changes['initialDate'] && this.initialDate) {
-  //         const formattedDate = this.formatToDDMMYYYY(this.initialDate);
-
-  //     this.form.patchValue(
-  //       { requestedDate: formattedDate },
-  //       { emitEvent: false }
-  //     );
-  //   }
-  // }
 
   onSubmit(): void {
     if (this.form.invalid || this.isSaving) {
       return;
     }
-    this.save.emit( this.form.getRawValue() as ScheduleAppointmentRequest);
+    this.save.emit(this.form.getRawValue() as ScheduleAppointmentRequest);
   }
 }
