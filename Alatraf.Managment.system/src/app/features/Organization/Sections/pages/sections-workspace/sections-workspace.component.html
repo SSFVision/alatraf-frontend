@@ -21,6 +21,7 @@
   [section]="Selectedsection()"
   (close)="OnCloseAddForm()"
   (save)="OnSaveNewRooms($event)"
+  [disableAfterSave]="saving()"
 ></app-section-rooms-form>
 
 } }

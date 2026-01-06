@@ -19,7 +19,7 @@ export class SectionsWorkspaceComponent {
   roomsFacade = inject(SectionRoomsFacade);
   Selectedsection = this.facade.selectedSection;
   isEditMode = this.facade.isEditMode;
-
+  saving = signal(false);
   isLoading = signal(true);
 
   constructor() {
@@ -37,6 +37,7 @@ export class SectionsWorkspaceComponent {
         this.facade.enterCreateMode();
         this.roomsFacade.clear();
       }
+      this.saving.set(false);
       this.isLoading.set(false);
     });
   }
@@ -44,16 +45,23 @@ export class SectionsWorkspaceComponent {
   openAddNewRoomToSectionDialog = signal(false);
   onAddNewRoomToSection(): void {
     this.openAddNewRoomToSectionDialog.set(true);
+    this.saving.set(false);
     console.log('Add new room to section', this.Selectedsection());
   }
   OnCloseAddForm() {
+    this.saving.set(false);
+
     this.openAddNewRoomToSectionDialog.set(false);
     this.roomsFacade.loadBySectionId(this.Selectedsection()!.id);
   }
   OnSaveNewRooms(newRooms: AssignNewRoomsToSectionDto) {
     this.facade
       .assignNewRoomsToSection(this.Selectedsection()!.id, newRooms)
-      ?.subscribe((res) => {});
+      ?.subscribe((res) => {
+        if (res.isSuccess) {
+          this.saving.set(true);
+        }
+      });
   }
 
   OnEditRoom(room: SectionRoomDto) {}
