@@ -44,13 +44,13 @@ export class PaymentsProcessingFacade extends BaseFacade {
   loadTherapyPayment(
     paymentId: number,
     paymentReference: PaymentReference
-  ): void {
+  ) {
     this._isLoading.set(true);
     this._therapyPayment.set(null);
     this._repairPayment.set(null);
     this.formValidationErrors.set({}); // 🔹 clear old errors
 
-    this.service
+ return   this.service
       .getTherapyPayment(paymentId, paymentReference)
       .pipe(
         tap((res: ApiResult<TherapyPaymentDto>) => {
@@ -63,19 +63,18 @@ export class PaymentsProcessingFacade extends BaseFacade {
           this._isLoading.set(false);
         })
       )
-      .subscribe();
   }
 
   loadRepairPayment(
     paymentId: number,
     paymentReference: PaymentReference
-  ): void {
+  ) {
     this._isLoading.set(true);
     this._therapyPayment.set(null);
     this._repairPayment.set(null);
     this.formValidationErrors.set({}); // 🔹 clear old errors
 
-    this.service
+  return  this.service
       .getRepairPayment(paymentId, paymentReference)
       .pipe(
         tap((res: ApiResult<RepairPaymentDto>) => {
@@ -88,7 +87,6 @@ export class PaymentsProcessingFacade extends BaseFacade {
           this._isLoading.set(false);
         })
       )
-      .subscribe();
   }
 
   /* ---------------------------------------------

@@ -22,7 +22,7 @@ import { NgIf } from '@angular/common';
 import { PaymentSummaryDto } from '../../Shared/payment-summary.dto';
 import { TherapyPaymentDto } from '../../Models/therapy-payment.dto';
 import { RepairPaymentDto } from '../../Models/repair-payment.dto';
-import { PaymentSummaryComponent } from "../../Components/payment-summary/payment-summary.component";
+import { PaymentSummaryComponent } from '../../Components/payment-summary/payment-summary.component';
 
 @Component({
   selector: 'app-paied-page',
@@ -32,8 +32,8 @@ import { PaymentSummaryComponent } from "../../Components/payment-summary/paymen
     TherapyPaymentDetailsComponent,
     RepairPaymentDetailsComponent,
     PaymentActionsComponent,
-    PaymentSummaryComponent
-],
+    PaymentSummaryComponent,
+  ],
   templateUrl: './paied-page.component.html',
   styleUrl: './paied-page.component.css',
 })
@@ -81,6 +81,7 @@ export class PaiedPageComponent {
   });
 
   allowedAccountKinds = signal<AccountKind[]>([]);
+  paymentSummary = signal<PaymentSummaryDto | null>(null);
 
   ngOnInit(): void {
     this.listenToRouteParams();
@@ -127,21 +128,30 @@ export class PaiedPageComponent {
     type: 'therapy' | 'repair' | null
   ): void {
     if (type === 'therapy') {
-      this.processingFacade.loadTherapyPayment(paymentId, reference);
-      if (this.therapyPayment()) {
-        this.paymentSummary.set(
-          this.mapTherapyToSummary(this.therapyPayment()!)
-        );
-      }
+      this.processingFacade
+        .loadTherapyPayment(paymentId, reference)
+        .subscribe((res) => {
+          if (res.isSuccess && this.therapyPayment()) {
+            console.log('start mapping therapy payment to summary');
+            this.paymentSummary.set(
+              this.mapTherapyToSummary(this.therapyPayment()!)
+            );
+          }
+        });
     }
 
     if (type === 'repair') {
-      this.processingFacade.loadRepairPayment(paymentId, reference);
-      if (this.repairPayment()) {
-        this.paymentSummary.set(
-          this.mapRepairToSummary(this.repairPayment()!)
-        );
-      }
+      this.processingFacade
+        .loadRepairPayment(paymentId, reference)
+        .subscribe((res) => {
+          if (res.isSuccess && this.repairPayment()) {
+            console.log('start mapping repair payment to summary');
+            this.paymentSummary.set(
+              this.mapRepairToSummary(this.repairPayment()!)
+            );
+            console.log(this.paymentSummary());
+          }
+        });
     }
   }
 
@@ -280,59 +290,50 @@ export class PaiedPageComponent {
     }
   }
 
-// for showing the payment info after payment is done
+  // for showing the payment info after payment is done
 
-paymentSummary = signal<PaymentSummaryDto | null>(null);
+  private mapTherapyToSummary(dto: TherapyPaymentDto): PaymentSummaryDto {
+    const discount = dto.discount ?? 0;
 
-private mapTherapyToSummary(
-  dto: TherapyPaymentDto 
-): PaymentSummaryDto {
-  const discount = dto.discount ?? 0;
+    return {
+      paymentId: dto.paymentId,
 
-  return {
-    paymentId: dto.paymentId,
+      patientName: dto.patientName,
+      age: dto.age,
+      gender: dto.gender,
+      patientId: dto.patientId,
 
-    patientName: dto.patientName,
-    age: dto.age,
-    gender: dto.gender,
-    patientId: dto.patientId,
+      totalAmount: dto.totalAmount,
+      paidAmount: dto.paidAmount ?? null,
+      discount: dto.discount ?? null,
+      netAmount: dto.totalAmount - (dto.totalAmount * discount) / 100,
 
-    totalAmount: dto.totalAmount,
-    paidAmount: dto.paidAmount ?? null,
-    discount: dto.discount ?? null,
-    netAmount:
-      dto.totalAmount - (dto.totalAmount * discount) / 100,
+      accountKind: dto.accountKind ?? null,
+      paymentDate: dto.paymentDate ?? null,
 
-    accountKind: dto.accountKind ?? null,
-    paymentDate: dto.paymentDate ?? null,
+      isCompleted: dto.isCompleted,
+    };
+  }
+  private mapRepairToSummary(dto: RepairPaymentDto): PaymentSummaryDto {
+    const discount = dto.discount ?? 0;
 
-    isCompleted: dto.isCompleted,
-  };
-}
-private mapRepairToSummary(
-  dto: RepairPaymentDto
-): PaymentSummaryDto {
-  const discount = dto.discount ?? 0;
+    return {
+      paymentId: dto.paymentId,
 
-  return {
-    paymentId: dto.paymentId,
+      patientName: dto.patientName,
+      age: dto.age,
+      gender: dto.gender,
+      patientId: dto.patientId,
 
-    patientName: dto.patientName,
-    age: dto.age,
-    gender: dto.gender,
-    patientId: dto.patientId,
+      totalAmount: dto.totalAmount,
+      paidAmount: dto.paidAmount ?? null,
+      discount: dto.discount ?? null,
+      netAmount: dto.totalAmount - (dto.totalAmount * discount) / 100,
 
-    totalAmount: dto.totalAmount,
-    paidAmount: dto.paidAmount ?? null,
-    discount: dto.discount ?? null,
-    netAmount:
-      dto.totalAmount - (dto.totalAmount * discount) / 100,
+      accountKind: dto.accountKind ?? null,
+      paymentDate: dto.paymentDate ?? null,
 
-    accountKind: dto.accountKind ?? null,
-    paymentDate: dto.paymentDate ?? null,
-
-    isCompleted: dto.isCompleted,
-  };
-}
-
+      isCompleted: dto.isCompleted,
+    };
+  }
 }

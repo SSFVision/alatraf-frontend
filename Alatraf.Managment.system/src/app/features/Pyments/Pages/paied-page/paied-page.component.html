@@ -10,7 +10,7 @@
 
   <button
     class="btn primary"
-    [disabled]="therapyPayment()?.isCompleted || repairPayment()?.isCompleted"
+    [disabled]="!paymentSummary()?.isCompleted"
   >
     طباعة
   </button>
@@ -26,17 +26,23 @@
   <app-repair-payment-details [data]="repair"></app-repair-payment-details>
 </ng-container>
 
-<app-payment-actions
-  *ngIf="!paymentSummary()?.isCompleted"
-  [allowedAccountKinds]="allowedAccountKinds()"
-  [totalAmount]="totalAmount()"
-  [disabled]="isSaveDisabled()"
-  (submitPayment)="onSubmitPayment($event)"
->
-</app-payment-actions>
+<ng-container>
+ 
+  @if (therapyPayment()?.isCompleted || repairPayment()?.isCompleted ) {
+  <app-payment-summary
+    [summary]="paymentSummary()!"
+  ></app-payment-summary>
 
-<app-payment-summary
-  *ngIf="!paymentSummary()?.isCompleted"
-  [summary]="paymentSummary()!"
-></app-payment-summary>
+  } @else {
+
+  <app-payment-actions
+    [allowedAccountKinds]="allowedAccountKinds()"
+    [totalAmount]="totalAmount()"
+    [disabled]="isSaveDisabled()"
+    (submitPayment)="onSubmitPayment($event)"
+  >
+  </app-payment-actions>
+  }
+</ng-container>
+
 }

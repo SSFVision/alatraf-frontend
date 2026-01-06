@@ -1,61 +1,50 @@
-<p>payment-summary works!</p>
 <div class="column gap-16">
   <div class="width-100">
-    <p class="title-md">ملخص الدفع</p>
+    <p class="title-md">بيانات الدفع</p>
     <span class="home-line"></span>
   </div>
+</div>
 
-  <!-- Patient Info -->
-  <div class="row flex-center">
-    <label class="label-lg">اسم المريض</label>
-    <span class="label-lg">{{ summary.patientName }}</span>
-  </div>
-
-  <div class="row flex-center">
-    <label class="label-lg">العمر</label>
-    <span class="label-lg">{{ summary.age }}</span>
-  </div>
-
-  <div class="row flex-center">
-    <label class="label-lg">الجنس</label>
-    <span class="label-lg">{{ summary.gender }}</span>
-  </div>
-
-  <!-- Payment Info -->
+<div class="column gap-16">
   <div class="row flex-center">
     <label class="label-lg">نوع الحساب</label>
-    <span class="label-lg">
-      {{ summary.accountKind}}
-    </span>
+    <input class="label-lg" type="text" readonly [value]="summary().accountKind" disabled />
+
   </div>
+
 
   <div class="row flex-center">
     <label class="label-lg">المبلغ الكلي</label>
-    <span class="label-lg">{{ summary.totalAmount }}</span>
+    <input class="label-lg" type="number" readonly [value]="summary().totalAmount" disabled/>
   </div>
 
-  <div class="row flex-center" *ngIf="summary.discount != null">
-    <label class="label-lg">التخفيض (%)</label>
-    <span class="label-lg">{{ summary.discount }}</span>
-  </div>
+    <div  class="row flex-center">
+      <label class="label-lg">المبلغ المدفوع</label>
+      <input class="label-lg" type="number" readonly [value]="summary().paidAmount ?? 0" disabled/>
+    </div>
 
-  <div class="row flex-center">
-    <label class="label-lg">الإجمالي بعد التخفيض</label>
-    <span class="label-lg">{{ netAmount }}</span>
-  </div>
+    <!-- Discount -->
+    <div  class="row flex-center">
+      <label class="label-lg">التخفيض (%)</label>
 
-  <div class="row flex-center" *ngIf="summary.paidAmount != null">
-    <label class="label-lg">المبلغ المدفوع</label>
-    <span class="label-lg">{{ summary.paidAmount }}</span>
-  </div>
+      <input class="label-lg" type="number"  [value]="summary().discount??0"  readonly disabled/>
+    </div>
 
-  <div class="row flex-center" *ngIf="summary.paymentDate">
-    <label class="label-lg">تاريخ الدفع</label>
-    <span class="label-lg">{{ summary.paymentDate | date: 'yyyy/MM/dd HH:mm' }}</span>
-  </div>
+    <div  class="row flex-center">
+      <label class="label-lg"> بعد التخفيض</label>
+        <input class="label-lg" type="number"  [value]="summary().netAmount"  readonly disabled />
+    </div>
 
-  <!-- Status -->
-  <div class="flex-center margin-top-16">
-    <span class="status-badge success">تم الدفع بنجاح</span>
-  </div>
+    <!-- Voucher Number -->
+    <div class="row flex-center">
+      <label class="label-lg">تاريخ الدفع</label>
+
+      <input class="label-lg" type="text" readonly [value]="summary().paymentDate | date:'medium'" />
+
+      
+    </div>
+
+
+    
+  <!-- </ng-container> -->
 </div>
