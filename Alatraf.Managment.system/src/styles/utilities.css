@@ -150,16 +150,3 @@
   min-height: 200px;
   overflow-y: auto;
 }
-
-.row.fill-height {
-  display: flex;
-  flex: 1; 
-  align-items: stretch;
-}
-
-.row.fill-height > .box {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-width: 300px; 
-}
