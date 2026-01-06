@@ -63,13 +63,13 @@ body {
 
 /* backdrop */
 .backdrop {
-  position: absolute;
+  position: fixed;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-  pointer-events: painted;
   z-index: 2;
+  pointer-events: auto;
 }
 
 /* dialog */
