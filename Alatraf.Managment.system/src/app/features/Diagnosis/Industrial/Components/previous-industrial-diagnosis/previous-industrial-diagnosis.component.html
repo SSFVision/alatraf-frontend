@@ -16,7 +16,9 @@
       <th class="title-sm">اسباب الاصابة</th>
       <th class="title-sm">جانب الاصابة</th>
       <th class="title-sm">نوع الاصابة</th>
-      <th class="title-sm">القطع الصناعية</th>
+      <th class="title-sm">القطعة الصناعية</th>
+      <th class="title-sm">الكمية</th>
+      <th class="title-sm">الوحدة</th>
       <th class="buttons"></th>
     </tr>
   </thead>
@@ -32,6 +34,8 @@
       <td class="body-md">{{ formatNames(item.injuryReasons) }}</td>
       <td class="body-md">{{ formatNames(item.injurySides) }}</td>
       <td class="body-md">{{ formatNames(item.injuryTypes) }}</td>
+      <td class="body-md">—</td>
+      <td class="body-md">—</td>
       <td class="body-md">—</td>
       <td>
         <button class="btn primary icon" type="button" (click)="onView(item)">
@@ -90,10 +94,17 @@
 
       <!-- اسم القطعة -->
       <td class="body-md">
-        {{ part.partName }}
-        @if (part.quantity) { ({{ part.quantity }}) } @if (part.unitName) {
-        {{ part.unitName }}
-        }
+        {{ part.partName || "—" }}
+      </td>
+
+      <!-- الكمية -->
+      <td class="body-md">
+        {{ part.quantity || "—" }}
+      </td>
+
+      <!-- الوحدة -->
+      <td class="body-md">
+        {{ part.unitName || "—" }}
       </td>
 
       @if (i === 0) {
