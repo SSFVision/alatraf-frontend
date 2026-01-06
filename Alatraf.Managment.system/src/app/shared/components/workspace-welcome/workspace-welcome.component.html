@@ -1,7 +1,7 @@
 <div class="empty-state">
   <img [src]="imageSrc ? imageSrc : 'assets/images/bro.svg'"
-    [attr.width]="(imageSrc === 'assets/images/therapy.svg') ? '401' : '496.75'"
-    [attr.height]="(imageSrc === 'assets/images/therapy.svg') ? '379.76' : '512'" alt="مرحبا"
+    [attr.width]="(imageSrc && imageSrc.includes('therapy.svg')) ? '320.8' : '397.4'"
+    [attr.height]="(imageSrc && imageSrc.includes('therapy.svg')) ? '303.808' : '409.6'" alt="مرحبا"
     class="empty-state_image" />
   <!-- <h2 class="title-lg">{{ title }}</h2> -->
   <p class="title-md primary-color-50">{{ subtitle }}</p>
