@@ -13,9 +13,7 @@
   min-height: none !important;
 
   flex: 1;
-  /* ← يأخذ الباقي فقط */
   overflow: hidden;
-  /* أو auto */
   box-sizing: border-box;
 
 }

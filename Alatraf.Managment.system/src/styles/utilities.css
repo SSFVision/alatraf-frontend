@@ -117,6 +117,7 @@
   overflow-y: auto;
 }
 
+/* scorolable dev */
 .max-hight-712 {
   max-height: 600px;
   min-height: 100px;
@@ -124,10 +125,7 @@
 }
 
 .max-hight-800 {
-  max-height: 638px;
-  min-height: 500px;
-  /* min-height: 680px; */
-  overflow-y: auto;
+  flex: 1;
 }
 
 .hight-800 {
@@ -151,4 +149,17 @@
   max-height: 340px;
   min-height: 200px;
   overflow-y: auto;
+}
+
+.row.fill-height {
+  display: flex;
+  flex: 1; 
+  align-items: stretch;
+}
+
+.row.fill-height > .box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 300px; 
 }
