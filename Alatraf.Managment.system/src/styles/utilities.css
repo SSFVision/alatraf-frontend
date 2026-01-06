@@ -20,10 +20,9 @@
   margin: auto;
 }
 
-.flex-center button.btn:not(.icon) {
+.flex-center button.btn:not(.icon) button.btn:not(.margin-8) {
   margin-top: 16px;
 }
-
 
 .row {
   display: flex;
@@ -91,6 +90,10 @@
   margin: auto;
 }
 
+.margin-8 {
+  margin: 8px;
+}
+
 .center {
   text-align: center;
 }
@@ -119,7 +122,7 @@
 
 /* scorolable dev */
 .max-hight-712 {
-  max-height: 600px;
+  max-height: 500px;
   min-height: 100px;
   overflow-y: auto;
 }

@@ -10,3 +10,8 @@
   flex-direction: column;
   min-width: 300px;
 }
+
+.btn {
+  position: absolute;
+  left: 36px;
+}

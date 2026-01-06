@@ -1,5 +1,6 @@
 <div class="row gap-16">
-  <div class="box max-width-324 gap-24 max-hight-800">
+
+  <div class="box max-width-324 gap-24">
     <div class="row space-between">
       <h2 class="title-md flex-center">قائمة المواعيد</h2>
       <div class="primary-color-background WH-40 flex-center border-radius-20">
@@ -39,13 +40,12 @@
       (select)="onSelectAppointment($event)" [loading]="isloading()"></app-waiting-appointment-card>
   </div>
 
-  <!-- <div class=" column gap-16 ">
-    <button class="btn big-btn primary lable-lg" (click)="onAddHoliday()">
+  <div class="box gap-16">
+    @if (isButtonVisible){
+    <button class="btn primary lable-lg margin-8" (click)="onAddHoliday()">
       إضافة إجازة
-    </button> -->
-
-  <div class="box max-hight-800 gap-16">
+    </button>}
     <router-outlet></router-outlet>
   </div>
-  <!-- </div> -->
+
 </div>
