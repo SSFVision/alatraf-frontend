@@ -1,5 +1,4 @@
-/* Main container for the card */
-.info-card-container {
+Main container for the card .info-card-container {
   padding: 16px 24px;
 }
 
@@ -8,7 +7,8 @@
   background-color: #ffffff;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  border-top: 4px solid #4a90e2; /* A nice blue accent color */
+  border-top: 4px solid #4a90e2;
+  /* A nice blue accent color */
   transition: all 0.3s ease-in-out;
 }
 
@@ -56,4 +56,3 @@
   height: 24px;
   background-size: contain;
 }
-

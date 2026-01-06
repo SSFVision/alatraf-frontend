@@ -1,4 +1,4 @@
-<div class="page-shell">
+<!-- <div class="page-shell">
   <h1 class="title">تحديث حالة الموعد</h1>
 
   <ng-container *ngIf="selectedAppointment() as appt; else emptyState">
@@ -14,13 +14,8 @@
 
     <div class="status-flow">
       <ng-container *ngFor="let step of flow; let last = last">
-        <button
-          class="flow-node"
-          [class.active]="appt.status === step"
-          [class.disabled]="isOptionDisabled(step)"
-          [disabled]="isOptionDisabled(step) || actionLoading()"
-          (click)="changeStatus(step)"
-        >
+        <button class="flow-node" [class.active]="appt.status === step" [class.disabled]="isOptionDisabled(step)"
+          [disabled]="isOptionDisabled(step) || actionLoading()" (click)="changeStatus(step)">
           <span class="node-label">{{ statusLabel(step) }}</span>
         </button>
         <span class="arrow" *ngIf="!last">→</span>
@@ -36,4 +31,33 @@
       <p class="meta">اختر موعدًا أو تأكد من رابط الصفحة.</p>
     </div>
   </ng-template>
+</div> -->
+
+<div class="column gap-24 padding-LR-24">
+
+  <h2 class="title-lg cursor-pointer"> حالة الموعد </h2>
+
+
+
+  <div>
+    <p class="title-md">بيانات الموعد</p>
+
+    <span class="home-line"></span>
+  </div>
+
+  <div class="row flex-center">
+    <label class="label-lg"> الاسم </label>
+    <input class="label-lg" type="text" [value]="" placeholder="" disabled readonly />
+  </div>
+
+  <div class="row flex-center">
+    <label class="label-lg"> تاريخ الحضور </label>
+    <input class="label-lg" type="date" [value]="" placeholder="" disabled readonly />
+  </div>
+
+  <div class="row flex-center">
+    <label class="label-lg"> الحالة </label>
+    <input class="label-lg" type="text" [value]="" placeholder="" disabled readonly />
+  </div>
+
 </div>
