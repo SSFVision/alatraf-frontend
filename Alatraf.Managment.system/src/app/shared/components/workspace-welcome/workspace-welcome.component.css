@@ -1,0 +1,19 @@
+:host {
+  padding: auto;
+  margin: auto;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 48px;
+  text-align: center;
+}
+
+.empty-state_image {
+  margin-bottom: 32px;
+  max-width: 100%;
+  height: auto;
+}

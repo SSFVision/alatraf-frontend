@@ -1,5 +1,5 @@
 <div class="row gap-16">
-  <div class="box max-width-324 culumn gap-24 max-hight-800">
+  <div class="box max-width-324 gap-24 max-hight-800">
     <!-- Header -->
     <div class="row space-between">
       <h2 class="title-md flex-center">قائمة الإنتظار</h2>
@@ -58,10 +58,8 @@
     <router-outlet></router-outlet>
     } @else {
 
-    <div class="empty-state">
-      <img src="assets/images/bro.svg" class="empty-state_image" alt="اضافة تشخيص" width="496.75" height="512" />
-      <p class="title-md primary-color-50">مرحباً بك</p>
-    </div>
+    <app-workspace-welcome subtitle="مرحباً بك"></app-workspace-welcome>
+
     }
   </div>
 </div>

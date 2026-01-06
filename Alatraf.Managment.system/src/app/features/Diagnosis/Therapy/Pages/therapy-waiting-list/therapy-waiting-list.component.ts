@@ -14,10 +14,11 @@ import {
 } from '../../../../Reception/Tickets/models/ticket.model';
 import { TicketFacade } from '../../../../Reception/Tickets/tickets.facade.service';
 import { Department, ServiceType } from '../../../Shared/enums/department.enum';
+import { WorkspaceWelcomeComponent } from "../../../../../shared/components/workspace-welcome/workspace-welcome.component";
 
 @Component({
   selector: 'app-therapy-waiting-list',
-  imports: [RouterOutlet, PatientCardComponent],
+  imports: [RouterOutlet, PatientCardComponent, WorkspaceWelcomeComponent],
   templateUrl: './therapy-waiting-list.component.html',
   styleUrl: './therapy-waiting-list.component.css',
 })

@@ -6,10 +6,11 @@ import { ManagementEntityCardComponent } from '../../../../shared/components/man
 import { MedicalProgramsNavigationFacade } from '../../../../core/navigation/navigation-medical-programs.facade';
 import { MedicalProgramsFacade } from '../../../MedicalPrograms/Services/medical-programs.facade.service';
 import { IndustrialPartsFacade } from '../../Services/industrial-parts.facade.service';
+import { WorkspaceWelcomeComponent } from "../../../../shared/components/workspace-welcome/workspace-welcome.component";
 
 @Component({
   selector: 'app-main-industrial-parts-page',
-  imports: [RouterOutlet, ManagementEntityCardComponent],
+  imports: [RouterOutlet, ManagementEntityCardComponent, WorkspaceWelcomeComponent],
   templateUrl: './main-industrial-parts-page.component.html',
   styleUrl: './main-industrial-parts-page.component.css',
 })

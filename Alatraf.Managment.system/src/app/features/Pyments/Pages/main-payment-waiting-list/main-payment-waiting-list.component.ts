@@ -9,11 +9,12 @@ import { GeneralWaitingPatientVM } from '../../../../shared/models/general-waiti
 import { PaymentWaitingListDto } from '../../Models/payment-waitingList-dto';
 import { PaymentReference } from '../../Models/payment-reference.enum';
 import { PaymentsWaitingListFacade } from '../../Services/payments-waiting-list.facade.service';
+import { WorkspaceWelcomeComponent } from "../../../../shared/components/workspace-welcome/workspace-welcome.component";
 
 @Component({
   selector: 'app-main-payment-waiting-list',
   standalone: true,
-  imports: [GeneralWaitingPatientQueueComponent, RouterOutlet],
+  imports: [GeneralWaitingPatientQueueComponent, RouterOutlet, WorkspaceWelcomeComponent],
   templateUrl: './main-payment-waiting-list.component.html',
   styleUrl: './main-payment-waiting-list.component.css',
 })
@@ -84,7 +85,7 @@ export class MainPaymentWaitingListComponent {
     this.paymentsFacade.updateFilters({
       isCompleted,
     });
-        this.paymentsFacade.loadPaymentsWaitingList();
+    this.paymentsFacade.loadPaymentsWaitingList();
 
   }
 }

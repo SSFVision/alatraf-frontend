@@ -63,13 +63,13 @@ body {
 
 /* backdrop */
 .backdrop {
-  position: absolute;
+  position: fixed;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-  pointer-events: painted;
   z-index: 2;
+  pointer-events: auto;
 }
 
 /* dialog */
@@ -83,19 +83,4 @@ body {
   max-height: 688px;
   min-height: 200px;
   max-width: 815px;
-}
-
-.empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin: 48px;
-  text-align: center;
-}
-
-.empty-state_image {
-  margin-bottom: 16px;
-  max-width: 100%;
-  height: auto;
 }

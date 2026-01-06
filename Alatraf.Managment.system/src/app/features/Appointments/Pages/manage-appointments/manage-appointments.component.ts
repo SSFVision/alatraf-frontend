@@ -10,6 +10,7 @@ import { signal } from '@angular/core';
   selector: 'app-manage-appointments',
   imports: [RouterOutlet, WaitingAppointmentCardComponent],
   templateUrl: './manage-appointments.component.html',
+  styleUrls: ['./manage-appointments.component.css'],
 })
 export class ManageAppointmentsComponent {
   appointmentFacade = inject(AppointmentsFacade);
@@ -37,13 +38,13 @@ export class ManageAppointmentsComponent {
   selectedFilter = signal<undefined | AppointmentStatus>(undefined);
 
   setFilter(status: AppointmentStatus | undefined) {
-  this.selectedFilter.set(status);
+    this.selectedFilter.set(status);
     this.appointmentFacade.updateFilters({ status });
   }
 
   onSelectAppointment(appointment: any) {
 
-this.nav.goToChangeAppointmentStatus(appointment.id);
+    this.nav.goToChangeAppointmentStatus(appointment.id);
   }
 
   // onCheckIn(appointmentId: number) {

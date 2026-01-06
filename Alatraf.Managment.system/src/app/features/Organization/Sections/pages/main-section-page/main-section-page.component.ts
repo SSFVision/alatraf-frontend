@@ -7,10 +7,11 @@ import { ManagementEntityCardUiModel } from '../../../../../shared/models/manage
 
 import { SectionsFacade } from '../../Service/sections.facade.service';
 import { Department } from '../../../../Diagnosis/Shared/enums/department.enum';
+import { WorkspaceWelcomeComponent } from "../../../../../shared/components/workspace-welcome/workspace-welcome.component";
 
 @Component({
   selector: 'app-main-section-page',
-  imports: [ManagementEntityCardComponent, RouterOutlet],
+  imports: [ManagementEntityCardComponent, RouterOutlet, WorkspaceWelcomeComponent],
   templateUrl: './main-section-page.component.html',
   styleUrl: './main-section-page.component.css',
 })
@@ -46,7 +47,7 @@ export class MainSectionPageComponent implements OnInit {
     this.facade.resetAndLoad();
   }
 
- 
+
   onCardSelected(id: number | string) {
     this.selectedId.set(id);
     this.addMode.set(false);

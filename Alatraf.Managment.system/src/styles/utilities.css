@@ -117,6 +117,7 @@
   overflow-y: auto;
 }
 
+/* scorolable dev */
 .max-hight-712 {
   max-height: 600px;
   min-height: 100px;
@@ -124,10 +125,7 @@
 }
 
 .max-hight-800 {
-  max-height: 638px;
-  min-height: 500px;
-  /* min-height: 680px; */
-  overflow-y: auto;
+  flex: 1;
 }
 
 .hight-800 {
