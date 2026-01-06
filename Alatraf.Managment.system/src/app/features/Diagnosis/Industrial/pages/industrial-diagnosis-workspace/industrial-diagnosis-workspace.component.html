@@ -1,4 +1,4 @@
-@if (isLoading()) {
+@if (isLoading() || loadingPatientRepairDiagnosis()) {
 <div class="flex-center">
   <span class="loader"></span>
 </div>
@@ -27,7 +27,7 @@
   }
 
   @if (viewMode() === 'history') {
-  <app-previous-industrial-diagnosis [items]="industrialHistoryItems" (viewDetails)="openHistoryDetails($event)">
+  <app-previous-industrial-diagnosis [items]="patientRepairDiagnosis()" (viewDetails)="openHistoryDetails($event)">
   </app-previous-industrial-diagnosis>
   }
 </div>

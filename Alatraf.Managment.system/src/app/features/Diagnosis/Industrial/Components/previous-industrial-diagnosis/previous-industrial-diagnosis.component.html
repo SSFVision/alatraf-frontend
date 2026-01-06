@@ -4,72 +4,107 @@
 </div>
 
 @if (items.length === 0) {
-  <p class="body-md padding-16">لا توجد تشخيصات سابقة لهذا المريض.</p>
+<p class="body-md padding-16">لا توجد تشخيصات سابقة لهذا المريض.</p>
 } @else {
 
 <table>
   <thead>
     <tr>
       <th class="title-sm">رقم الكرت</th>
-      <th class="title-sm">التاريخ</th>
+      <th class="title-sm">تاريخ الاصابة</th>
+      <th class="title-sm">التشخيص</th>
+      <th class="title-sm">اسباب الاصابة</th>
+      <th class="title-sm">جانب الاصابة</th>
+      <th class="title-sm">نوع الاصابة</th>
       <th class="title-sm">القطع الصناعية</th>
       <th class="buttons"></th>
     </tr>
   </thead>
 
   <tbody>
-    @for (item of items; track item.diagnosisId) {
+    @for (item of items; track item.diagnosisId) { @if
+    (!item.diagnosisIndustrialParts || item.diagnosisIndustrialParts.length ===
+    0) {
+    <tr>
+      <td class="body-md">{{ item.repairCardId }}</td>
+      <td class="body-md">{{ item.injuryDate | date : "dd-MM-yyyy" }}</td>
+      <td class="body-md">{{ item.diagnosisText || "—" }}</td>
+      <td class="body-md">{{ formatNames(item.injuryReasons) }}</td>
+      <td class="body-md">{{ formatNames(item.injurySides) }}</td>
+      <td class="body-md">{{ formatNames(item.injuryTypes) }}</td>
+      <td class="body-md">—</td>
+      <td>
+        <button class="btn primary icon" type="button" (click)="onView(item)">
+          <img src="assets/icons/eye-icon.svg" alt="عرض التفاصيل" />
+        </button>
+      </td>
+    </tr>
+    } @else { @for (part of item.diagnosisIndustrialParts ; track
+    part.diagnosisIndustrialPartId ?? part.partName; let i = $index) {
+    <tr>
+      @if (i === 0) {
+      <!-- رقم الكرت -->
+      <td
+        class="body-md"
+        [attr.rowspan]="item.diagnosisIndustrialParts.length || 1"
+      >
+        {{ item.repairCardId }}
+      </td>
 
-      @for (part of item.parts; track part.partName; let i = $index) {
-        <tr>
+      <!-- التاريخ -->
+      <td
+        class="body-md"
+        [attr.rowspan]="item.diagnosisIndustrialParts.length || 1"
+      >
+        {{ item.injuryDate | date : "dd-MM-yyyy" }}
+      </td>
 
-          @if (i === 0) {
-            <!-- رقم الكرت -->
-            <td
-              class="body-md"
-              [attr.rowspan]="item.parts.length"
-            >
-              {{ item.cardNumber }}
-            </td>
+      <td
+        class="body-md"
+        [attr.rowspan]="item.diagnosisIndustrialParts.length || 1"
+      >
+        {{ item.diagnosisText || "—" }}
+      </td>
 
-            <!-- التاريخ -->
-            <td
-              class="body-md"
-              [attr.rowspan]="item.parts.length"
-            >
-              {{ item.date | date: 'dd-MM-YYYY' }}
-            </td>
-          }
+      <td
+        class="body-md"
+        [attr.rowspan]="item.diagnosisIndustrialParts.length || 1"
+      >
+        {{ formatNames(item.injuryReasons) }}
+      </td>
 
-          <!-- اسم القطعة -->
-          <td class="body-md">
-            {{ part.partName }}
-            @if (part.quantity) {
-              ({{ part.quantity }})
-            }
-            @if (part.unitName) {
-              {{ part.unitName }}
-            }
-          </td>
+      <td
+        class="body-md"
+        [attr.rowspan]="item.diagnosisIndustrialParts.length || 1"
+      >
+        {{ formatNames(item.injurySides) }}
+      </td>
 
-          @if (i === 0) {
-            <td
-              [attr.rowspan]="item.parts.length"
-            >
-              <button
-                class="btn primary icon"
-                type="button"
-                (click)="onView(item)"
-              >
-                <img src="assets/icons/eye-icon.svg" alt="عرض التفاصيل" />
-              </button>
-            </td>
-          }
-
-        </tr>
+      <td
+        class="body-md"
+        [attr.rowspan]="item.diagnosisIndustrialParts.length || 1"
+      >
+        {{ formatNames(item.injuryTypes) }}
+      </td>
       }
 
-    }
+      <!-- اسم القطعة -->
+      <td class="body-md">
+        {{ part.partName }}
+        @if (part.quantity) { ({{ part.quantity }}) } @if (part.unitName) {
+        {{ part.unitName }}
+        }
+      </td>
+
+      @if (i === 0) {
+      <td [attr.rowspan]="item.diagnosisIndustrialParts.length || 1">
+        <button class="btn primary icon" type="button" (click)="onView(item)">
+          <img src="assets/icons/eye-icon.svg" alt="عرض التفاصيل" />
+        </button>
+      </td>
+      }
+    </tr>
+    } } }
   </tbody>
 </table>
 
