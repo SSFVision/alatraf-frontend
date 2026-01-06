@@ -77,6 +77,8 @@ export class MainPaymentWaitingListComponent {
     this.paymentsFacade.updateFilters({
       paymentReference: reference,
     });
+        this.paymentsFacade.loadPaymentsWaitingList();
+
   }
 
   setPaymentStatus(isCompleted: boolean): void {

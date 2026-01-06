@@ -1,26 +1,39 @@
-<!-- The form tag binds the reactive form group and the submit event handler. -->
-<form [formGroup]="form" (ngSubmit)="onSubmit()" class="padding-LR-24 column gap-16">
+<form
+  [formGroup]="form"
+  (ngSubmit)="onSubmit()"
+  class="padding-LR-24 column gap-16"
+>
   <div class="width-100">
     <p class="title-md">تأكيد الموعد</p>
     <span class="home-line"></span>
   </div>
-
   <div class="row flex-center">
     <label class="label-lg">تاريخ الموعد </label>
-    <input class="label-lg flex-center" type="date" [value]="formatToDDMMYYYY(initialDate!)" readonly />
-
+    <input
+      class="label-lg flex-center"
+      type="text"
+      [value]="initialDate!"
+      readonly
+    />
   </div>
 
   <div class="row flex-center">
     <label class="label-lg">ملاحظات</label>
     <textarea class="width-100" rows="4" formControlName="notes"></textarea>
-    <div *ngIf="form.get('notes')?.hasError('maxlength')" class="text-danger mt-1 small">
+    <div
+      *ngIf="form.get('notes')?.hasError('maxlength')"
+      class="text-danger mt-1 small"
+    >
       يجب ألا تتجاوز الملاحظات 1000 حرف.
     </div>
   </div>
 
   <div class="flex-center">
-    <button type="submit" class="btn primary label-md" [disabled]="form.invalid || isSaving || isCompleted">
+    <button
+      type="submit"
+      class="btn primary label-md"
+      [disabled]="form.invalid || isSaving || isCompleted"
+    >
       <span *ngIf="!isSaving">حفظ</span>
       <span *ngIf="isSaving">جاري الحفظ...</span>
     </button>

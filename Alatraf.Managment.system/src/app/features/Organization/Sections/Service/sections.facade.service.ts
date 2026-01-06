@@ -365,7 +365,7 @@ export class SectionsFacade extends BaseFacade {
           this.toast.success('تم تعيين الغرف الجديدة للقسم بنجاح');
         } else {
           const err = this.extractError(res);
-          this.toast.error('فشل تعيين الغرف الجديدة للقسم');
+          this.toast.error(res.errorMessage ??'فشل تعيين الغرف الجديدة للقسم');
         }
       }),
       tap({

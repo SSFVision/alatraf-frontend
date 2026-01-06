@@ -14,6 +14,7 @@ import { InjuryDto } from '../../../../core/models/injuries/injury.dto';
 import { InjuriesManagementService } from '../../../Injuries/Services/injuries-management.service';
 import { IndustrialPartsManagementService } from '../../../IndustrialParts/Services/industrial-parts-management.service';
 import { IndustrialPartDto } from '../../../../core/models/industrial-parts/industrial-partdto';
+import { PatientService } from '../../../Reception/Patients/Services/patient.service';
 
 @Injectable({
   providedIn: 'root',
@@ -131,4 +132,36 @@ export class RepairCardDiagnosisFacade extends BaseFacade {
       })
     );
   }
+private patientService = inject(PatientService);
+
+private _patientRepairDiagnosis = signal<RepairCardDiagnosisDto[]>([]);
+patientRepairDiagnosis = this._patientRepairDiagnosis.asReadonly();
+
+loadingPatientRepairDiagnosis = signal<boolean>(false);
+loadPatientRepairDiagnosis(patientId: number) {
+  this.loadingPatientRepairDiagnosis.set(true);
+
+  this.patientService
+    .GetRepairCardsByPatientId(patientId)
+    .pipe(
+      tap((result) => {
+        if (result.isSuccess && result.data) {
+          this._patientRepairDiagnosis.set(result.data);
+          this.toast.success(
+            'previous repair diagnoses returned successfully'
+          );
+        } else {
+          this._patientRepairDiagnosis.set([]);
+          this.toast.error(
+            result.errorMessage ?? 'تعذر تحميل بيانات تشخيصات الإصلاح'
+          );
+        }
+
+        this.loadingPatientRepairDiagnosis.set(false);
+      })
+    )
+    .subscribe();
+}
+
+
 }

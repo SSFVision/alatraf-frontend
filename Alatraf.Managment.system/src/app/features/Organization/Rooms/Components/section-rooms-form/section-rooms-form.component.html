@@ -31,21 +31,32 @@
           placeholder="اسم الغرفة"
         />
 
-        <td>
-          <button
-            *ngIf="rooms.length > 1"
-            type="button"
-            class="btn danger icon"
-            (click)="removeRoom(i)"
-          >
-            ✕
-          </button>
-        </td>
+        @if (roomControl(i).hasError('duplicate')) {
+
+        <p class="body-sm primary-color-50">اسم الغرفة مكرر</p>
+
+        }
+
+        <button
+          *ngIf="rooms.length > 1"
+          type="button"
+          class="btn danger icon"
+          (click)="removeRoom(i)"
+        >
+          ✕
+        </button>
       </div>
     </form>
   </div>
 
   <div class="actions">
-    <button type="button" class="btn primary" (click)="onSave()">حفظ</button>
+    <button
+      type="button"
+      class="btn primary"
+      (click)="onSave()"
+      [disabled]="form.invalid || disableAfterSave()"
+    >
+      حفظ
+    </button>
   </div>
 </div>

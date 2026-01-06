@@ -9,6 +9,7 @@
   <p class="body-md primary-color-50">لا يوجد مرضى في قائمة الانتظار حالياً</p>
 </div>
 } @for (ticket of tickets(); track ticket.ticketId) {
+@if (ticket.patient) {
 
 <div
   class="card cursor-pointer"
@@ -21,12 +22,12 @@
 >
   <!-- Full Name -->
   <p class="body-md">
-    {{ ticket.patient?.personDto?.fullname }}
+    {{ ticket.patient.personDto?.fullname }}
   </p>
 
   <!-- Auto Registration Number -->
   <p class="body-sm primary-color-50">
-    رقم المريض : {{ ticket.patient?.personDto?.nationalNo }}
+    رقم المريض : {{ ticket.patient.personDto?.nationalNo }}
   </p>
   <p class="body-sm primary-color-50">Ticket Number : {{ ticket.ticketId }}</p>
   <!-- Service Name (NEW DATA) -->
@@ -35,12 +36,14 @@
   <div class="row gap-16">
     <!-- Gender -->
     <p class="body-sm primary-color-50">
-      {{ ticket.patient?.personDto?.gender }}
+      {{ ticket.patient.personDto?.gender }}
     </p>
 
-    <p class="body-sm primary-color-50">
-      {{ getAgeFromBirthdate(ticket.patient!.personDto!.birthdate) }} سنة
-    </p>
+    @if (ticket.patient.personDto) {
+      <p class="body-sm primary-color-50">
+        {{ getAgeFromBirthdate(ticket.patient.personDto.birthdate) }} سنة
+      </p>
+    }
   </div>
 
   <!-- Ticket Status (NEW DATA) -->
@@ -50,4 +53,5 @@
   </p>
 </div>
 
+}
 } }

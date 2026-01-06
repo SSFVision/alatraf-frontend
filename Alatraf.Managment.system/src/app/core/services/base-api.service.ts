@@ -127,6 +127,24 @@ export class BaseApiService {
       .pipe(catchError((err) => this.handleError(err)));
   }
 
+  // Some APIs require a DELETE request with a body payload. Angular supports this via request('DELETE').
+  // This method preserves the existing delete() signature while enabling DELETE-with-body when needed.
+  protected deleteWithBody<T>(
+    endpoint: string,
+    body: any,
+    headers?: HttpHeaders,
+    params?: HttpParams
+  ): Observable<ApiResult<T>> {
+    const url = this.buildUrl(endpoint);
+    return this.http
+      .request<ApiResult<T>>('DELETE', url, {
+        headers: this.createHeaders(headers),
+        body,
+        params,
+      })
+      .pipe(catchError((err) => this.handleError(err)));
+  }
+
   protected getFullUrl<T>(fullUrl: string): Observable<ApiResult<T>> {
     return this.http
       .get<ApiResult<T>>(this.normalize(fullUrl))

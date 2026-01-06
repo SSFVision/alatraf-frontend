@@ -10,14 +10,11 @@ export interface PaymentTypeConfig {
   showDisabledCardId: boolean;
   showReportNumber: boolean;
   showNotes: boolean;
-showNetAmount: boolean;
+  showNetAmount: boolean;
 
   /** Validation */
   requiredFields: Array<
-    | 'paidAmount'
-    | 'voucherNumber'
-    | 'disabledCardId'
-    | 'reportNumber'
+    'paidAmount' | 'voucherNumber' | 'disabledCardId' | 'reportNumber'
   >;
 }
 
@@ -31,14 +28,14 @@ export const PAYMENT_TYPE_CONFIG: Record<AccountKind, PaymentTypeConfig> = {
     showDisabledCardId: false,
     showReportNumber: false,
     showNotes: false,
-  showNetAmount: false,
+    showNetAmount: false,
 
     requiredFields: [],
   },
 
   [AccountKind.Patient]: {
     accountKind: AccountKind.Patient,
-  showNetAmount: true,
+    showNetAmount: true,
 
     showPaidAmount: true,
     showDiscount: true,
@@ -59,7 +56,7 @@ export const PAYMENT_TYPE_CONFIG: Record<AccountKind, PaymentTypeConfig> = {
     showDisabledCardId: true,
     showReportNumber: false,
     showNotes: true,
-  showNetAmount: false,
+    showNetAmount: false,
 
     requiredFields: ['disabledCardId'],
   },
@@ -73,7 +70,7 @@ export const PAYMENT_TYPE_CONFIG: Record<AccountKind, PaymentTypeConfig> = {
     showDisabledCardId: false,
     showReportNumber: true,
     showNotes: true,
-  showNetAmount: false,
+    showNetAmount: false,
 
     requiredFields: [],
   },

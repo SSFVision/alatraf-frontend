@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
+import { Component, DestroyRef, OnInit, effect, inject, signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -44,9 +44,6 @@ export class IndustrialDiagnosisWorkspaceComponent implements OnInit {
   private ticketFacade = inject(TicketFacade);
   private repairFacade = inject(RepairCardDiagnosisFacade);
 
-  // ------------------------------
-  // STATE
-  // ------------------------------
   ticket = this.ticketFacade.selectedTicket;
   isLoading = this.ticketFacade.loadingTicket;
 
@@ -63,14 +60,25 @@ export class IndustrialDiagnosisWorkspaceComponent implements OnInit {
   existingCard = signal<RepairCardDiagnosisDto | null>(null);
 
   // Mock history for now
-  industrialHistoryItems = MOCK_INDUSTRIAL_DIAGNOSIS_HISTORY;
+ patientRepairDiagnosis = this.repairFacade.patientRepairDiagnosis;
+  loadingPatientRepairDiagnosis =
+    this.repairFacade.loadingPatientRepairDiagnosis;
 
   ngOnInit(): void {
     this.repairFacade.loadLookups();
 
     this.listenToRouteChanges();
   }
+ constructor() {
+    effect(() => {
+      const mode = this.viewMode();
+      const patientId = this.ticket()?.patient?.patientId;
 
+      if (mode === 'history' && patientId) {
+        this.repairFacade.loadPatientRepairDiagnosis(patientId);
+      }
+    });
+  }
   private listenToRouteChanges() {
     this.route.paramMap
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -99,9 +107,7 @@ export class IndustrialDiagnosisWorkspaceComponent implements OnInit {
     this.viewMode.set('history');
   }
 
-  // ------------------------------
-  // SAVE HANDLER
-  // ------------------------------
+ 
   saveIndustrialDiagnosis(
     dto: CreateRepairCardRequest | UpdateRepairCardRequest
   ) {
@@ -122,12 +128,11 @@ export class IndustrialDiagnosisWorkspaceComponent implements OnInit {
     }
   }
 
-  // ------------------------------
-  // HISTORY HANDLER (placeholder)
-  // ------------------------------
-  openHistoryDetails(item: IndustrialDiagnosisHistoryDto) {
+  
+  openHistoryDetails(item: RepairCardDiagnosisDto) {
     // لاحقاً: يمكنك هنا استدعاء API لجلب RepairCardDiagnosisDto حقيقي
-    console.log('View industrial diagnosis history details:', item);
+    // console.log('View industrial diagnosis history details:', item);
+    this.toast.info("ميزة عرض التفاصيل قيد التطوير حالياً.");
     // مثال مستقبلي:
     // this.repairFacade.loadRepairCardForEdit(item.repairCardId);
     // this.existingCard.set(.... من الفاساد ....);

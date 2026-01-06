@@ -12,6 +12,8 @@ import { PatientDto } from '../../../../core/models/Shared/patient.model';
 import { CreatePatientRequest } from '../models/create-patient.request';
 import { UpdatePatientRequest } from '../models/update-patient.request';
 import { TherapyCardDiagnosisDto } from '../../../Diagnosis/Therapy/Models/therapy-card-diagnosis.dto';
+import { RepairCardDiagnosisDto } from '../../../Diagnosis/Industrial/Models/repair-card-diagnosis.dto';
+import { TherapyCardDto } from '../../../TherapyCards/Models/therapy-card.dto';
 export interface PatientFilterDto {
   searchTerm?: string;
 }
@@ -44,12 +46,6 @@ export class PatientService extends BaseApiService {
       })
     );
   }
-  
-  GetPatientTherapyCardsById(id: number): Observable<ApiResult<TherapyCardDiagnosisDto[]>> {
-   console.log("Fetching therapy cards for patient ID:", id);
-     const url = `${this.endpoint}/${id}/therapy-cards`;
-    return this.get<TherapyCardDiagnosisDto[]>(url);
-  }
 
   getPatientById(id: number): Observable<ApiResult<PatientDto>> {
     return this.get<PatientDto>(`${this.endpoint}/${id}`);
@@ -66,10 +62,9 @@ export class PatientService extends BaseApiService {
     patientId: number,
     dto: UpdatePatientRequest
   ): Observable<ApiResult<void>> {
-        const headers = new HttpHeaders().set('X-Enable-Loader', 'true');
+    const headers = new HttpHeaders().set('X-Enable-Loader', 'true');
 
-    
-    return this.put<void>(`${this.endpoint}/${patientId}`, dto,headers);
+    return this.put<void>(`${this.endpoint}/${patientId}`, dto, headers);
   }
 
   // DELETE a patient
@@ -77,5 +72,26 @@ export class PatientService extends BaseApiService {
     const headers = new HttpHeaders().set('X-Enable-Loader', 'true');
 
     return this.delete<void>(`${this.endpoint}/${id}`, undefined, headers);
+  }
+
+  GetPatientTherapyCardsById(
+    id: number
+  ): Observable<ApiResult<TherapyCardDiagnosisDto[]>> {
+    const url = `${this.endpoint}/${id}/therapy-cards`;
+    return this.get<TherapyCardDiagnosisDto[]>(url);
+  }
+  GetRepairCardsByPatientId(
+    id: number
+  ): Observable<ApiResult<RepairCardDiagnosisDto[]>> {
+    const url = `${this.endpoint}/${id}//repair-cards`;
+    return this.get<RepairCardDiagnosisDto[]>(url);
+  }
+
+
+    GetLastActiveTherapyCard(
+    patientId: number
+  ): Observable<ApiResult<TherapyCardDto[]>> {
+    const url = `${this.endpoint}/${patientId}/therapy-cards/last-active`;
+    return this.get<TherapyCardDto[]>(url);
   }
 }

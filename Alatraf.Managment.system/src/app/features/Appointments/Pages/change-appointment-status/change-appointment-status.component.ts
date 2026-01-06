@@ -67,7 +67,8 @@ export class ChangeAppointmentStatusComponent implements OnInit {
       .subscribe();
   }
 
-  statusLabel(status: AppointmentStatus) {
+  statusLabel(status: AppointmentStatus | undefined): string {
+    if (status === undefined) return '';
   return getAppointmentStatusLabelFromEnumToArabic(status);
   }
 

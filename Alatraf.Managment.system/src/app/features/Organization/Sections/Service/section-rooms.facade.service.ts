@@ -6,10 +6,9 @@ import { BaseFacade } from '../../../../core/utils/facades/base-facade';
 
 import { SectionRoomDto } from '../../Models/section-room.dto';
 import { OrganizationService } from '../../organization.service';
+import { RoomService } from '../../Rooms/Services/room.service';
 import { AssignNewRoomsToSectionDto } from '../Models/assign-new-rooms-to-section.dto';
 import { SectionService } from './section.service';
-import { RoomsFacade } from '../../Rooms/Services/room.facade.service';
-import { RoomService } from '../../Rooms/Services/room.service';
 
 @Injectable({ providedIn: 'root' })
 export class SectionRoomsFacade extends BaseFacade {
