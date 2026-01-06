@@ -13,6 +13,7 @@ import { CreatePatientRequest } from '../models/create-patient.request';
 import { UpdatePatientRequest } from '../models/update-patient.request';
 import { TherapyCardDiagnosisDto } from '../../../Diagnosis/Therapy/Models/therapy-card-diagnosis.dto';
 import { RepairCardDiagnosisDto } from '../../../Diagnosis/Industrial/Models/repair-card-diagnosis.dto';
+import { TherapyCardDto } from '../../../TherapyCards/Models/therapy-card.dto';
 export interface PatientFilterDto {
   searchTerm?: string;
 }
@@ -76,15 +77,21 @@ export class PatientService extends BaseApiService {
   GetPatientTherapyCardsById(
     id: number
   ): Observable<ApiResult<TherapyCardDiagnosisDto[]>> {
-    console.log('Fetching therapy cards for patient ID:', id);
     const url = `${this.endpoint}/${id}/therapy-cards`;
     return this.get<TherapyCardDiagnosisDto[]>(url);
   }
   GetRepairCardsByPatientId(
     id: number
   ): Observable<ApiResult<RepairCardDiagnosisDto[]>> {
-    console.log('Fetching repair cards for patient ID:', id);
     const url = `${this.endpoint}/${id}//repair-cards`;
     return this.get<RepairCardDiagnosisDto[]>(url);
+  }
+
+
+    GetLastActiveTherapyCard(
+    patientId: number
+  ): Observable<ApiResult<TherapyCardDto[]>> {
+    const url = `${this.endpoint}/${patientId}/therapy-cards/last-active`;
+    return this.get<TherapyCardDto[]>(url);
   }
 }

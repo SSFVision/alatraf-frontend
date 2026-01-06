@@ -44,9 +44,6 @@ export class IndustrialDiagnosisWorkspaceComponent implements OnInit {
   private ticketFacade = inject(TicketFacade);
   private repairFacade = inject(RepairCardDiagnosisFacade);
 
-  // ------------------------------
-  // STATE
-  // ------------------------------
   ticket = this.ticketFacade.selectedTicket;
   isLoading = this.ticketFacade.loadingTicket;
 
@@ -134,7 +131,8 @@ export class IndustrialDiagnosisWorkspaceComponent implements OnInit {
   
   openHistoryDetails(item: RepairCardDiagnosisDto) {
     // لاحقاً: يمكنك هنا استدعاء API لجلب RepairCardDiagnosisDto حقيقي
-    console.log('View industrial diagnosis history details:', item);
+    // console.log('View industrial diagnosis history details:', item);
+    this.toast.info("ميزة عرض التفاصيل قيد التطوير حالياً.");
     // مثال مستقبلي:
     // this.repairFacade.loadRepairCardForEdit(item.repairCardId);
     // this.existingCard.set(.... من الفاساد ....);
