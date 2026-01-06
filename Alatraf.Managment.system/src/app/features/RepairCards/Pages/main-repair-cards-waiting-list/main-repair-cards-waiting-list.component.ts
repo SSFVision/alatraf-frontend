@@ -12,6 +12,7 @@ import { RepairCardsFacade } from '../../Services/repair-cards.facade.service';
 import { mapTechnicianToDoctorWorkloadCardVM } from '../../../../core/utils/doctor-workload.mapper';
 import { DoctorWorkloadCardVM } from '../../../../shared/models/doctor-workload-card.vm';
 import { DoctorWorkloadFacade } from '../../../Organization/Doctors/Service/doctor-workload.facade.service';
+import { WorkspaceWelcomeComponent } from "../../../../shared/components/workspace-welcome/workspace-welcome.component";
 
 @Component({
   selector: 'app-main-repair-cards-waiting-list',
@@ -20,6 +21,7 @@ import { DoctorWorkloadFacade } from '../../../Organization/Doctors/Service/doct
     DoctorCardComponent,
     GeneralWaitingPatientQueueComponent,
     RouterOutlet,
+    WorkspaceWelcomeComponent
   ],
   templateUrl: './main-repair-cards-waiting-list.component.html',
   styleUrl: './main-repair-cards-waiting-list.component.css',

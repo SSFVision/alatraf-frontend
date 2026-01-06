@@ -1,4 +1,4 @@
-<main class="padding-32 row gap-16 padding-24">
+<div class="row gap-16">
   <div class="box max-width-324 culumn gap-24 max-hight-800">
     <!-- Header -->
     <div class="row space-between">
@@ -12,49 +12,27 @@
 
     <!-- Search Box -->
     <div class="search-box">
-      <img
-        src="assets/icons/search-icon.svg"
-        class="search-icon"
-        alt="search"
-      />
-      <input
-        type="text"
-        placeholder="بحث: اسم الطبيب..."
-        (input)="onSearch($event)"
-      />
+      <img src="assets/icons/search-icon.svg" class="search-icon" alt="search" />
+      <input type="text" placeholder="بحث: اسم الطبيب..." (input)="onSearch($event)" />
     </div>
 
     <!-- Filters -->
     <div class="filters-container">
-      <button
-        class="filter-btn"
-        [class.active]="selectedDepartment() === null"
-        (click)="onFilterChange(null)"
-      >
+      <button class="filter-btn" [class.active]="selectedDepartment() === null" (click)="onFilterChange(null)">
         الكل
       </button>
-      <button
-        class="filter-btn"
-        [class.active]="selectedDepartment() === Department.Therapy"
-        (click)="onFilterChange(Department.Therapy)"
-      >
+      <button class="filter-btn" [class.active]="selectedDepartment() === Department.Therapy"
+        (click)="onFilterChange(Department.Therapy)">
         العلاج الطبيعي
       </button>
-      <button
-        class="filter-btn"
-        [class.active]="selectedDepartment() === Department.Industrial"
-        (click)="onFilterChange(Department.Industrial)"
-      >
+      <button class="filter-btn" [class.active]="selectedDepartment() === Department.Industrial"
+        (click)="onFilterChange(Department.Industrial)">
         الأطراف الصناعية
       </button>
     </div>
 
-    <app-doctor-list
-      class="max-hight-712 column gap-16"
-      [doctors]="doctors()"
-      [loading]="loading()"
-      (doctorSelectedId)="onDoctorSelected($event)"
-    ></app-doctor-list>
+    <app-doctor-list class="max-hight-712 column gap-16" [doctors]="doctors()" [loading]="loading()"
+      (doctorSelectedId)="onDoctorSelected($event)"></app-doctor-list>
 
     <div class="flex-center">
       <button class="btn primary" (click)="goToAddDoctor()">
@@ -66,4 +44,4 @@
   <div class="box max-hight-800 gap-16">
     <router-outlet></router-outlet>
   </div>
-</main>
+</div>

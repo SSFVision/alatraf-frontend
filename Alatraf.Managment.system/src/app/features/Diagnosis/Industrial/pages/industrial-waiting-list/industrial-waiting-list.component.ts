@@ -8,10 +8,11 @@ import {
 } from '../../../../Reception/Tickets/models/ticket.model';
 import { TicketFacade } from '../../../../Reception/Tickets/tickets.facade.service';
 import { Department, ServiceType } from '../../../Shared/enums/department.enum';
+import { WorkspaceWelcomeComponent } from "../../../../../shared/components/workspace-welcome/workspace-welcome.component";
 
 @Component({
   selector: 'app-industrial-waiting-list',
-  imports: [RouterOutlet, PatientCardComponent],
+  imports: [RouterOutlet, PatientCardComponent, WorkspaceWelcomeComponent],
   templateUrl: './industrial-waiting-list.component.html',
   styleUrl: './industrial-waiting-list.component.css',
 })
@@ -49,13 +50,13 @@ export class IndustrialWaitingListComponent implements OnInit, OnDestroy {
     this.ticketFacade.updateFilters({
       departmentId: Department.Industrial,
       serviceId: serviceId ?? undefined,
-      status:serviceId===ServiceType.Industrial? TicketStatus.Continue:TicketStatus.New,
+      status: serviceId === ServiceType.Industrial ? TicketStatus.Continue : TicketStatus.New,
     });
 
     this.ticketFacade.setPage(1);
   }
 
-  
+
   select(ticket: TicketDto) {
     this.selectedTicket.set(ticket);
     this.navDiagnos.goToIndustrialCreate(ticket.ticketId);

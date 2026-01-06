@@ -4,10 +4,11 @@ import { ManagementEntityCardComponent } from '../../../../shared/components/man
 import { ManagementEntityCardUiModel } from '../../../../shared/models/management-entity-card.ui-model';
 import { RouterOutlet } from '@angular/router';
 import { MedicalProgramsFacade } from '../../Services/medical-programs.facade.service';
+import { WorkspaceWelcomeComponent } from "../../../../shared/components/workspace-welcome/workspace-welcome.component";
 
 @Component({
   selector: 'app-medical-programs-page',
-  imports: [ManagementEntityCardComponent, RouterOutlet],
+  imports: [ManagementEntityCardComponent, RouterOutlet, WorkspaceWelcomeComponent],
   templateUrl: './main-medical-programs-page.component.html',
   styleUrl: './main-medical-programs-page.component.css',
 })

@@ -10,6 +10,7 @@ import { GeneralWaitingPatientVM } from '../../../../shared/models/general-waiti
 import { TherapyCardDiagnosisDto } from '../../../Diagnosis/Therapy/Models/therapy-card-diagnosis.dto';
 import { DoctorWorkloadFacade } from '../../../Organization/Doctors/Service/doctor-workload.facade.service';
 import { TherapySessionsFacade } from '../../services/therapy-sessions.facade.service';
+import { WorkspaceWelcomeComponent } from "../../../../shared/components/workspace-welcome/workspace-welcome.component";
 
 @Component({
   selector: 'app-main-therapy-patients-wating-list',
@@ -17,6 +18,7 @@ import { TherapySessionsFacade } from '../../services/therapy-sessions.facade.se
     RouterOutlet,
     DoctorCardComponent,
     GeneralWaitingPatientQueueComponent,
+    WorkspaceWelcomeComponent
   ],
   templateUrl: './main-therapy-patients-wating-list.component.html',
   styleUrl: './main-therapy-patients-wating-list.component.css',
@@ -24,7 +26,7 @@ import { TherapySessionsFacade } from '../../services/therapy-sessions.facade.se
 export class MainTherapyPatientsWatingListComponent implements OnDestroy {
 
 
-private sessionsFacade = inject(TherapySessionsFacade);
+  private sessionsFacade = inject(TherapySessionsFacade);
   private doctorWorkloadFacade = inject(DoctorWorkloadFacade);
   private navTherapyCard = inject(TherapyCardsNavigationFacade);
 

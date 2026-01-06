@@ -29,14 +29,11 @@
   </div>
 
   <!-- RIGHT SIDE: DETAILS -->
-  @if (selectedId() || addMode()) {
   <div class="box max-hight-800 gap-16">
-    <router-outlet></router-outlet>
+    @if (selectedId() ||addMode()) {
+    <router-outlet></router-outlet>}
+    @else {
+    <app-workspace-welcome subtitle="مرحباً بك" imageSrc="assets/images/bro-1.svg"></app-workspace-welcome>
+    }
   </div>
-  } @else {
-  <div class="box max-hight-800 gap-16 flex-center">
-    <img src="assets/images/bro.svg" alt="مرحبا" width="496.75" height="512" class="padding-32" />
-    <p class="title-md primary-color-50">مرحباً بك</p>
-  </div>
-  }
 </div>
