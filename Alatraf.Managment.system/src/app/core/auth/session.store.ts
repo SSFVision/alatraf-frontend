@@ -5,9 +5,6 @@ import { UserSession } from './models/user-session.model';
 
 @Injectable({ providedIn: 'root' })
 export class SessionStore {
-  // -------------------------------------------------------
-  // 1. Signals (state)
-  // -------------------------------------------------------
 
   private userSignal = signal<UserDetailsDto | null>(null);
 
@@ -16,25 +13,17 @@ export class SessionStore {
   private expiresOnUtcSignal = signal<string | null>(null);
   private tokenTypeSignal = signal<string | null>('Bearer');
 
-  // -------------------------------------------------------
-  // 2. Derived signals (computed)
-  // -------------------------------------------------------
 
-  /** True if the user is logged in */
   readonly isLoggedIn = computed(() => {
     return this.accessTokenSignal() !== null && this.userSignal() !== null;
   });
 
-  /** Current user model */
   readonly user = computed(() => this.userSignal());
 
-  /** User roles */
   readonly roles = computed(() => this.userSignal()?.roles ?? []);
 
-  /** User permissions */
   readonly permissions = computed(() => this.userSignal()?.permissions ?? []);
 
-  /** Reference: full session snapshot */
   readonly session = computed<UserSession>(() => ({
     user: this.userSignal(),
     accessToken: this.accessTokenSignal(),
@@ -57,7 +46,7 @@ export class SessionStore {
     this.accessTokenSignal.set(tokens.accessToken);
     this.refreshTokenSignal.set(tokens.refreshToken);
     this.expiresOnUtcSignal.set(tokens.expiresOnUtc);
-    // this.tokenTypeSignal.set(tokens.tokenType ?? 'Bearer');
+    this.tokenTypeSignal.set('Bearer');
   }
 
   // -------------------------------------------------------

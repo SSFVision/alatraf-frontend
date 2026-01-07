@@ -14,6 +14,7 @@ export const APP_ROUTES: Routes = [
   {
     path: AppRoutes.auth.root, // 'auth'
     component: AuthLayoutComponent,
+
     children: [
       {
         path: '',

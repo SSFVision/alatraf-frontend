@@ -1,6 +1,6 @@
 import { UserDetailsDto } from './models/user-details.dto.';
 import { Injectable, inject } from '@angular/core';
-import { tap, switchMap, catchError } from 'rxjs';
+import { tap, switchMap, catchError, EMPTY, of } from 'rxjs';
 
 import { AuthService } from './auth.service';
 import { TokenStorageFacade } from './token-storage/token-storage.facade';
@@ -125,4 +125,34 @@ export class AuthFacade {
 
     return this.sessionStore.hasPermission(permission);
   }
+
+
+  autoLogin() {
+  const refreshToken = this.tokenStorage.getRefreshToken();
+
+  if (!refreshToken) {
+  return of(null);
+  }
+
+  const request: RefreshTokenRequest = {
+    refreshToken,
+    expiredAccessToken: this.tokenStorage.getAccessToken() ?? '',
+  };
+
+  return this.authService.refreshToken(request).pipe(
+    tap((tokens) => {
+      this.tokenStorage.setTokens(tokens);
+      this.sessionStore.setTokens(tokens);
+    }),
+    switchMap(() => this.authService.getCurrentUser()),
+    tap((user) => {
+      this.sessionStore.setUser(user);
+    }),
+    catchError(() => {
+      this.logout();
+      return EMPTY;
+    })
+  );
+}
+
 }
