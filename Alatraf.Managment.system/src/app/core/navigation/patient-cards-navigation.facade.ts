@@ -16,10 +16,10 @@ export class PatientCardsNavigationFacade {
   }
 
   goToEditWoundedCardPage(
-    woundedCardId: number | string,
+    cardNumber: number | string,
     extras?: NavigationExtras
   ): void {
-    this.go(AppRoutes.patientCards.wounded.edit(woundedCardId), extras);
+    this.go(AppRoutes.patientCards.wounded.edit(cardNumber), extras);
   }
 
   goToViewWoundedCardPage(
@@ -40,10 +40,10 @@ export class PatientCardsNavigationFacade {
   }
 
   goToEditDisabledCardPage(
-    disabledCardId: number | string,
+    cardNumber: number | string,
     extras?: NavigationExtras
   ): void {
-    this.go(AppRoutes.patientCards.disabled.edit(disabledCardId), extras);
+    this.go(AppRoutes.patientCards.disabled.edit(cardNumber), extras);
   }
 
   goToViewDisabledCardPage(

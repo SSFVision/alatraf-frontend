@@ -19,6 +19,6 @@ export interface PatientCardsFacade {
   setPage(page: number): void;
   setPageSize(size: number): void;
 
-  openWorkspace(cardId: number): void;
+  openWorkspace(cardNumber: string): void;
   openAddPage():void;
 }

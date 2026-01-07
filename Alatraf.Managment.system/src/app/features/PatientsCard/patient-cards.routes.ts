@@ -43,7 +43,7 @@ export const PATIENT_CARDS_ROUTES: Routes = [
           ).then((c) => c.DisabledCardWorkspaceComponent),
       },
       {
-        path: 'edit/:disabledCardId',
+        path: 'edit/:cardNumber',
         loadComponent: () =>
           import(
             './workspace/disabled/disabled-card-workspace/disabled-card-workspace.component'

@@ -16,12 +16,12 @@ export class PatientCardsListComponent {
 
   readonly typeLabel = PatientCardTypeLabel;
 
-  select = output<number>();
+  select = output<PatientCardListItemVm>();
 
   selectedId = signal<number | null>(null);
 
-  onSelect(id: number): void {
-    this.selectedId.set(id);
-    this.select.emit(id);
+  onSelect(card: PatientCardListItemVm): void {
+    this.selectedId.set(card.id);
+    this.select.emit(card);
   }
 }

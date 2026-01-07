@@ -75,12 +75,11 @@ export class DisabledCardWorkspaceComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.routeSub = this.route.paramMap.subscribe((params) => {
-      const idParam = params.get('disabledCardId');
-      const id = idParam ? Number(idParam) : null;
+      const cardNumber = params.get('cardNumber');
 
-      if (id) {
+      if (cardNumber) {
         this.mode.set('edit');
-        this.facade.loadDisabledCardForEdit(id);
+        this.facade.loadDisabledCardForEdit(cardNumber);
       } else {
         this.mode.set('create');
         this.facade.enterCreateMode();

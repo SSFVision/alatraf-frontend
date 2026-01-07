@@ -117,8 +117,8 @@ export class WoundedCardsFacade
     this.load();
   }
 
-  openWorkspace(cardId: number): void {
-    this.navCard.goToEditWoundedCardPage(cardId);
+  openWorkspace(cardNumber: string): void {
+    this.navCard.goToEditWoundedCardPage(cardNumber);
   }
   openAddPage(): void {
     this.navCard.goToCreateWoundedCardPage();

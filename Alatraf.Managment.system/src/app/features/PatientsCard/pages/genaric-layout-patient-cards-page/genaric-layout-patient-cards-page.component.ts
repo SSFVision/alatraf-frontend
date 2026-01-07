@@ -11,6 +11,7 @@ import { RouterOutlet } from '@angular/router';
 import { PatientCardsFacade } from '../../Facades/patient-cards.facade.service';
 import { PatientCardsNavigationFacade } from '../../../../core/navigation/patient-cards-navigation.facade';
 import { PatientCardType } from '../../models/patient-card-type.enum';
+import { PatientCardListItemVm } from '../../models/patient-card-list-item.vm';
 
 @Component({
   selector: 'app-genaric-layout-patient-cards-page',
@@ -35,9 +36,9 @@ export class GenaricLayoutPatientCardsPageComponent implements OnInit {
     this.facade.search(term);
   }
 
-  onSelectCard(cardId: number): void {
+  onSelectCard(card: PatientCardListItemVm): void {
     this.canRoute.set(true);
-    this.facade.openWorkspace(cardId);
+    this.facade.openWorkspace(card.cardNumber);
   }
   private navigation = inject(PatientCardsNavigationFacade);
 
