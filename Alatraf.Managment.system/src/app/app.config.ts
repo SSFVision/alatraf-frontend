@@ -13,7 +13,6 @@ import {
 import { APP_ROUTES } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
-import { InMemoryDataService } from './mocks/in-memory-data.service';
 import { loadingInterceptor } from './core/interceptors/loading.interceptor';
 import { SkeletonLoadingInterceptor } from './core/interceptors/skeleteon-loading.interceptor';
 import { apiResponseInterceptor } from './core/interceptors/api-response.interceptor';
@@ -40,14 +39,5 @@ export const appConfig: ApplicationConfig = {
         authInterceptor,
       ])
     ),
- importProvidersFrom(
- HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService, {
-  delay: 500,
-  dataEncapsulation: false,
-  passThruUnknownUrl: true
-})
-
-)
-
   ],
 };

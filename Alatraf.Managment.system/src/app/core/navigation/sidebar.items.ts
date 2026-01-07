@@ -1,4 +1,4 @@
-import { PERMISSIONS } from '../auth/models/permissions.map';
+import { PERMISSIONS } from '../auth/Roles/permissions.map';
 import { AppRoutes } from '../routing/app.routes.map';
 
 export interface MenuItem {
@@ -33,8 +33,6 @@ export const MENU_CONFIG: MenuCategory[] = [
         route: AppRoutes.doctors.root,
         requiredPermissions: [PERMISSIONS.PATIENTS.ADD],
       },
-
-
     ],
   },
 

@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { PermissionGuard } from '../../core/guards/permission.guard';
-import { PERMISSIONS } from '../../core/auth/models/permissions.map';
+import { PERMISSIONS } from '../../core/auth/Roles/permissions.map';
 
 export const RepairCardsRoutes: Routes = [
   {

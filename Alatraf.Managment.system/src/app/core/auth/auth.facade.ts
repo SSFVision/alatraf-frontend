@@ -1,4 +1,4 @@
-import { UserModel } from './models/user.model';
+import { UserDetailsDto } from './models/user-details.dto.';
 import { Injectable, inject } from '@angular/core';
 import { tap, switchMap, catchError } from 'rxjs';
 
@@ -11,7 +11,7 @@ import { ALL_CACHE_KEYS } from '../constants/cache-keys.constants';
 import { LoginRequest } from './models/login-request.model';
 import { RefreshTokenRequest } from './models/refresh-token-request.model';
 import { NavigationAuthFacade } from '../navigation/navigation-auth.facade';
-import { AppUserRole } from './models/app.user.roles.enum';
+import { AppUserRole } from './Roles/app.user.roles.enum';
 
 @Injectable({ providedIn: 'root' })
 export class AuthFacade {
@@ -33,12 +33,10 @@ export class AuthFacade {
         this.sessionStore.setTokens(tokenResponse);
       }),
 
-      // Step B: load the user profile from /identity/current-user/claims
       switchMap(() => this.authService.getCurrentUser()),
 
-      // Step C: attach user to session + navigate by role
       tap((user) => {
-        // console.log('info After Sucess Login ', user);
+        console.log('info After Sucess Login ', user);
         this.sessionStore.setUser(user);
         const primaryRole = user.roles?.[0].toString();
         this.navigation.redirectAfterLogin(primaryRole as AppUserRole);
@@ -125,7 +123,6 @@ export class AuthFacade {
       return true;
     }
 
-    // 🔐 Normal permission check
     return this.sessionStore.hasPermission(permission);
   }
 }

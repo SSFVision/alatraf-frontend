@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { PERMISSIONS } from '../../core/auth/models/permissions.map';
+import { PERMISSIONS } from '../../core/auth/Roles/permissions.map';
 import { PermissionGuard } from '../../core/guards/permission.guard';
 
 export const PaymentsRoutes: Routes = [
@@ -11,8 +11,8 @@ export const PaymentsRoutes: Routes = [
       import(
         './Pages/main-payment-waiting-list/main-payment-waiting-list.component'
       ).then((m) => m.MainPaymentWaitingListComponent),
-   
-      children: [
+
+    children: [
       {
         path: 'paid/:paymentId/:paymentReference',
         canActivate: [PermissionGuard],

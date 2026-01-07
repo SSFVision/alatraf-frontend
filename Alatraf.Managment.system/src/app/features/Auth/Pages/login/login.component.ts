@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NavigationAuthFacade } from '../../../../core/navigation/navigation-auth.facade';
-import { AppUserRole } from '../../../../core/auth/models/app.user.roles.enum';
+import { AppUserRole } from '../../../../core/auth/Roles/app.user.roles.enum';
 import { NgIf } from '@angular/common';
 import { AuthFacade } from '../../../../core/auth/auth.facade';
 import { LoginRequest } from '../../../../core/auth/models/login-request.model';
@@ -31,8 +31,8 @@ export class LoginComponent {
   shake = false;
 
   loginForm = this.fb.group({
-    userName: ['wa', Validators.required],
-    password: ['fc', Validators.required],
+    userName: ['waleed', Validators.required],
+    password: ['778500511wa', Validators.required],
   });
 
   ngOnInit(): void {

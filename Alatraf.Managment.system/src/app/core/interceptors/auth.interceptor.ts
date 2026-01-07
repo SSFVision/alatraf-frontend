@@ -58,7 +58,8 @@ console.log("this the refresh tocken ",refreshToken);
 
             const retryReq = authReq.clone({
               setHeaders: {
-                Authorization: `${newTokens.tokenType} ${newTokens.accessToken}`
+                // Authorization: `${newTokens.tokenType} ${newTokens.accessToken}`
+                Authorization: `Bearer ${newTokens.accessToken}`
               }
             });
 

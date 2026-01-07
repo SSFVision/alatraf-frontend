@@ -9,12 +9,11 @@ import { PatientsListComponent } from '../../components/patients.list/patients.l
 import { PatientsFacade } from '../../Services/patients.facade.service';
 
 import { HasPermissionDirective } from '../../../../../core/auth/directives/has-permission.directive';
-import { PERMISSIONS } from '../../../../../core/auth/models/permissions.map';
+import { PERMISSIONS } from '../../../../../core/auth/Roles/permissions.map';
 import { AuthFacade } from '../../../../../core/auth/auth.facade';
 import { ToastService } from '../../../../../core/services/toast.service';
 import { PatientFilterRequest } from '../../models/PatientFilterRequest';
 import { PatientDto } from '../../../../../core/models/Shared/patient.model';
-
 
 @Component({
   selector: 'app-patients-page',

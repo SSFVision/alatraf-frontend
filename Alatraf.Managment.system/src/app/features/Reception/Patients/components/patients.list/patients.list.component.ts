@@ -5,7 +5,7 @@ import { SkeletonsLoadingService } from '../../../../../core/services/skeletons-
 import { NavigationReceptionFacade } from '../../../../../core/navigation/navigation-reception.facade';
 import { StopPropagationDirective } from '../../../../../shared/Directives/stop-propagation.directive';
 import { AuthFacade } from '../../../../../core/auth/auth.facade';
-import { PERMISSIONS } from '../../../../../core/auth/models/permissions.map';
+import { PERMISSIONS } from '../../../../../core/auth/Roles/permissions.map';
 import { HasPermissionDirective } from '../../../../../core/auth/directives/has-permission.directive';
 import { PatientsFacade } from '../../Services/patients.facade.service';
 import { UiLockService } from '../../../../../core/services/ui-lock.service';
@@ -23,7 +23,7 @@ import { PatientDto } from '../../../../../core/models/Shared/patient.model';
   styleUrl: './patients.list.component.css',
 })
 export class PatientsListComponent {
- patients = input.required<PatientDto[]>();
+  patients = input.required<PatientDto[]>();
   loading = input<boolean>(false);
 
   pageLoader = inject(SkeletonsLoadingService);
