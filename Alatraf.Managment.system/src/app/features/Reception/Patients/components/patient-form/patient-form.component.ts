@@ -34,6 +34,10 @@ import {
   yemeniPhoneNumberValidator,
 } from '../../../../../core/utils/person.validators';
 import { CreatePatientRequest } from '../../models/create-patient.request';
+import { CACHE_KEYS } from '../../../../../core/constants/cache-keys.constants';
+import { CacheManager } from '../../../../../core/utils/cache-manager';
+import { debounceTime } from 'rxjs';
+import { CacheService } from '../../../../../core/services/cache.service';
 
 @Component({
   selector: 'app-patient-form',
@@ -47,7 +51,7 @@ export class PatientFormComponent implements OnChanges, OnInit {
   close = output();
   save = output<CreatePatientRequest>();
   mode = input.required<boolean>();
-maxDate = new Date().toISOString().split('T')[0];
+  maxDate = new Date().toISOString().split('T')[0];
 
   private facade = inject(PatientsFacade);
   private fb = inject(FormBuilder);
@@ -58,7 +62,9 @@ maxDate = new Date().toISOString().split('T')[0];
 
   preventNonNumericInput = preventNonNumericInput;
   formatPhoneNumberInput = formatPhoneNumberInput;
-
+  //  for caching  form data an  refresh page
+  private cache = inject(CacheService); // 10 minutes expiration
+  private DRAFT_KEY = CACHE_KEYS.PATIENT_FORM_DRAFT;
   ngOnInit(): void {
     this.form = this.fb.group({
       fullname: ['', Validators.required],
@@ -76,7 +82,11 @@ maxDate = new Date().toISOString().split('T')[0];
       nationalNo: [''],
       patientType: ['Disabled', Validators.required],
     });
-
+    // Load draft data if available
+    const draft = this.cache.get(this.DRAFT_KEY);
+    if (draft) {
+      this.form.patchValue(draft);
+    }
     this.validationState = new FormValidationState(
       this.form,
       this.facade.formValidationErrors
@@ -89,6 +99,13 @@ maxDate = new Date().toISOString().split('T')[0];
     });
 
     this.validationState.clearOnEdit();
+
+    // Cache form data on value changes
+    this.form.valueChanges
+      .pipe(debounceTime(1)) // wait 0.5s after changes
+      .subscribe((value) => {
+        this.cache.set(this.DRAFT_KEY, value);
+      });
   }
   getControl(name: string): AbstractControl | null {
     return this.form.get(name);
@@ -119,6 +136,8 @@ maxDate = new Date().toISOString().split('T')[0];
       }
 
       this.save.emit(dto);
+      // 🔹 Clear cache on successful save
+      this.cache.clear(this.DRAFT_KEY);
     } else {
       this.form.markAllAsTouched();
     }
@@ -144,6 +163,8 @@ maxDate = new Date().toISOString().split('T')[0];
   }
 
   onClose() {
+    // 🔹 Clear draft when user cancels form
+    this.cache.clear(this.DRAFT_KEY);
     this.close.emit();
   }
 
