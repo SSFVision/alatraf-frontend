@@ -13,12 +13,15 @@ import {
   Validators,
 } from '@angular/forms';
 import { finalize } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 import { HolidayType } from '../../Models/holiday-type.enum';
 import { CreateHolidayRequest } from '../../Models/create-holiday.request';
+import { UpdateHolidayRequest } from '../../Models/update-holiday.request';
 import { HolidaysFacade } from '../../services/holidays.facade.service';
 import { FormValidationState } from '../../../../core/utils/form-validation-state';
 import { PositiveNumberDirective } from '../../../../shared/Directives/positive-number.directive';
+import { HolidayDto } from '../../Models/holiday.dto';
 
 @Component({
   selector: 'app-add-new-holiday',
@@ -31,8 +34,12 @@ export class AddNewHolidayComponent {
   private fb = inject(FormBuilder);
   private facade = inject(HolidaysFacade);
   private env = inject(EnvironmentInjector);
+  private route = inject(ActivatedRoute);
 
   private validationState!: FormValidationState;
+
+  private currentHolidayId: number | null = null;
+  isEditMode = false;
 
   holidayTypes = [
     { label: 'ثابتة', value: HolidayType.Fixed },
@@ -79,11 +86,24 @@ export class AddNewHolidayComponent {
       effect(() => {
         this.validationState.apply();
       });
+
+      effect(() => {
+        const selected = this.facade.selectedHoliday();
+        if (
+          this.isEditMode &&
+          selected &&
+          selected.holidayId === this.currentHolidayId
+        ) {
+          this.patchFormForHoliday(selected);
+        }
+      });
     });
 
     this.validationState.clearOnEdit();
 
     this.setupTypeReactiveBehavior();
+
+    this.detectEditMode();
   }
 
   get daysCount(): number | null {
@@ -140,10 +160,7 @@ export class AddNewHolidayComponent {
       };
     }
     this.isSubmitting = true;
-    this.facade
-      .createHoliday(payload)
-      .pipe(finalize(() => (this.isSubmitting = false)))
-      .subscribe();
+    this.facade.createHoliday(payload).subscribe();
   }
 
   // Helpers for template validation (match patient form pattern)
@@ -161,6 +178,73 @@ export class AddNewHolidayComponent {
   }
 
   HolidayType = HolidayType; // expose enum to template
+
+  private detectEditMode(): void {
+    const idParam = this.route.snapshot.paramMap.get('id');
+    const parsedId = idParam ? Number(idParam) : null;
+
+    if (parsedId && !Number.isNaN(parsedId)) {
+      this.isEditMode = true;
+      this.currentHolidayId = parsedId;
+      this.facade.getHolidayById(parsedId);
+    } else {
+      this.isEditMode = false;
+      this.currentHolidayId = null;
+      this.resetFormForCreate();
+    }
+  }
+
+  private patchFormForHoliday(holiday: HolidayDto): void {
+    if (holiday.type === HolidayType.Fixed) {
+      const date = new Date(holiday.startDate);
+      const month = Number.isNaN(date.getTime()) ? 1 : date.getMonth() + 1;
+      const day = Number.isNaN(date.getTime()) ? 1 : date.getDate();
+
+      this.form.patchValue(
+        {
+          name: holiday.name ?? '',
+          type: HolidayType.Fixed,
+          fixedMonth: month,
+          fixedDay: day,
+          isRecurring: true,
+          isActive: holiday.isActive,
+          startDate: '',
+          endDate: '',
+        },
+        { emitEvent: true }
+      );
+    } else {
+      this.form.patchValue(
+        {
+          name: holiday.name ?? '',
+          type: HolidayType.Temporary,
+          startDate: holiday.startDate,
+          endDate: holiday.endDate ?? '',
+          isRecurring: holiday.isRecurring,
+          isActive: holiday.isActive,
+          fixedMonth: 1,
+          fixedDay: 1,
+        },
+        { emitEvent: true }
+      );
+    }
+  }
+
+  private resetFormForCreate(): void {
+    this.form.reset({
+      name: '',
+      startDate: '',
+      endDate: '',
+      isRecurring: false,
+      type: HolidayType.Fixed,
+      isActive: true,
+      fixedMonth: 1,
+      fixedDay: 1,
+    });
+
+    const typeCtrl = this.form.get('type');
+    typeCtrl?.setValue(HolidayType.Fixed, { emitEvent: true });
+  }
 
   private setupTypeReactiveBehavior(): void {
     const typeCtrl = this.form.get('type');

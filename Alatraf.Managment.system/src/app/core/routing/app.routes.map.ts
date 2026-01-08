@@ -143,6 +143,7 @@ export const AppRoutes = {
       root: 'holiday',
       add: 'holiday/add',
       list: 'holiday/list',
+      edit: (holidayId: number | string) => `holiday/edit/${holidayId}`,
     },
     schedule: (ticketId: number | string, patientId: number | string) =>
       `waiting-patients/schedule/${ticketId}/patient/${patientId}`,

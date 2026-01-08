@@ -21,6 +21,13 @@ export class HolidaysNavigationFacade {
     );
   }
 
+  goToEditHoliday(holidayId: number | string, extras?: NavigationExtras): void {
+    this.go(
+      `${AppRoutes.Appointment.root}/${AppRoutes.Appointment.manage}/${AppRoutes.Appointment.holidays.edit(holidayId)}`,
+      extras
+    );
+  }
+
   goToManageAppointments(extras?: NavigationExtras): void {
     this.go(
       `${AppRoutes.Appointment.root}/${AppRoutes.Appointment.manage}`,

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { HolidaysNavigationFacade } from '../../../../core/navigation/Holidays-navigation.facade';
 
 import { HolidayDto } from '../../Models/holiday.dto';
 import { HolidayType } from '../../Models/holiday-type.enum';
@@ -16,6 +17,7 @@ import { HolidaysFacade } from '../../services/holidays.facade.service';
 export class HolidayListComponent implements OnInit {
   private fb = inject(FormBuilder);
   private facade = inject(HolidaysFacade);
+  private holidayNav = inject(HolidaysNavigationFacade);
   HolidayType = HolidayType;
 
   private arabicMonths = [
@@ -110,4 +112,11 @@ export class HolidayListComponent implements OnInit {
     return `${year}-${monthName}-${day}`;
   }
 
+  onEdit(holiday: HolidayDto): void {
+    this.holidayNav.goToEditHoliday(holiday.holidayId);
+  }
+
+  onDelete(holiday: HolidayDto): void {
+    this.facade.deleteHoliday(holiday);
+  }
 }

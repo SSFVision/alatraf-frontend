@@ -142,17 +142,28 @@ export class HolidaysFacade extends BaseFacade {
     );
   }
 
-  deleteHoliday(id: number) {
-    return this.handleDelete(this.service.deleteHoliday(id), {
-      successMessage: 'Holiday deleted successfully.',
-      defaultErrorMessage: 'Failed to delete holiday. Please try again.',
-    }).pipe(
-      tap((success) => {
-        if (success) {
-          this.removeHolidayFromList(id);
-        }
-      })
-    );
+  deleteHoliday(holiday: HolidayDto): void {
+    if (!holiday?.holidayId) return;
+
+    const config = {
+      title: 'حذف العطلة',
+      message: 'هل أنت متأكد من حذف العطلة التالية؟',
+      payload: { الاسم: holiday.name ?? 'بدون اسم' },
+    };
+
+    this.confirmAndDelete(
+      config,
+      () => this.service.deleteHoliday(holiday.holidayId),
+      {
+        successMessage: 'تم حذف العطلة بنجاح',
+        defaultErrorMessage: 'فشل حذف العطلة. حاول لاحقاً.',
+      }
+    ).subscribe((success) => {
+      if (success) {
+        this.loadHolidays();
+        this._selectedHoliday.set(null);
+      }
+    });
   }
 
   // ---------------------------------------------

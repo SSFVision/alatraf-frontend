@@ -16,6 +16,13 @@ export const HolidaysRoutes: Routes = [
           ),
       },
       {
+        path: 'edit/:id',
+        loadComponent: () =>
+          import('./Pages/add-new-holiday/add-new-holiday.component').then(
+            (m) => m.AddNewHolidayComponent
+          ),
+      },
+      {
         path: 'list',
         loadComponent: () =>
           import('./Pages/holiday-list/holiday-list.component').then(

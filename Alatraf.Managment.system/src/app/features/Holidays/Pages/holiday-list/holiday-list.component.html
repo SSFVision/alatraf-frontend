@@ -1,16 +1,24 @@
 ﻿<div class="column gap-16">
-  <form class="row flex-center gap-16" [formGroup]="filterForm" (ngSubmit)="applyFilters()">
-    <div class="row flex-center ">
+  <form
+    class="row flex-center gap-16"
+    [formGroup]="filterForm"
+    (ngSubmit)="applyFilters()"
+  >
+    <div class="row flex-center">
       <label class="label-lg">نوع الإجازة</label>
       <select class="label-lg" formControlName="type">
-        <option *ngFor="let t of holidayTypes" [ngValue]="t.value">{{ t.label }}</option>
+        <option *ngFor="let t of holidayTypes" [ngValue]="t.value">
+          {{ t.label }}
+        </option>
       </select>
     </div>
 
     <div class="row flex-center">
       <label class="label-lg">الحالة</label>
       <select class="label-lg" formControlName="isActive">
-        <option *ngFor="let s of statusOptions" [ngValue]="s.value">{{ s.label }}</option>
+        <option *ngFor="let s of statusOptions" [ngValue]="s.value">
+          {{ s.label }}
+        </option>
       </select>
     </div>
 
@@ -52,10 +60,10 @@
         <td class="body-md">{{ formatDateWithArabicMonth(h.startDate) }}</td>
         <td class="body-md">{{ formatDateWithArabicMonth(h.endDate) }}</td>
         <td class="row gap-16 body-md">
-          <button class="btn primary icon">
+          <button class="btn primary icon" (click)="onEdit(h)">
             <img src="assets/icons/pencil-icon.svg" alt="تعديل" />
           </button>
-          <button class="btn danger icon">
+          <button class="btn danger icon" (click)="onDelete(h)">
             <img src="assets/icons/trash-icon.svg" alt="حذف" />
           </button>
         </td>
