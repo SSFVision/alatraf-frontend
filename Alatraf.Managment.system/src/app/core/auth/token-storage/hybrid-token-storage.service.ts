@@ -6,7 +6,6 @@ import { TOKEN_KEYS } from '../../constants/token-keys.constant';
 @Injectable({ providedIn: 'root' })
 export class HybridTokenStorage implements TokenStorageStrategy {
   private accessToken: string | null = null;
-  private REFRESH_KEY = 'refreshToken';
 
   setTokens(tokens: TokenResponse): void {
     // Store access token in memory
@@ -21,11 +20,11 @@ export class HybridTokenStorage implements TokenStorageStrategy {
   }
 
   getRefreshToken(): string | null {
-    return localStorage.getItem(this.REFRESH_KEY);
+    return localStorage.getItem(TOKEN_KEYS.refresh);
   }
 
   clear(): void {
     this.accessToken = null;
-    localStorage.removeItem(this.REFRESH_KEY);
+    localStorage.removeItem(TOKEN_KEYS.refresh);
   }
 }
