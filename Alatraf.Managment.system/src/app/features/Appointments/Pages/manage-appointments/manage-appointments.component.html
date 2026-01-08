@@ -1,5 +1,4 @@
 <div class="row gap-16">
-
   <div class="box max-width-324 gap-24">
     <div class="row space-between">
       <h2 class="title-md flex-center">قائمة المواعيد</h2>
@@ -11,41 +10,71 @@
     </div>
 
     <div class="search-box">
-      <img src="assets/icons/search-icon.svg" class="search-icon" alt="search" />
-      <input type="text" placeholder="بحث: اسم المريض أو الرقم" #searchBox (input)="onSearch(searchBox.value)" />
+      <img
+        src="assets/icons/search-icon.svg"
+        class="search-icon"
+        alt="search"
+      />
+      <input
+        type="text"
+        placeholder="بحث: اسم المريض أو الرقم"
+        #searchBox
+        (input)="onSearch(searchBox.value)"
+      />
     </div>
 
     <div class="filters-container">
-      <button class="filter-btn" [class.active]="selectedFilter() === undefined" (click)="setFilter(undefined)">
+      <button
+        class="filter-btn"
+        [class.active]="selectedFilter() === undefined"
+        (click)="setFilter(undefined)"
+      >
         الكل
       </button>
-      <button class="filter-btn" [class.active]="selectedFilter() === AppointmentStatus.Scheduled"
-        (click)="setFilter(AppointmentStatus.Scheduled)">
+      <button
+        class="filter-btn"
+        [class.active]="selectedFilter() === AppointmentStatus.Scheduled"
+        (click)="setFilter(AppointmentStatus.Scheduled)"
+      >
         مجدولة
       </button>
-      <button class="filter-btn" [class.active]="selectedFilter() === AppointmentStatus.Today"
-        (click)="setFilter(AppointmentStatus.Today)">
+      <button
+        class="filter-btn"
+        [class.active]="selectedFilter() === AppointmentStatus.Today"
+        (click)="setFilter(AppointmentStatus.Today)"
+      >
         اليوم
       </button>
-      <button class="filter-btn" [class.active]="selectedFilter() === AppointmentStatus.Absent"
-        (click)="setFilter(AppointmentStatus.Absent)">
+      <button
+        class="filter-btn"
+        [class.active]="selectedFilter() === AppointmentStatus.Absent"
+        (click)="setFilter(AppointmentStatus.Absent)"
+      >
         متأخر
       </button>
-      <button class="filter-btn" [class.active]="selectedFilter() === AppointmentStatus.Cancelled"
-        (click)="setFilter(AppointmentStatus.Cancelled)">
+      <button
+        class="filter-btn"
+        [class.active]="selectedFilter() === AppointmentStatus.Cancelled"
+        (click)="setFilter(AppointmentStatus.Cancelled)"
+      >
         ملغي
       </button>
     </div>
-    <app-waiting-appointment-card class="max-hight-712 column gap-16" [appointments]="appointments()"
-      (select)="onSelectAppointment($event)" [loading]="isloading()"></app-waiting-appointment-card>
+    <app-waiting-appointment-card
+      class="max-hight-712 column gap-16"
+      [appointments]="appointments()"
+      (select)="onSelectAppointment($event)"
+      [loading]="isloading()"
+    ></app-waiting-appointment-card>
   </div>
 
   <div class="box gap-16">
-    @if (isButtonVisible){
+    @if (isButtonVisible()){
     <button class="btn primary lable-lg margin-8" (click)="onAddHoliday()">
       إضافة إجازة
-    </button>}
+    </button>
+
+    }
     <router-outlet></router-outlet>
   </div>
-
 </div>

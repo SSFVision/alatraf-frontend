@@ -43,7 +43,14 @@ export class AppointmentsNavigationFacade {
   }
   goToAddNewHolidayPage(extras?: NavigationExtras): void {
     this.go(
-      `${AppRoutes.Appointment.root}/${AppRoutes.Appointment.manage}/${AppRoutes.Appointment.addHoliday}`,
+      `${AppRoutes.Appointment.root}/${AppRoutes.Appointment.manage}/${AppRoutes.Appointment.holidays.add}`,
+      extras
+    );
+  }
+
+  goToHolidayListPage(extras?: NavigationExtras): void {
+    this.go(
+      `${AppRoutes.Appointment.root}/${AppRoutes.Appointment.manage}/${AppRoutes.Appointment.holidays.list}`,
       extras
     );
   }
