@@ -1,23 +1,172 @@
 <div>
   <p class="title-md">بيانات الإجازة</p>
-
   <span class="home-line"></span>
 </div>
 
-<form class="padding-LR-24 column gap-16">
+<form
+  class="padding-LR-24 column gap-16"
+  [formGroup]="form"
+  (ngSubmit)="onSubmit()"
+>
   <div class="row flex-center">
-    <label class="label-lg"> عدد الأيام </label>
-    <input class="label-lg" type="text" placeholder="" />
+    <label class="label-lg">الاسم</label>
+    <input
+      class="label-lg"
+      type="text"
+      formControlName="name"
+      placeholder="اسم الإجازة"
+      (blur)="getControl('name')?.markAsTouched()"
+    />
+
+    <!-- Backend Validation -->
+    <div class="error-message label-lg" *ngIf="hasBackendError('name')">
+      {{ getBackendError("name") }}
+    </div>
+
+    <!-- Frontend Validation -->
+    <div *ngIf="hasFrontendError('name')" class="error-message label-lg">
+      <span *ngIf="getControl('name')?.hasError('required')">الاسم مطلوب</span>
+      <span *ngIf="getControl('name')?.hasError('maxlength')"
+        >الاسم يجب ألا يتجاوز 100 حرف</span
+      >
+    </div>
+  </div>
+
+  <!-- Temporary holiday: full dates -->
+  <div
+    class="row flex-center"
+    *ngIf="form.value.type === HolidayType.Temporary"
+  >
+    <label class="label-lg">تاريخ الإجازة: من</label>
+    <input
+      class="label-lg"
+      type="date"
+      formControlName="startDate"
+      [attr.min]="today"
+    />
+    <label class="label-lg">إلى</label>
+    <input
+      class="label-lg"
+      type="date"
+      formControlName="endDate"
+      [attr.min]="today"
+    />
+  </div>
+  <!-- Fixed holiday: month/day only -->
+  <div class="row flex-center" *ngIf="form.value.type === HolidayType.Fixed">
+    <label class="label-lg">الشهر</label>
+    <select class="label-lg" formControlName="fixedMonth">
+      <option *ngFor="let m of months" [value]="m.value">{{ m.label }}</option>
+    </select>
+    <label class="label-lg">اليوم</label>
+    <input
+      appPositiveNumber
+      class="label-lg"
+      type="number"
+      formControlName="fixedDay"
+      [attr.min]="1"
+      [attr.max]="maxDayForMonth(form.value.fixedMonth || 1)"
+    />
+  </div>
+  <!-- Backend Validation (temporary only) -->
+  <div
+    class="error-message label-lg"
+    *ngIf="
+      hasBackendError('startDate') && form.value.type === HolidayType.Temporary
+    "
+  >
+    {{ getBackendError("startDate") }}
+  </div>
+  <!-- Frontend Validation (temporary only) -->
+  <div
+    *ngIf="
+      hasFrontendError('startDate') && form.value.type === HolidayType.Temporary
+    "
+    class="error-message label-lg"
+  >
+    <span *ngIf="getControl('startDate')?.hasError('required')"
+      >تاريخ البداية مطلوب</span
+    >
+    <span *ngIf="getControl('startDate')?.hasError('pastDate')"
+      >تاريخ البداية لا يمكن أن يكون في الماضي</span
+    >
+  </div>
+  <div
+    class="error-message label-lg"
+    *ngIf="
+      hasBackendError('endDate') && form.value.type === HolidayType.Temporary
+    "
+  >
+    {{ getBackendError("endDate") }}
+  </div>
+  <div
+    *ngIf="
+      hasFrontendError('endDate') && form.value.type === HolidayType.Temporary
+    "
+    class="error-message label-lg"
+  >
+    <span *ngIf="getControl('endDate')?.hasError('beforeStart')"
+      >تاريخ النهاية يجب ألا يسبق تاريخ البداية</span
+    >
+  </div>
+  <!-- Fixed validation messages -->
+  <div
+    *ngIf="form.value.type === HolidayType.Fixed"
+    class="error-message label-lg"
+  >
+    <span *ngIf="getControl('fixedMonth')?.hasError('required')"
+      >اختيار الشهر مطلوب</span
+    >
+    <span *ngIf="getControl('fixedDay')?.hasError('required')"
+      >اختيار اليوم مطلوب</span
+    >
   </div>
 
   <div class="row flex-center">
-    <label class="label-lg"> تاريخ الإجازة : من </label>
-    <input class="label-lg" type="number" placeholder="" />
-    <label class="label-lg"> إلى </label>
-    <input class="label-lg" type="number" placeholder="" />
+    <label class="label-lg">عدد الأيام</label>
+    <input class="label-lg" type="text" [value]="daysCount ?? ''" readonly />
+
+    <label class="label-lg">نوع الإجازة</label>
+    <select class="label-lg" formControlName="type">
+      <option *ngFor="let t of holidayTypes" [value]="t.value">
+        {{ t.label }}
+      </option>
+    </select>
+
+    <!-- Backend Validation -->
+    <div class="error-message label-lg" *ngIf="hasBackendError('type')">
+      {{ getBackendError("type") }}
+    </div>
+    <!-- Frontend Validation -->
+    <div *ngIf="hasFrontendError('type')" class="error-message label-lg">
+      <span *ngIf="getControl('type')?.hasError('required')"
+        >نوع الإجازة مطلوب</span
+      >
+    </div>
   </div>
+
+  <!-- <div class="row flex-center gap-8">
+    <label class="label-lg" for="isRecurring">هل الإجازة متكررة؟</label>
+    <input
+      id="isRecurring"
+      type="checkbox"
+      class="checkbox-sm"
+      formControlName="isRecurring"
+    />
+    <span
+      class="label-sm primary-color-50"
+      *ngIf="form.value.type === HolidayType.Fixed"
+      >(ثابتة دائماً)</span
+    >
+  </div> -->
 
   <div class="row gap-32 flex-center">
-    <button class="btn primary label-md">حفظ التعديلات</button>
+    <button
+      class="btn primary label-md"
+      type="submit"
+      [disabled]="form.invalid || isSubmitting"
+    >
+      حفظ الإجازة
+    </button>
   </div>
 </form>

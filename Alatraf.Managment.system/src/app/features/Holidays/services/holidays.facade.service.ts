@@ -118,7 +118,7 @@ export class HolidaysFacade extends BaseFacade {
       tap((res) => {
         if (res.success && res.data) {
           this.formValidationErrors.set({});
-          this.loadHolidays();
+          // this.loadHolidays();
         } else if (res.validationErrors) {
           this.formValidationErrors.set(res.validationErrors);
         }
@@ -134,7 +134,7 @@ export class HolidaysFacade extends BaseFacade {
       tap((res) => {
         if (res.success) {
           this.formValidationErrors.set({});
-          this.updateHolidayInList(id, dto);
+          // this.updateHolidayInList(id, dto);
         } else if (res.validationErrors) {
           this.formValidationErrors.set(res.validationErrors);
         }
