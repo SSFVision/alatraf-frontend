@@ -1,31 +1,28 @@
 import { Injectable } from '@angular/core';
 import { TokenResponse } from '../models/token-response.model';
 import { TokenStorageStrategy } from './token-storage-strategy';
+import { TOKEN_KEYS } from '../../constants/token-keys.constant';
 
 @Injectable({ providedIn: 'root' })
 export class LocalTokenStorage implements TokenStorageStrategy {
 
-  private ACCESS_KEY = 'accessToken';
-  private REFRESH_KEY = 'refreshToken';
-  private EXPIRATION_KEY = 'expiration';
-
   setTokens(tokens: TokenResponse): void {
-    localStorage.setItem(this.ACCESS_KEY, tokens.accessToken);
-    localStorage.setItem(this.REFRESH_KEY, tokens.refreshToken);
-    localStorage.setItem(this.EXPIRATION_KEY, tokens.expiresOnUtc);
+    localStorage.setItem(TOKEN_KEYS.access, tokens.accessToken);
+    localStorage.setItem(TOKEN_KEYS.refresh, tokens.refreshToken);
+    localStorage.setItem(TOKEN_KEYS.expiration, tokens.expiresOnUtc);
   }
 
   getAccessToken(): string | null {
-    return localStorage.getItem(this.ACCESS_KEY);
+    return localStorage.getItem(TOKEN_KEYS.access);
   }
 
   getRefreshToken(): string | null {
-    return localStorage.getItem(this.REFRESH_KEY);
+    return localStorage.getItem(TOKEN_KEYS.refresh);
   }
 
   clear(): void {
-    localStorage.removeItem(this.ACCESS_KEY);
-    localStorage.removeItem(this.REFRESH_KEY);
-    localStorage.removeItem(this.EXPIRATION_KEY);
+    localStorage.removeItem(TOKEN_KEYS.access);
+    localStorage.removeItem(TOKEN_KEYS.refresh);
+    localStorage.removeItem(TOKEN_KEYS.expiration);
   }
 }
