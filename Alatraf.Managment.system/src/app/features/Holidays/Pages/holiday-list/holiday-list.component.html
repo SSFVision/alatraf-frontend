@@ -1,393 +1,65 @@
-    
+﻿<div class="column gap-16">
+  <form class="row flex-center gap-16" [formGroup]="filterForm" (ngSubmit)="applyFilters()">
+    <div class="row flex-center ">
+      <label class="label-lg">نوع الإجازة</label>
+      <select class="label-lg" formControlName="type">
+        <option *ngFor="let t of holidayTypes" [ngValue]="t.value">{{ t.label }}</option>
+      </select>
+    </div>
 
-      <table>
-        <thead>
-          <tr>
-            <th class="label-lg">الإجازة</th>
-            <th class="label-lg">المدة</th>
-            <th class="label-lg">تاريخ البداية</th>
-            <th class="label-lg">تاريخ النهاية</th>
-            <th class="label-lg">تبدأ بعد</th>
-            <th class="buttons"></th>
-          </tr>
-        </thead>
+    <div class="row flex-center">
+      <label class="label-lg">الحالة</label>
+      <select class="label-lg" formControlName="isActive">
+        <option *ngFor="let s of statusOptions" [ngValue]="s.value">{{ s.label }}</option>
+      </select>
+    </div>
 
-        <tbody>
-          <tr>
-            <td class="body-md">ثورة 26 سبتمبر</td>
-            <td class="body-md">يوم واحد</td>
-            <td class="body-md">2025-09-26</td>
-            <td class="body-md">2025-09-26</td>
-            <td class="body-md">من الآن: 8 أشهر (مثال)</td>
-            <td class="row gap-16 body-md">
-              <button class="btn primary icon">
-                <img src="assets/icons/pencil-icon.svg" alt="تعديل" />
-              </button>
-              <button class="btn danger icon">
-                <img src="assets/icons/trash-icon.svg" alt="حذف" />
-              </button>
-            </td>
-          </tr>
+    <!-- <div class="row flex-center gap-8">
+      <label class="label-lg">تاريخ البداية</label>
+      <input class="label-lg" type="date" formControlName="specificDate" />
+    </div>
 
-          <tr>
-            <td class="body-md">عيد الأضحى</td>
-            <td class="body-md">4 أيام</td>
-            <td class="body-md">2025-06-06</td>
-            <td class="body-md">2025-06-09</td>
-            <td class="body-md">من الآن: 4 أشهر (مثال)</td>
-            <td class="row gap-16 body-md">
-              <button class="btn primary icon">
-                <img src="../../assets/icons/pencil-icon.svg" alt="تعديل" />
-              </button>
-              <button class="btn danger icon">
-                <img src="../../assets/icons/trash-icon.svg" alt="حذف" />
-              </button>
-            </td>
-          </tr>
-             <tr>
-            <td class="body-md">ثورة 26 سبتمبر</td>
-            <td class="body-md">يوم واحد</td>
-            <td class="body-md">2025-09-26</td>
-            <td class="body-md">2025-09-26</td>
-            <td class="body-md">من الآن: 8 أشهر (مثال)</td>
-            <td class="row gap-16 body-md">
-              <button class="btn primary icon">
-                <img src="assets/icons/pencil-icon.svg" alt="تعديل" />
-              </button>
-              <button class="btn danger icon">
-                <img src="assets/icons/trash-icon.svg" alt="حذف" />
-              </button>
-            </td>
-          </tr>
+    <div class="row flex-center gap-8">
+      <label class="label-lg">تاريخ النهاية</label>
+      <input class="label-lg" type="date" formControlName="endDate" />
+    </div> -->
 
-          <tr>
-            <td class="body-md">عيد الأضحى</td>
-            <td class="body-md">4 أيام</td>
-            <td class="body-md">2025-06-06</td>
-            <td class="body-md">2025-06-09</td>
-            <td class="body-md">من الآن: 4 أشهر (مثال)</td>
-            <td class="row gap-16 body-md">
-              <button class="btn primary icon">
-                <img src="../../assets/icons/pencil-icon.svg" alt="تعديل" />
-              </button>
-              <button class="btn danger icon">
-                <img src="../../assets/icons/trash-icon.svg" alt="حذف" />
-              </button>
-            </td>
-          </tr>
-             <tr>
-            <td class="body-md">ثورة 26 سبتمبر</td>
-            <td class="body-md">يوم واحد</td>
-            <td class="body-md">2025-09-26</td>
-            <td class="body-md">2025-09-26</td>
-            <td class="body-md">من الآن: 8 أشهر (مثال)</td>
-            <td class="row gap-16 body-md">
-              <button class="btn primary icon">
-                <img src="assets/icons/pencil-icon.svg" alt="تعديل" />
-              </button>
-              <button class="btn danger icon">
-                <img src="assets/icons/trash-icon.svg" alt="حذف" />
-              </button>
-            </td>
-          </tr>
+    <div class="row gap-8">
+      <button class="btn primary label-md" type="submit">تطبيق</button>
+      <!-- <button class="btn secondary label-md" type="button" (click)="resetFilters()">مسح</button> -->
+    </div>
+  </form>
 
-          <tr>
-            <td class="body-md">عيد الأضحى</td>
-            <td class="body-md">4 أيام</td>
-            <td class="body-md">2025-06-06</td>
-            <td class="body-md">2025-06-09</td>
-            <td class="body-md">من الآن: 4 أشهر (مثال)</td>
-            <td class="row gap-16 body-md">
-              <button class="btn primary icon">
-                <img src="../../assets/icons/pencil-icon.svg" alt="تعديل" />
-              </button>
-              <button class="btn danger icon">
-                <img src="../../assets/icons/trash-icon.svg" alt="حذف" />
-              </button>
-            </td>
-          </tr>
-             <tr>
-            <td class="body-md">ثورة 26 سبتمبر</td>
-            <td class="body-md">يوم واحد</td>
-            <td class="body-md">2025-09-26</td>
-            <td class="body-md">2025-09-26</td>
-            <td class="body-md">من الآن: 8 أشهر (مثال)</td>
-            <td class="row gap-16 body-md">
-              <button class="btn primary icon">
-                <img src="assets/icons/pencil-icon.svg" alt="تعديل" />
-              </button>
-              <button class="btn danger icon">
-                <img src="assets/icons/trash-icon.svg" alt="حذف" />
-              </button>
-            </td>
-          </tr>
+  <table>
+    <thead>
+      <tr>
+        <th class="label-lg">اسم الإجازة</th>
+        <th class="label-lg">المدة</th>
+        <th class="label-lg">تاريخ البداية</th>
+        <th class="label-lg">تاريخ النهاية</th>
+        <th class="buttons"></th>
+      </tr>
+    </thead>
 
-          <tr>
-            <td class="body-md">عيد الأضحى</td>
-            <td class="body-md">4 أيام</td>
-            <td class="body-md">2025-06-06</td>
-            <td class="body-md">2025-06-09</td>
-            <td class="body-md">من الآن: 4 أشهر (مثال)</td>
-            <td class="row gap-16 body-md">
-              <button class="btn primary icon">
-                <img src="../../assets/icons/pencil-icon.svg" alt="تعديل" />
-              </button>
-              <button class="btn danger icon">
-                <img src="../../assets/icons/trash-icon.svg" alt="حذف" />
-              </button>
-            </td>
-          </tr>
-             <tr>
-            <td class="body-md">ثورة 26 سبتمبر</td>
-            <td class="body-md">يوم واحد</td>
-            <td class="body-md">2025-09-26</td>
-            <td class="body-md">2025-09-26</td>
-            <td class="body-md">من الآن: 8 أشهر (مثال)</td>
-            <td class="row gap-16 body-md">
-              <button class="btn primary icon">
-                <img src="assets/icons/pencil-icon.svg" alt="تعديل" />
-              </button>
-              <button class="btn danger icon">
-                <img src="assets/icons/trash-icon.svg" alt="حذف" />
-              </button>
-            </td>
-          </tr>
+    <tbody>
+      <tr *ngIf="holidays().length === 0">
+        <td class="body-md" colspan="6">لا توجد إجازات</td>
+      </tr>
 
-          <tr>
-            <td class="body-md">عيد الأضحى</td>
-            <td class="body-md">4 أيام</td>
-            <td class="body-md">2025-06-06</td>
-            <td class="body-md">2025-06-09</td>
-            <td class="body-md">من الآن: 4 أشهر (مثال)</td>
-            <td class="row gap-16 body-md">
-              <button class="btn primary icon">
-                <img src="../../assets/icons/pencil-icon.svg" alt="تعديل" />
-              </button>
-              <button class="btn danger icon">
-                <img src="../../assets/icons/trash-icon.svg" alt="حذف" />
-              </button>
-            </td>
-          </tr>
-             <tr>
-            <td class="body-md">ثورة 26 سبتمبر</td>
-            <td class="body-md">يوم واحد</td>
-            <td class="body-md">2025-09-26</td>
-            <td class="body-md">2025-09-26</td>
-            <td class="body-md">من الآن: 8 أشهر (مثال)</td>
-            <td class="row gap-16 body-md">
-              <button class="btn primary icon">
-                <img src="assets/icons/pencil-icon.svg" alt="تعديل" />
-              </button>
-              <button class="btn danger icon">
-                <img src="assets/icons/trash-icon.svg" alt="حذف" />
-              </button>
-            </td>
-          </tr>
-
-          <tr>
-            <td class="body-md">عيد الأضحى</td>
-            <td class="body-md">4 أيام</td>
-            <td class="body-md">2025-06-06</td>
-            <td class="body-md">2025-06-09</td>
-            <td class="body-md">من الآن: 4 أشهر (مثال)</td>
-            <td class="row gap-16 body-md">
-              <button class="btn primary icon">
-                <img src="../../assets/icons/pencil-icon.svg" alt="تعديل" />
-              </button>
-              <button class="btn danger icon">
-                <img src="../../assets/icons/trash-icon.svg" alt="حذف" />
-              </button>
-            </td>
-          </tr>
-             <tr>
-            <td class="body-md">ثورة 26 سبتمبر</td>
-            <td class="body-md">يوم واحد</td>
-            <td class="body-md">2025-09-26</td>
-            <td class="body-md">2025-09-26</td>
-            <td class="body-md">من الآن: 8 أشهر (مثال)</td>
-            <td class="row gap-16 body-md">
-              <button class="btn primary icon">
-                <img src="assets/icons/pencil-icon.svg" alt="تعديل" />
-              </button>
-              <button class="btn danger icon">
-                <img src="assets/icons/trash-icon.svg" alt="حذف" />
-              </button>
-            </td>
-          </tr>
-
-          <tr>
-            <td class="body-md">عيد الأضحى</td>
-            <td class="body-md">4 أيام</td>
-            <td class="body-md">2025-06-06</td>
-            <td class="body-md">2025-06-09</td>
-            <td class="body-md">من الآن: 4 أشهر (مثال)</td>
-            <td class="row gap-16 body-md">
-              <button class="btn primary icon">
-                <img src="../../assets/icons/pencil-icon.svg" alt="تعديل" />
-              </button>
-              <button class="btn danger icon">
-                <img src="../../assets/icons/trash-icon.svg" alt="حذف" />
-              </button>
-            </td>
-          </tr>
-             <tr>
-            <td class="body-md">ثورة 26 سبتمبر</td>
-            <td class="body-md">يوم واحد</td>
-            <td class="body-md">2025-09-26</td>
-            <td class="body-md">2025-09-26</td>
-            <td class="body-md">من الآن: 8 أشهر (مثال)</td>
-            <td class="row gap-16 body-md">
-              <button class="btn primary icon">
-                <img src="assets/icons/pencil-icon.svg" alt="تعديل" />
-              </button>
-              <button class="btn danger icon">
-                <img src="assets/icons/trash-icon.svg" alt="حذف" />
-              </button>
-            </td>
-          </tr>
-
-          <tr>
-            <td class="body-md">عيد الأضحى</td>
-            <td class="body-md">4 أيام</td>
-            <td class="body-md">2025-06-06</td>
-            <td class="body-md">2025-06-09</td>
-            <td class="body-md">من الآن: 4 أشهر (مثال)</td>
-            <td class="row gap-16 body-md">
-              <button class="btn primary icon">
-                <img src="../../assets/icons/pencil-icon.svg" alt="تعديل" />
-              </button>
-              <button class="btn danger icon">
-                <img src="../../assets/icons/trash-icon.svg" alt="حذف" />
-              </button>
-            </td>
-          </tr>
-             <tr>
-            <td class="body-md">ثورة 26 سبتمبر</td>
-            <td class="body-md">يوم واحد</td>
-            <td class="body-md">2025-09-26</td>
-            <td class="body-md">2025-09-26</td>
-            <td class="body-md">من الآن: 8 أشهر (مثال)</td>
-            <td class="row gap-16 body-md">
-              <button class="btn primary icon">
-                <img src="assets/icons/pencil-icon.svg" alt="تعديل" />
-              </button>
-              <button class="btn danger icon">
-                <img src="assets/icons/trash-icon.svg" alt="حذف" />
-              </button>
-            </td>
-          </tr>
-
-          <tr>
-            <td class="body-md">عيد الأضحى</td>
-            <td class="body-md">4 أيام</td>
-            <td class="body-md">2025-06-06</td>
-            <td class="body-md">2025-06-09</td>
-            <td class="body-md">من الآن: 4 أشهر (مثال)</td>
-            <td class="row gap-16 body-md">
-              <button class="btn primary icon">
-                <img src="../../assets/icons/pencil-icon.svg" alt="تعديل" />
-              </button>
-              <button class="btn danger icon">
-                <img src="../../assets/icons/trash-icon.svg" alt="حذف" />
-              </button>
-            </td>
-          </tr>
-             <tr>
-            <td class="body-md">ثورة 26 سبتمبر</td>
-            <td class="body-md">يوم واحد</td>
-            <td class="body-md">2025-09-26</td>
-            <td class="body-md">2025-09-26</td>
-            <td class="body-md">من الآن: 8 أشهر (مثال)</td>
-            <td class="row gap-16 body-md">
-              <button class="btn primary icon">
-                <img src="assets/icons/pencil-icon.svg" alt="تعديل" />
-              </button>
-              <button class="btn danger icon">
-                <img src="assets/icons/trash-icon.svg" alt="حذف" />
-              </button>
-            </td>
-          </tr>
-
-          <tr>
-            <td class="body-md">عيد الأضحى</td>
-            <td class="body-md">4 أيام</td>
-            <td class="body-md">2025-06-06</td>
-            <td class="body-md">2025-06-09</td>
-            <td class="body-md">من الآن: 4 أشهر (مثال)</td>
-            <td class="row gap-16 body-md">
-              <button class="btn primary icon">
-                <img src="../../assets/icons/pencil-icon.svg" alt="تعديل" />
-              </button>
-              <button class="btn danger icon">
-                <img src="../../assets/icons/trash-icon.svg" alt="حذف" />
-              </button>
-            </td>
-          </tr>
-             <tr>
-            <td class="body-md">ثورة 26 سبتمبر</td>
-            <td class="body-md">يوم واحد</td>
-            <td class="body-md">2025-09-26</td>
-            <td class="body-md">2025-09-26</td>
-            <td class="body-md">من الآن: 8 أشهر (مثال)</td>
-            <td class="row gap-16 body-md">
-              <button class="btn primary icon">
-                <img src="assets/icons/pencil-icon.svg" alt="تعديل" />
-              </button>
-              <button class="btn danger icon">
-                <img src="assets/icons/trash-icon.svg" alt="حذف" />
-              </button>
-            </td>
-          </tr>
-
-          <tr>
-            <td class="body-md">عيد الأضحى</td>
-            <td class="body-md">4 أيام</td>
-            <td class="body-md">2025-06-06</td>
-            <td class="body-md">2025-06-09</td>
-            <td class="body-md">من الآن: 4 أشهر (مثال)</td>
-            <td class="row gap-16 body-md">
-              <button class="btn primary icon">
-                <img src="../../assets/icons/pencil-icon.svg" alt="تعديل" />
-              </button>
-              <button class="btn danger icon">
-                <img src="../../assets/icons/trash-icon.svg" alt="حذف" />
-              </button>
-            </td>
-          </tr>
-             <tr>
-            <td class="body-md">ثورة 26 سبتمبر</td>
-            <td class="body-md">يوم واحد</td>
-            <td class="body-md">2025-09-26</td>
-            <td class="body-md">2025-09-26</td>
-            <td class="body-md">من الآن: 8 أشهر (مثال)</td>
-            <td class="row gap-16 body-md">
-              <button class="btn primary icon">
-                <img src="assets/icons/pencil-icon.svg" alt="تعديل" />
-              </button>
-              <button class="btn danger icon">
-                <img src="assets/icons/trash-icon.svg" alt="حذف" />
-              </button>
-            </td>
-          </tr>
-
-          <tr>
-            <td class="body-md">عيد الأضحى</td>
-            <td class="body-md">4 أيام</td>
-            <td class="body-md">2025-06-06</td>
-            <td class="body-md">2025-06-09</td>
-            <td class="body-md">من الآن: 4 أشهر (مثال)</td>
-            <td class="row gap-16 body-md">
-              <button class="btn primary icon">
-                <img src="../../assets/icons/pencil-icon.svg" alt="تعديل" />
-              </button>
-              <button class="btn danger icon">
-                <img src="../../assets/icons/trash-icon.svg" alt="حذف" />
-              </button>
-            </td>
-          </tr>
-          
-        </tbody>
-      </table>
-
-
-
+      <tr *ngFor="let h of holidays()">
+        <td class="body-md">{{ h.name }}</td>
+        <td class="body-md">{{ durationDays(h) }} يوم</td>
+        <td class="body-md">{{ formatDateWithArabicMonth(h.startDate) }}</td>
+        <td class="body-md">{{ formatDateWithArabicMonth(h.endDate) }}</td>
+        <td class="row gap-16 body-md">
+          <button class="btn primary icon">
+            <img src="assets/icons/pencil-icon.svg" alt="تعديل" />
+          </button>
+          <button class="btn danger icon">
+            <img src="assets/icons/trash-icon.svg" alt="حذف" />
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
