@@ -33,6 +33,21 @@ export const MENU_CONFIG: MenuCategory[] = [
         route: AppRoutes.doctors.root,
         requiredPermissions: [PERMISSIONS.PATIENTS.ADD],
       },
+        {
+        label: ' إدارة الاقسام ',
+        icon: 'assets/icons/grid-fill-w.svg',
+        activeIcon: 'assets/icons/grid-fill-b.svg',
+        route: `${AppRoutes.sections.root}`,
+        requiredPermissions: [PERMISSIONS.MedicalPrograms.VIEW],
+      },
+        {
+        label: 'البرامج العلاجية ',
+        icon: 'assets/icons/dumbbell-w.svg',
+        activeIcon: 'assets/icons/dumbbell-b.svg',
+        route: `${AppRoutes.medicalPrograms.root}`,
+        requiredPermissions: [PERMISSIONS.MedicalPrograms.VIEW],
+      },
+    
     ],
   },
 
@@ -74,20 +89,7 @@ export const MENU_CONFIG: MenuCategory[] = [
         route: `${AppRoutes.therapyCards.root}`,
         requiredPermissions: [PERMISSIONS.THERAPY_CARDS.VIEW],
       },
-      {
-        label: 'البرامج العلاجية ',
-        icon: 'assets/icons/dumbbell-w.svg',
-        activeIcon: 'assets/icons/dumbbell-b.svg',
-        route: `${AppRoutes.medicalPrograms.root}`,
-        requiredPermissions: [PERMISSIONS.MedicalPrograms.VIEW],
-      },
-      {
-        label: ' إدارة الاقسام ',
-        icon: 'assets/icons/grid-fill-w.svg',
-        activeIcon: 'assets/icons/grid-fill-b.svg',
-        route: `${AppRoutes.sections.root}`,
-        requiredPermissions: [PERMISSIONS.MedicalPrograms.VIEW],
-      },
+    
     ],
   },
 

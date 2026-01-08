@@ -1,0 +1,10 @@
+.checkbox-row {
+  align-items: center;
+}
+
+.checkbox-sm {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--primary-color, #2c6bed);
+  margin: 0;
+}

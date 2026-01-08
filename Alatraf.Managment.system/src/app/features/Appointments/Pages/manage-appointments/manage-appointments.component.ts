@@ -20,10 +20,10 @@ export class ManageAppointmentsComponent {
   totalCount = this.appointmentFacade.totalCount;
   private nav = inject(AppointmentsNavigationFacade);
 
-  isButtonVisible = true;
+  isButtonVisible=signal(true);
 
   ngOnInit() {
-    // default load (all)
+    // this.isButtonVisible.set(true);
     this.appointmentFacade.updateFilters({ status: undefined });
   }
 
@@ -45,7 +45,7 @@ export class ManageAppointmentsComponent {
   }
 
   onSelectAppointment(appointment: any) {
-
+    // this.isButtonVisible.set(true);
     this.nav.goToChangeAppointmentStatus(appointment.id);
   }
 
@@ -57,7 +57,7 @@ export class ManageAppointmentsComponent {
   //   //   .subscribe();
   // }
   onAddHoliday() {
-    this.isButtonVisible = false;
+    this.isButtonVisible.set(false);
     this.nav.goToAddNewHolidayPage();
   }
 }

@@ -60,13 +60,11 @@ export const AppointmentRoutes: Routes = [
           ).then((m) => m.ChangeAppointmentStatusComponent),
       },
       {
-        path: 'new/holiday',
+        path: 'holiday',
         canActivate: [PermissionGuard],
         data: { permission: PERMISSIONS.Appointment.AddHoliday },
-        loadComponent: () =>
-          import('./Pages/add-new-holiday/add-new-holiday.component').then(
-            (m) => m.AddNewHolidayComponent
-          ),
+        loadChildren: () =>
+          import('../Holidays/holidays.routes').then((m) => m.HolidaysRoutes),
       },
     ],
   },

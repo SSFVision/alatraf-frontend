@@ -35,10 +35,8 @@ export const ManageAppointmentRoutes: Routes = [
         path: 'new/holiday',
         canActivate: [PermissionGuard],
         data: { permission: PERMISSIONS.Appointment.AddHoliday },
-        loadComponent: () =>
-          import('./Pages/add-new-holiday/add-new-holiday.component').then(
-            (m) => m.AddNewHolidayComponent
-          ),
+        loadChildren: () =>
+          import('../Holidays/holidays.routes').then((m) => m.HolidaysRoutes),
       },
     ],
   },
