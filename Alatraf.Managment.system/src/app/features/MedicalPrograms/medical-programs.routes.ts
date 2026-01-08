@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { PERMISSIONS } from '../../core/auth/models/permissions.map';
+import { PERMISSIONS } from '../../core/auth/Roles/permissions.map';
 import { PermissionGuard } from '../../core/guards/permission.guard';
 
 export const MedicalProgramsRoutes: Routes = [
@@ -22,7 +22,7 @@ export const MedicalProgramsRoutes: Routes = [
             './Pages/medical-programs-work-space/medical-programs-work-space.component'
           ).then((m) => m.MedicalProgramsWorkSpaceComponent),
       },
-       {
+      {
         path: 'create',
         canActivate: [PermissionGuard],
         data: { permission: PERMISSIONS.MedicalPrograms.CREATE },
@@ -31,7 +31,6 @@ export const MedicalProgramsRoutes: Routes = [
             './Pages/medical-programs-work-space/medical-programs-work-space.component'
           ).then((m) => m.MedicalProgramsWorkSpaceComponent),
       },
-       
     ],
   },
 

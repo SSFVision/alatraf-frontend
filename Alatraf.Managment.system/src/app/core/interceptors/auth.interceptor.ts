@@ -1,11 +1,11 @@
-import { HttpInterceptorFn, HttpErrorResponse } from "@angular/common/http";
-import { inject } from "@angular/core";
-import { catchError, throwError, switchMap } from "rxjs";
-import { AuthService } from "../auth/auth.service";
-import { RefreshTokenRequest } from "../auth/models/refresh-token-request.model";
-import { SessionStore } from "../auth/session.store";
-import { TokenStorageFacade } from "../auth/token-storage/token-storage.facade";
-import { NavigationAuthFacade } from "../navigation/navigation-auth.facade";
+import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { catchError, throwError, switchMap } from 'rxjs';
+import { AuthService } from '../auth/auth.service';
+import { RefreshTokenRequest } from '../auth/models/refresh-token-request.model';
+import { SessionStore } from '../auth/session.store';
+import { TokenStorageFacade } from '../auth/token-storage/token-storage.facade';
+import { NavigationAuthFacade } from '../navigation/navigation-auth.facade';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const tokenStorage = inject(TokenStorageFacade);
@@ -27,18 +27,19 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   if (accessToken) {
     authReq = req.clone({
       setHeaders: {
-        Authorization: `${sessionStore.session().tokenType ?? 'Bearer'} ${accessToken}`
-      }
+        Authorization: `${
+          sessionStore.session().tokenType ?? 'Bearer'
+        } ${accessToken}`,
+      },
     });
   }
 
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
       if (error.status === 401 || error.status === 403) {
-      console.log("401 anuthentication");
+        console.log('401 anuthentication');
 
         const refreshToken = tokenStorage.getRefreshToken();
-console.log("this the refresh tocken ",refreshToken);
         if (!refreshToken || !accessToken) {
           sessionStore.clear();
           tokenStorage.clear();
@@ -48,18 +49,19 @@ console.log("this the refresh tocken ",refreshToken);
 
         const body: RefreshTokenRequest = {
           refreshToken,
-          expiredAccessToken: accessToken
+          expiredAccessToken: accessToken,
         };
-
+        console.log(' refreshing token request body ', body);
         return authService.refreshToken(body).pipe(
           switchMap((newTokens) => {
+            console.log(" new tokens after refresh ", newTokens);
             tokenStorage.setTokens(newTokens);
             sessionStore.setTokens(newTokens);
 
             const retryReq = authReq.clone({
               setHeaders: {
-                Authorization: `${newTokens.tokenType} ${newTokens.accessToken}`
-              }
+                Authorization: `Bearer ${newTokens.accessToken}`,
+              },
             });
 
             return next(retryReq);

@@ -11,7 +11,7 @@ import { UpdateTherapyCardRequest } from '../Models/update-therapy-card.request'
   providedIn: 'root',
 })
 export class TherapyDiagnosisService extends BaseApiService {
-  private readonly endpoint = 'http://localhost:2003/api/v1/therapy-cards';
+  private readonly endpoint = 'therapy-cards';
 
   getTherapyCardById(
     therapyCardId: number

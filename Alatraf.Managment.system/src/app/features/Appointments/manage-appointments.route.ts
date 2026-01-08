@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { PERMISSIONS } from '../../core/auth/models/permissions.map';
+import { PERMISSIONS } from '../../core/auth/Roles/permissions.map';
 import { PermissionGuard } from '../../core/guards/permission.guard';
 import { WorkspaceWelcomeComponent } from '../../shared/components/workspace-welcome/workspace-welcome.component';
 
@@ -30,7 +30,7 @@ export const ManageAppointmentRoutes: Routes = [
             './Pages/change-appointment-status/change-appointment-status.component'
           ).then((m) => m.ChangeAppointmentStatusComponent),
       },
-      
+
       {
         path: 'new/holiday',
         canActivate: [PermissionGuard],

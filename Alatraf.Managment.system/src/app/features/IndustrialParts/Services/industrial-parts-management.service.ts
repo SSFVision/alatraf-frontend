@@ -19,7 +19,7 @@ export class IndustrialPartsManagementService extends BaseApiService {
   constructor(http: HttpClient, private cache: CacheService) {
     super(http);
   }
-  private industrialPartsUrl = 'http://localhost:2003/api/v1/industrial-parts';
+  private industrialPartsUrl = 'industrial-parts';
 
   getIndustrialPartsWithFilters(
     filters: IndustrialPartFilterRequest,

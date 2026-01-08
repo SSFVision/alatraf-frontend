@@ -1,14 +1,7 @@
 import { HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-
-// Login models
-import { GenerateTokenRequest } from '../Models/Login/generate-token.request';
-import { RefreshTokenRequest } from '../Models/Login/refresh-token.request';
-import { TokenResponse } from '../Models/Login/token-response.model';
-import { UserDetailsDto } from '../Models/Login/user-details.dto';
-
-// User management models
+import { UserDetailsDto } from '../../../core/auth/models/user-details.dto.';
 import { ApiResult } from '../../../core/models/ApiResult';
 import { BaseApiService } from '../../../core/services/base-api.service';
 import { ActivateUserRequest } from '../Models/activate-user.request';
@@ -23,33 +16,12 @@ import { RemoveRolesRequest } from '../Models/remove-roles.request';
 import { ResetPasswordRequest } from '../Models/reset-password.request';
 import { RoleDetailsDto } from '../Models/Roles/role-details.dto';
 import { UserListItemDto } from '../Models/Users/user-list-item.dto';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class IdentityService extends BaseApiService {
-  private readonly endpoint = 'http://localhost:2003/api/v1/identity';
+  private readonly endpoint = environment.identityBaseUrl;
 
-  // Tokens
-  generateToken(
-    dto: GenerateTokenRequest
-  ): Observable<ApiResult<TokenResponse>> {
-    const url = `${this.endpoint}/token/generate`;
-    const headers = new HttpHeaders().set('X-Enable-Loader', 'true');
-    return this.post<TokenResponse>(url, dto, headers);
-  }
-
-  refreshToken(dto: RefreshTokenRequest): Observable<ApiResult<TokenResponse>> {
-    const url = `${this.endpoint}/token/refresh-token`;
-    const headers = new HttpHeaders().set('X-Enable-Loader', 'true');
-    return this.post<TokenResponse>(url, dto, headers);
-  }
-
-  // Current user
-  getCurrentUserInfo(): Observable<ApiResult<UserDetailsDto>> {
-    const url = `${this.endpoint}/current-user/claims`;
-    return this.get<UserDetailsDto>(url);
-  }
-
-  // Users CRUD + credentials
   createUser(dto: CreateUserRequest): Observable<ApiResult<string>> {
     const url = `${this.endpoint}/users`;
     const headers = new HttpHeaders().set('X-Enable-Loader', 'true');

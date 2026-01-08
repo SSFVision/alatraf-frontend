@@ -17,9 +17,9 @@ export class InjuriesManagementService extends BaseApiService {
     super(http);
   }
 
-  private injuryTypesUrl = 'http://localhost:2003/api/v1/injury-types';
-  private injurySidesUrl = 'http://localhost:2003/api/v1/injury-sides';
-  private injuryReasonsUrl = 'http://localhost:2003/api/v1/injury-reasons';
+  private injuryTypesUrl = 'injury-types';
+  private injurySidesUrl = 'injury-sides';
+  private injuryReasonsUrl = 'injury-reasons';
 
   // ------------------ INJURY TYPES ------------------
 

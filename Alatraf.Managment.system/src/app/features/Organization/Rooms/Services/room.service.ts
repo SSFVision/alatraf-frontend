@@ -15,7 +15,7 @@ import { UpdateRoomRequest } from '../Models/update-room.request';
   providedIn: 'root',
 })
 export class RoomService extends BaseApiService {
-  private readonly endpoint = 'http://localhost:2003/api/v1/rooms';
+  private readonly endpoint = 'rooms';
 
   getRooms(
     filters: RoomsFilterRequest,

@@ -16,7 +16,7 @@ import { TherapistSessionProgramDto } from '../Models/therapists/therapist-sessi
 })
 export class DoctorSectionRoomsService extends BaseApiService {
   private readonly endpoint =
-    'http://localhost:2003/api/v1/doctor-section-rooms';
+    'doctor-section-rooms';
 
   getTechnicianHeader(
     doctorSectionRoomId: number

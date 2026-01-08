@@ -13,7 +13,7 @@ import { BaseApiService } from '../../../../core/services/base-api.service';
   providedIn: 'root',
 })
 export class UnitService extends BaseApiService {
-  private readonly endpoint = 'http://localhost:2003/api/v1/units';
+  private readonly endpoint = 'units';
 
   constructor(http: HttpClient) {
     super(http);

@@ -7,10 +7,11 @@ import {
 } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NavigationAuthFacade } from '../../../../core/navigation/navigation-auth.facade';
-import { AppUserRole } from '../../../../core/auth/models/app.user.roles.enum';
+import { AppUserRole } from '../../../../core/auth/Roles/app.user.roles.enum';
 import { NgIf } from '@angular/common';
 import { AuthFacade } from '../../../../core/auth/auth.facade';
 import { LoginRequest } from '../../../../core/auth/models/login-request.model';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -31,8 +32,8 @@ export class LoginComponent {
   shake = false;
 
   loginForm = this.fb.group({
-    userName: ['wa', Validators.required],
-    password: ['fc', Validators.required],
+    userName: ['waleed', Validators.required],
+    password: ['778500511wa', Validators.required],
   });
 
   ngOnInit(): void {
@@ -52,11 +53,9 @@ export class LoginComponent {
   }
 
   OnLogin() {
-    // Mark all fields touched to show errors
     this.loginForm.markAllAsTouched();
     this.loginForm.updateValueAndValidity();
 
-    // If invalid → shake + focus first invalid
     if (this.loginForm.invalid) {
       this.shake = true;
       this.focusFirstInvalidField();
@@ -64,7 +63,7 @@ export class LoginComponent {
       return;
     }
 
-    if (this.isLoading) return; // Prevent double submit
+    if (this.isLoading) return; 
 
     this.serverError = null;
     this.isLoading = true;
@@ -78,9 +77,10 @@ export class LoginComponent {
       next: () => {
         this.isLoading = false;
       },
-      error: (err) => {
+      error: (err:HttpErrorResponse) => {
         this.isLoading = false;
-        this.serverError = err?.errorMessage || 'فشل تسجيل الدخول';
+        console.log("Login error:", err);
+        this.serverError = err?.error?.title || 'فشل تسجيل الدخول';
       },
     });
   }

@@ -1,10 +1,10 @@
 export enum AppUserRole {
   Reception = 'Reception',
   Doctor = 'Doctor',
-  Admin = 'Admin',
+  Admin = 'admin',
   Manager = 'Manager',
   Finance = 'Finance',
   Doctor_Therapy = 'Doctor_Therapy',
   Doctor_Industrial = 'Doctor_Industrial',
-  Appointment='Appointment'
+  Appointment = 'Appointment',
 }

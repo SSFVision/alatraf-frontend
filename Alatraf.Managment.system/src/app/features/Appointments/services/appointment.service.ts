@@ -18,7 +18,7 @@ import { BaseApiService } from '../../../core/services/base-api.service';
   providedIn: 'root',
 })
 export class AppointmentService extends BaseApiService {
-  private readonly endpoint = 'http://localhost:2003/api/v1/appointments';
+  private readonly endpoint = 'appointments';
 
   getAppointments(
     filters: AppointmentFilterRequest,

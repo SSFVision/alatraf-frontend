@@ -118,8 +118,8 @@ export class DisabledCardsFacade
     this.load();
   }
 
-  openWorkspace(cardId: number): void {
-    this.navCard.goToEditDisabledCardPage(cardId);
+  openWorkspace(cardNumber: string): void {
+    this.navCard.goToEditDisabledCardPage(cardNumber);
   }
 
   openAddPage(): void {
@@ -160,7 +160,7 @@ export class DisabledCardsFacade
 
             this.enterEditMode(res.data);
 
-            this.navCard.goToEditDisabledCardPage(res.data.disabledCardId);
+            this.navCard.goToEditDisabledCardPage(res.data.cardNumber);
           } else if (res.validationErrors) {
             this.formValidationErrors.set(res.validationErrors);
           }
@@ -170,21 +170,14 @@ export class DisabledCardsFacade
       .subscribe();
   }
 
-  // =========================
-  // LOAD FOR EDIT
-  // =========================
-  loadDisabledCardForEdit(disabledCardId: number): void {
+ 
+  loadDisabledCardForEdit(cardNumber: string): void {
     this._loadingItem.set(true);
     this.isEditMode.set(true);
     this._selectedDisabledCard.set(null);
 
-    const localVm = this._items().find((x) => x.id === disabledCardId);
-
-    const request$ = localVm
-      ? this.service.getDisabledCardByNumber(localVm.cardNumber)
-      : this.service.getDisabledCardByNumber(String(disabledCardId)); // ⚠️ keep as-is until you confirm service has getById
-
-    request$
+    this.service
+      .getDisabledCardByNumber(cardNumber)
       .pipe(
         tap((res) => {
           if (res.isSuccess && res.data) {

@@ -1,7 +1,7 @@
 import {
+  APP_INITIALIZER,
   ApplicationConfig,
   ErrorHandler,
-  importProvidersFrom,
   provideZoneChangeDetection,
 } from '@angular/core';
 import {
@@ -10,19 +10,28 @@ import {
   withRouterConfig,
 } from '@angular/router';
 
-import { APP_ROUTES } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
-import { InMemoryDataService } from './mocks/in-memory-data.service';
+import { APP_ROUTES } from './app.routes';
+import { AuthFacade } from './core/auth/auth.facade';
+import { authInitializer } from './core/auth/auth.initializer.service';
+import { GlobalErrorHandler } from './core/errors/global-error-handler';
+import { apiResponseInterceptor } from './core/interceptors/api-response.interceptor';
+import { authInterceptor } from './core/interceptors/auth.interceptor';
 import { loadingInterceptor } from './core/interceptors/loading.interceptor';
 import { SkeletonLoadingInterceptor } from './core/interceptors/skeleteon-loading.interceptor';
-import { apiResponseInterceptor } from './core/interceptors/api-response.interceptor';
-import { GlobalErrorHandler } from './core/errors/global-error-handler';
-import { authInterceptor } from './core/interceptors/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    { provide: ErrorHandler, useClass: GlobalErrorHandler },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: authInitializer,
+      deps: [AuthFacade],
+      multi: true,
+    },
+    {
+      provide: ErrorHandler,
+      useClass: GlobalErrorHandler,
+    },
 
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(
@@ -40,14 +49,5 @@ export const appConfig: ApplicationConfig = {
         authInterceptor,
       ])
     ),
- importProvidersFrom(
- HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService, {
-  delay: 500,
-  dataEncapsulation: false,
-  passThruUnknownUrl: true
-})
-
-)
-
   ],
 };

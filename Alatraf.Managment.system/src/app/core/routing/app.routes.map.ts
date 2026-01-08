@@ -63,8 +63,8 @@ export const AppRoutes = {
 
       create: 'patient-cards/wounded/create',
 
-      edit: (woundedCardId: number | string) =>
-        `patient-cards/wounded/edit/${woundedCardId}`,
+      edit: (cardNumber: number | string) =>
+        `patient-cards/wounded/edit/${cardNumber}`,
 
       view: (woundedCardId: number | string) =>
         `patient-cards/wounded/view/${woundedCardId}`,
@@ -77,8 +77,8 @@ export const AppRoutes = {
 
       create: 'patient-cards/disabled/create',
 
-      edit: (disabledCardId: number | string) =>
-        `patient-cards/disabled/edit/${disabledCardId}`,
+      edit: (cardNumber: number | string) =>
+        `patient-cards/disabled/edit/${cardNumber}`,
 
       view: (disabledCardId: number | string) =>
         `patient-cards/disabled/view/${disabledCardId}`,

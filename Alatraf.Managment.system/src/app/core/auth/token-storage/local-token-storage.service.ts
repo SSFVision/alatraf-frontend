@@ -7,10 +7,12 @@ export class LocalTokenStorage implements TokenStorageStrategy {
 
   private ACCESS_KEY = 'accessToken';
   private REFRESH_KEY = 'refreshToken';
+  private EXPIRATION_KEY = 'expiration';
 
   setTokens(tokens: TokenResponse): void {
     localStorage.setItem(this.ACCESS_KEY, tokens.accessToken);
     localStorage.setItem(this.REFRESH_KEY, tokens.refreshToken);
+    localStorage.setItem(this.EXPIRATION_KEY, tokens.expiresOnUtc);
   }
 
   getAccessToken(): string | null {
@@ -24,5 +26,6 @@ export class LocalTokenStorage implements TokenStorageStrategy {
   clear(): void {
     localStorage.removeItem(this.ACCESS_KEY);
     localStorage.removeItem(this.REFRESH_KEY);
+    localStorage.removeItem(this.EXPIRATION_KEY);
   }
 }

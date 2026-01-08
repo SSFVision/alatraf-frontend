@@ -16,7 +16,7 @@
   <div
     class="card primary-card cursor-pointer column gap-8"
     [class.selected]="selectedId() === item.id"
-    (click)="onSelect(item.id)"
+    (click)="onSelect(item)"
   >
     <p class="body-md">
       {{ item.fullName }}

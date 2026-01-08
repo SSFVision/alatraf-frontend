@@ -18,7 +18,7 @@ import { RepairCardFilterRequest } from '../Models/repair-card-filter.request';
   providedIn: 'root',
 })
 export class RepairCardsManagementService extends BaseApiService {
-  private readonly endpoint = 'http://localhost:2003/api/v1/repair-cards';
+  private readonly endpoint = 'repair-cards';
   getRepairCards(
     filter: RepairCardFilterRequest,
     pageRequest: PageRequest

@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Router, NavigationExtras } from '@angular/router';
 import { AppRoutes } from '../routing/app.routes.map';
-import { AppUserRole } from '../auth/models/app.user.roles.enum';
+import { AppUserRole } from '../auth/Roles/app.user.roles.enum';
 
 @Injectable({ providedIn: 'root' })
 export class NavigationAuthFacade {
@@ -32,22 +32,22 @@ export class NavigationAuthFacade {
 
   private getHomeRouteForRole(role: AppUserRole): string {
     switch (role) {
-      case 'Reception':
+      case AppUserRole.Reception:
         return AppRoutes.reception.root;
 
-      case 'Doctor_Therapy':
+      case AppUserRole.Doctor_Therapy:
         return `${AppRoutes.diagnosis.root}/${AppRoutes.diagnosis.therapy.root}`;
-      case 'Doctor_Industrial':
+      case AppUserRole.Doctor_Industrial:
         return `${AppRoutes.diagnosis.root}/${AppRoutes.diagnosis.industrial.root}`;
 
-      case 'Finance':
+      case AppUserRole.Finance:
         return AppRoutes.finance.root;
-      case 'Appointment':
+      case AppUserRole.Appointment:
         return AppRoutes.Appointment.root;
-      case 'Admin':
+      case AppUserRole.Admin:
         return AppRoutes.finance.root;
-        
-        // return `${AppRoutes.Appointment.root}/${AppRoutes.Appointment.manage}`;
+
+      // return `${AppRoutes.Appointment.root}/${AppRoutes.Appointment.manage}`;
       // case 'Manager':
       //   return AppRoutes.management.dashboard;
 
@@ -58,7 +58,7 @@ export class NavigationAuthFacade {
 
   /** Used after successful login */
   redirectAfterLogin(role: AppUserRole): void {
-    // console.log("try Navigate ",role);
+    console.log('try Navigate ', role);
     const home = this.getHomeRouteForRole(role);
     this.go(home, { replaceUrl: true });
   }

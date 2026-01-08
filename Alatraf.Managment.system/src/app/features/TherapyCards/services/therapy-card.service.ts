@@ -11,7 +11,7 @@ import { RenewTherapyCardRequest } from '../Models/renew-therapy-card.request';
 
 @Injectable({ providedIn: 'root' })
 export class TherapyCardService extends BaseApiService {
-  private readonly endpoint = 'http://localhost:2003/api/v1/therapy-cards';
+  private readonly endpoint = 'therapy-cards';
   getAllTherapyCardPagenated(
     filter?: TherapyCardFilterRequest,
     pageRequest?: PageRequest
