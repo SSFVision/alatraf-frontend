@@ -4,6 +4,7 @@ import {
   effect,
   inject,
   runInInjectionContext,
+  signal,
 } from '@angular/core';
 import { CommonModule, NgIf } from '@angular/common';
 import {
@@ -12,7 +13,6 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { finalize } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
 import { HolidayType } from '../../Models/holiday-type.enum';
@@ -22,6 +22,7 @@ import { HolidaysFacade } from '../../services/holidays.facade.service';
 import { FormValidationState } from '../../../../core/utils/form-validation-state';
 import { PositiveNumberDirective } from '../../../../shared/Directives/positive-number.directive';
 import { HolidayDto } from '../../Models/holiday.dto';
+import { HolidaysNavigationFacade } from '../../../../core/navigation/Holidays-navigation.facade';
 
 @Component({
   selector: 'app-add-new-holiday',
@@ -39,7 +40,7 @@ export class AddNewHolidayComponent {
   private validationState!: FormValidationState;
 
   private currentHolidayId: number | null = null;
-  isEditMode = false;
+  isEditMode = signal(false);
 
   holidayTypes = [
     { label: 'ثابتة', value: HolidayType.Fixed },
@@ -73,6 +74,7 @@ export class AddNewHolidayComponent {
   });
 
   isSubmitting = false;
+  isSubmitted = false;
 
   today = new Date().toISOString().split('T')[0];
 
@@ -90,7 +92,7 @@ export class AddNewHolidayComponent {
       effect(() => {
         const selected = this.facade.selectedHoliday();
         if (
-          this.isEditMode &&
+          this.isEditMode() &&
           selected &&
           selected.holidayId === this.currentHolidayId
         ) {
@@ -104,6 +106,8 @@ export class AddNewHolidayComponent {
     this.setupTypeReactiveBehavior();
 
     this.detectEditMode();
+
+    this.setupSubmitResetOnChange();
   }
 
   get daysCount(): number | null {
@@ -133,15 +137,19 @@ export class AddNewHolidayComponent {
 
     const raw = this.form.getRawValue();
     const type = raw.type as HolidayType;
-    let payload: CreateHolidayRequest;
-
-    if (type === HolidayType.Fixed) {
+    const buildFixedPayload = (): {
+      startDate: string;
+      endDate: null;
+      name: string;
+      isRecurring: true;
+      type: HolidayType.Fixed;
+      isActive: boolean;
+    } => {
       const month = Number(raw.fixedMonth ?? 1);
       const day = Number(raw.fixedDay ?? 1);
       const yearStr = '0001';
       const startDate = `${yearStr}-${this.pad2(month)}-${this.pad2(day)}`;
-
-      payload = {
+      return {
         name: raw.name as string,
         startDate,
         endDate: null,
@@ -149,20 +157,72 @@ export class AddNewHolidayComponent {
         type: HolidayType.Fixed,
         isActive: Boolean(raw.isActive),
       };
-    } else {
-      payload = {
-        name: raw.name as string,
-        startDate: raw.startDate as string,
-        endDate: (raw.endDate as string) || null,
-        isRecurring: Boolean(raw.isRecurring),
-        type: HolidayType.Temporary,
-        isActive: Boolean(raw.isActive),
-      };
-    }
+    };
+
+    const buildTemporaryPayload = (): {
+      startDate: string;
+      endDate: string | null;
+      name: string;
+      isRecurring: boolean;
+      type: HolidayType.Temporary;
+      isActive: boolean;
+    } => ({
+      name: raw.name as string,
+      startDate: raw.startDate as string,
+      endDate: (raw.endDate as string) || null,
+      isRecurring: Boolean(raw.isRecurring),
+      type: HolidayType.Temporary,
+      isActive: Boolean(raw.isActive),
+    });
+
+    const payloadFixed = buildFixedPayload();
+    const payloadTemp = buildTemporaryPayload();
+
+    const createPayload: CreateHolidayRequest =
+      type === HolidayType.Fixed ? payloadFixed : payloadTemp;
+    const updatePayload: UpdateHolidayRequest =
+      type === HolidayType.Fixed ? payloadFixed : payloadTemp;
+
     this.isSubmitting = true;
-    this.facade.createHoliday(payload).subscribe();
+    if (this.isEditMode() && this.currentHolidayId) {
+      this.facade
+        .updateHoliday(this.currentHolidayId, updatePayload)
+        .subscribe({
+          next: (res) => {
+            if (res.success) {
+              this.isSubmitted = true;
+            }
+          },
+          error: () => {
+            // allow retry on error
+          },
+          complete: () => {
+            this.isSubmitting = false;
+          },
+        });
+    } else {
+      this.facade.createHoliday(createPayload).subscribe({
+        next: (res) => {
+          if (res.success) {
+            this.isSubmitted = true;
+          }
+        },
+        error: () => {
+          // allow retry on error
+        },
+        complete: () => {
+          this.isSubmitting = false;
+        },
+      });
+    }
   }
 
+  holidayNav=inject(HolidaysNavigationFacade);
+OnCloseEditHoliday(){
+this.holidayNav.goToHolidayList();
+
+  
+}
   // Helpers for template validation (match patient form pattern)
   getControl(name: string): AbstractControl | null {
     return this.form.get(name);
@@ -184,18 +244,18 @@ export class AddNewHolidayComponent {
     const parsedId = idParam ? Number(idParam) : null;
 
     if (parsedId && !Number.isNaN(parsedId)) {
-      this.isEditMode = true;
+      this.isEditMode.set(true);
       this.currentHolidayId = parsedId;
       this.facade.getHolidayById(parsedId);
     } else {
-      this.isEditMode = false;
+      this.isEditMode.set(false);
       this.currentHolidayId = null;
       this.resetFormForCreate();
     }
   }
 
   private patchFormForHoliday(holiday: HolidayDto): void {
-    if (holiday.type === HolidayType.Fixed) {
+    if ('fixed' === holiday.type) {
       const date = new Date(holiday.startDate);
       const month = Number.isNaN(date.getTime()) ? 1 : date.getMonth() + 1;
       const day = Number.isNaN(date.getTime()) ? 1 : date.getDate();
@@ -307,6 +367,14 @@ export class AddNewHolidayComponent {
         fixedDayCtrl?.setValue(max);
       } else if (day < 1) {
         fixedDayCtrl?.setValue(1);
+      }
+    });
+  }
+
+  private setupSubmitResetOnChange(): void {
+    this.form.valueChanges.subscribe(() => {
+      if (this.isSubmitted && !this.isSubmitting) {
+        this.isSubmitted = false;
       }
     });
   }

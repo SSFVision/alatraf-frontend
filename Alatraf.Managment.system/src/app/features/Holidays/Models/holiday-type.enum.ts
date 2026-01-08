@@ -1,4 +1,4 @@
 export enum HolidayType {
-  Fixed = 'Fixed',
-  Temporary = 'Temporary',
+  Fixed = 'fixed',
+  Temporary = 'temporary',
 }
