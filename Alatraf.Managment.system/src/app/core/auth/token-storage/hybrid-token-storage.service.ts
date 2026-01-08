@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { TokenResponse } from '../models/token-response.model';
 import { TokenStorageStrategy } from './token-storage-strategy';
+import { TOKEN_KEYS } from '../../constants/token-keys.constant';
 
 @Injectable({ providedIn: 'root' })
 export class HybridTokenStorage implements TokenStorageStrategy {
-
   private accessToken: string | null = null;
   private REFRESH_KEY = 'refreshToken';
 
@@ -12,8 +12,8 @@ export class HybridTokenStorage implements TokenStorageStrategy {
     // Store access token in memory
     this.accessToken = tokens.accessToken;
 
-    // Store refresh token persistently
-    localStorage.setItem(this.REFRESH_KEY, tokens.refreshToken);
+    localStorage.setItem(TOKEN_KEYS.refresh, tokens.refreshToken);
+    localStorage.setItem(TOKEN_KEYS.expiration, tokens.expiresOnUtc);
   }
 
   getAccessToken(): string | null {
