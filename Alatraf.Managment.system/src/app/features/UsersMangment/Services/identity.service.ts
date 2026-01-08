@@ -1,9 +1,6 @@
 import { HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-
-
-// User management models
 import { UserDetailsDto } from '../../../core/auth/models/user-details.dto.';
 import { ApiResult } from '../../../core/models/ApiResult';
 import { BaseApiService } from '../../../core/services/base-api.service';
@@ -19,10 +16,11 @@ import { RemoveRolesRequest } from '../Models/remove-roles.request';
 import { ResetPasswordRequest } from '../Models/reset-password.request';
 import { RoleDetailsDto } from '../Models/Roles/role-details.dto';
 import { UserListItemDto } from '../Models/Users/user-list-item.dto';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class IdentityService extends BaseApiService {
-  private readonly endpoint = 'http://localhost:2003/api/v1/identity';
+  private readonly endpoint = environment.identityBaseUrl;
 
   createUser(dto: CreateUserRequest): Observable<ApiResult<string>> {
     const url = `${this.endpoint}/users`;

@@ -18,7 +18,7 @@ import { ScheduleAppointmentRequest } from './models/schedule-appointment.reques
   providedIn: 'root',
 })
 export class TicketService extends BaseApiService {
-  private readonly endpoint = 'http://localhost:2003/api/v1/tickets';
+  private readonly endpoint = 'tickets';
 
   constructor(http: HttpClient) {
     super(http);

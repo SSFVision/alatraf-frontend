@@ -10,7 +10,7 @@ import { ServiceDto } from '../../../../core/models/Shared/service.model';
 
 @Injectable({ providedIn: 'root' })
 export class OrganizationServiceService extends BaseApiService {
-  private readonly endpoint = 'http://localhost:2003/api/v1/services';
+  private readonly endpoint = 'services';
 
   constructor(http: HttpClient) {
     super(http);

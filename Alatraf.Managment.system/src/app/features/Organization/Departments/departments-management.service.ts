@@ -14,7 +14,7 @@ import { BaseApiService } from '../../../core/services/base-api.service';
 })
 export class DepartmentsManagementService extends BaseApiService {
   private readonly endpoint =
-    'http://localhost:2003/api/v1/departments';
+    'departments';
 
   constructor(http: HttpClient) {
     super(http);

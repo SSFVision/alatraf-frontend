@@ -37,6 +37,15 @@ export class BaseApiService {
     return url.replace(/([^:]\/)\/+/g, '$1');
   }
 
+  // Join URL path segments safely (no double slashes).
+  protected joinUrl(...segments: Array<string | number>): string {
+    const path = segments
+      .filter((s) => s !== null && s !== undefined && s !== '')
+      .map((s) => String(s).replace(/^\/+|\/+$/g, ''))
+      .join('/');
+    return path; // relative path without leading slash
+  }
+
   protected createHeaders(custom?: HttpHeaders): HttpHeaders {
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -50,6 +59,23 @@ export class BaseApiService {
     }
 
     return headers;
+  }
+
+  // Convenience: create headers and enable loader flag.
+  protected withLoader(headers?: HttpHeaders): HttpHeaders {
+    return this.createHeaders(headers).set('X-Enable-Loader', 'true');
+  }
+
+  // Build HttpParams from a plain object, skipping null/undefined/empty strings.
+  protected buildParams(params?: Record<string, any>): HttpParams | undefined {
+    if (!params) return undefined;
+    let hp = new HttpParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== null && value !== undefined && value !== '') {
+        hp = hp.set(key, String(value));
+      }
+    });
+    return hp;
   }
 
   protected buildOptions(params?: HttpParams, headers?: HttpHeaders) {
@@ -74,9 +100,18 @@ export class BaseApiService {
     return this.http
       .get<ApiResult<T>>(url, this.buildOptions(params, headers))
       .pipe(
-        catchError((err) => this.handleError(err)),
+        catchError((err) => this.handleError(err))
         // delay(1500)
       );
+  }
+
+  // Variant: accept plain object params (auto-converted to HttpParams)
+  protected getWithParams<T>(
+    endpoint: string,
+    paramsObj?: Record<string, any>,
+    headers?: HttpHeaders
+  ): Observable<ApiResult<T>> {
+    return this.get<T>(endpoint, this.buildParams(paramsObj), headers);
   }
 
   protected post<T>(

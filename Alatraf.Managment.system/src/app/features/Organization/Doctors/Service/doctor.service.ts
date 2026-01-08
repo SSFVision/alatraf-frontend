@@ -22,7 +22,7 @@ import { TherapistDto } from '../Models/therapists/therapist.dto';
   providedIn: 'root',
 })
 export class DoctorService extends BaseApiService {
-  private readonly endpoint = 'http://localhost:2003/api/v1/doctors';
+  private readonly endpoint = 'doctors';
 
   getDoctors(
     filters: DoctorsFilterRequest,

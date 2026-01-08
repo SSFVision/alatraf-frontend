@@ -16,7 +16,7 @@ import { AssignNewRoomsToSectionDto } from '../Models/assign-new-rooms-to-sectio
   providedIn: 'root',
 })
 export class SectionService extends BaseApiService {
-  private readonly endpoint = 'http://localhost:2003/api/v1/sections';
+  private readonly endpoint = 'sections';
 
   getSections(
     filters: SectionFilterRequest,

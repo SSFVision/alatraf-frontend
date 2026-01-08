@@ -11,20 +11,19 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root',
 })
 export class OrganizationService extends BaseApiService {
-  private readonly endpoint = 'http://localhost:2003/api/v1/';
   constructor(http: HttpClient) {
     super(http);
   }
   getSectionsByDepartmentId(
     departmentId: number
   ): Observable<ApiResult<DepartmentSectionDto[]>> {
-    const url = this.endpoint + `departments/${departmentId}/sections`;
+    const url =  `departments/${departmentId}/sections`;
     return this.get<DepartmentSectionDto[]>(url);
   }
   getRoomsBySectionId(
     sectionId: number
   ): Observable<ApiResult<SectionRoomDto[]>> {
-    const url = this.endpoint + `sections/${sectionId}/rooms`;
+    const url =  `sections/${sectionId}/rooms`;
 
     return this.get<SectionRoomDto[]>(url);
   }
@@ -32,7 +31,7 @@ export class OrganizationService extends BaseApiService {
     sectionId: number,
     roomId: number
   ): Observable<ApiResult<GetDoctorDto[]>> {
-    const url = this.endpoint + `sections/${sectionId}/rooms/${roomId}/doctors`;
+    const url = `sections/${sectionId}/rooms/${roomId}/doctors`;
 
     return this.get<GetDoctorDto[]>(url);
   }
@@ -40,7 +39,7 @@ export class OrganizationService extends BaseApiService {
   getDoctorsBySection(
     sectionId: number
   ): Observable<ApiResult<GetDoctorDto[]>> {
-    const url = this.endpoint + `sections/${sectionId}/doctors`;
+    const url = `sections/${sectionId}/doctors`;
 
     return this.get<GetDoctorDto[]>(url);
   }

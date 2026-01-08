@@ -19,7 +19,7 @@ export class MedicalProgramsManagementService extends BaseApiService {
     super(http);
   }
 
-  private medicalProgramsUrl = 'http://localhost:2003/api/v1/medical-programs';
+  private medicalProgramsUrl = 'medical-programs';
 
   getMedicalProgramsWithFilters(
     filters: MedicalProgramsFilterRequest,

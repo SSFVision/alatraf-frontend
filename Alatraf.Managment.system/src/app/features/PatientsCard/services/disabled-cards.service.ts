@@ -16,7 +16,7 @@ import { UpdateDisabledCardRequest } from '../models/disabled-Models/update-disa
   providedIn: 'root',
 })
 export class DisabledCardsService extends BaseApiService {
-  private readonly endpoint = 'http://localhost:2003/api/v1/disabled-cards';
+  private readonly endpoint = 'disabled-cards';
 
   getDisabledCards(
     filters: DisabledCardsFilterRequest,

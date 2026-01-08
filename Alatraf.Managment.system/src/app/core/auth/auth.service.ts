@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 import { LoginRequest } from './models/login-request.model';
 import { RefreshTokenRequest } from './models/refresh-token-request.model';
 import { TokenResponse } from './models/token-response.model';
@@ -8,7 +9,7 @@ import { UserDetailsDto } from './models/user-details.dto.';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly baseUrl = 'http://localhost:2003/identity';
+  private readonly baseUrl = environment.identityBaseUrl;
 
   constructor(private http: HttpClient) {}
 
@@ -18,7 +19,6 @@ export class AuthService {
       request
     );
   }
-
 
   // ---------------------------------------------------------
   // 2. Refresh Access Token
@@ -37,4 +37,3 @@ export class AuthService {
     return this.http.get<UserDetailsDto>(`${this.baseUrl}/current-user/claims`);
   }
 }
-

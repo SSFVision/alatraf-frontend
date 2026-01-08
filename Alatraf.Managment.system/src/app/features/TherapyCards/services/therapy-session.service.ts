@@ -15,7 +15,7 @@ import { GetPaidTherapyCardsFilterRequest } from '../Models/get-paid-therapy-car
   providedIn: 'root',
 })
 export class TherapySessionService extends BaseApiService {
-  private readonly endpoint = 'http://localhost:2003/api/v1/therapy-cards';
+  private readonly endpoint = 'therapy-cards';
 
   createSession(
     therapyCardId: number,

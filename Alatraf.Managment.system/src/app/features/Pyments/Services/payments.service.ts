@@ -31,7 +31,7 @@ import { PayWoundedPaymentRequest } from '../Models/PaymentTypesRequests/pay-wou
   providedIn: 'root',
 })
 export class PaymentsService extends BaseApiService {
-  private readonly endpoint = 'http://localhost:2003/api/v1/payments';
+  private readonly endpoint = 'payments';
 
   getPaymentsWaitingList(
     filter: GetPaymentsWaitingListFilterRequest,

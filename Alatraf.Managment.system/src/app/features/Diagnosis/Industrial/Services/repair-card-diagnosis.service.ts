@@ -13,7 +13,7 @@ import { UpdateRepairCardRequest } from '../Models/update-repair-card.request';
   providedIn: 'root',
 })
 export class RepairCardDiagnosisService extends BaseApiService {
-  private readonly endpoint = 'http://localhost:2003/api/v1/repair-cards';
+  private readonly endpoint = 'repair-cards';
 
 
   getRepairCardById(

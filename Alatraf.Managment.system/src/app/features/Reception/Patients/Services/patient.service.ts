@@ -2,7 +2,7 @@ import { tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { BaseApiService } from '../../../../core/services/base-api.service';
 
-import { HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ApiResult } from '../../../../core/models/ApiResult';
 import { PatientFilterRequest } from '../models/PatientFilterRequest';
@@ -21,7 +21,11 @@ export interface PatientFilterDto {
   providedIn: 'root',
 })
 export class PatientService extends BaseApiService {
-  private readonly endpoint = 'http://localhost:2003/api/v1/patients';
+  private readonly endpoint = 'patients';
+
+  constructor(http: HttpClient) {
+    super(http);
+  }
 
   getPatients(
     filters?: PatientFilterRequest,
@@ -83,7 +87,7 @@ export class PatientService extends BaseApiService {
   GetRepairCardsByPatientId(
     id: number
   ): Observable<ApiResult<RepairCardDiagnosisDto[]>> {
-    const url = `${this.endpoint}/${id}//repair-cards`;
+    const url = `${this.endpoint}/${id}/repair-cards`;
     return this.get<RepairCardDiagnosisDto[]>(url);
   }
 
