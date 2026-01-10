@@ -225,6 +225,7 @@ export const AppRoutes = {
     view: (userId: number | string) => `view/${userId}`,
 
     permissions: (userId: number | string) => `${userId}/permissions`,
+    AssignRole: (userId: number | string) => `assign-role/${userId}`,
   },
 
   management: {

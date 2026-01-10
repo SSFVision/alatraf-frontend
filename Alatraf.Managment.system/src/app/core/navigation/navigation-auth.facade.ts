@@ -42,8 +42,10 @@ export class NavigationAuthFacade {
 
       case AppUserRole.FinanceEmployee:
         return AppRoutes.finance.root;
-      case AppUserRole.TechnicalManagementReceptionist:
-        return AppRoutes.Appointment.root;
+        case AppUserRole.SalesEmployee:
+        return AppRoutes.finance.root;
+      case AppUserRole.AppointmentsEmployee:
+      return `${AppRoutes.Appointment.root}/${AppRoutes.Appointment.manage}`;
       case AppUserRole.Admin:
         return AppRoutes.users.root;
 

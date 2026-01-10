@@ -11,5 +11,6 @@ export class HeaderComponent {
   auth = inject(AuthFacade);
   user = this.auth.getUser()!;
 
+  userName= signal<string>(this.user.username);
 
 }

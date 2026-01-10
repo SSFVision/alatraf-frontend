@@ -112,7 +112,7 @@ export class AddNewUserPageComponent implements OnInit {
           this.dialogService.confirm(config).subscribe((confirm) => {
             if (!confirm || !newUserId) return;
 
-            this.userNav.goToUsersMainPage();
+            this.userNav.goToUserRoleAssignPage(newUserId);
           });
 
           this.onClose();

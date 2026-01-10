@@ -40,6 +40,15 @@ export const USERS_ROUTES: Routes = [
             './Pages/user-workspace-page/user-workspace-page.component'
           ).then((m) => m.UserWorkspacePageComponent),
       },
+       {
+        path: 'assign-role/:userId',
+        canActivate: [PermissionGuard],
+        data: { permission: PERMISSIONS.User.ASSIGN_ROLES },
+        loadComponent: () =>
+          import(
+            './Pages/user-role-assign/user-role-assign.component'
+          ).then((m) => m.UserRoleAssignComponent),
+      },
     ],
   },
 ];
