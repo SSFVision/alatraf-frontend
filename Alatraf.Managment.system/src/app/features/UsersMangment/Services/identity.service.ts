@@ -16,15 +16,16 @@ import { ResetPasswordRequest } from '../Models/reset-password.request';
 import { RoleDetailsDto } from '../Models/Roles/role-details.dto';
 import { UserListItemDto } from '../Models/Users/user-list-item.dto';
 import { environment } from '../../../../environments/environment';
+import { UserCreatedDto } from '../Models/User.Created.Dto';
 
 @Injectable({ providedIn: 'root' })
 export class IdentityService extends BaseApiService {
   private readonly endpoint = environment.identityBaseUrl;
 
-  createUser(dto: CreateUserRequest): Observable<ApiResult<string>> {
+  createUser(dto: CreateUserRequest): Observable<ApiResult<UserCreatedDto>> {
     const url = `${this.endpoint}/users`;
     const headers = new HttpHeaders().set('X-Enable-Loader', 'true');
-    return this.post<string>(url, dto, headers);
+    return this.post<UserCreatedDto>(url, dto, headers);
   }
 
   activateUser(

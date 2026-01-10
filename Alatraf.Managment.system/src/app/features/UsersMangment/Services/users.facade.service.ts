@@ -99,7 +99,6 @@ export class UsersFacadeService extends BaseFacade {
     this._users.set([]);
     this.totalCount.set(0);
   }
-  createdUserId = signal<string | null>(null);
 
   createUser(dto: CreateUserRequest) {
     return this.handleCreateOrUpdate(this.service.createUser(dto), {
@@ -108,7 +107,6 @@ export class UsersFacadeService extends BaseFacade {
     }).pipe(
       tap((res) => {
         if (res.success && res.data) {
-          this.createdUserId.set(res.data);
           this.formValidationErrors.set({});
         } else if (res.validationErrors) {
           this.formValidationErrors.set(res.validationErrors);

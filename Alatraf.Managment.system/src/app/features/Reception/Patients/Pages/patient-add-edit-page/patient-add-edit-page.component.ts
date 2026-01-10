@@ -31,15 +31,16 @@ export class PatientAddEditPageComponent {
   // this for redirect after save
   private route = inject(ActivatedRoute);
   private redirectTarget: string | null = null;
-private featureTarget: PatientSelectTarget | null = null;
+  private featureTarget: PatientSelectTarget | null = null;
 
   ngOnInit() {
     const id = Number(this.patientId());
 
     // read redirect query param
     this.redirectTarget = this.route.snapshot.queryParamMap.get('redirect');
-this.featureTarget =
-  this.route.snapshot.queryParamMap.get('target') as PatientSelectTarget | null;
+    this.featureTarget = this.route.snapshot.queryParamMap.get(
+      'target'
+    ) as PatientSelectTarget | null;
 
     if (!isNaN(id)) {
       this.facade.loadPatientForEdit(id);
@@ -77,7 +78,8 @@ this.featureTarget =
 
             this.dialogService
               .confirmSuccess(ArabicSuccessMessages.saved)
-              .subscribe((confirm) => {
+              .subscribe((confirm) =>
+                 {
                 if (!confirm || !newPatientId) return;
 
                 if (this.redirectTarget === 'select-patient') {
@@ -119,8 +121,7 @@ this.featureTarget =
         },
       });
       return;
-    } 
-      this.navReception.goToPatientsList();
-    
+    }
+    this.navReception.goToPatientsList();
   }
 }

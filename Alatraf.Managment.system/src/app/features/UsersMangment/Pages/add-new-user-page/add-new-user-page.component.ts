@@ -1,4 +1,8 @@
 import {
+  DialogConfig,
+  DialogType,
+} from '../../../../shared/components/dialog/DialogConfig';
+import {
   Component,
   effect,
   EnvironmentInjector,
@@ -24,6 +28,8 @@ import { CreateUserRequest } from '../../Models/create-user.request';
 import { UsersFacadeService } from '../../Services/users.facade.service';
 import { CommonModule } from '@angular/common';
 import { UsersNavigationFacade } from '../../../../core/navigation/users-navigation.facade';
+import { ArabicSuccessMessages } from '../../../../core/locals/Arabic';
+import { DialogService } from '../../../../shared/components/dialog/dialog.service';
 
 @Component({
   selector: 'app-add-new-user-page',
@@ -36,7 +42,7 @@ export class AddNewUserPageComponent implements OnInit {
   private fb = inject(FormBuilder);
   private facade = inject(UsersFacadeService);
   private env = inject(EnvironmentInjector);
-  private cache = inject(CacheService);
+  private dialogService = inject(DialogService);
 
   private userNav = inject(UsersNavigationFacade);
 
@@ -64,7 +70,7 @@ export class AddNewUserPageComponent implements OnInit {
       address: ['', Validators.required],
       nationalNo: [''],
       userName: ['', Validators.required],
-      password: ['', Validators.required],
+      password: ['ِAdmin@123', Validators.required],
       isActive: [true, Validators.required],
     });
 
@@ -92,9 +98,25 @@ export class AddNewUserPageComponent implements OnInit {
     if (this.form.valid) {
       const dto: CreateUserRequest = { ...this.form.getRawValue() };
 
-      this.facade.createUser(dto).subscribe((res) => {
-        if (res.success && res.data) {
-          this.form.reset({ gender: true, isActive: true });
+      this.facade.createUser(dto).subscribe((result) => {
+        if (result.success && !result.validationErrors && result.data) {
+          const newUserId = result.data.userId;
+          const config: DialogConfig = {
+            title: 'تم إنشاء المستخدم بنجاح',
+            payload: { الاسم: dto.fullName },
+            confirmText: 'إختيار دور للمستخدم',
+            showCancel: false,
+            type: DialogType.Success,
+          };
+
+          this.dialogService.confirm(config).subscribe((confirm) => {
+            if (!confirm || !newUserId) return;
+
+            this.userNav.goToUsersMainPage();
+          });
+
+          this.onClose();
+          return;
         }
       });
     } else {
