@@ -7,7 +7,6 @@ import { BaseApiService } from '../../../core/services/base-api.service';
 import { ActivateUserRequest } from '../Models/activate-user.request';
 import { AssignRolesRequest } from '../Models/assign-roles.request';
 import { ChangeCredentialsRequest } from '../Models/change-credentials.request';
-import { CreateRoleRequest } from '../Models/create-role.request';
 import { CreateUserRequest } from '../Models/create-user.request';
 import { GetUserFilterRequest } from '../Models/get-user-filter.request';
 import { PermissionIdsRequest } from '../Models/permission-ids.request';
@@ -50,7 +49,7 @@ export class IdentityService extends BaseApiService {
     userId: string,
     dto: ChangeCredentialsRequest
   ): Observable<ApiResult<void>> {
-    const url = `${this.endpoint}/users/${userId}/credentials`;
+    const url = `${this.endpoint}/users/${userId}/change-credentials`;
     const headers = new HttpHeaders().set('X-Enable-Loader', 'true');
     return this.patch<void>(url, dto, headers);
   }
@@ -71,7 +70,6 @@ export class IdentityService extends BaseApiService {
     return this.get<UserListItemDto[]>(url, params);
   }
 
-  // Roles assignment/removal
   assignRoles(
     userId: string,
     dto: AssignRolesRequest
@@ -89,41 +87,6 @@ export class IdentityService extends BaseApiService {
     const headers = new HttpHeaders().set('X-Enable-Loader', 'true');
     return this.deleteWithBody<void>(url, dto, headers);
   }
-
-  
-
-  // Roles management
-  createRole(dto: CreateRoleRequest): Observable<ApiResult<string>> {
-    const url = `${this.endpoint}/roles`;
-    const headers = new HttpHeaders().set('X-Enable-Loader', 'true');
-    return this.post<string>(url, dto, headers);
-  }
-
-  deleteRole(roleId: string): Observable<ApiResult<void>> {
-    const url = `${this.endpoint}/roles/${roleId}`;
-    const headers = new HttpHeaders().set('X-Enable-Loader', 'true');
-    return this.delete<void>(url, undefined, headers);
-  }
-
-  assignPermissionsToRole(
-    roleId: string,
-    dto: PermissionIdsRequest
-  ): Observable<ApiResult<void>> {
-    const url = `${this.endpoint}/roles/${roleId}/permissions`;
-    const headers = new HttpHeaders().set('X-Enable-Loader', 'true');
-    return this.post<void>(url, dto, headers);
-  }
-
-  removePermissionsFromRole(
-    roleId: string,
-    dto: PermissionIdsRequest
-  ): Observable<ApiResult<void>> {
-    const url = `${this.endpoint}/roles/${roleId}/permissions`;
-    const headers = new HttpHeaders().set('X-Enable-Loader', 'true');
-    return this.deleteWithBody<void>(url, dto, headers);
-  }
-
- 
 
   getRoles(): Observable<ApiResult<RoleDetailsDto[]>> {
     const url = `${this.endpoint}/roles`;
@@ -149,17 +112,6 @@ export class IdentityService extends BaseApiService {
     return this.post<void>(url, dto, headers);
   }
 
-  removeUserPermissionOverrides(
-    userId: string,
-    dto: PermissionIdsRequest
-  ): Observable<ApiResult<void>> {
-    const url = `${this.endpoint}/users/${userId}/permissions`;
-    const headers = new HttpHeaders().set('X-Enable-Loader', 'true');
-    return this.deleteWithBody<void>(url, dto, headers);
-  }
-
-  
-
   // Permissions queries
   getEffectiveUserPermissions(userId: string): Observable<ApiResult<string[]>> {
     const url = `${this.endpoint}/users/${userId}/permissions`;
@@ -170,5 +122,21 @@ export class IdentityService extends BaseApiService {
     const url = `${this.endpoint}/permissions`;
     const params = search ? new HttpParams().set('search', search) : undefined;
     return this.get<PermissionDto[]>(url, params);
+  }
+  activatePermissionsInRole(
+    roleId: string,
+    dto: PermissionIdsRequest
+  ): Observable<ApiResult<void>> {
+    const url = `${this.endpoint}/roles/${roleId}/permissions/activate`;
+    const headers = new HttpHeaders().set('X-Enable-Loader', 'true');
+    return this.patch<void>(url, dto, headers);
+  }
+  deactivatePermissionsInRole(
+    roleId: string,
+    dto: PermissionIdsRequest
+  ): Observable<ApiResult<void>> {
+    const url = `${this.endpoint}/roles/${roleId}/permissions/deactivate`;
+    const headers = new HttpHeaders().set('X-Enable-Loader', 'true');
+    return this.patch<void>(url, dto, headers);
   }
 }
