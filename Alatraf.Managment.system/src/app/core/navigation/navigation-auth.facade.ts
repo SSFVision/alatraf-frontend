@@ -32,20 +32,20 @@ export class NavigationAuthFacade {
 
   private getHomeRouteForRole(role: AppUserRole): string {
     switch (role) {
-      case AppUserRole.Reception:
+      case AppUserRole.Receptionist:
         return AppRoutes.reception.root;
 
-      case AppUserRole.Doctor_Therapy:
+      case AppUserRole.TherapyDoctor:
         return `${AppRoutes.diagnosis.root}/${AppRoutes.diagnosis.therapy.root}`;
-      case AppUserRole.Doctor_Industrial:
+      case AppUserRole.IndustrialDoctor:
         return `${AppRoutes.diagnosis.root}/${AppRoutes.diagnosis.industrial.root}`;
 
-      case AppUserRole.Finance:
+      case AppUserRole.FinanceEmployee:
         return AppRoutes.finance.root;
-      case AppUserRole.Appointment:
+      case AppUserRole.TechnicalManagementReceptionist:
         return AppRoutes.Appointment.root;
       case AppUserRole.Admin:
-      return `${AppRoutes.Appointment.root}/${AppRoutes.Appointment.manage}`;
+        return AppRoutes.users.root;
 
       // return `${AppRoutes.Appointment.root}/${AppRoutes.Appointment.manage}`;
       // case 'Manager':
@@ -58,7 +58,7 @@ export class NavigationAuthFacade {
 
   /** Used after successful login */
   redirectAfterLogin(role: AppUserRole): void {
-    console.log('try Navigate ', role);
+    // console.log('try Navigate ', role);
     const home = this.getHomeRouteForRole(role);
     this.go(home, { replaceUrl: true });
   }

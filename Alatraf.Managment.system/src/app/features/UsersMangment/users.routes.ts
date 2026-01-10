@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { PERMISSIONS } from '../../core/auth/Roles/permissions.map';
 import { PermissionGuard } from '../../core/guards/permission.guard';
+import { WorkspaceWelcomeComponent } from '../../shared/components/workspace-welcome/workspace-welcome.component';
 
 export const USERS_ROUTES: Routes = [
   {
@@ -12,6 +13,15 @@ export const USERS_ROUTES: Routes = [
         (m) => m.MainUserPageComponent
       ),
     children: [
+      {
+        path: '',
+        component: WorkspaceWelcomeComponent,
+        data: {
+          title: 'مرحباً بك في   إدارة المستخدمين',
+          subtitle: 'اختر المستخدم من القائمة أو أضف مستخدم جديد',
+        },
+      },
+
       {
         path: 'create',
         canActivate: [PermissionGuard],

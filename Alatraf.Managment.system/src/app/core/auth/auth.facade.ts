@@ -117,8 +117,7 @@ export class AuthFacade {
 
     // 🔥 SUPER ROLES: Admin + Manager have full access
     if (
-      user.roles?.includes(AppUserRole.Admin) ||
-      user.roles?.includes(AppUserRole.Manager)
+      user.roles?.includes(AppUserRole.Admin) 
     ) {
       return true;
     }
