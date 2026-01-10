@@ -20,8 +20,6 @@ export class ManageAppointmentsComponent {
   totalCount = this.appointmentFacade.totalCount;
   private nav = inject(AppointmentsNavigationFacade);
 
-  isButtonVisible=signal(true);
-
   ngOnInit() {
     // this.isButtonVisible.set(true);
     this.appointmentFacade.updateFilters({ status: undefined });
@@ -57,7 +55,6 @@ export class ManageAppointmentsComponent {
   //   //   .subscribe();
   // }
   onAddHoliday() {
-    this.isButtonVisible.set(false);
     this.nav.goToAddNewHolidayPage();
   }
 }
