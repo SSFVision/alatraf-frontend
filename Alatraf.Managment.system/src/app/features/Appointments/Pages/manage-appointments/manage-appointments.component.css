@@ -13,5 +13,10 @@
 
 .btn {
   position: absolute;
-  left: 36px;
+  right: 301px;
+  top: 24px;
+}
+
+.box.gap-16 {
+  margin-top: 52px;
 }
