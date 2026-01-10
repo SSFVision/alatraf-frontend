@@ -38,6 +38,9 @@ export class MainTherapyPatientsWatingListComponent implements OnDestroy {
   selectedCardId = signal<number | null>(null);
   selectedDoctorId = signal<number | null>(null);
 
+  showFirstQueue: boolean = true;
+  showSecondQueue: boolean = false;
+
 
   patientsVM = computed<GeneralWaitingPatientVM[]>(() =>
     this.paidTherapyCards().map((card: TherapyCardDiagnosisDto) => ({
@@ -96,6 +99,11 @@ export class MainTherapyPatientsWatingListComponent implements OnDestroy {
   OnSelectDoctor(doctorSectionRoomId: number): void {
     this.selectedDoctorId.set(doctorSectionRoomId);
     this.navTherapyCard.goToTherapyDoctorsListPage(doctorSectionRoomId);
+  }
+
+  toggleQueues() {
+    this.showFirstQueue = !this.showFirstQueue;
+    this.showSecondQueue = !this.showFirstQueue;
   }
 
 }
