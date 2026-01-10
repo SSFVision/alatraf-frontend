@@ -45,6 +45,10 @@ export class MainRepairCardsWaitingListComponent {
   selectedCardId = signal<number | null>(null);
   SelectedDoctorId = signal<number | null>(null);
 
+  showFirstQueue: boolean = true;
+  showSecondQueue: boolean = false;
+
+
   patientsVM = computed<GeneralWaitingPatientVM[]>(() =>
     this.paidRepairCards().map((card: RepairCardDiagnosisDto) => ({
       id: card.repairCardId,
@@ -86,5 +90,10 @@ export class MainRepairCardsWaitingListComponent {
   OnSelectDoctor(doctorSectionRoomId: number): void {
     this.SelectedDoctorId.set(doctorSectionRoomId);
     this.navRepairCard.goToRepairDoctorsListPage(doctorSectionRoomId);
+  }
+
+  toggleQueues() {
+    this.showFirstQueue = !this.showFirstQueue;
+    this.showSecondQueue = !this.showFirstQueue;
   }
 }

@@ -1,6 +1,8 @@
 <div class="row gap-16">
   <div class="column gap-16 max-width-324">
-    <div class="box gap-24 max-hight-360">
+
+    <div class="box gap-24" [class.hidden-queue]="!showFirstQueue" [class.max-hight-360]="showFirstQueue"
+      (click)="!showFirstQueue && toggleQueues()">
       <div class="row space-between">
         <h2 class="title-md flex-center">قائمة الإنتظار</h2>
         <div class="primary-color-background WH-40 flex-center border-radius-20">
@@ -10,6 +12,7 @@
         </div>
       </div>
 
+      @if (showFirstQueue) {
       <div class="search-box">
         <img src="assets/icons/search-icon.svg" class="search-icon" alt="search" />
         <input type="text" placeholder="بحث: اسم المريض أو الرقم" #searchBox (input)="onSearch(searchBox.value)" />
@@ -22,11 +25,13 @@
       </div>
       <app-general-waiting-patient-queue class="max-hight-712 column gap-16" [patients]="patientsVM()"
         [loading]="loading()" (select)="select($event)"></app-general-waiting-patient-queue>
+      }
     </div>
 
-    <div class="box gap-24 max-hight-360">
+    <div class="box gap-24" [class.hidden-queue]="!showSecondQueue" [class.max-hight-360]="showSecondQueue"
+      (click)="!showSecondQueue && toggleQueues()">
       <h2 class="title-md">الأطباءالفنين</h2>
-
+      @if (showSecondQueue) {
       <div class="search-box">
         <img src="assets/icons/search-icon.svg" class="search-icon" alt="search" />
         <input type="text" placeholder="بحث: اسم الطبيب أو الرقم" (input)="onDoctorSearch($any($event.target).value)" />
@@ -40,6 +45,7 @@
       </div>
       <app-doctor-card class="max-hight-712 column gap-16" [doctors]="technicianDoctorsVM()"
         [loading]="loadingTechnicians()" (select)="OnSelectDoctor($event)"></app-doctor-card>
+      }
     </div>
   </div>
 

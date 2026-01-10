@@ -10,3 +10,51 @@
   flex-direction: column;
   min-width: 300px;
 }
+
+.hidden-queue {
+  position: relative;
+  /* ضروري جداً لكي يظهر النص داخل الكارت وليس خارجه */
+  flex: 0 0 auto;
+  /* استبدل fit-content بـ auto لضمان وجود مساحة */
+  min-height: 60px;
+  /* تأكد من وجود حد أدنى للارتفاع ليظهر النص */
+  cursor: pointer;
+  overflow: hidden;
+  /* للحفاظ على شكل الكارت */
+  transition: all 0.3s ease;
+}
+
+/* حالة الهافرينج */
+.hidden-queue:hover {
+  background-color: var(--card-active-color) !important;
+  border-color: var(--card-active-color);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.hidden-queue::after {
+  content: '\2195';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  color: var(--primary-color) !important;
+  font-size: 1rem;
+  white-space: nowrap;
+
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 2;
+}
+
+.hidden-queue:hover::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+
+.hidden-queue:hover .content {
+  opacity: 0 !important;
+  visibility: hidden;
+}
