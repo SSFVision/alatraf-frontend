@@ -6,7 +6,7 @@ export const TherapyCardsRoutes: Routes = [
   {
     path: '',
     canActivate: [PermissionGuard],
-    data: { permission: PERMISSIONS.THERAPY_CARDS.VIEW },
+    data: { permission: PERMISSIONS.TherapyCard.READ },
     loadComponent: () =>
       import(
         './Pages/main-therapy-patients-wating-list/main-therapy-patients-wating-list.component'
@@ -16,7 +16,7 @@ export const TherapyCardsRoutes: Routes = [
       {
         path: ':therapyCardId/sessions/create',
         canActivate: [PermissionGuard],
-        data: { permission: PERMISSIONS.THERAPY_SESSIONS.ADD },
+        data: { permission: PERMISSIONS.TherapyCard.CREATE },
         loadComponent: () =>
           import('./Pages/sessions-mangment/sessions-mangment.component').then(
             (m) => m.SessionsManagementComponent
@@ -25,7 +25,7 @@ export const TherapyCardsRoutes: Routes = [
       {
         path: 'doctors/:doctorSectionRoomId/assigments',
         canActivate: [PermissionGuard],
-        data: { permission: PERMISSIONS.Doctors.VIEW },
+        data: { permission: PERMISSIONS.TherapyCard.READ_SESSION },
         loadComponent: () =>
           import(
             './Pages/therapist-doctor-assigments/therapist-doctor-assigments.component'

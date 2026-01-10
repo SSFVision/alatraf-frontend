@@ -6,7 +6,7 @@ export const SectionsRoutes: Routes = [
   {
     path: '',
     canActivate: [PermissionGuard],
-    data: { permission: PERMISSIONS.Sections.VIEW },
+    data: { permission: PERMISSIONS.Section.READ },
     loadComponent: () =>
       import('./pages/main-section-page/main-section-page.component').then(
         (m) => m.MainSectionPageComponent
@@ -16,7 +16,7 @@ export const SectionsRoutes: Routes = [
       {
         path: 'create',
         canActivate: [PermissionGuard],
-        data: { permission: PERMISSIONS.Sections.CREATE },
+        data: { permission: PERMISSIONS.Section.CREATE },
         loadComponent: () =>
           import(
             './pages/sections-workspace/sections-workspace.component'
@@ -25,7 +25,7 @@ export const SectionsRoutes: Routes = [
       {
         path: 'edit/:sectionId',
         canActivate: [PermissionGuard],
-        data: { permission: PERMISSIONS.Sections.EDIT },
+        data: { permission: PERMISSIONS.Section.UPDATE },
         loadComponent: () =>
           import(
             './pages/sections-workspace/sections-workspace.component'

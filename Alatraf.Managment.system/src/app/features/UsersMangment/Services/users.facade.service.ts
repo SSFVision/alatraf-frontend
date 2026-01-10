@@ -8,9 +8,10 @@ import { ApiResult } from '../../../core/models/ApiResult';
 import { PageRequest } from '../../../core/models/Shared/page-request.model';
 import { SearchManager } from '../../../core/utils/search-manager';
 import { BaseFacade } from '../../../core/utils/facades/base-facade';
+import { CreateUserRequest } from '../Models/create-user.request';
 
 @Injectable({ providedIn: 'root' })
-export class UsersFacade extends BaseFacade {
+export class UsersFacadeService extends BaseFacade {
   private service = inject(IdentityService);
 
   private _users = signal<UserListItemDto[]>([]);
@@ -27,7 +28,6 @@ export class UsersFacade extends BaseFacade {
   });
   filters = this._filters.asReadonly();
 
- 
   // Search manager to debounce user searches
   private searchManager = new SearchManager<UserListItemDto[]>(
     (term: string) =>
@@ -48,14 +48,12 @@ export class UsersFacade extends BaseFacade {
     super();
   }
 
- 
-  private _formValidationErrors = signal<Record<string, string[]>>({});
-  formValidationErrors = this._formValidationErrors.asReadonly();
+  formValidationErrors = signal<Record<string, string[]>>({});
 
   loadUsers() {
     this._isLoading.set(true);
     this.service
-      .getUsers( this._filters())
+      .getUsers(this._filters())
       .pipe(
         tap((res) => {
           if (res.isSuccess && res.data) {
@@ -72,7 +70,6 @@ export class UsersFacade extends BaseFacade {
       )
       .subscribe();
   }
-
 
   resetAndLoad(): void {
     this._users.set([]);
@@ -101,6 +98,23 @@ export class UsersFacade extends BaseFacade {
     this._filters.set({ searchBy: '', isActive: undefined });
     this._users.set([]);
     this.totalCount.set(0);
+  }
+  createdUserId = signal<string | null>(null);
+
+  createUser(dto: CreateUserRequest) {
+    return this.handleCreateOrUpdate(this.service.createUser(dto), {
+      successMessage: 'تم إنشاء المستخدم بنجاح',
+      defaultErrorMessage: 'فشل إنشاء المستخدم. يرجى المحاولة لاحقاً.',
+    }).pipe(
+      tap((res) => {
+        if (res.success && res.data) {
+          this.createdUserId.set(res.data);
+          this.formValidationErrors.set({});
+        } else if (res.validationErrors) {
+          this.formValidationErrors.set(res.validationErrors);
+        }
+      })
+    );
   }
 
   private handleLoadUsersError(result: ApiResult<any>) {

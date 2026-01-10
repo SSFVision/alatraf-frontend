@@ -1,9 +1,9 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { UsersNavigationFacade } from '../../../../core/navigation/users-navigation.facade';
-import { UserListComponent } from '../../Components/user-list/user-list.component';
 import { UserListItemDto } from '../../Models/Users/user-list-item.dto';
-import { UsersFacade } from '../../Services/users.facade.service';
+import { UsersFacadeService } from '../../Services/users.facade.service';
+import { UserListComponent } from '../user-list/user-list.component';
 
 @Component({
   selector: 'app-main-user-page',
@@ -11,14 +11,14 @@ import { UsersFacade } from '../../Services/users.facade.service';
   templateUrl: './main-user-page.component.html',
   styleUrl: './main-user-page.component.css',
 })
-export class MainUserPageComponent  implements OnInit{
+export class MainUserPageComponent implements OnInit {
   selectedId = signal<number | string | null>(null);
   private userNav = inject(UsersNavigationFacade);
-  usersFacade = inject(UsersFacade);
+  usersFacade = inject(UsersFacadeService);
   canRout = signal<boolean>(false);
 
-  usersListItem=this.usersFacade.users;
-  loadingUser=this.usersFacade.isLoading;
+  usersListItem = this.usersFacade.users;
+  loadingUser = this.usersFacade.isLoading;
 
   ngOnInit(): void {
     this.usersFacade.loadUsers();

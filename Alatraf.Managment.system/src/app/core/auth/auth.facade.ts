@@ -38,8 +38,13 @@ export class AuthFacade {
       tap((user) => {
         console.log('info After Sucess Login ', user);
         this.sessionStore.setUser(user);
+        if (user.roles[0]) {
+
         const primaryRole = user.roles?.[0].toString();
-        this.navigation.redirectAfterLogin(primaryRole as AppUserRole);
+          this.navigation.redirectAfterLogin(primaryRole as AppUserRole);
+        } else {
+          this.navigation.goToDefultRole();
+        }
       })
     );
   }
@@ -116,42 +121,38 @@ export class AuthFacade {
     if (!user) return false;
 
     // 🔥 SUPER ROLES: Admin + Manager have full access
-    if (
-      user.roles?.includes(AppUserRole.Admin) 
-    ) {
+    if (user.roles?.includes(AppUserRole.Admin)) {
       return true;
     }
 
     return this.sessionStore.hasPermission(permission);
   }
 
-
   autoLogin() {
-  const refreshToken = this.tokenStorage.getRefreshToken();
+    const refreshToken = this.tokenStorage.getRefreshToken();
 
-  if (!refreshToken) {
-  return of(null);
+    if (!refreshToken) {
+      return of(null);
+    }
+
+    const request: RefreshTokenRequest = {
+      refreshToken,
+      expiredAccessToken: this.tokenStorage.getAccessToken() ?? '',
+    };
+
+    return this.authService.refreshToken(request).pipe(
+      tap((tokens) => {
+        this.tokenStorage.setTokens(tokens);
+        this.sessionStore.setTokens(tokens);
+      }),
+      switchMap(() => this.authService.getCurrentUser()),
+      tap((user) => {
+        this.sessionStore.setUser(user);
+      }),
+      catchError(() => {
+        this.logout();
+        return EMPTY;
+      })
+    );
   }
-
-  const request: RefreshTokenRequest = {
-    refreshToken,
-    expiredAccessToken: this.tokenStorage.getAccessToken() ?? '',
-  };
-
-  return this.authService.refreshToken(request).pipe(
-    tap((tokens) => {
-      this.tokenStorage.setTokens(tokens);
-      this.sessionStore.setTokens(tokens);
-    }),
-    switchMap(() => this.authService.getCurrentUser()),
-    tap((user) => {
-      this.sessionStore.setUser(user);
-    }),
-    catchError(() => {
-      this.logout();
-      return EMPTY;
-    })
-  );
-}
-
 }

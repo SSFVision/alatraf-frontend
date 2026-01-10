@@ -7,7 +7,7 @@ export const USERS_ROUTES: Routes = [
   {
     path: '',
     canActivate: [PermissionGuard],
-    data: { permission: PERMISSIONS.Users.VIEW },
+    data: { permission: PERMISSIONS.User.READ },
     loadComponent: () =>
       import('./Pages/main-user-page/main-user-page.component').then(
         (m) => m.MainUserPageComponent
@@ -25,16 +25,16 @@ export const USERS_ROUTES: Routes = [
       {
         path: 'create',
         canActivate: [PermissionGuard],
-        data: { permission: PERMISSIONS.Users.CREATE },
+        data: { permission: PERMISSIONS.User.CREATE },
         loadComponent: () =>
           import(
-            './Pages/user-workspace-page/user-workspace-page.component'
-          ).then((m) => m.UserWorkspacePageComponent),
+            './Pages/add-new-user-page/add-new-user-page.component'
+          ).then((m) => m.AddNewUserPageComponent),
       },
       {
         path: 'edit/:userId',
         canActivate: [PermissionGuard],
-        data: { permission: PERMISSIONS.Users.EDIT },
+        data: { permission: PERMISSIONS.User.UPDATE },
         loadComponent: () =>
           import(
             './Pages/user-workspace-page/user-workspace-page.component'

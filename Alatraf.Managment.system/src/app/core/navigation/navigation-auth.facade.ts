@@ -51,20 +51,25 @@ export class NavigationAuthFacade {
       // case 'Manager':
       //   return AppRoutes.management.dashboard;
 
-      default:
-        return AppRoutes.auth.login;
+      default: {
+        return AppRoutes.management.dashboard;
+      }
     }
   }
 
   /** Used after successful login */
   redirectAfterLogin(role: AppUserRole): void {
-    // console.log('try Navigate ', role);
+    console.log('try Navigate ', role);
     const home = this.getHomeRouteForRole(role);
     this.go(home, { replaceUrl: true });
   }
 
   goToRoleHome(role: AppUserRole): void {
     const home = this.getHomeRouteForRole(role);
+
     this.go(home);
+  }
+  goToDefultRole(): void {
+    this.go(AppRoutes.dashboard.root);
   }
 }

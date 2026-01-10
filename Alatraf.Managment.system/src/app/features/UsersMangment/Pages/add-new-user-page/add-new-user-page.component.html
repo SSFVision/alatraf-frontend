@@ -1,0 +1,162 @@
+<div class="backdrop" (click)="onClose()"></div>
+
+<div class="box dialog">
+  <!-- Header -->
+  <div class="space-between sticky">
+    <h2 class="title-lg">إضافة مستخدم جديد</h2>
+    <img
+      src="assets/icons/close-icon.svg"
+      alt="إغلاق"
+      (click)="onClose()"
+      class="close-icon cursor-pointer"
+    />
+  </div>
+
+  <div>
+    <p class="title-md">البيانات الشخصية</p>
+    <span class="home-line"></span>
+  </div>
+
+  <form
+    class="padding-LR-24 column gap-16"
+    [formGroup]="form"
+    (ngSubmit)="onSave()"
+  >
+    <!-- الاسم الكامل -->
+    <div class="row flex-center">
+      <label class="label-lg">الاسم الكامل</label>
+      <input class="label-lg" type="text" formControlName="fullName" />
+
+      <div class="error-message label-lg" *ngIf="hasBackendError('fullName')">
+        {{ getBackendError('fullName') }}
+      </div>
+
+      <div *ngIf="hasFrontendError('fullName')" class="error-message label-lg">
+        الاسم مطلوب
+      </div>
+    </div>
+
+    <!-- رقم الهاتف -->
+    <div class="row flex-center">
+      <label class="label-lg">رقم الهاتف</label>
+      <input
+        class="label-lg"
+        type="text"
+        formControlName="phone"
+        (input)="formatPhoneNumberInput(getControl('phone'))"
+        (keypress)="preventNonNumericInput($event)"
+      />
+
+      <div class="error-message label-lg" *ngIf="hasBackendError('phone')">
+        {{ getBackendError('phone') }}
+      </div>
+
+      <div *ngIf="hasFrontendError('phone')" class="error-message label-lg">
+        رقم الهاتف مطلوب
+      </div>
+    </div>
+
+    <!-- الجنس + تاريخ الميلاد -->
+    <div class="row flex-center">
+      <label class="label-lg">الجنس</label>
+      <select class="label-lg" formControlName="gender">
+        <option [ngValue]="true">ذكر</option>
+        <option [ngValue]="false">أنثى</option>
+      </select>
+
+      <label class="label-lg">تاريخ الميلاد</label>
+      <input
+        class="label-lg"
+        type="date"
+        formControlName="birthdate"
+        [max]="maxDate"
+      />
+
+      <div
+        class="error-message label-lg"
+        *ngIf="hasBackendError('birthdate')"
+      >
+        {{ getBackendError('birthdate') }}
+      </div>
+
+      <div *ngIf="hasFrontendError('birthdate')" class="error-message label-lg">
+        تاريخ الميلاد مطلوب
+      </div>
+    </div>
+
+    <!-- العنوان -->
+    <div class="row flex-center">
+      <label class="label-lg">العنوان</label>
+      <input class="label-lg" type="text" formControlName="address" />
+
+      <div class="error-message label-lg" *ngIf="hasBackendError('address')">
+        {{ getBackendError('address') }}
+      </div>
+
+      <div *ngIf="hasFrontendError('address')" class="error-message label-lg">
+        العنوان مطلوب
+      </div>
+    </div>
+
+    <!-- رقم الهوية -->
+    <div class="row flex-center">
+      <label class="label-lg">رقم الهوية</label>
+      <input class="label-lg" type="text" formControlName="nationalNo" />
+
+      <div class="error-message label-lg" *ngIf="hasBackendError('nationalNo')">
+        {{ getBackendError('nationalNo') }}
+      </div>
+    </div>
+ <div>
+    <p class="title-md">بيانات المستخدم</p>
+    <span class="home-line"></span>
+  </div>
+    <!-- اسم المستخدم -->
+    <div class="row flex-center">
+      <label class="label-lg">اسم المستخدم</label>
+      <input class="label-lg" type="text" formControlName="userName" />
+
+      <div class="error-message label-lg" *ngIf="hasBackendError('userName')">
+        {{ getBackendError('userName') }}
+      </div>
+
+      <div *ngIf="hasFrontendError('userName')" class="error-message label-lg">
+        اسم المستخدم مطلوب
+      </div>
+    </div>
+
+    <!-- كلمة المرور -->
+    <div class="row flex-center">
+      <label class="label-lg">كلمة المرور</label>
+      <input
+        class="label-lg"
+        type="password"
+        formControlName="password"
+      />
+
+      <div class="error-message label-lg" *ngIf="hasBackendError('password')">
+        {{ getBackendError('password') }}
+      </div>
+
+      <div *ngIf="hasFrontendError('password')" class="error-message label-lg">
+        كلمة المرور مطلوبة
+      </div>
+    </div>
+
+    <!-- حالة المستخدم -->
+    <div class="row flex-center">
+      <label class="label-lg">الحالة</label>
+      <select class="label-lg" formControlName="isActive">
+        <option [ngValue]="true">نشط</option>
+        <option [ngValue]="false">غير نشط</option>
+      </select>
+    </div>
+
+    <!-- زر الحفظ -->
+    <div class="flex-center">
+      <button class="btn primary label-md" type="submit">
+        حفظ
+      </button>
+    </div>
+  </form>
+</div>

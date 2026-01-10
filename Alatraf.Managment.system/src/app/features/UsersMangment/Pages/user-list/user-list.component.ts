@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Output, signal, input, output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Output,
+  signal,
+  input,
+  output,
+} from '@angular/core';
 import { UserListItemDto } from '../../Models/Users/user-list-item.dto';
 
 @Component({
@@ -8,9 +15,9 @@ import { UserListItemDto } from '../../Models/Users/user-list-item.dto';
   styleUrl: './user-list.component.css',
 })
 export class UserListComponent {
-  users = input<UserListItemDto[] >([]);
+  users = input<UserListItemDto[]>([]);
   loading = input<boolean>(false);
-selectUser=output<UserListItemDto>()
+  selectUser = output<UserListItemDto>();
 
   selectedId = signal<number | string | null>(null);
 
