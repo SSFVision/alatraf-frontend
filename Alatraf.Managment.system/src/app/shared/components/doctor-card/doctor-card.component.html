@@ -21,7 +21,6 @@
     [class.selected]="selectedId() === doctor.id"
     (click)="onSelect(doctor)"
   >
-    <!-- Doctor name -->
     <div class="column gap-4">
       <p class="body-md">
         د/ {{ doctor.name }}
@@ -34,7 +33,6 @@
       }
     </div>
 
-    <!-- Today total -->
     <div class="primary-color-background WH-40 flex-center border-radius-20">
       <h2 class="title-md white-color margin-auto">
         {{ doctor.todayCount }}

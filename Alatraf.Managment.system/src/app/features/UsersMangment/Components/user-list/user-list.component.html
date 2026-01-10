@@ -1,0 +1,30 @@
+@if (loading()) {
+<div class="flex-center">
+  <span class="loader"></span>
+  <span class="body-md primary-color-50 margin-left-8"> جاري التحميل... </span>
+</div>
+} @else { @if (!users() || users().length === 0) {
+<div class="empty-state">
+  <img src="assets/images/amico.svg" alt="no users" class="empty-icon" />
+  <p class="body-md primary-color-50">لا يوجد مستخدمين متاحين حالياً</p>
+</div>
+} @for (user of users(); track user.userId) {
+<div
+  class="card cursor-pointer primary-card row space-between"
+  [class.selected]="selectedId() === user.userId"
+  (click)="onSelect(user)"
+>
+  <div class="column gap-4">
+    <p class="body-md">{{ user.username }}</p>
+    <p class="body-sm primary-color-50">
+      {{ user.personName }} · {{ user.phoneNumber }}
+    </p>
+  </div>
+
+  <div class="primary-color-background WH-40 flex-center border-radius-20">
+    <h2 class="title-md white-color margin-auto">
+      {{ user.isActive ? "✅" : "⛔" }}
+    </h2>
+  </div>
+</div>
+} }

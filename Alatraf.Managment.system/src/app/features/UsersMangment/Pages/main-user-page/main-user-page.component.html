@@ -1,39 +1,40 @@
 <div class="row gap-16 fill-height">
-
   <div class="box max-width-324 gap-24 max-hight-800">
     <div class="row space-between">
       <h2 class="title-md flex-center">المستخدمين</h2>
       <div class="primary-color-background WH-40 flex-center border-radius-20">
-        <h2 class="title-md white-color margin-auto">7</h2>
+        <h2 class="title-md white-color margin-auto">{{usersListItem().length}}</h2>
       </div>
     </div>
     <div class="search-box">
-      <img src="assets/icons/search-icon.svg" class="search-icon" alt="search" />
-      <input type="text" placeholder="بحث: اسم المستخدم أو الرقم" />
+      <img
+        src="assets/icons/search-icon.svg"
+        class="search-icon"
+        alt="search"
+      />
+      <input
+        type="text"
+        placeholder="بحث: اسم المستخدم أو الرقم"
+        (input)="onSearch($any($event.target).value)"
+      />
     </div>
 
-    <div class="filters-container">
+    <!-- <div class="filters-container">
       <button class="filter-btn active">الكل</button>
       <button class="filter-btn">الاستقبال</button>
       <button class="filter-btn">الحسابات</button>
       <button class="filter-btn">العلاج الطبيعي</button>
       <button class="filter-btn">المخازن</button>
       <button class="filter-btn">الأطراف الصناعية</button>
-    </div>
+    </div> -->
 
-    <div>
-      <div class="max-hight-712 column gap-16">
-        <div class="card primary-card" (click)="OnSelectedUser(1)" [class.selected]="selectedId() === 1">
-          <p class="body-md">صالح المرادي</p>
-          <p class="body-sm primary-color-50">الرقم: 1</p>
-        </div>
-
-        <div class="card primary-card" (click)="OnSelectedUser(2)" [class.selected]="selectedId() === 2">
-          <p class="body-md">خالد العتيبي</p>
-          <p class="body-sm primary-color-50">الرقم: 2</p>
-        </div>
+      <div>
+        <app-user-list
+          [users]="usersListItem()"
+          [loading]="loadingUser()"
+          (selectUser)="OnSelectedUser($event)"
+        ></app-user-list>
       </div>
-    </div>
 
     <div class="flex-center">
       <button class="btn primary" (click)="goToAddUser()">
@@ -44,6 +45,5 @@
 
   <div class="box max-hight-800 gap-16">
     <router-outlet></router-outlet>
-  
   </div>
 </div>
