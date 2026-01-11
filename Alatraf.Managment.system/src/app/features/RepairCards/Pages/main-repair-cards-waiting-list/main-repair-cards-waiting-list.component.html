@@ -30,7 +30,20 @@
 
     <div class="box gap-24" [class.hidden-queue]="!showSecondQueue" [class.max-hight-360]="showSecondQueue"
       (click)="!showSecondQueue && toggleQueues()">
-      <h2 class="title-md">الأطباءالفنين</h2>
+
+      <div class="row space-between">
+        <h2 class="title-md">الأطباءالفنين</h2>
+
+        <div class="primary-color-background WH-40 flex-center border-radius-20">
+          <h2 class="title-md white-color margin-auto">
+            3
+          </h2>
+        </div>
+      </div>
+
+
+
+
       @if (showSecondQueue) {
       <div class="search-box">
         <img src="assets/icons/search-icon.svg" class="search-icon" alt="search" />
