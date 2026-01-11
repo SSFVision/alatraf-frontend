@@ -10,6 +10,7 @@
   white-space: nowrap;
   font-size: 1rem;
   width: fit-content;
+  color: var(--primary-color);
 }
 
 .btn.big-btn {
@@ -86,4 +87,37 @@
 .cursor-pointer,
 .close-icon {
   cursor: pointer;
+}
+
+.btn.blue {
+  background-color: var(--card-active-color);
+  color: var(--primary-color);
+}
+
+.btn.blue:hover {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn.green {
+  background-color: var(--card-green);
+  color: var(--primary-color);
+}
+
+.btn.green:hover {
+  background-color: var(--green-color);
+  color: var(--white-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn.red {
+  background-color: var(--card-red);
+  color: var(--primary-color);
+}
+
+.btn.red:hover {
+  background-color: var(--red-color);
+  color: var(--white-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
