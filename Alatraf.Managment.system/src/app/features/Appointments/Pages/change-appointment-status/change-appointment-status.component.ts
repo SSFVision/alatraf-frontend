@@ -30,6 +30,7 @@ export class ChangeAppointmentStatusComponent implements OnInit {
   selectedAppointment = this.appointmentFacade.selectedAppointment;
   actionLoading = signal<boolean>(false);
   private currentAppointmentId: number | null = null;
+  AppStatus: any;
 
   ngOnInit(): void {
     this.listenToRouteChanges();
@@ -69,7 +70,7 @@ export class ChangeAppointmentStatusComponent implements OnInit {
 
   statusLabel(status: AppointmentStatus | undefined): string {
     if (status === undefined) return '';
-  return getAppointmentStatusLabelFromEnumToArabic(status);
+    return getAppointmentStatusLabelFromEnumToArabic(status);
   }
 
   isOptionDisabled(target: AppointmentStatus) {

@@ -8,17 +8,12 @@
 <div class="row space-between">
   <h1 class="title-lg">الحسابات</h1>
 
-  <button
-    class="btn primary"
-    [disabled]="!paymentSummary()?.isCompleted"
-  >
+  <button class="btn primary" [disabled]="paymentSummary()?.isCompleted">
     طباعة
   </button>
 </div>
 
-<ng-container
-  *ngIf="paymentType() === 'therapy' && therapyPayment() as therapy"
->
+<ng-container *ngIf="paymentType() === 'therapy' && therapyPayment() as therapy">
   <app-therapy-payment-details [data]="therapy"></app-therapy-payment-details>
 </ng-container>
 
@@ -27,20 +22,14 @@
 </ng-container>
 
 <ng-container>
- 
+
   @if (therapyPayment()?.isCompleted || repairPayment()?.isCompleted ) {
-  <app-payment-summary
-    [summary]="paymentSummary()!"
-  ></app-payment-summary>
+  <app-payment-summary [summary]="paymentSummary()!"></app-payment-summary>
 
   } @else {
 
-  <app-payment-actions
-    [allowedAccountKinds]="allowedAccountKinds()"
-    [totalAmount]="totalAmount()"
-    [disabled]="isSaveDisabled()"
-    (submitPayment)="onSubmitPayment($event)"
-  >
+  <app-payment-actions [allowedAccountKinds]="allowedAccountKinds()" [totalAmount]="totalAmount()"
+    [disabled]="isSaveDisabled()" (submitPayment)="onSubmitPayment($event)">
   </app-payment-actions>
   }
 </ng-container>

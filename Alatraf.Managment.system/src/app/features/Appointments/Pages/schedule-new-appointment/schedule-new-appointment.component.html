@@ -46,7 +46,7 @@
   </ng-container> -->
 </div>
 
-<div class="column gap-24 padding-LR-24">
+<div class="column gap-16 padding-LR-24">
   <div class="width-100">
     <p class="title-md">معلومات آخر يوم مجدول</p>
     <span class="home-line"></span>
@@ -54,35 +54,19 @@
 
   <div class="row flex-center">
     <label class="label-lg">التاريخ</label>
-    <input
-      class="label-lg"
-      type="datetime"
-      [value]="lastScheduledDayDate()"
-      disabled
-      readonly
-    />
+    <input class="label-lg" type="datetime" [value]="lastScheduledDayDate()" disabled readonly />
   </div>
 
   <div class="row flex-center">
     <label class="label-lg">عدد الحلات</label>
-    <input
-      class="label-lg"
-      type="number"
-      [value]="lastScheduledDayCount()"
-      disabled
-      readonly
-    />
+    <input class="label-lg" type="number" [value]="lastScheduledDayCount()" disabled readonly />
   </div>
 </div>
 
 <!-- The new information ends here -->
 
 <ng-container *ngIf="!isLoadingLastDay() && lastScheduledDay()">
-  <app-schedule-appointment-form
-    [initialDate]="lastScheduledDay()?.date"
-    [isSaving]="isScheduling()"
-    [isCompleted]="isAppointmentCreated()"
-    (save)="onScheduleSubmit($event)"
-  ></app-schedule-appointment-form>
+  <app-schedule-appointment-form [initialDate]="lastScheduledDay()?.date" [isSaving]="isScheduling()"
+    [isCompleted]="isAppointmentCreated()" (save)="onScheduleSubmit($event)"></app-schedule-appointment-form>
 </ng-container>
 }
