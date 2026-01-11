@@ -8,32 +8,17 @@
 }
 
 <ng-template #holidayForm>
-  <div class="space-between">
-    <p class="title-md">بيانات الإجازة</p>
-    <img
-      *ngIf="isEditMode()"
-      src="assets/icons/close-icon.svg"
-      alt="إغلاق"
-      class="close-icon"
-      (click)="OnCloseEditHoliday()"
-    />
-  </div>
-  <span class="home-line"></span>
 
-  <form
-    class="padding-LR-24 column gap-16"
-    [formGroup]="form"
-    (ngSubmit)="onSubmit()"
-  >
+  <form class="padding-LR-24 column gap-16" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="width-100">
+      <p class="title-md">بيانات الإجازة</p>
+
+      <span class="home-line"></span>
+    </div>
     <div class="row flex-center">
       <label class="label-lg">الاسم</label>
-      <input
-        class="label-lg"
-        type="text"
-        formControlName="name"
-        placeholder="اسم الإجازة"
-        (blur)="getControl('name')?.markAsTouched()"
-      />
+      <input class="label-lg" type="text" formControlName="name" placeholder="اسم الإجازة"
+        (blur)="getControl('name')?.markAsTouched()" />
 
       <!-- Backend Validation -->
       <div class="error-message label-lg" *ngIf="hasBackendError('name')">
@@ -42,34 +27,17 @@
 
       <!-- Frontend Validation -->
       <div *ngIf="hasFrontendError('name')" class="error-message label-lg">
-        <span *ngIf="getControl('name')?.hasError('required')"
-          >الاسم مطلوب</span
-        >
-        <span *ngIf="getControl('name')?.hasError('maxlength')"
-          >الاسم يجب ألا يتجاوز 100 حرف</span
-        >
+        <span *ngIf="getControl('name')?.hasError('required')">الاسم مطلوب</span>
+        <span *ngIf="getControl('name')?.hasError('maxlength')">الاسم يجب ألا يتجاوز 100 حرف</span>
       </div>
     </div>
 
     <!-- Temporary holiday: full dates -->
-    <div
-      class="row flex-center"
-      *ngIf="form.value.type === HolidayType.Temporary"
-    >
+    <div class="row flex-center" *ngIf="form.value.type === HolidayType.Temporary">
       <label class="label-lg">تاريخ الإجازة: من</label>
-      <input
-        class="label-lg"
-        type="date"
-        formControlName="startDate"
-        [attr.min]="today"
-      />
+      <input class="label-lg" type="date" formControlName="startDate" [attr.min]="today" />
       <label class="label-lg">إلى</label>
-      <input
-        class="label-lg"
-        type="date"
-        formControlName="endDate"
-        [attr.min]="today"
-      />
+      <input class="label-lg" type="date" formControlName="endDate" [attr.min]="today" />
     </div>
     <!-- Fixed holiday: month/day only -->
     <div class="row flex-center" *ngIf="form.value.type === HolidayType.Fixed">
@@ -80,69 +48,38 @@
         </option>
       </select>
       <label class="label-lg">اليوم</label>
-      <input
-        appPositiveNumber
-        class="label-lg"
-        type="number"
-        formControlName="fixedDay"
-        [attr.min]="1"
-        [attr.max]="maxDayForMonth(form.value.fixedMonth || 1)"
-      />
+      <input appPositiveNumber class="label-lg" type="number" formControlName="fixedDay" [attr.min]="1"
+        [attr.max]="maxDayForMonth(form.value.fixedMonth || 1)" />
     </div>
     <!-- Backend Validation (temporary only) -->
-    <div
-      class="error-message label-lg"
-      *ngIf="
+    <div class="error-message label-lg" *ngIf="
         hasBackendError('startDate') &&
         form.value.type === HolidayType.Temporary
-      "
-    >
+      ">
       {{ getBackendError("startDate") }}
     </div>
     <!-- Frontend Validation (temporary only) -->
-    <div
-      *ngIf="
+    <div *ngIf="
         hasFrontendError('startDate') &&
         form.value.type === HolidayType.Temporary
-      "
-      class="error-message label-lg"
-    >
-      <span *ngIf="getControl('startDate')?.hasError('required')"
-        >تاريخ البداية مطلوب</span
-      >
-      <span *ngIf="getControl('startDate')?.hasError('pastDate')"
-        >تاريخ البداية لا يمكن أن يكون في الماضي</span
-      >
+      " class="error-message label-lg">
+      <span *ngIf="getControl('startDate')?.hasError('required')">تاريخ البداية مطلوب</span>
+      <span *ngIf="getControl('startDate')?.hasError('pastDate')">تاريخ البداية لا يمكن أن يكون في الماضي</span>
     </div>
-    <div
-      class="error-message label-lg"
-      *ngIf="
+    <div class="error-message label-lg" *ngIf="
         hasBackendError('endDate') && form.value.type === HolidayType.Temporary
-      "
-    >
+      ">
       {{ getBackendError("endDate") }}
     </div>
-    <div
-      *ngIf="
+    <div *ngIf="
         hasFrontendError('endDate') && form.value.type === HolidayType.Temporary
-      "
-      class="error-message label-lg"
-    >
-      <span *ngIf="getControl('endDate')?.hasError('beforeStart')"
-        >تاريخ النهاية يجب ألا يسبق تاريخ البداية</span
-      >
+      " class="error-message label-lg">
+      <span *ngIf="getControl('endDate')?.hasError('beforeStart')">تاريخ النهاية يجب ألا يسبق تاريخ البداية</span>
     </div>
     <!-- Fixed validation messages -->
-    <div
-      *ngIf="form.value.type === HolidayType.Fixed"
-      class="error-message label-lg"
-    >
-      <span *ngIf="getControl('fixedMonth')?.hasError('required')"
-        >اختيار الشهر مطلوب</span
-      >
-      <span *ngIf="getControl('fixedDay')?.hasError('required')"
-        >اختيار اليوم مطلوب</span
-      >
+    <div *ngIf="form.value.type === HolidayType.Fixed" class="error-message label-lg">
+      <span *ngIf="getControl('fixedMonth')?.hasError('required')">اختيار الشهر مطلوب</span>
+      <span *ngIf="getControl('fixedDay')?.hasError('required')">اختيار اليوم مطلوب</span>
     </div>
 
     <div class="row flex-center">
@@ -162,9 +99,7 @@
       </div>
       <!-- Frontend Validation -->
       <div *ngIf="hasFrontendError('type')" class="error-message label-lg">
-        <span *ngIf="getControl('type')?.hasError('required')"
-          >نوع الإجازة مطلوب</span
-        >
+        <span *ngIf="getControl('type')?.hasError('required')">نوع الإجازة مطلوب</span>
       </div>
     </div>
 
@@ -184,11 +119,7 @@
     </div> -->
 
     <div class="row gap-32 flex-center">
-      <button
-        class="btn primary label-md"
-        type="submit"
-        [disabled]="form.invalid || isSubmitting || isSubmitted"
-      >
+      <button class="btn primary label-md" type="submit" [disabled]="form.invalid || isSubmitting || isSubmitted">
         {{ isEditMode() ? "تعديل الإجازة" : "حفظ الإجازة" }}
       </button>
     </div>

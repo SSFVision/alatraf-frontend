@@ -1,28 +1,13 @@
-<div class="column gap-24">
-  <div class="space-between">
-    <div class="row gap-16">
-      <h2
-        class="title-lg cursor-pointer"
-        [class.primary-color-50]="activeTab() !== 'add'"
-        (click)="goToAdd()"
-      >
-        إضافة إجازة
-      </h2>
-      <h2
-        class="title-lg cursor-pointer"
-        [class.primary-color-50]="activeTab() !== 'list'"
-        (click)="goToList()"
-      >
-        الإجازات
-      </h2>
-    </div>
-    <img
-      src="assets/icons/close-icon.svg"
-      alt="إغلاق"
-      class="close-icon"
-      (click)="OnCloseHoliday()"
-    />
+<div class="space-between">
+  <div class="row gap-16">
+    <h2 class="title-lg cursor-pointer" [class.primary-color-50]="activeTab() !== 'add'" (click)="goToAdd()">
+      إضافة إجازة
+    </h2>
+    <h2 class="title-lg cursor-pointer" [class.primary-color-50]="activeTab() !== 'list'" (click)="goToList()">
+      الإجازات
+    </h2>
   </div>
-
-  <router-outlet></router-outlet>
+  <img src="assets/icons/close-icon.svg" alt="إغلاق" class="close-icon" (click)="OnCloseHoliday()" />
 </div>
+
+<router-outlet></router-outlet>
