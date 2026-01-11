@@ -1,0 +1,26 @@
+@if (loading()) {
+<div class="flex-center">
+  <span class="loader"></span>
+  <span class="body-md primary-color-50 margin-left-8"> جاري التحميل... </span>
+</div>
+} @else{ @if (!sortedInjuries() || sortedInjuries().length === 0) {
+<div class="empty-state">
+  <img src="assets/images/amico.svg" alt="no injuries" class="empty-icon" />
+  <p class="body-md primary-color-50">لا توجد إصابات متاحة حالياً</p>
+</div>
+} @for (injury of sortedInjuries(); track injury.id) {
+<div
+  class="card cursor-pointer primary-card row space-between"
+  [class.selected]="selectedId() === injury.id"
+  (click)="onSelect(injury)"
+>
+  <div class="column gap-4">
+    <p class="body-md">
+      {{ injury.name }}
+    </p>
+    <p class="body-sm primary-color-50">
+      الرقم: {{ injury.id }}
+    </p>
+  </div>
+</div>
+} }

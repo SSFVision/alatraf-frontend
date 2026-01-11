@@ -89,6 +89,13 @@ export const MENU_CONFIG: MenuCategory[] = [
         route: `${AppRoutes.therapyCards.root}`,
         requiredPermissions: [PERMISSIONS.TherapyCard.READ_SESSION],
       },
+         {
+        label: ' الاصابات',
+        icon: 'assets/icons/services-w.svg',
+        activeIcon: 'assets/icons/services-b.svg',
+        route: AppRoutes.injuries.root,
+        requiredPermissions: [PERMISSIONS.IndustrialPart.READ],
+      },
     
     ],
   },

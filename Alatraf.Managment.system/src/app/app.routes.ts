@@ -114,6 +114,13 @@ export const APP_ROUTES: Routes = [
           ),
       },
       {
+        path: AppRoutes.injuries.root,
+        loadChildren: () =>
+          import('./features/Injuries/injuries.routes').then(
+            (m) => m.InjuriesRoutes
+          ),
+      },
+      {
         path: AppRoutes.doctors.root,
         loadChildren: () =>
           import('./features/Organization/Doctors/doctors.routes').then(

@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { PERMISSIONS } from '../../core/auth/Roles/permissions.map';
 import { PermissionGuard } from '../../core/guards/permission.guard';
+import { WorkspaceWelcomeComponent } from '../../shared/components/workspace-welcome/workspace-welcome.component';
 
 export const TherapyCardsRoutes: Routes = [
   {
@@ -13,6 +14,16 @@ export const TherapyCardsRoutes: Routes = [
       ).then((m) => m.MainTherapyPatientsWatingListComponent),
 
     children: [
+    
+{
+        path: '',
+        component: WorkspaceWelcomeComponent,
+        data: {
+          title: 'مرحباً بك في إدارة التشخيص والعلاج',
+          subtitle: ' اختر بطاقة علاج من قائمة الانتظار المدفوعة للبدء في الجلسات',
+        },
+      },
+
       {
         path: ':therapyCardId/sessions/create',
         canActivate: [PermissionGuard],

@@ -1,0 +1,87 @@
+:host {
+  display: flex;
+  flex: 1;
+  align-items: stretch;
+}
+
+.host > .box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 300px;
+}
+
+.hidden-queue {
+  position: relative;
+  /* ضروري جداً لكي يظهر النص داخل الكارت وليس خارجه */
+  flex: 0 0 auto;
+  /* استبدل fit-content بـ auto لضمان وجود مساحة */
+  min-height: 60px;
+  max-height: 60px;
+  /* تأكد من وجود حد أدنى للارتفاع ليظهر النص */
+  cursor: pointer;
+  overflow: hidden;
+  /* للحفاظ على شكل الكارت */
+  transition: max-height 0.35s ease, background-color 0.3s ease,
+    border-color 0.3s ease, box-shadow 0.3s ease;
+  will-change: max-height;
+}
+
+/* حالة الهافرينج */
+.hidden-queue:hover {
+  background-color: var(--card-active-color) !important;
+  border-color: var(--card-active-color);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.hidden-queue::after {
+  content: "\2195";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  color: var(--primary-color) !important;
+  font-size: 1rem;
+  white-space: nowrap;
+
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 2;
+}
+
+.hidden-queue:hover::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+.hidden-queue:hover .content {
+  opacity: 0 !important;
+  visibility: hidden;
+}
+
+/* الحالة المفتوحة: ارتفاع سلس */
+.max-hight-360 {
+  max-height: 360px;
+  overflow: auto;
+  transition: max-height 0.35s ease;
+  will-change: max-height;
+}
+
+/* تحريك العناصر الداخلية لتكون أكثر سلاسة عند الفتح والإغلاق */
+.hidden-queue .search-box,
+.hidden-queue app-injury-card {
+  opacity: 0;
+  transform: translateY(-4px);
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.max-hight-360 .search-box,
+.max-hight-360 app-injury-card {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  transition: opacity 0.25s ease 0.1s, transform 0.25s ease 0.1s;
+}
