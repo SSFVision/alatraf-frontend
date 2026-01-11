@@ -79,10 +79,10 @@
   color: --primary-color-50 !important;
 }
 
-.max-width-324 .btn {
+/* .max-width-324 .btn {
   position: absolute;
   bottom: 16px;
-}
+} */
 
 .cursor-pointer,
 .close-icon {
