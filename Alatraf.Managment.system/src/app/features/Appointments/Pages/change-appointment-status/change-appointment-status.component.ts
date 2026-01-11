@@ -30,7 +30,7 @@ export class ChangeAppointmentStatusComponent implements OnInit {
   selectedAppointment = this.appointmentFacade.selectedAppointment;
   actionLoading = signal<boolean>(false);
   private currentAppointmentId: number | null = null;
-  AppStatus: any;
+  AppStatus = AppointmentStatus;
 
   ngOnInit(): void {
     this.listenToRouteChanges();
@@ -56,7 +56,7 @@ export class ChangeAppointmentStatusComponent implements OnInit {
     const current = this.selectedAppointment();
     if (!id || this.actionLoading() || !current) return;
     if (current.status === newStatus) return;
-    if (this.isOptionDisabled(newStatus)) return;
+    if (!this.canTransitionTo(newStatus)) return;
 
     this.actionLoading.set(true);
     this.appointmentFacade
@@ -73,29 +73,43 @@ export class ChangeAppointmentStatusComponent implements OnInit {
     return getAppointmentStatusLabelFromEnumToArabic(status);
   }
 
-  isOptionDisabled(target: AppointmentStatus) {
+  canTransitionTo(newState: AppointmentStatus): boolean {
     const current = this.selectedAppointment();
-    if (!current) return true;
+    if (!current) return false;
 
-    if (target === AppointmentStatus.Today) {
-      return current.status !== AppointmentStatus.Scheduled;
-    }
+    // Business rules:
+    // Scheduled -> Today
+    if (
+      current.status === AppointmentStatus.Scheduled &&
+      newState === AppointmentStatus.Today
+    )
+      return true;
 
-    if (target === AppointmentStatus.Attended) {
-      return current.status !== AppointmentStatus.Today;
-    }
+    // Today -> Attended
+    if (
+      current.status === AppointmentStatus.Today &&
+      newState === AppointmentStatus.Attended
+    )
+      return true;
 
-    if (target === AppointmentStatus.Absent) {
-      return current.status !== AppointmentStatus.Today;
-    }
+    // Today -> Absent
+    if (
+      current.status === AppointmentStatus.Today &&
+      newState === AppointmentStatus.Absent
+    )
+      return true;
 
-    if (target === AppointmentStatus.Cancelled) {
-      return (
-        current.status === AppointmentStatus.Attended ||
-        current.status === AppointmentStatus.Cancelled
-      );
-    }
+    // Any (except Attended) -> Cancelled
+    if (
+      newState === AppointmentStatus.Cancelled &&
+      current.status !== AppointmentStatus.Attended
+    )
+      return true;
 
-    return true;
+    return false;
+  }
+
+  isOptionDisabled(target: AppointmentStatus) {
+    return !this.canTransitionTo(target);
   }
 }

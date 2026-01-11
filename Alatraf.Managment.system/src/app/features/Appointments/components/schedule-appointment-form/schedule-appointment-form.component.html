@@ -32,7 +32,7 @@
     <button
       type="submit"
       class="btn primary label-md"
-      [disabled]="form.invalid || isSaving || isCompleted"
+      [disabled]="form.invalid || isSaving || isCompleted()"
     >
       <span *ngIf="!isSaving">حفظ</span>
       <span *ngIf="isSaving">جاري الحفظ...</span>
