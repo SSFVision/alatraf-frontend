@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { InjuryTypesFacadeService } from '../../Services/injury-types.facade.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-injury-types-add-edit',
@@ -40,29 +41,27 @@ export class InjuryTypesAddEditComponent implements OnInit {
       this.facade.enterCreateMode();
     });
   }
-  constructor() {
-    this.listenToRoute();
-    effect(() => {
-      if (this.isEditMode()) {
-        const item = this.selectedItem();
-        if (!item) return;
-        this.form.patchValue({ name: item.name });
-        this.form.markAsPristine();
-        this.form.enable();
-        this.canDelete.set(true);
-        this.canSubmit.set(false);
-      } else {
-        this.form.reset({ name: '' });
-        this.form.markAsPristine();
-        this.form.enable();
-        this.canDelete.set(false);
-        this.canSubmit.set(false);
-      }
-    });
-  }
+  private readonly syncFormEffect = effect(() => {
+    if (this.isEditMode()) {
+      const item = this.selectedItem();
+      if (!item) return;
 
+      this.form.patchValue({ name: item.name });
+      this.form.markAsPristine();
+      this.form.enable();
+      this.canDelete.set(true);
+      this.canSubmit.set(false);
+    } else {
+      this.form.reset({ name: '' });
+      this.form.markAsPristine();
+      this.form.enable();
+      this.canDelete.set(false);
+      this.canSubmit.set(false);
+    }
+  });
+ 
   ngOnInit(): void {
-    this.facade.loadInjuryTypes();
+    this.listenToRoute();
 
     this.form.valueChanges.subscribe(() => {
       this.canSubmit.set(this.form.valid && this.form.dirty);

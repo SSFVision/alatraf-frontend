@@ -1,23 +1,25 @@
 <div class="row gap-16">
   <div class="column gap-16 max-width-324">
-    <!-- Injury Types -->
+   
+    <!-- Injury Sides -->
     <div
       class="box gap-24"
-      [class.hidden-queue]="!showTypesQueue"
-      [class.max-hight-360]="showTypesQueue"
-      (click)="!showTypesQueue && toggleQueues('types')"
+      [class.hidden-queue]="!showSidesQueue"
+      [class.max-hight-360]="showSidesQueue"
+      (click)="!showSidesQueue && toggleQueues('sides')"
     >
       <div class="row space-between">
-        <h2 class="title-md flex-center">أنواع الإصابات</h2>
+        <h2 class="title-md flex-center">جهات الإصابة</h2>
         <div
           class="primary-color-background WH-40 flex-center border-radius-20"
         >
           <h2 class="title-md white-color margin-auto">
-            {{ types().length }}
+            {{ sides().length }}
           </h2>
         </div>
       </div>
-      @if (showTypesQueue) {
+
+      @if (showSidesQueue) {
       <div class="search-box">
         <img
           src="assets/icons/search-icon.svg"
@@ -26,23 +28,25 @@
         />
         <input
           type="text"
-          placeholder="بحث: اسم الإصابة"
-          (input)="onSearchTypes($any($event.target).value)"
+          placeholder="بحث: اسم الجهة"
+          (input)="onSearchSides($any($event.target).value)"
         />
       </div>
 
       <app-injury-card
         class="max-hight-712 column gap-16"
-        [injuries]="filteredTypes()"
-        [loading]="loadingTypes()"
-        (select)="onSelectType($event)"
+        [injuries]="filteredSides()"
+        [loading]="loadingSides()"
+        (select)="onSelectSide($event)"
       ></app-injury-card>
-      <button class="btn primary width-100" type="button" (click)="onAddType()">
-        إضافة نوع إصابة جديد
+
+      <button class="btn primary width-100" type="button" (click)="onAddSide()">
+        إضافة جهة إصابة جديدة
       </button>
       }
     </div>
-   <!-- Injury Reasons -->
+
+  <!-- Injury Reasons -->
     <div
       class="box gap-24"
       [class.hidden-queue]="!showReasonsQueue"
@@ -90,25 +94,24 @@
       }
     </div>
 
-    <!-- Injury Sides -->
+ <!-- Injury Types -->
     <div
       class="box gap-24"
-      [class.hidden-queue]="!showSidesQueue"
-      [class.max-hight-360]="showSidesQueue"
-      (click)="!showSidesQueue && toggleQueues('sides')"
+      [class.hidden-queue]="!showTypesQueue"
+      [class.max-hight-360]="showTypesQueue"
+      (click)="!showTypesQueue && toggleQueues('types')"
     >
       <div class="row space-between">
-        <h2 class="title-md flex-center">جهات الإصابة</h2>
+        <h2 class="title-md flex-center">أنواع الإصابات</h2>
         <div
           class="primary-color-background WH-40 flex-center border-radius-20"
         >
           <h2 class="title-md white-color margin-auto">
-            {{ sides().length }}
+            {{ types().length }}
           </h2>
         </div>
       </div>
-
-      @if (showSidesQueue) {
+      @if (showTypesQueue) {
       <div class="search-box">
         <img
           src="assets/icons/search-icon.svg"
@@ -117,26 +120,23 @@
         />
         <input
           type="text"
-          placeholder="بحث: اسم الجهة"
-          (input)="onSearchSides($any($event.target).value)"
+          placeholder="بحث: اسم الإصابة"
+          (input)="onSearchTypes($any($event.target).value)"
         />
       </div>
 
       <app-injury-card
         class="max-hight-712 column gap-16"
-        [injuries]="filteredSides()"
-        [loading]="loadingSides()"
-        (select)="onSelectSide($event)"
+        [injuries]="filteredTypes()"
+        [loading]="loadingTypes()"
+        (select)="onSelectType($event)"
       ></app-injury-card>
-
-      <button class="btn primary width-100" type="button" (click)="onAddSide()">
-        إضافة جهة إصابة جديدة
+      <button class="btn primary width-100" type="button" (click)="onAddType()">
+        إضافة نوع إصابة جديد
       </button>
       }
     </div>
-
- 
-
+  
   </div>
 
   <div class="box max-hight-800 gap-16">

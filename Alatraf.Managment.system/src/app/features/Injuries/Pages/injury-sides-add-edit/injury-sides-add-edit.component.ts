@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { InjurySidesFacadeService } from '../../Services/injury-sides.facade.service';
 import { InjuryDto } from '../../../../core/models/injuries/injury.dto';
 import { InjuriesNavigationFacade } from '../../../../core/navigation/injuries-navigation.facade';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-injury-sides-add-edit',
@@ -42,32 +43,31 @@ export class InjurySidesAddEditComponent {
     });
   }
 
-  constructor() {
+  private readonly syncFormEffect = effect(() => {
+    if (this.isEditMode()) {
+      const item = this.selectedItem();
+      if (!item) return;
+      this.form.patchValue({ name: item.name });
+      this.form.markAsPristine();
+      this.form.enable();
+      this.canDelete.set(true);
+      this.canSubmit.set(false);
+    } else {
+      this.form.reset({ name: '' });
+      this.form.markAsPristine();
+      this.form.enable();
+      this.canDelete.set(false);
+      this.canSubmit.set(false);
+    }
+  });
+ 
+  ngOnInit(): void {
     this.listenToRoute();
-
-    effect(() => {
-      if (this.isEditMode()) {
-        const item = this.selectedItem();
-        if (!item) return;
-        this.form.patchValue({ name: item.name });
-        this.form.markAsPristine();
-        this.form.enable();
-        this.canDelete.set(true);
-        this.canSubmit.set(false);
-      } else {
-        this.form.reset({ name: '' });
-        this.form.markAsPristine();
-        this.form.enable();
-        this.canDelete.set(false);
-        this.canSubmit.set(false);
-      }
-    });
 
     this.form.valueChanges.subscribe(() => {
       this.canSubmit.set(this.form.valid && this.form.dirty);
     });
   }
-
   submit(): void {
     if (!this.canSubmit()) return;
     const name = this.form.controls.name.value.trim();
