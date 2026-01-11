@@ -27,16 +27,20 @@
     </button>
     } -->
 
-    <button class="btn green" (click)="changeStatus(AppStatus.Today)">
+    <button class="btn green" *ngIf="canTransitionTo(AppStatus.Today)" [disabled]="actionLoading()" (click)="changeStatus(AppStatus.Today)">
       موعد اليوم
     </button>
 
-    <button class=" btn red" (click)="changeStatus(AppStatus.Cancelled)">
+    <button class=" btn red" *ngIf="canTransitionTo(AppStatus.Cancelled)" [disabled]="actionLoading()" (click)="changeStatus(AppStatus.Cancelled)">
       ملغي
     </button>
 
-    <button class="btn" (click)="changeStatus(AppStatus.Absent)">
+    <button class="btn" *ngIf="canTransitionTo(AppStatus.Absent)" [disabled]="actionLoading()" (click)="changeStatus(AppStatus.Absent)">
       متأخر
+    </button>
+
+    <button class="btn" *ngIf="canTransitionTo(AppStatus.Attended)" [disabled]="actionLoading()" (click)="changeStatus(AppStatus.Attended)">
+      {{ statusLabel(AppStatus.Attended) }}
     </button>
 
   </div>
