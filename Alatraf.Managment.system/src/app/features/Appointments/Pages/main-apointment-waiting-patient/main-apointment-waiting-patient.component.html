@@ -1,5 +1,5 @@
 <div class="row gap-16">
-  <div class="box max-width-324 culumn gap-24 max-hight-800">
+  <div class="box max-width-324 culumn gap-24">
     <div class="row space-between">
       <h2 class="title-md flex-center">قائمة الإنتظار</h2>
       <div class="primary-color-background WH-40 flex-center border-radius-20">
@@ -9,29 +9,16 @@
       </div>
     </div>
     <div class="search-box">
-      <img
-        src="assets/icons/search-icon.svg"
-        class="search-icon"
-        alt="search"
-      />
-      <input
-        type="text"
-        placeholder="بحث: اسم المريض أو الرقم"
-        #searchBox
-        (input)="onSearch(searchBox.value)"
-      />
+      <img src="assets/icons/search-icon.svg" class="search-icon" alt="search" />
+      <input type="text" placeholder="بحث: اسم المريض أو الرقم" #searchBox (input)="onSearch(searchBox.value)" />
     </div>
 
-    <app-waiting-patient-card
-      class="max-hight-712 column gap-16"
-      [tickets]="tickets()"
-      (select)="OnSelectPatientTicket($event)"
-      [loading]="isloading()"
-    ></app-waiting-patient-card>
+    <app-waiting-patient-card class="max-hight-712 column gap-16" [tickets]="tickets()"
+      (select)="OnSelectPatientTicket($event)" [loading]="isloading()"></app-waiting-patient-card>
   </div>
 
-    <div class="box max-hight-800 gap-16 flex-center">
-    
-      <router-outlet></router-outlet>
-    </div>
+  <div class="box gap-16">
+
+    <router-outlet></router-outlet>
+  </div>
 </div>
