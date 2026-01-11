@@ -14,42 +14,30 @@ export class UsersNavigationFacade {
   }
 
   goToUsersListPage(extras?: NavigationExtras): void {
-    this.go(
-      `${AppRoutes.users.root}/${AppRoutes.users.list}`,
-      extras
-    );
+    this.go(`${AppRoutes.users.root}/${AppRoutes.users.list}`, extras);
   }
 
   goToCreateUserPage(extras?: NavigationExtras): void {
-    this.go(
-      `${AppRoutes.users.root}/${AppRoutes.users.create}`,
-      extras
-    );
+    this.go(`${AppRoutes.users.root}/${AppRoutes.users.create}`, extras);
   }
 
-  goToEditUserPage(
-    userId: number | string,
-    extras?: NavigationExtras
-  ): void {
-    this.go(
-      `${AppRoutes.users.root}/${AppRoutes.users.edit(userId)}`,
-      extras
-    );
+  goToEditUserPage(userId:  string, extras?: NavigationExtras): void {
+    this.go(`${AppRoutes.users.root}/${AppRoutes.users.edit(userId)}`, extras);
   }
 
-  goToViewUserPage(
-    userId: number | string,
-    extras?: NavigationExtras
-  ): void {
-    this.go(
-      `${AppRoutes.users.root}/${AppRoutes.users.view(userId)}`,
-      extras
-    );
+  goToViewUserPage(userId: string, extras?: NavigationExtras): void {
+    this.go(`${AppRoutes.users.root}/${AppRoutes.users.view(userId)}`, extras);
   }
 
   // ==============================
   // User Permissions
   // ==============================
+  goToUserRoleAssignPage(userId: string, extras?: NavigationExtras): void {
+    this.go(
+      `${AppRoutes.users.root}/${AppRoutes.users.AssignRole(userId)}`,
+      extras
+    );
+  }
   goToUserPermissionsPage(
     userId: number | string,
     extras?: NavigationExtras
@@ -59,17 +47,10 @@ export class UsersNavigationFacade {
       extras
     );
   }
-
   // ==============================
   // Internal Helper
   // ==============================
-  private go(
-    path: string | any[],
-    extras?: NavigationExtras
-  ): void {
-    this.router.navigate(
-      Array.isArray(path) ? path : [path],
-      extras
-    );
+  private go(path: string | any[], extras?: NavigationExtras): void {
+    this.router.navigate(Array.isArray(path) ? path : [path], extras);
   }
 }

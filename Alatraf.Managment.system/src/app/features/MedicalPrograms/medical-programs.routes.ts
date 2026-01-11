@@ -6,7 +6,7 @@ export const MedicalProgramsRoutes: Routes = [
   {
     path: '',
     canActivate: [PermissionGuard],
-    data: { permission: PERMISSIONS.MedicalPrograms.VIEW },
+    data: { permission: PERMISSIONS.MedicalProgram.READ },
     loadComponent: () =>
       import(
         './Pages/main-medical-programs-page/main-medical-programs-page.component'
@@ -16,7 +16,7 @@ export const MedicalProgramsRoutes: Routes = [
       {
         path: 'edit/:medicalProgramId',
         canActivate: [PermissionGuard],
-        data: { permission: PERMISSIONS.MedicalPrograms.UPDATE },
+        data: { permission: PERMISSIONS.MedicalProgram.UPDATE },
         loadComponent: () =>
           import(
             './Pages/medical-programs-work-space/medical-programs-work-space.component'
@@ -25,7 +25,7 @@ export const MedicalProgramsRoutes: Routes = [
       {
         path: 'create',
         canActivate: [PermissionGuard],
-        data: { permission: PERMISSIONS.MedicalPrograms.CREATE },
+        data: { permission: PERMISSIONS.MedicalProgram.CREATE },
         loadComponent: () =>
           import(
             './Pages/medical-programs-work-space/medical-programs-work-space.component'

@@ -6,7 +6,7 @@ export const IndustrialPartsRoutes: Routes = [
   {
     path: '',
     canActivate: [PermissionGuard],
-    data: { permission: PERMISSIONS.IndustrialParts.VIEW },
+    data: { permission: PERMISSIONS.IndustrialPart.READ },
     loadComponent: () =>
       import(
         './Pages/main-industrial-parts-page/main-industrial-parts-page.component'
@@ -16,7 +16,7 @@ export const IndustrialPartsRoutes: Routes = [
       {
         path: 'create',
         canActivate: [PermissionGuard],
-        data: { permission: PERMISSIONS.IndustrialParts.CREATE },
+        data: { permission: PERMISSIONS.IndustrialPart.CREATE },
         loadComponent: () =>
           import(
             './Pages/industrial-part-worke-space-view-page.component/industrial-part-worke-space-view-page.component.component'
@@ -26,7 +26,7 @@ export const IndustrialPartsRoutes: Routes = [
       {
         path: 'edit/:industrialPartId',
         canActivate: [PermissionGuard],
-        data: { permission: PERMISSIONS.IndustrialParts.UPDATE },
+        data: { permission: PERMISSIONS.IndustrialPart.UPDATE },
         loadComponent: () =>
           import(
             './Pages/industrial-part-worke-space-view-page.component/industrial-part-worke-space-view-page.component.component'

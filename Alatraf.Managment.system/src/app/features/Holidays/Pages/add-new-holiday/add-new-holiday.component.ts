@@ -255,7 +255,7 @@ this.holidayNav.goToHolidayList();
   }
 
   private patchFormForHoliday(holiday: HolidayDto): void {
-    if ('fixed' === holiday.type) {
+    if (HolidayType.Fixed === holiday.type) {
       const date = new Date(holiday.startDate);
       const month = Number.isNaN(date.getTime()) ? 1 : date.getMonth() + 1;
       const day = Number.isNaN(date.getTime()) ? 1 : date.getDate();

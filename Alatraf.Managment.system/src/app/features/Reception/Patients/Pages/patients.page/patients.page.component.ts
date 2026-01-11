@@ -54,7 +54,7 @@ export class PatientsPageComponent implements OnInit {
   }
 
   onDeletePatient(patient: PatientDto) {
-    if (this.auth.hasPermission(PERMISSIONS.PATIENTS.DELETE)) {
+    if (this.auth.hasPermission(PERMISSIONS.Patient.DELETE)) {
       this.facade.deletePatient(patient);
     } else {
       this.toast.warning('لا تملك صلاحية الوصول لتنفيذ هذه العملية');

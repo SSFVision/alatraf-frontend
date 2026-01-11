@@ -6,7 +6,7 @@ export const PaymentsRoutes: Routes = [
   {
     path: '',
     canActivate: [PermissionGuard],
-    data: { permission: PERMISSIONS.PAYMENTS.VIEW },
+    data: { permission: PERMISSIONS.Payment.READ },
     loadComponent: () =>
       import(
         './Pages/main-payment-waiting-list/main-payment-waiting-list.component'
@@ -16,7 +16,7 @@ export const PaymentsRoutes: Routes = [
       {
         path: 'paid/:paymentId/:paymentReference',
         canActivate: [PermissionGuard],
-        data: { permission: PERMISSIONS.PAYMENTS.ADD },
+        data: { permission: PERMISSIONS.Payment.CREATE },
         loadComponent: () =>
           import('./Pages/paied-page/paied-page.component').then(
             (m) => m.PaiedPageComponent

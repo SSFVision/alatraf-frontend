@@ -32,27 +32,30 @@ export class NavigationAuthFacade {
 
   private getHomeRouteForRole(role: AppUserRole): string {
     switch (role) {
-      case AppUserRole.Reception:
+      case AppUserRole.Receptionist:
         return AppRoutes.reception.root;
 
-      case AppUserRole.Doctor_Therapy:
+      case AppUserRole.TherapyDoctor:
         return `${AppRoutes.diagnosis.root}/${AppRoutes.diagnosis.therapy.root}`;
-      case AppUserRole.Doctor_Industrial:
+      case AppUserRole.IndustrialDoctor:
         return `${AppRoutes.diagnosis.root}/${AppRoutes.diagnosis.industrial.root}`;
 
-      case AppUserRole.Finance:
+      case AppUserRole.FinanceEmployee:
         return AppRoutes.finance.root;
-      case AppUserRole.Appointment:
-        return AppRoutes.Appointment.root;
-      case AppUserRole.Admin:
+        case AppUserRole.SalesEmployee:
+        return AppRoutes.finance.root;
+      case AppUserRole.AppointmentsEmployee:
       return `${AppRoutes.Appointment.root}/${AppRoutes.Appointment.manage}`;
+      case AppUserRole.Admin:
+        return AppRoutes.users.root;
 
       // return `${AppRoutes.Appointment.root}/${AppRoutes.Appointment.manage}`;
       // case 'Manager':
       //   return AppRoutes.management.dashboard;
 
-      default:
-        return AppRoutes.auth.login;
+      default: {
+        return AppRoutes.management.dashboard;
+      }
     }
   }
 
@@ -65,6 +68,10 @@ export class NavigationAuthFacade {
 
   goToRoleHome(role: AppUserRole): void {
     const home = this.getHomeRouteForRole(role);
+
     this.go(home);
+  }
+  goToDefultRole(): void {
+    this.go(AppRoutes.dashboard.root);
   }
 }

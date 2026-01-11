@@ -8,7 +8,7 @@ export const DiagnosisRoutes: Routes = [
   {
     path: 'therapy',
     canActivate: [PermissionGuard],
-    data: { permission: PERMISSIONS.DIAGNOSIS.THERAPY.VIEW },
+    data: { permission: PERMISSIONS.TherapyCard.READ },
     children: [
       {
         path: '',
@@ -25,7 +25,7 @@ export const DiagnosisRoutes: Routes = [
   {
     path: 'industrial',
     canActivate: [PermissionGuard],
-    data: { permission: PERMISSIONS.DIAGNOSIS.INDUSTRIAL.VIEW },
+    data: { permission: PERMISSIONS.TherapyCard.READ },
     children: [
       {
         path: '',
