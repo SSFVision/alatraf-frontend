@@ -6,7 +6,7 @@ export const TicketsRoutes: Routes = [
   {
     path: 'create/:patientId',
     canActivate: [PermissionGuard],
-    data: { permission: PERMISSIONS.TICKETS.ADD },
+    data: { permission: PERMISSIONS.Ticket.CREATE },
     loadComponent: () =>
       import('../Tickets/Pages/create-ticket/create-ticket.component').then(
         (m) => m.CreateTicketComponent

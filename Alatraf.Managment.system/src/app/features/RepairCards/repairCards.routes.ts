@@ -6,7 +6,7 @@ export const RepairCardsRoutes: Routes = [
   {
     path: '',
     canActivate: [PermissionGuard],
-    data: { permission: PERMISSIONS.REPAIR_CARDS.VIEW },
+    data: { permission: PERMISSIONS.RepairCard.READ },
     loadComponent: () =>
       import(
         './Pages/main-repair-cards-waiting-list/main-repair-cards-waiting-list.component'
@@ -16,7 +16,7 @@ export const RepairCardsRoutes: Routes = [
       {
         path: ':repairCardId/assignments/assign-parts',
         canActivate: [PermissionGuard],
-        data: { permission: PERMISSIONS.REPAIR_CARDS.ASSIGN_INDUSTRIAL_PARTS },
+        data: { permission: PERMISSIONS.RepairCard.ASSIGN_TECHNICIAN },
         loadComponent: () =>
           import(
             './Pages/repair-card-assignments-workspace/repair-card-assignments-workspace.component'
@@ -25,7 +25,7 @@ export const RepairCardsRoutes: Routes = [
       {
         path: 'doctors/:doctorSectionRoomId',
         canActivate: [PermissionGuard],
-        data: { permission: PERMISSIONS.Doctors.VIEW },
+        data: { permission: PERMISSIONS.RepairCard.ASSIGN_TECHNICIAN },
         loadComponent: () =>
           import(
             './Pages/technician-doctor-assignments/technician-doctor-assignments.component'

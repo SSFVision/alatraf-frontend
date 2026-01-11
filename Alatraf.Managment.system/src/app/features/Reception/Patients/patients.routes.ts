@@ -6,7 +6,7 @@ export const PatientsRoutes: Routes = [
   {
     path: 'view/:patientId',
     canActivate: [PermissionGuard],
-    data: { permission: PERMISSIONS.PATIENTS.VIEW },
+    data: { permission: PERMISSIONS.Patient.READ },
     loadComponent: () =>
       import(
         './Pages/show-patient-details/show-patient-details.component'
@@ -15,7 +15,7 @@ export const PatientsRoutes: Routes = [
   {
     path: 'add',
     canActivate: [PermissionGuard],
-    data: { permission: PERMISSIONS.PATIENTS.ADD },
+    data: { permission: PERMISSIONS.Patient.CREATE },
     loadComponent: () =>
       import(
         '../Patients/Pages/patient-add-edit-page/patient-add-edit-page.component'
@@ -24,7 +24,7 @@ export const PatientsRoutes: Routes = [
   {
     path: 'edit/:patientId',
     canActivate: [PermissionGuard],
-    data: { permission: PERMISSIONS.PATIENTS.UPDATE },
+    data: { permission: PERMISSIONS.Patient.UPDATE },
     loadComponent: () =>
       import(
         '../Patients/Pages/patient-add-edit-page/patient-add-edit-page.component'

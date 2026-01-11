@@ -8,7 +8,7 @@ export const DoctorsRoutes: Routes = [
   {
     path: '',
     canActivate: [PermissionGuard],
-    data: { permission: PERMISSIONS.Doctors.VIEW },
+    data: { permission: PERMISSIONS.Doctor.READ },
     loadComponent: () =>
       import('./Pages/main-doctor-page/main-doctor-page.component').then(
         (m) => m.MainDoctorPageComponent
@@ -26,7 +26,7 @@ export const DoctorsRoutes: Routes = [
       {
         path: 'edit/:doctorId',
         canActivate: [PermissionGuard],
-        data: { permission: PERMISSIONS.Doctors.UPDATE },
+        data: { permission: PERMISSIONS.Doctor.UPDATE },
         loadComponent: () =>
           import(
             './Pages/doctor-workspace-page/doctor-workspace-page.component'
@@ -35,7 +35,7 @@ export const DoctorsRoutes: Routes = [
       {
         path: 'create',
         canActivate: [PermissionGuard],
-        data: { permission: PERMISSIONS.Doctors.CREATE },
+        data: { permission: PERMISSIONS.Doctor.CREATE },
         loadComponent: () =>
           import(
             './Pages/doctor-workspace-page/doctor-workspace-page.component'
@@ -44,7 +44,7 @@ export const DoctorsRoutes: Routes = [
       {
         path: 'assign/:doctorId',
         canActivate: [PermissionGuard],
-        data: { permission: PERMISSIONS.Doctors.VIEW },
+        data: { permission: PERMISSIONS.Doctor.READ },
         loadComponent: () =>
           import(
             './Pages/doctor-assigments-page/doctor-assigments-page.component'

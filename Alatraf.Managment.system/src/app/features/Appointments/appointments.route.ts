@@ -7,7 +7,7 @@ export const AppointmentRoutes: Routes = [
   {
     path: 'waiting-patients',
     canActivate: [PermissionGuard],
-    data: { permission: PERMISSIONS.Appointment.VIEW },
+    data: { permission: PERMISSIONS.Appointment.READ },
     loadComponent: () =>
       import(
         './Pages/main-apointment-waiting-patient/main-apointment-waiting-patient.component'
@@ -25,7 +25,7 @@ export const AppointmentRoutes: Routes = [
       {
         path: 'schedule/:ticketId/patient/:patientId',
         canActivate: [PermissionGuard],
-        data: { permission: PERMISSIONS.Appointment.Schedule },
+        data: { permission: PERMISSIONS.Appointment.CREATE },
         loadComponent: () =>
           import(
             './Pages/schedule-new-appointment/schedule-new-appointment.component'
@@ -36,7 +36,7 @@ export const AppointmentRoutes: Routes = [
   {
     path: 'manage',
     canActivate: [PermissionGuard],
-    data: { permission: PERMISSIONS.Appointment.VIEW },
+    data: { permission: PERMISSIONS.Appointment.READ },
     loadComponent: () =>
       import('./Pages/manage-appointments/manage-appointments.component').then(
         (m) => m.ManageAppointmentsComponent
@@ -53,7 +53,7 @@ export const AppointmentRoutes: Routes = [
       {
         path: 'change-status/:appointmentId',
         canActivate: [PermissionGuard],
-        data: { permission: PERMISSIONS.Appointment.VIEW },
+        data: { permission: PERMISSIONS.Appointment.CHANGE_STATUS },
         loadComponent: () =>
           import(
             './Pages/change-appointment-status/change-appointment-status.component'
@@ -62,7 +62,7 @@ export const AppointmentRoutes: Routes = [
       {
         path: 'holiday',
         canActivate: [PermissionGuard],
-        data: { permission: PERMISSIONS.Appointment.AddHoliday },
+        data: { permission: PERMISSIONS.Holiday.READ },
         loadChildren: () =>
           import('../Holidays/holidays.routes').then((m) => m.HolidaysRoutes),
       },

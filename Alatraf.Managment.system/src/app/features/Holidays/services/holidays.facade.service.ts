@@ -134,7 +134,6 @@ export class HolidaysFacade extends BaseFacade {
       tap((res) => {
         if (res.success) {
           this.formValidationErrors.set({});
-          // this.updateHolidayInList(id, dto);
         } else if (res.validationErrors) {
           this.formValidationErrors.set(res.validationErrors);
         }
@@ -166,32 +165,7 @@ export class HolidaysFacade extends BaseFacade {
     });
   }
 
-  // ---------------------------------------------
-  // PRIVATE HELPERS
-  // ---------------------------------------------
-
-  private updateHolidayInList(id: number, changes: Partial<HolidayDto>) {
-    this._holidays.update((list) =>
-      list.map((h) => (h.holidayId === id ? { ...h, ...changes } : h))
-    );
-
-    const selected = this._selectedHoliday();
-    if (selected?.holidayId === id) {
-      this._selectedHoliday.set({ ...selected, ...changes });
-    }
-  }
-
-  private removeHolidayFromList(id: number) {
-    this._holidays.update((list) => list.filter((h) => h.holidayId !== id));
-    if (this.totalCount() > 0) {
-      this.totalCount.update((c) => (c > 0 ? c - 1 : 0));
-    }
-
-    const selected = this._selectedHoliday();
-    if (selected?.holidayId === id) {
-      this._selectedHoliday.set(null);
-    }
-  }
+ 
 
   private handleLoadHolidaysError(result: ApiResult<any>) {
     const err = this.extractError(result);

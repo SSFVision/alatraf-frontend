@@ -1,6 +1,6 @@
-import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { catchError, throwError, switchMap } from 'rxjs';
+import { catchError, switchMap, throwError } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { RefreshTokenRequest } from '../auth/models/refresh-token-request.model';
 import { SessionStore } from '../auth/session.store';
@@ -51,10 +51,10 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
           refreshToken,
           expiredAccessToken: accessToken,
         };
-        console.log(' refreshing token request body ', body);
+        // console.log(' refreshing token request body ', body);
         return authService.refreshToken(body).pipe(
           switchMap((newTokens) => {
-            console.log(" new tokens after refresh ", newTokens);
+            // console.log(" new tokens after refresh ", newTokens);
             tokenStorage.setTokens(newTokens);
             sessionStore.setTokens(newTokens);
 
@@ -63,7 +63,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
                 Authorization: `Bearer ${newTokens.accessToken}`,
               },
             });
-
+            console.log('return the orginal request,', retryReq);
             return next(retryReq);
           }),
           catchError(() => {

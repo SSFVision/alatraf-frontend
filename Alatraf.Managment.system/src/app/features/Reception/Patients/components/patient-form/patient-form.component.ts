@@ -168,15 +168,4 @@ export class PatientFormComponent implements OnChanges, OnInit {
     this.close.emit();
   }
 
-  private toBooleanGender(value: string | boolean | null | undefined): boolean {
-    if (typeof value === 'boolean') return value;
-
-    if (typeof value === 'string') {
-      const v = value.toLowerCase();
-      if (v === 'male' || v === 'ذكر') return true;
-      if (v === 'female' || v === 'أنثى') return false;
-    }
-
-    return true; // default
-  }
 }

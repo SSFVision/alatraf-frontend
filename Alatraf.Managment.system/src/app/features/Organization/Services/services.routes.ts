@@ -7,7 +7,7 @@ export const ServicesRoutes: Routes = [
   {
     path: '',
     canActivate: [PermissionGuard],
-    data: { permission: PERMISSIONS.Services.VIEW },
+    data: { permission: PERMISSIONS.Service.READ },
     loadComponent: () =>
       import('./pages/main-services-page/main-services-page.component').then(
         (m) => m.MainServicesPageComponent
@@ -25,7 +25,7 @@ export const ServicesRoutes: Routes = [
       {
         path: 'create',
         canActivate: [PermissionGuard],
-        data: { permission: PERMISSIONS.Services.CREATE },
+        data: { permission: PERMISSIONS.Service.CREATE },
         loadComponent: () =>
           import(
             './pages/services-workspace/services-workspace.component'
@@ -34,7 +34,7 @@ export const ServicesRoutes: Routes = [
       {
         path: 'edit/:serviceId',
         canActivate: [PermissionGuard],
-        data: { permission: PERMISSIONS.Services.EDIT },
+        data: { permission: PERMISSIONS.Service.UPDATE },
         loadComponent: () =>
           import(
             './pages/services-workspace/services-workspace.component'

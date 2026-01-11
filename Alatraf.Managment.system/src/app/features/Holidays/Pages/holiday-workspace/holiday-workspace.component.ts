@@ -1,7 +1,6 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NavigationEnd, Router, RouterModule } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { Component, inject, signal } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
 import { HolidaysNavigationFacade } from '../../../../core/navigation/Holidays-navigation.facade';
 
 @Component({
@@ -28,9 +27,7 @@ export class HolidayWorkspaceComponent {
     this.holidayNav.goToHolidayList();
   }
 
-  OnCloseHoliday() {
-    this.holidayNav.goToManageAppointments();
-  }
+  
 
   
 }
