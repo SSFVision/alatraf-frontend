@@ -1,6 +1,18 @@
-<div class="max-hight-712 column gap-16">
+<!-- <div class="max-hight-712 column gap-16"> -->
   <h2 class="title-lg">المستخدمون</h2>
-
-  <app-user-details class="column gap-16"></app-user-details>
-  <app-user-permissions class="column gap-16"></app-user-permissions>
+@if (isLoadingSelectedUser()) {
+<div class="flex-center">
+  <span class="loader"></span>
 </div>
+<p class="flex-center">جاري تحميل بيانات القسم...</p>
+} @else {
+  <app-user-details class="column gap-16"
+  [user]="selectedUser()"
+  [isLoading]="isLoadingSelectedUser()"
+  ></app-user-details>
+  <app-user-permissions class="column gap-16"
+  [user]="selectedUser()"
+  ></app-user-permissions>
+}
+
+<!-- </div> -->

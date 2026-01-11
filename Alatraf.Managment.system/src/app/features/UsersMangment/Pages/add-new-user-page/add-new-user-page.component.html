@@ -28,7 +28,7 @@
       <input class="label-lg" type="text" formControlName="fullName" />
 
       <div class="error-message label-lg" *ngIf="hasBackendError('fullName')">
-        {{ getBackendError('fullName') }}
+        {{ getBackendError("fullName") }}
       </div>
 
       <div *ngIf="hasFrontendError('fullName')" class="error-message label-lg">
@@ -45,15 +45,20 @@
         formControlName="phone"
         (input)="formatPhoneNumberInput(getControl('phone'))"
         (keypress)="preventNonNumericInput($event)"
+        (blur)="form.controls['phone'].markAsTouched()"
       />
-
       <div class="error-message label-lg" *ngIf="hasBackendError('phone')">
-        {{ getBackendError('phone') }}
+        {{ getBackendError("phone") }}
       </div>
-
-      <div *ngIf="hasFrontendError('phone')" class="error-message label-lg">
-        رقم الهاتف مطلوب
+      @if (hasFrontendError('phone')) { @if (getControl('phone')?.invalid &&
+      getControl('phone')?.touched) { @if
+      (getControl('phone')?.hasError('required')) {
+      <div class="error-message label-lg">رقم الهاتف مطلوب.</div>
+      } @if (getControl('phone')?.hasError('yemeniPhoneNumber')) {
+      <div class="error-message label-lg">
+        {{ getControl("phone")?.getError("yemeniPhoneNumber").message }}
       </div>
+      } } }
     </div>
 
     <!-- الجنس + تاريخ الميلاد -->
@@ -72,11 +77,8 @@
         [max]="maxDate"
       />
 
-      <div
-        class="error-message label-lg"
-        *ngIf="hasBackendError('birthdate')"
-      >
-        {{ getBackendError('birthdate') }}
+      <div class="error-message label-lg" *ngIf="hasBackendError('birthdate')">
+        {{ getBackendError("birthdate") }}
       </div>
 
       <div *ngIf="hasFrontendError('birthdate')" class="error-message label-lg">
@@ -90,7 +92,7 @@
       <input class="label-lg" type="text" formControlName="address" />
 
       <div class="error-message label-lg" *ngIf="hasBackendError('address')">
-        {{ getBackendError('address') }}
+        {{ getBackendError("address") }}
       </div>
 
       <div *ngIf="hasFrontendError('address')" class="error-message label-lg">
@@ -104,20 +106,26 @@
       <input class="label-lg" type="text" formControlName="nationalNo" />
 
       <div class="error-message label-lg" *ngIf="hasBackendError('nationalNo')">
-        {{ getBackendError('nationalNo') }}
+        {{ getBackendError("nationalNo") }}
+      </div>
+      <div
+        *ngIf="hasFrontendError('nationalNo')"
+        class="error-message label-lg"
+      >
+        رقم الهوية مطلوب
       </div>
     </div>
- <div>
-    <p class="title-md">بيانات المستخدم</p>
-    <span class="home-line"></span>
-  </div>
+    <div>
+      <p class="title-md">بيانات المستخدم</p>
+      <span class="home-line"></span>
+    </div>
     <!-- اسم المستخدم -->
     <div class="row flex-center">
       <label class="label-lg">اسم المستخدم</label>
       <input class="label-lg" type="text" formControlName="userName" />
 
       <div class="error-message label-lg" *ngIf="hasBackendError('userName')">
-        {{ getBackendError('userName') }}
+        {{ getBackendError("userName") }}
       </div>
 
       <div *ngIf="hasFrontendError('userName')" class="error-message label-lg">
@@ -128,14 +136,10 @@
     <!-- كلمة المرور -->
     <div class="row flex-center">
       <label class="label-lg">كلمة المرور</label>
-      <input
-        class="label-lg"
-        type="password"
-        formControlName="password"
-      />
+      <input class="label-lg" type="password" formControlName="password" />
 
       <div class="error-message label-lg" *ngIf="hasBackendError('password')">
-        {{ getBackendError('password') }}
+        {{ getBackendError("password") }}
       </div>
 
       <div *ngIf="hasFrontendError('password')" class="error-message label-lg">
@@ -154,9 +158,7 @@
 
     <!-- زر الحفظ -->
     <div class="flex-center">
-      <button class="btn primary label-md" type="submit">
-        حفظ
-      </button>
+      <button class="btn primary label-md" type="submit">حفظ</button>
     </div>
   </form>
 </div>

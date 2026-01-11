@@ -14,7 +14,6 @@ import { UsersFacadeService } from '../../Services/users.facade.service';
   styleUrl: './user-workspace-page.component.css',
 })
 export class UserWorkspacePageComponent implements OnInit {
- 
   userNav = inject(UsersNavigationFacade);
   private route = inject(ActivatedRoute);
   private rolePermissionFacade = inject(RolesAndPermissionsFacadeService);
@@ -23,9 +22,9 @@ export class UserWorkspacePageComponent implements OnInit {
   private userFacade = inject(UsersFacadeService);
   selectedUser = this.userFacade.selectedUser;
   isLoadingSelectedUser = this.userFacade.isLoadingSelectedUser;
-    currentUserId: string | null = null;
+  currentUserId: string | null = null;
 
- ngOnInit(): void {
+  ngOnInit(): void {
     this.listenToRoute();
   }
   private listenToRoute() {
@@ -38,6 +37,4 @@ export class UserWorkspacePageComponent implements OnInit {
       }
     });
   }
-
-
 }

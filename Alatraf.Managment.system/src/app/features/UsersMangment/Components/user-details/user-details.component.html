@@ -5,24 +5,46 @@
 
 <div class="row flex-center">
   <label class="label-lg"> الاسم </label>
-  <input class="label-lg" type="text" placeholder="" />
+  <input
+    class="label-lg"
+    type="text"
+    [value]="user()?.username ?? ''"
+    readonly
+    [disabled]="isLoading()"
+  />
   <label class="label-lg"> الرقم الوظيفي </label>
-  <input class="label-lg" type="text" placeholder="" />
+  <input
+    class="label-lg"
+    type="text"
+    [value]="user()?.userId ?? ''"
+    readonly
+    [disabled]="isLoading()"
+  />
 </div>
 
 <div class="row flex-center">
   <label class="label-lg"> اسم المستخدم </label>
-  <input class="label-lg" type="text" placeholder="" />
-  <button class="btn primary label-md margin-LR-24">
+  <input
+    class="label-lg"
+    type="text"
+    [value]="user()?.username ?? ''"
+    readonly
+    [disabled]="isLoading()"
+  />
+  <button class="btn primary label-md margin-LR-24" (click)="onRestPasswordClick()">
     إعادة تعيين كلمة المرور
   </button>
 </div>
 
 <div class="row flex-center">
   <label class="label-lg"> الحالة </label>
-  <select class="label-lg">
-    <option></option>
-    <option>نشط</option>
-    <option>غير نشط</option>
+  <select
+    class="label-lg"
+    [ngModel]="user()?.isActive ?? false"
+    [disabled]="true"
+
+    >
+    <option [ngValue]="true">نشط</option>
+    <option [ngValue]="false">غير نشط</option>
   </select>
 </div>

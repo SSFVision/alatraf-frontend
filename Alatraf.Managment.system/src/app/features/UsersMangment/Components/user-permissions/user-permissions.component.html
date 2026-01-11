@@ -12,142 +12,124 @@
         <th>إضافة</th>
         <th>تعديل</th>
         <th>حذف</th>
+        <th>طباعة</th>
+        <th>تغيير الحالة</th>
+        <th
+          *ngFor="let extraLabel of extraColumns; trackBy: trackByExtraHeader"
+        >
+          {{ extraLabel }}
+        </th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>المرضى</td>
-        <td>
-          <label class="ring-toggle"
-            ><input type="checkbox" name="patients.view" /><span
-              class="ring"
-            ></span
-          ></label>
+      <tr *ngFor="let group of permissionGroups; trackBy: trackByLabel">
+        <td>{{ group.label }}</td>
+         <td>
+          @if (group.read) {
+          <label class="ring-toggle">
+            <input
+              type="checkbox"
+              [checked]="isPermGranted(group.read)"
+              disabled
+            />
+            <span class="ring"></span>
+          </label>
+          } @else {
+          <span class="muted">—</span>
+          }
+        </td>
+          <td>
+          @if (group.create) {
+          <label class="ring-toggle">
+            <input
+              type="checkbox"
+              [checked]="isPermGranted(group.create)"
+              disabled
+            />
+            <span class="ring"></span>
+          </label>
+          } @else {
+          <span class="muted">—</span>
+          }
         </td>
         <td>
-          <label class="ring-toggle"
-            ><input type="checkbox" name="patients.create" /><span
-              class="ring"
-            ></span
-          ></label>
+          @if (group.update) {
+          <label class="ring-toggle">
+            <input
+              type="checkbox"
+              [checked]="isPermGranted(group.update)"
+              disabled
+            />
+            <span class="ring"></span>
+          </label>
+          } @else {
+          <span class="muted">—</span>
+          }
+        </td>
+         <td>
+          @if (group.delete) {
+          <label class="ring-toggle">
+            <input
+              type="checkbox"
+              [checked]="isPermGranted(group.delete)"
+              disabled
+            />
+            <span class="ring"></span>
+          </label>
+          } @else {
+          <span class="muted">—</span>
+          }
         </td>
         <td>
-          <label class="ring-toggle"
-            ><input type="checkbox" name="patients.update" /><span
-              class="ring"
-            ></span
-          ></label>
+          @if (group.print) {
+          <label class="ring-toggle">
+            <input
+              type="checkbox"
+              [checked]="isPermGranted(group.print)"
+              disabled
+            />
+            <span class="ring"></span>
+          </label>
+          } @else {
+          <span class="muted">—</span>
+          }
         </td>
         <td>
-          <label class="ring-toggle"
-            ><input type="checkbox" name="patients.delete" /><span
-              class="ring"
-            ></span
-          ></label>
+          @if (group.changeStatus) {
+          <label class="ring-toggle">
+            <input
+              type="checkbox"
+              [checked]="isPermGranted(group.changeStatus)"
+              disabled
+            />
+            <span class="ring"></span>
+          </label>
+          } @else {
+          <span class="muted">—</span>
+          }
         </td>
-      </tr>
-
-      <tr>
-        <td>التشخيصات</td>
-        <td>
-          <label class="ring-toggle"
-            ><input type="checkbox" name="diagnosis.view" /><span
-              class="ring"
-            ></span
-          ></label>
-        </td>
-        <td>
-          <label class="ring-toggle"
-            ><input type="checkbox" name="diagnosis.create" /><span
-              class="ring"
-            ></span
-          ></label>
-        </td>
-        <td>
-          <label class="ring-toggle"
-            ><input type="checkbox" name="diagnosis.update" /><span
-              class="ring"
-            ></span
-          ></label>
-        </td>
-        <td>
-          <label class="ring-toggle"
-            ><input type="checkbox" name="diagnosis.delete" /><span
-              class="ring"
-            ></span
-          ></label>
-        </td>
-      </tr>
-
-      <tr>
-        <td>الحسابات</td>
-        <td>
-          <label class="ring-toggle"
-            ><input type="checkbox" name="accounts.view" /><span
-              class="ring"
-            ></span
-          ></label>
-        </td>
-        <td>
-          <label class="ring-toggle"
-            ><input type="checkbox" name="accounts.create" /><span
-              class="ring"
-            ></span
-          ></label>
-        </td>
-        <td>
-          <label class="ring-toggle"
-            ><input type="checkbox" name="accounts.update" /><span
-              class="ring"
-            ></span
-          ></label>
-        </td>
-        <td>
-          <label class="ring-toggle"
-            ><input type="checkbox" name="accounts.delete" /><span
-              class="ring"
-            ></span
-          ></label>
-        </td>
-      </tr>
-
-      <tr>
-        <td>الأطراف الصناعية</td>
-        <td>
-          <label class="ring-toggle"
-            ><input type="checkbox" name="prosthetics.view" /><span
-              class="ring"
-            ></span
-          ></label>
-        </td>
-        <td>
-          <label class="ring-toggle"
-            ><input type="checkbox" name="prosthetics.create" /><span
-              class="ring"
-            ></span
-          ></label>
-        </td>
-        <td>
-          <label class="ring-toggle"
-            ><input type="checkbox" name="prosthetics.update" /><span
-              class="ring"
-            ></span
-          ></label>
-        </td>
-        <td>
-          <label class="ring-toggle"
-            ><input type="checkbox" name="prosthetics.delete" /><span
-              class="ring"
-            ></span
-          ></label>
+        <td
+          *ngFor="let extraLabel of extraColumns; trackBy: trackByExtraHeader"
+        >
+          @if (getExtraPerm(group, extraLabel)) {
+          <label class="ring-toggle">
+            <input
+              type="checkbox"
+              [checked]="isPermGranted(getExtraPerm(group, extraLabel))"
+              disabled
+            />
+            <span class="ring"></span>
+          </label>
+          } @else {
+          <span class="muted">—</span>
+          }
         </td>
       </tr>
-
-
     </tbody>
   </table>
 </form>
 
 <div class="row flex-center">
-  <button class="btn secondary" disabled>تعديل</button>
+  <!-- <button class="btn secondary" disabled>تعديل</button> -->
 </div>
+

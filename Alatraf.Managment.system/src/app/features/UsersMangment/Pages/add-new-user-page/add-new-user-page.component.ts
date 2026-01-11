@@ -68,7 +68,7 @@ export class AddNewUserPageComponent implements OnInit {
         ],
       ],
       address: ['', Validators.required],
-      nationalNo: [''],
+      nationalNo: ['', Validators.required],
       userName: ['', Validators.required],
       password: ['ِAdmin@123', Validators.required],
       isActive: [true, Validators.required],
