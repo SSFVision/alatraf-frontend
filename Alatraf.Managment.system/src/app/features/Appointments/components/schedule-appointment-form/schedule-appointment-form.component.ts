@@ -2,6 +2,7 @@ import {
   Component,
   EventEmitter,
   inject,
+  input,
   Input,
   Output,
   SimpleChanges,
@@ -20,8 +21,7 @@ import { CommonModule, formatDate } from '@angular/common';
 export class ScheduleAppointmentFormComponent {
   private fb = inject(FormBuilder);
   @Input() initialDate: string | null | undefined;
-  @Input() isCompleted: boolean = false;
-
+  isCompleted = input<boolean>(false);
   @Input() isSaving: boolean = false;
 
   @Output() save = new EventEmitter<ScheduleAppointmentRequest>();
