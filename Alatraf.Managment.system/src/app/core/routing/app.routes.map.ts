@@ -193,6 +193,33 @@ export const AppRoutes = {
 
     view: (serviceId: number | string) => `view/${serviceId}`,
   },
+  injuries: {
+    root: 'injuries',
+
+    types: {
+      root: 'injuries/types',
+      list: 'injuries/types',
+      create: 'injuries/types/create',
+      edit: (injuryTypeId: number | string) =>
+        `injuries/types/edit/${injuryTypeId}`,
+    },
+
+    sides: {
+      root: 'injuries/sides',
+      list: 'injuries/sides',
+      create: 'injuries/sides/create',
+      edit: (injurySideId: number | string) =>
+        `injuries/sides/edit/${injurySideId}`,
+    },
+
+    reasons: {
+      root: 'injuries/reasons',
+      list: 'injuries/reasons',
+      create: 'injuries/reasons/create',
+      edit: (injuryReasonId: number | string) =>
+        `injuries/reasons/edit/${injuryReasonId}`,
+    },
+  },
   doctors: {
     root: 'doctors',
     list: 'doctors',

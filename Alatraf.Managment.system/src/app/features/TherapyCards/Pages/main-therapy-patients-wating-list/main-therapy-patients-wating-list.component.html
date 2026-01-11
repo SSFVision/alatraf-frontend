@@ -58,11 +58,8 @@
 
 
 
-  <div class="box   gap-16">
-    @if(selectedCardId() || selectedDoctorId()) {
-    <router-outlet></router-outlet>}
-    @else {
-    <app-workspace-welcome subtitle="مرحباً بك" imageSrc="assets/images/therapy.svg"></app-workspace-welcome>
-    }
+  <div class="box max-hight-800 gap-16">
+    <router-outlet></router-outlet>
+  
   </div>
 </div>

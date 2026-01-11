@@ -18,7 +18,6 @@ import { WorkspaceWelcomeComponent } from "../../../../shared/components/workspa
     RouterOutlet,
     DoctorCardComponent,
     GeneralWaitingPatientQueueComponent,
-    WorkspaceWelcomeComponent
   ],
   templateUrl: './main-therapy-patients-wating-list.component.html',
   styleUrl: './main-therapy-patients-wating-list.component.css',

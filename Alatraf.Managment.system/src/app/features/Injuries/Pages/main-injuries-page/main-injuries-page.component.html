@@ -1,0 +1,145 @@
+<div class="row gap-16">
+  <div class="column gap-16 max-width-324">
+   
+    <!-- Injury Sides -->
+    <div
+      class="box gap-24"
+      [class.hidden-queue]="!showSidesQueue"
+      [class.max-hight-360]="showSidesQueue"
+      (click)="!showSidesQueue && toggleQueues('sides')"
+    >
+      <div class="row space-between">
+        <h2 class="title-md flex-center">جهات الإصابة</h2>
+        <div
+          class="primary-color-background WH-40 flex-center border-radius-20"
+        >
+          <h2 class="title-md white-color margin-auto">
+            {{ sides().length }}
+          </h2>
+        </div>
+      </div>
+
+      @if (showSidesQueue) {
+      <div class="search-box">
+        <img
+          src="assets/icons/search-icon.svg"
+          class="search-icon"
+          alt="search"
+        />
+        <input
+          type="text"
+          placeholder="بحث: اسم الجهة"
+          (input)="onSearchSides($any($event.target).value)"
+        />
+      </div>
+
+      <app-injury-card
+        class="max-hight-712 column gap-16"
+        [injuries]="filteredSides()"
+        [loading]="loadingSides()"
+        (select)="onSelectSide($event)"
+      ></app-injury-card>
+
+      <button class="btn primary width-100" type="button" (click)="onAddSide()">
+        إضافة جهة إصابة جديدة
+      </button>
+      }
+    </div>
+
+  <!-- Injury Reasons -->
+    <div
+      class="box gap-24"
+      [class.hidden-queue]="!showReasonsQueue"
+      [class.max-hight-360]="showReasonsQueue"
+      (click)="!showReasonsQueue && toggleQueues('reasons')"
+    >
+      <div class="row space-between">
+        <h2 class="title-md flex-center">أسباب الإصابة</h2>
+        <div
+          class="primary-color-background WH-40 flex-center border-radius-20"
+        >
+          <h2 class="title-md white-color margin-auto">
+            {{ reasons().length }}
+          </h2>
+        </div>
+      </div>
+
+      @if (showReasonsQueue) {
+      <div class="search-box">
+        <img
+          src="assets/icons/search-icon.svg"
+          class="search-icon"
+          alt="search"
+        />
+        <input
+          type="text"
+          placeholder="بحث: سبب الإصابة"
+          (input)="onSearchReasons($any($event.target).value)"
+        />
+      </div>
+
+      <app-injury-card
+        class="max-hight-712 column gap-16"
+        [injuries]="filteredReasons()"
+        [loading]="loadingReasons()"
+        (select)="onSelectReason($event)"
+      ></app-injury-card>
+      <button
+        class="btn primary width-100"
+        type="button"
+        (click)="onAddReason()"
+      >
+        إضافة سبب إصابة جديد
+      </button>
+      }
+    </div>
+
+ <!-- Injury Types -->
+    <div
+      class="box gap-24"
+      [class.hidden-queue]="!showTypesQueue"
+      [class.max-hight-360]="showTypesQueue"
+      (click)="!showTypesQueue && toggleQueues('types')"
+    >
+      <div class="row space-between">
+        <h2 class="title-md flex-center">أنواع الإصابات</h2>
+        <div
+          class="primary-color-background WH-40 flex-center border-radius-20"
+        >
+          <h2 class="title-md white-color margin-auto">
+            {{ types().length }}
+          </h2>
+        </div>
+      </div>
+      @if (showTypesQueue) {
+      <div class="search-box">
+        <img
+          src="assets/icons/search-icon.svg"
+          class="search-icon"
+          alt="search"
+        />
+        <input
+          type="text"
+          placeholder="بحث: اسم الإصابة"
+          (input)="onSearchTypes($any($event.target).value)"
+        />
+      </div>
+
+      <app-injury-card
+        class="max-hight-712 column gap-16"
+        [injuries]="filteredTypes()"
+        [loading]="loadingTypes()"
+        (select)="onSelectType($event)"
+      ></app-injury-card>
+      <button class="btn primary width-100" type="button" (click)="onAddType()">
+        إضافة نوع إصابة جديد
+      </button>
+      }
+    </div>
+  
+  </div>
+
+  <div class="box max-hight-800 gap-16">
+    <router-outlet></router-outlet>
+  </div>
+</div>
