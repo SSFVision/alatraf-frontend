@@ -16,13 +16,19 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { finalize } from 'rxjs/operators';
+import { finalize, throttleTime } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { UsersNavigationFacade } from '../../../../core/navigation/users-navigation.facade';
 import { FormValidationState } from '../../../../core/utils/form-validation-state';
 import { ChangeCredentialsRequest } from '../../Models/change-credentials.request';
 import { UsersFacadeService } from '../../Services/users.facade.service';
 import { signal } from '@angular/core';
+import { AuthFacade } from '../../../../core/auth/auth.facade';
+import { DialogService } from '../../../../shared/components/dialog/dialog.service';
+import {
+  DialogConfig,
+  DialogType,
+} from '../../../../shared/components/dialog/DialogConfig';
 
 const requireNewCredential: ValidatorFn = (
   control: AbstractControl
@@ -47,6 +53,9 @@ export class ChangeCredentialsComponent implements OnInit {
   private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
   private usersFacade = inject(UsersFacadeService);
+  private authfacade = inject(AuthFacade); // temporary
+  private dialogService = inject(DialogService);
+
   private userNav = inject(UsersNavigationFacade);
   private env = inject(EnvironmentInjector);
   isSubmitting = signal(false);
@@ -81,6 +90,23 @@ export class ChangeCredentialsComponent implements OnInit {
     this.validationState.clearOnEdit();
   }
 
+  private confirmLogout() {
+    // const config: DialogConfig = {
+    //   title: ' إنشاء المستخدم تم بنجاح',
+    //   payload: {
+    //     message: 'سيتم تسجيل خروجك من النظام لتسجيل الدخول بالإسم الجديد.',
+    //   },
+    //   showCancel: false,
+    //   type: DialogType.Success,
+    // };
+    this.dialogService
+      .confirmSuccess(' سيتم تسجيل خروجك من النظام لتسجيل الدخول بالإسم الجديد',' إنشاء المستخدم تم بنجاح')
+      .subscribe((confirm) => {
+        if (!confirm) return;
+
+        this.authfacade.logout(); // temporary
+      });
+  }
   onSubmit() {
     this.submitted.set(true);
 
@@ -118,13 +144,12 @@ export class ChangeCredentialsComponent implements OnInit {
         if (result.success && !result.validationErrors) {
           this.submissionDone.set(true);
           this.form.disable({ emitEvent: false });
-          this.onClose();
+          this.confirmLogout();
         }
       });
   }
 
   onClose() {
-
     if (this.currentUserId) {
       this.userNav.goToEditUserPage(this.currentUserId);
       return;
