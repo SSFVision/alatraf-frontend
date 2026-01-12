@@ -25,6 +25,6 @@ export class UserDetailsComponent {
       return;
     }
 
-    this.userNav.goToChangeCredentialsPage(currentUser.userId);
+    this.userNav.goToResetPasswordPage(currentUser.userId);
   }
 }

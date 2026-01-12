@@ -13,6 +13,7 @@ export class UsersNavigationFacade {
     this.go(AppRoutes.users.root, extras);
   }
 
+
   goToUsersListPage(extras?: NavigationExtras): void {
     this.go(`${AppRoutes.users.root}/${AppRoutes.users.list}`, extras);
   }
@@ -21,8 +22,11 @@ export class UsersNavigationFacade {
     this.go(`${AppRoutes.users.root}/${AppRoutes.users.create}`, extras);
   }
 
-  goToEditUserPage(userId:  string, extras?: NavigationExtras): void {
-    this.go(`${AppRoutes.users.root}/${AppRoutes.users.edit(userId)}`, {replaceUrl:true, ...extras});
+  goToEditUserPage(userId: string, extras?: NavigationExtras): void {
+    this.go(`${AppRoutes.users.root}/${AppRoutes.users.edit(userId)}`, {
+      replaceUrl: true,
+      ...extras,
+    });
   }
 
   goToChangeCredentialsPage(
@@ -31,6 +35,16 @@ export class UsersNavigationFacade {
   ): void {
     this.go(
       `${AppRoutes.users.root}/${AppRoutes.users.changeCredentials(userId)}`,
+      extras
+    );
+  }
+
+  goToResetPasswordPage(
+    userId: number | string,
+    extras?: NavigationExtras
+  ): void {
+    this.go(
+      `${AppRoutes.users.root}/${AppRoutes.users.resetPassword(userId)}`,
       extras
     );
   }

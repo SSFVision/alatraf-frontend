@@ -16,15 +16,11 @@
 >
   <div class="column gap-4">
     <p class="body-md">{{ user.username }}</p>
-    <p class="body-sm primary-color-50">
-      · {{ user.phoneNumber }}
-    </p>
+    <p class="body-sm primary-color-50">· {{ user.phoneNumber }}</p>
   </div>
-
-  <div class="primary-color-background WH-40 flex-center border-radius-20">
-    <h2 class="title-md white-color margin-auto">
-      {{ user.isActive ? "✅" : "⛔" }}
-    </h2>
-  </div>
+  <label class="ring-toggle">
+    <input type="checkbox" [checked]="user.isActive" disabled />
+    <span class="ring"></span>
+  </label>
 </div>
 } }

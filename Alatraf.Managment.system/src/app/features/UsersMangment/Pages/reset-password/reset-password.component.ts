@@ -6,61 +6,42 @@ import {
   effect,
   inject,
   runInInjectionContext,
+  signal,
 } from '@angular/core';
 import {
-  AbstractControl,
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
-  ValidationErrors,
-  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { UsersNavigationFacade } from '../../../../core/navigation/users-navigation.facade';
 import { FormValidationState } from '../../../../core/utils/form-validation-state';
-import { ChangeCredentialsRequest } from '../../Models/change-credentials.request';
+import { ResetPasswordRequest } from '../../Models/reset-password.request';
 import { UsersFacadeService } from '../../Services/users.facade.service';
-import { signal } from '@angular/core';
-
-const requireNewCredential: ValidatorFn = (
-  control: AbstractControl
-): ValidationErrors | null => {
-  const group = control as FormGroup;
-  const newPassword = group.get('newPassword')?.value;
-  const newUsername = group.get('newUsername')?.value;
-
-  if (newPassword || newUsername) return null;
-
-  return { noCredentialChange: true };
-};
 
 @Component({
-  selector: 'app-change-credentials',
+  selector: 'app-reset-password',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './change-credentials.component.html',
-  styleUrls: ['./change-credentials.component.css'],
+  templateUrl: './reset-password.component.html',
+  styleUrls: ['./reset-password.component.css'],
 })
-export class ChangeCredentialsComponent implements OnInit {
+export class ResetPasswordComponent implements OnInit {
   private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
   private usersFacade = inject(UsersFacadeService);
   private userNav = inject(UsersNavigationFacade);
   private env = inject(EnvironmentInjector);
+
   isSubmitting = signal(false);
   submissionDone = signal(false);
   submitted = signal(false);
 
-  form = this.fb.group(
-    {
-      oldPassword: ['', Validators.required],
-      newPassword: ['', Validators.required],
-      newUsername: ['', Validators.required],
-    },
-    { validators: requireNewCredential }
-  );
+  form: FormGroup = this.fb.group({
+    newPassword: ['', Validators.required],
+  });
 
   private validationState = new FormValidationState(
     this.form,
@@ -80,7 +61,11 @@ export class ChangeCredentialsComponent implements OnInit {
 
     this.validationState.clearOnEdit();
   }
-
+  private listenToRoute() {
+    this.route.paramMap.subscribe((params) => {
+      this.currentUserId = params.get('userId');
+    });
+  }
   onSubmit() {
     this.submitted.set(true);
 
@@ -93,19 +78,18 @@ export class ChangeCredentialsComponent implements OnInit {
       this.form.markAllAsTouched();
       return;
     }
+
     const raw = this.form.getRawValue();
+
+    const dto: ResetPasswordRequest = {
+      newPassword: raw.newPassword ?? '',
+    };
 
     this.isSubmitting.set(true);
     this.form.disable({ emitEvent: false });
 
-    const changeRequest: ChangeCredentialsRequest = {
-      oldPassword: raw.oldPassword ?? '',
-      newPassword: raw.newPassword ?? undefined,
-      newUsername: raw.newUsername ?? undefined,
-    };
-
     this.usersFacade
-      .changeCredentials(this.currentUserId, changeRequest)
+      .resetPassword(this.currentUserId, dto)
       .pipe(
         finalize(() => {
           this.isSubmitting.set(false);
@@ -142,18 +126,5 @@ export class ChangeCredentialsComponent implements OnInit {
 
   hasFrontendError(controlName: string): boolean {
     return this.validationState.hasFrontendError(controlName);
-  }
-
-  get formLevelError(): string | null {
-    if (this.form.errors?.['noCredentialChange']) {
-      return 'أدخل اسم مستخدم جديد أو كلمة مرور جديدة.';
-    }
-    return null;
-  }
-
-  private listenToRoute() {
-    this.route.paramMap.subscribe((params) => {
-      this.currentUserId = params.get('userId');
-    });
   }
 }

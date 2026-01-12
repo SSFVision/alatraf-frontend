@@ -27,9 +27,9 @@ export const USERS_ROUTES: Routes = [
         canActivate: [PermissionGuard],
         data: { permission: PERMISSIONS.User.CREATE },
         loadComponent: () =>
-          import(
-            './Pages/add-new-user-page/add-new-user-page.component'
-          ).then((m) => m.AddNewUserPageComponent),
+          import('./Pages/add-new-user-page/add-new-user-page.component').then(
+            (m) => m.AddNewUserPageComponent
+          ),
       },
       {
         path: 'edit/:userId',
@@ -46,17 +46,26 @@ export const USERS_ROUTES: Routes = [
         data: { permission: PERMISSIONS.User.UPDATE },
         loadComponent: () =>
           import(
-            './Components/change-credentials/change-credentials.component'
+            './Pages/change-credentials/change-credentials.component'
           ).then((m) => m.ChangeCredentialsComponent),
       },
-       {
+      {
+        path: 'reset-password/:userId',
+        canActivate: [PermissionGuard],
+        data: { permission: PERMISSIONS.User.UPDATE },
+        loadComponent: () =>
+          import('./Pages/reset-password/reset-password.component').then(
+            (m) => m.ResetPasswordComponent
+          ),
+      },
+      {
         path: 'assign-role/:userId',
         canActivate: [PermissionGuard],
         data: { permission: PERMISSIONS.User.ASSIGN_ROLES },
         loadComponent: () =>
-          import(
-            './Pages/user-role-assign/user-role-assign.component'
-          ).then((m) => m.UserRoleAssignComponent),
+          import('./Pages/user-role-assign/user-role-assign.component').then(
+            (m) => m.UserRoleAssignComponent
+          ),
       },
     ],
   },
