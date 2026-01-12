@@ -252,6 +252,8 @@ export const AppRoutes = {
     changeCredentials: (userId: number | string) =>
       `change-credentials/${userId}`,
 
+    resetPassword: (userId: number | string) => `reset-password/${userId}`,
+
     view: (userId: number | string) => `view/${userId}`,
 
     permissions: (userId: number | string) => `${userId}/permissions`,
