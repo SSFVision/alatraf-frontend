@@ -4,11 +4,10 @@ import { UsersNavigationFacade } from '../../../../core/navigation/users-navigat
 import { UserListItemDto } from '../../Models/Users/user-list-item.dto';
 import { UsersFacadeService } from '../../Services/users.facade.service';
 import { UserListComponent } from '../user-list/user-list.component';
-import { WorkspaceWelcomeComponent } from "../../../../shared/components/workspace-welcome/workspace-welcome.component";
 
 @Component({
   selector: 'app-main-user-page',
-  imports: [RouterOutlet, UserListComponent, WorkspaceWelcomeComponent],
+  imports: [RouterOutlet, UserListComponent],
   templateUrl: './main-user-page.component.html',
   styleUrl: './main-user-page.component.css',
 })

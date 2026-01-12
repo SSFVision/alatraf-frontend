@@ -249,6 +249,9 @@ export const AppRoutes = {
 
     edit: (userId: number | string) => `edit/${userId}`,
 
+    changeCredentials: (userId: number | string) =>
+      `change-credentials/${userId}`,
+
     view: (userId: number | string) => `view/${userId}`,
 
     permissions: (userId: number | string) => `${userId}/permissions`,

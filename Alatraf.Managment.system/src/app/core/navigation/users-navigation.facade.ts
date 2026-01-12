@@ -22,7 +22,17 @@ export class UsersNavigationFacade {
   }
 
   goToEditUserPage(userId:  string, extras?: NavigationExtras): void {
-    this.go(`${AppRoutes.users.root}/${AppRoutes.users.edit(userId)}`, extras);
+    this.go(`${AppRoutes.users.root}/${AppRoutes.users.edit(userId)}`, {replaceUrl:true, ...extras});
+  }
+
+  goToChangeCredentialsPage(
+    userId: number | string,
+    extras?: NavigationExtras
+  ): void {
+    this.go(
+      `${AppRoutes.users.root}/${AppRoutes.users.changeCredentials(userId)}`,
+      extras
+    );
   }
 
   goToViewUserPage(userId: string, extras?: NavigationExtras): void {
