@@ -40,6 +40,15 @@ export const USERS_ROUTES: Routes = [
             './Pages/user-workspace-page/user-workspace-page.component'
           ).then((m) => m.UserWorkspacePageComponent),
       },
+      {
+        path: 'change-credentials/:userId',
+        canActivate: [PermissionGuard],
+        data: { permission: PERMISSIONS.User.UPDATE },
+        loadComponent: () =>
+          import(
+            './Components/change-credentials/change-credentials.component'
+          ).then((m) => m.ChangeCredentialsComponent),
+      },
        {
         path: 'assign-role/:userId',
         canActivate: [PermissionGuard],
