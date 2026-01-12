@@ -7,20 +7,20 @@ export const TherapyCardsRoutes: Routes = [
   {
     path: '',
     canActivate: [PermissionGuard],
-    data: { permission: PERMISSIONS.TherapyCard.READ },
+    data: { permission: PERMISSIONS.TherapyCard.CREATE_SESSION },
     loadComponent: () =>
       import(
         './Pages/main-therapy-patients-wating-list/main-therapy-patients-wating-list.component'
       ).then((m) => m.MainTherapyPatientsWatingListComponent),
 
     children: [
-    
-{
+      {
         path: '',
         component: WorkspaceWelcomeComponent,
         data: {
           title: 'مرحباً بك في إدارة التشخيص والعلاج',
-          subtitle: ' اختر بطاقة علاج من قائمة الانتظار المدفوعة للبدء في الجلسات',
+          subtitle:
+            ' اختر بطاقة علاج من قائمة الانتظار المدفوعة للبدء في الجلسات',
         },
       },
 

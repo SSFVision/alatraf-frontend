@@ -39,7 +39,8 @@ export class NavigationAuthFacade {
         return `${AppRoutes.diagnosis.root}/${AppRoutes.diagnosis.therapy.root}`;
       case AppUserRole.IndustrialDoctor:
         return `${AppRoutes.diagnosis.root}/${AppRoutes.diagnosis.industrial.root}`;
-
+     case AppUserRole.TherapyManagementReceptionist:
+        return AppRoutes.therapyCards.root;
       case AppUserRole.FinanceEmployee:
         return AppRoutes.finance.root;
         case AppUserRole.SalesEmployee:
@@ -47,7 +48,7 @@ export class NavigationAuthFacade {
       case AppUserRole.AppointmentsEmployee:
       return `${AppRoutes.Appointment.root}/${AppRoutes.Appointment.manage}`;
       case AppUserRole.Admin:
-        return AppRoutes.injuries.root;
+        return AppRoutes.users.root;
 
       // return `${AppRoutes.Appointment.root}/${AppRoutes.Appointment.manage}`;
       // case 'Manager':

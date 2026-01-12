@@ -6,7 +6,7 @@ export const RepairCardsRoutes: Routes = [
   {
     path: '',
     canActivate: [PermissionGuard],
-    data: { permission: PERMISSIONS.RepairCard.READ },
+    data: { permission: PERMISSIONS.RepairCard.ASSIGN_TECHNICIAN },
     loadComponent: () =>
       import(
         './Pages/main-repair-cards-waiting-list/main-repair-cards-waiting-list.component'
