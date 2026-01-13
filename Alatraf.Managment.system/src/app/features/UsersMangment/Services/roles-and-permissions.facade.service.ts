@@ -5,7 +5,6 @@ import { ApiResult } from '../../../core/models/ApiResult';
 import { BaseFacade } from '../../../core/utils/facades/base-facade';
 import { IdentityService } from './identity.service';
 import { AssignRolesRequest } from '../Models/assign-roles.request';
-import { RemoveRolesRequest } from '../Models/remove-roles.request';
 import { PermissionIdsRequest } from '../Models/permission-ids.request';
 import { RoleDetailsDto } from '../Models/Roles/role-details.dto';
 import { PermissionDto } from '../Models/Permissions/permission.dto';
@@ -22,7 +21,7 @@ export class RolesAndPermissionsFacadeService extends BaseFacade {
 
   private _isLoadingRoles = signal<boolean>(false);
   isLoadingRoles = this._isLoadingRoles.asReadonly();
-private _isLoadingPermissions = signal<boolean>(false);
+  private _isLoadingPermissions = signal<boolean>(false);
   isLoadingPermissions = this._isLoadingPermissions.asReadonly();
 
   formValidationErrors = signal<Record<string, string[]>>({});
@@ -78,45 +77,12 @@ private _isLoadingPermissions = signal<boolean>(false);
     );
   }
 
-  removeRoles(userId: string, dto: RemoveRolesRequest) {
-    return this.handleCreateOrUpdate(this.service.removeRoles(userId, dto), {
-      successMessage: 'تم إزالة الأدوار بنجاح',
-      defaultErrorMessage: 'فشل إزالة الأدوار. يرجى المحاولة لاحقاً.',
-    }).pipe(
-      tap((res) => {
-        if (res.success) {
-          this.formValidationErrors.set({});
-        } else if (res.validationErrors) {
-          this.formValidationErrors.set(res.validationErrors);
-        }
-      })
-    );
-  }
-
   grantPermissionsToUser(userId: string, dto: PermissionIdsRequest) {
     return this.handleCreateOrUpdate(
       this.service.grantPermissionsToUser(userId, dto),
       {
         successMessage: 'تم منح الصلاحيات للمستخدم بنجاح',
         defaultErrorMessage: 'فشل منح الصلاحيات. يرجى المحاولة لاحقاً.',
-      }
-    ).pipe(
-      tap((res) => {
-        if (res.success) {
-          this.formValidationErrors.set({});
-        } else if (res.validationErrors) {
-          this.formValidationErrors.set(res.validationErrors);
-        }
-      })
-    );
-  }
-
-  denyPermissionsToUser(userId: string, dto: PermissionIdsRequest) {
-    return this.handleCreateOrUpdate(
-      this.service.denyPermissionsToUser(userId, dto),
-      {
-        successMessage: 'تم إلغاء صلاحيات المستخدم بنجاح',
-        defaultErrorMessage: 'فشل إلغاء الصلاحيات. يرجى المحاولة لاحقاً.',
       }
     ).pipe(
       tap((res) => {

@@ -4,17 +4,23 @@ import {
   EnvironmentInjector,
   OnInit,
   effect,
+  computed,
   inject,
   runInInjectionContext,
   signal,
 } from '@angular/core';
-import { finalize } from 'rxjs/operators';
+import { finalize, tap } from 'rxjs/operators';
 import { UsersNavigationFacade } from '../../../../core/navigation/users-navigation.facade';
 import { ActivatedRoute } from '@angular/router';
 import { RolesAndPermissionsFacadeService } from '../../Services/roles-and-permissions.facade.service';
 import { UsersFacadeService } from '../../Services/users.facade.service';
 import { RoleDetailsDto } from '../../Models/Roles/role-details.dto';
 import { mapRoleToArabic } from '../../../../core/auth/Roles/app.user.roles.enum';
+import { DialogService } from '../../../../shared/components/dialog/dialog.service';
+import {
+  DialogConfig,
+  DialogType,
+} from '../../../../shared/components/dialog/DialogConfig';
 
 @Component({
   selector: 'app-user-role-assign',
@@ -32,34 +38,51 @@ export class UserRoleAssignComponent implements OnInit {
   private userFacade = inject(UsersFacadeService);
   selectedUser = this.userFacade.selectedUser;
   isLoadingSelectedUser = this.userFacade.isLoadingSelectedUser;
+  isInitialLoading = computed(
+    () => this.isLoadingRoles() || this.isLoadingSelectedUser()
+  );
+  hasLoadedData = computed(() => {
+    const user = this.selectedUser();
+    const roles = this.roles();
+    // Consider data ready when we have a user and either roles finished loading or some roles arrived
+    return !!user && (!this.isLoadingRoles() || roles.length > 0);
+  });
 
   currentUserId: string | null = null;
   selectedRoleIds = signal<string[]>([]);
   isSaving = signal(false);
+  isSaveSuccessful = signal(false);
+  roleSelectionNotice = signal<string | null>(null);
+  private readonly minRoleMessage = '*يجب اختيار دور واحد على الأقل.';
   private env = inject(EnvironmentInjector);
+  private dialog = inject(DialogService);
   mapRoleToArabic = mapRoleToArabic;
 
   ngOnInit(): void {
     this.listenToRoute();
     this.rolePermissionFacade.loadRoles();
     runInInjectionContext(this.env, () => {
-      effect(
-        () => {
-          const user = this.selectedUser();
-          const availableRoles = this.roles();
-          if (!user) {
-            this.selectedRoleIds.set([]);
-            return;
-          }
+      effect(() => {
+        const user = this.selectedUser();
+        const availableRoles = this.roles();
+        if (!user) {
+          this.selectedRoleIds.set([]);
+          return;
+        }
 
-          const userRoleNames = new Set(user.roles ?? []);
-          const matchedRoleIds = availableRoles
-            .filter((r) => userRoleNames.has(r.name))
-            .map((r) => r.roleId);
+        const userRoleNames = new Set(user.roles ?? []);
+        const matchedRoleIds = availableRoles
+          .filter((r) => userRoleNames.has(r.name))
+          .map((r) => r.roleId);
 
-          this.selectedRoleIds.set(matchedRoleIds);
-        },
-      );
+        this.selectedRoleIds.set(matchedRoleIds);
+      });
+
+      effect(() => {
+        if (this.selectedRoleIds().length === 0) {
+          this.roleSelectionNotice.set(this.minRoleMessage);
+        }
+      });
     });
   }
 
@@ -77,25 +100,73 @@ export class UserRoleAssignComponent implements OnInit {
 
   onRoleToggle(event: Event, role: RoleDetailsDto) {
     const checked = (event.target as HTMLInputElement).checked;
+    this.isSaveSuccessful.set(false); // re-enable save after any change
     this.selectedRoleIds.update((ids) => {
       if (checked) {
+        this.roleSelectionNotice.set(null);
         return ids.includes(role.roleId) ? ids : [...ids, role.roleId];
       }
+
+      if (ids.length <= 1 && ids.includes(role.roleId)) {
+        (event.target as HTMLInputElement).checked = true;
+        this.ensureHasAtLeastOneRole([]);
+        return ids;
+      }
+
       return ids.filter((id) => id !== role.roleId);
     });
   }
 
-  onSave() {
+  async onSave() {
     if (!this.currentUserId) return;
 
     const roleIds = this.selectedRoleIds();
+    if (!this.ensureHasAtLeastOneRole()) {
+      return;
+    }
+
+    const confirmed = await this.confirmRoleAssignmentChange(roleIds);
+    if (!confirmed) {
+      return;
+    }
+
+    this.isSaveSuccessful.set(false);
     this.isSaving.set(true);
     this.rolePermissionFacade
       .assignRoles(this.currentUserId, { roleIds })
-      .pipe(finalize(() => this.isSaving.set(true)))
+      .pipe(
+        tap((res) => {
+          if (res?.success) {
+            this.isSaveSuccessful.set(true);
+          }
+        }),
+        finalize(() => this.isSaving.set(false))
+      )
       .subscribe();
   }
 
+  private async confirmRoleAssignmentChange(
+    roleIds: string[]
+  ): Promise<boolean> {
+    const roleNames = this.getSelectedRoleNames(roleIds);
+    const rolesText =
+      roleNames.length > 0
+        ? `[${roleNames.join('، ')}]`
+        : `${roleIds.length} دور`;
+
+    const config: DialogConfig = {
+      type: DialogType.Confirm,
+      title: 'تأكيد تعيين الأدوار',
+      message: `سيتم تعيين الأدوار التالية:\n${rolesText}\n\للمستخدم : ${
+        this.selectedUser()?.username ?? ''
+      }`,
+      confirmText: 'متابعة',
+      cancelText: 'تراجع',
+      showCancel: true,
+    };
+
+    return await this.dialog.confirmPromise(config);
+  }
   private listenToRoute() {
     this.route.paramMap.subscribe((params) => {
       const id = params.get('userId');
@@ -105,5 +176,21 @@ export class UserRoleAssignComponent implements OnInit {
         this.userFacade.getUserById(id);
       }
     });
+  }
+
+  private ensureHasAtLeastOneRole(candidateRoles?: string[]): boolean {
+    const rolesToCheck = candidateRoles ?? this.selectedRoleIds();
+    const hasRole = rolesToCheck.length > 0;
+    if (!hasRole) {
+      this.roleSelectionNotice.set(this.minRoleMessage);
+    }
+    return hasRole;
+  }
+
+  private getSelectedRoleNames(roleIds?: string[]): string[] {
+    const selected = new Set(roleIds ?? this.selectedRoleIds());
+    return this.roles()
+      .filter((r) => selected.has(r.roleId))
+      .map((r) => this.mapRoleToArabic(r.name));
   }
 }

@@ -239,38 +239,19 @@ export class AddIndustrialDiagnosisFormComponent
 
     const partId = last.get('industrialPartId')?.value;
     const unitId = last.get('unitId')?.value;
-    const quantity = last.get('quantity')?.value;
+    const quantityCtrl = last.get('quantity');
+    const quantity = quantityCtrl?.value;
+    const quantityTouched = !!quantityCtrl?.touched;
 
-    const hasData = !!(
-      partId ||
-      unitId ||
-      (quantity !== null && quantity !== undefined)
-    );
+    const hasInput =
+      (partId !== null && partId !== undefined && partId !== '') ||
+      (unitId !== null && unitId !== undefined && unitId !== '') ||
+      (quantityTouched && quantity !== null && quantity !== undefined && quantity !== '');
 
-    // If last row has the required pieces filled, ensure validators and append a new empty row
-    if (partId && unitId) {
-      last.get('industrialPartId')?.setValidators(Validators.required);
-      last.get('unitId')?.setValidators(Validators.required);
-      last
-        .get('quantity')
-        ?.setValidators([Validators.required, Validators.min(1)]);
-
-      last
-        .get('industrialPartId')
-        ?.updateValueAndValidity({ onlySelf: true, emitEvent: false });
-      last
-        .get('unitId')
-        ?.updateValueAndValidity({ onlySelf: true, emitEvent: false });
-      last
-        .get('quantity')
-        ?.updateValueAndValidity({ onlySelf: true, emitEvent: false });
-
-      // If it's the last row, append an empty trailing row without validators
-      if (lastIndex === this.industrialPartsForm.length - 1) {
-        this.industrialPartsForm.push(this.createIndustrialPartRow(false));
-      }
-    } else if (!hasData) {
-      // If row is empty, ensure controls don't have validators so it doesn't block submit
+    if (hasInput) {
+      this.applyPartRowValidators(last as FormGroup);
+    } else {
+      // empty trailing row stays optional
       last.get('industrialPartId')?.setValidators(null);
       last.get('unitId')?.setValidators(null);
       last.get('quantity')?.setValidators(null);
@@ -284,6 +265,11 @@ export class AddIndustrialDiagnosisFormComponent
       last
         .get('quantity')
         ?.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+    }
+
+    // When last row is complete (part + unit), append a new empty trailing row
+    if (partId && unitId && lastIndex === this.industrialPartsForm.length - 1) {
+      this.industrialPartsForm.push(this.createIndustrialPartRow(false));
     }
   }
 
@@ -384,6 +370,22 @@ export class AddIndustrialDiagnosisFormComponent
   // Submit
   // --------------------------
   onSubmit() {
+    // apply validators only to rows with any input so partial rows show errors
+    this.industrialPartsForm.controls.forEach((row) => {
+      const partId = row.get('industrialPartId')?.value;
+      const unitId = row.get('unitId')?.value;
+      const quantity = row.get('quantity')?.value;
+      const hasInput =
+        (partId !== null && partId !== undefined && partId !== '') ||
+        (unitId !== null && unitId !== undefined && unitId !== '') ||
+        (quantity !== null && quantity !== undefined && quantity !== '');
+
+      if (hasInput) {
+        this.applyPartRowValidators(row as FormGroup);
+        row.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+      }
+    });
+
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
@@ -423,6 +425,24 @@ export class AddIndustrialDiagnosisFormComponent
       this.startSubmitting();
       this.submitForm.emit(dto);
     }
+  }
+
+  private applyPartRowValidators(row: FormGroup) {
+    row.get('industrialPartId')?.setValidators(Validators.required);
+    row.get('unitId')?.setValidators(Validators.required);
+    row
+      .get('quantity')
+      ?.setValidators([Validators.required, Validators.min(1)]);
+
+    row
+      .get('industrialPartId')
+      ?.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+    row
+      .get('unitId')
+      ?.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+    row
+      .get('quantity')
+      ?.updateValueAndValidity({ onlySelf: true, emitEvent: false });
   }
   private noFutureDatesValidator(
     control: AbstractControl

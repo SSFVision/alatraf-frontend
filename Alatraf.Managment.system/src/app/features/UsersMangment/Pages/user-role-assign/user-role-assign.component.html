@@ -1,55 +1,99 @@
 <div class="backdrop" (click)="onClose()"></div>
 
 <div class="box dialog">
-  <div>
-    <h2 class="title-lg">اختيار دور للمستخدم</h2>
+  <ng-container *ngIf="hasLoadedData(); else loadingState">
+    <div class="space-between">
+      <h2 class="title-lg">اختيار دور للمستخدم</h2>
+      <img
+        src="assets/icons/close-icon.svg"
+        alt="إغلاق"
+        (click)="onClose()"
+        class="close-icon cursor-pointer"
+      />
+    </div>
     <span class="home-line"></span>
-  </div>
 
-  <div class="row flex-center">
-    <label class="label-lg">اسم المستخدم</label>
-    <input class="label-lg" type="text" [value]="selectedUser()?.username" readonly />
-  </div>
+    <div class="row flex-center">
+      <label class="label-lg">اسم المستخدم</label>
+      <input
+        class="label-lg"
+        type="text"
+        [value]="selectedUser()?.username"
+        readonly
+      />
+    </div>
 
-  <div class="width-100">
-    <p class="title-md">الصلاحيات</p>
-    <span class="home-line"></span>
-  </div>
+    <div class="width-100">
+      <p class="title-md">الصلاحيات</p>
+      <span class="home-line"></span>
+    </div>
 
-  <div class="main-content-wrapper">
-    <form class="scrollable-area column gap-16">
-      <table class="permissions-table">
-        <thead>
-          <tr>
-            <th>الدور</th>
-            <th>تعيين</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let role of roles(); trackBy: trackByRoleId">
-            <td>{{ mapRoleToArabic(role.name) }}</td>
-            <td>
-              <label class="ring-toggle">
-                <input type="checkbox" [checked]="isRoleChecked(role)" [value]="role.roleId"
-                  name="role-{{ role.roleId }}" (change)="onRoleToggle($event, role)"
-                  [disabled]="isLoadingRoles() || isLoadingSelectedUser()" />
-                <span class="ring"></span>
-              </label>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </form>
-  </div>
+    <div *ngIf="roleSelectionNotice()" class="error-message">
+      {{ roleSelectionNotice() }}
+    </div>
 
-  <div class="row flex-center">
-    <button class="btn secondary" type="button" (click)="onSave()" [disabled]="
-        !currentUserId ||
-        isLoadingRoles() ||
-        isLoadingSelectedUser() ||
-        isSaving()
-      ">
-      حفظ
-    </button>
-  </div>
+    <div class="main-content-wrapper">
+      <form class="column gap-16">
+        <table class="permissions-table">
+          <thead>
+            <tr>
+              <th>الدور</th>
+              <th>تعيين</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let role of roles(); trackBy: trackByRoleId">
+              <td>{{ mapRoleToArabic(role.name) }}</td>
+              <td>
+                <label class="ring-toggle">
+                  <input
+                    type="checkbox"
+                    [checked]="isRoleChecked(role)"
+                    [value]="role.roleId"
+                    name="role-{{ role.roleId }}"
+                    (change)="onRoleToggle($event, role)"
+                    [disabled]="isLoadingRoles() || isLoadingSelectedUser()"
+                  />
+                  <span class="ring"></span>
+                </label>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </form>
+    </div>
+
+    <div class="row flex-center">
+      <button
+        *ngIf="!isSaveSuccessful()"
+        class="btn secondary"
+        type="button"
+        (click)="onSave()"
+        [disabled]="
+          !currentUserId ||
+          isLoadingRoles() ||
+          isLoadingSelectedUser() ||
+          isSaving() ||
+          isSaveSuccessful()
+        "
+      >
+        حفظ
+      </button>
+      <button
+        *ngIf="isSaveSuccessful()"
+        class="btn red"
+        type="button"
+        (click)="onClose()"
+      >
+        إغلاق
+      </button>
+    </div>
+  </ng-container>
+
+  <ng-template #loadingState>
+    <div class="flex-center">
+      <span class="loader"></span>
+      <p>جارٍ تحميل المستخدم والأدوار...</p>
+    </div>
+  </ng-template>
 </div>

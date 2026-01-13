@@ -166,6 +166,18 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges, OnDestroy {
   }
 
   onSubmit() {
+    // ensure program rows carry validators only when user entered data
+    this.programs.controls.forEach((row) => {
+      const med = row.get('medicalProgramId')?.value;
+      const dur = row.get('duration')?.value;
+      const hasInput =
+        (med !== null && med !== '') || (dur !== null && dur !== '');
+      if (hasInput) {
+        this.ensureRowValidators(row as FormGroup);
+      }
+    });
+    this.programs.updateValueAndValidity();
+
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;

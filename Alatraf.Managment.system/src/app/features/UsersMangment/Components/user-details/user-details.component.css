@@ -1,1 +1,26 @@
+.roles-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 12px;
+  min-height: 44px;
+  border: 1px solid #e2e6ee;
+  border-radius: 10px;
+  background-color: #f7f9fc;
+}
 
+.role-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background-color: #e9eef7;
+  border: 1px solid #d3ddf0;
+  color: #1f2a44;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.roles-empty {
+  color: #7a7f87;
+}

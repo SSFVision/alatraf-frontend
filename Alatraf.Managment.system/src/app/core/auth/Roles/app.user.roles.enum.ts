@@ -19,7 +19,7 @@ export const RoleArabicMap: Record<AppUserRole, string> = {
   [AppUserRole.Receptionist]: 'موظف استقبال',
   [AppUserRole.FinanceEmployee]: 'موظف مالي',
   [AppUserRole.TherapyDoctor]: 'طبيب علاج طبيعي',
-  [AppUserRole.IndustrialDoctor]: 'طبيب صناعي',
+  [AppUserRole.IndustrialDoctor]: 'طبيب  اطراف صناعية',
   [AppUserRole.TechnicalManagementReceptionist]: 'استقبال الإدارة الفنية',
   [AppUserRole.TherapyManagementReceptionist]: 'استقبال إدارة العلاج',
   [AppUserRole.OrdersEmployee]: 'موظف طلبات',

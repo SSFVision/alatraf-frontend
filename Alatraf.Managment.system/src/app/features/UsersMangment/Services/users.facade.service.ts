@@ -77,7 +77,7 @@ export class UsersFacadeService extends BaseFacade {
       )
       .subscribe();
   }
- private _isLoadingSelectedUser = signal<boolean>(false);
+  private _isLoadingSelectedUser = signal<boolean>(false);
   isLoadingSelectedUser = this._isLoadingSelectedUser.asReadonly();
 
   getUserById(userId: string) {
