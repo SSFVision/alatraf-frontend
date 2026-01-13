@@ -5,39 +5,41 @@
 </div>
 } @else {
 
-<div class="max-hight-712 column gap-16 column gap-16" (scroll)="onScroll($event)">
-  @if (!items() || items().length === 0) {
-  <div class="empty-state">
-    <img src="assets/images/amico.svg" alt="no items" class="empty-icon" />
-    <p class="body-md primary-color-50">لا توجد بيانات حالياً</p>
-  </div>
-  }
-
-  @else { @for (item of items(); track item.id; let i = $index) {
-  <div class="card primary-card cursor-pointer column gap-8" [class.selected]="selectedId() === item.id"
-    (click)="onSelect(item.id)">
-    <!-- optional counter (testing) -->
-    <p class="body-sm neutral-color-60">#{{ i + 1 }}</p>
-
-    <p class="body-md">{{ item.name }}</p>
-
-    <div class="row space-between">
-      <p class="body-sm primary-color-50">رقم : {{ item.id }}</p>
-
-      @if (item.sectionName) {
-      <p class="body-sm neutral-color-60">{{ item.sectionName }}</p>
-      }
+<div class="main-content-wrapper">
+  <div class="scrollable-area column gap-16 column gap-16" (scroll)="onScroll($event)">
+    @if (!items() || items().length === 0) {
+    <div class="empty-state">
+      <img src="assets/images/amico.svg" alt="no items" class="empty-icon" />
+      <p class="body-md primary-color-50">لا توجد بيانات حالياً</p>
     </div>
-  </div>
-  } }
+    }
 
-  @if (loadingMore()) {
-  <div class="flex-center padding-16">
-    <span class="loader"></span>
-    <span class="body-sm primary-color-50 margin-left-8">
-      جاري تحميل المزيد...
-    </span>
+    @else { @for (item of items(); track item.id; let i = $index) {
+    <div class="card primary-card cursor-pointer column gap-8" [class.selected]="selectedId() === item.id"
+      (click)="onSelect(item.id)">
+      <!-- optional counter (testing) -->
+      <p class="body-sm neutral-color-60">#{{ i + 1 }}</p>
+
+      <p class="body-md">{{ item.name }}</p>
+
+      <div class="row space-between">
+        <p class="body-sm primary-color-50">رقم : {{ item.id }}</p>
+
+        @if (item.sectionName) {
+        <p class="body-sm neutral-color-60">{{ item.sectionName }}</p>
+        }
+      </div>
+    </div>
+    } }
+
+    @if (loadingMore()) {
+    <div class="flex-center padding-16">
+      <span class="loader"></span>
+      <span class="body-sm primary-color-50 margin-left-8">
+        جاري تحميل المزيد...
+      </span>
+    </div>
+    }
   </div>
-  }
 </div>
 }

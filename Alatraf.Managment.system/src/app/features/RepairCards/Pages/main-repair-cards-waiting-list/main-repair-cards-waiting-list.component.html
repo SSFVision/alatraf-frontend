@@ -23,8 +23,10 @@
         <button class="filter-btn">يتجهز</button>
         <button class="filter-btn">جاهز</button>
       </div>
-      <app-general-waiting-patient-queue class="max-hight-712 column gap-16" [patients]="patientsVM()"
-        [loading]="loading()" (select)="select($event)"></app-general-waiting-patient-queue>
+      <div class="main-content-wrapper">
+        <app-general-waiting-patient-queue class="scrollable-area column gap-16" [patients]="patientsVM()"
+          [loading]="loading()" (select)="select($event)"></app-general-waiting-patient-queue>
+      </div>
       }
     </div>
 
@@ -56,8 +58,10 @@
         <button class="filter-btn">جلد</button>
         <button class="filter-btn">اطراف</button>
       </div>
-      <app-doctor-card class="max-hight-712 column gap-16" [doctors]="technicianDoctorsVM()"
-        [loading]="loadingTechnicians()" (select)="OnSelectDoctor($event)"></app-doctor-card>
+      <div class="main-content-wrapper">
+        <app-doctor-card class="scrollable-area column gap-16" [doctors]="technicianDoctorsVM()"
+          [loading]="loadingTechnicians()" (select)="OnSelectDoctor($event)"></app-doctor-card>
+      </div>
       }
     </div>
   </div>

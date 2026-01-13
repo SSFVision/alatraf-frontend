@@ -30,9 +30,10 @@
         الأطراف الصناعية
       </button>
     </div>
-
-    <app-doctor-list class="max-hight-712 column gap-16" [doctors]="doctors()" [loading]="loading()"
-      (doctorSelectedId)="onDoctorSelected($event)"></app-doctor-list>
+    <div class="main-content-wrapper">
+      <app-doctor-list class="scrollable-area column gap-16" [doctors]="doctors()" [loading]="loading()"
+        (doctorSelectedId)="onDoctorSelected($event)"></app-doctor-list>
+    </div>
 
     <div class="flex-center">
       <button class="btn primary" (click)="goToAddDoctor()">

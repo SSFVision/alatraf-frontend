@@ -20,8 +20,8 @@
       <button class="filter-btn">الأطراف الصناعية</button>
     </div> -->
 
-    <div>
-      <app-user-list class="max-hight-712 column gap-16" [users]="usersListItem()" [loading]="loadingUser()"
+    <div class="main-content-wrapper">
+      <app-user-list class="scrollable-area column gap-16" [users]="usersListItem()" [loading]="loadingUser()"
         (selectUser)="OnSelectedUser($event)"></app-user-list>
     </div>
 
@@ -32,7 +32,7 @@
     </div>
   </div>
 
-  <div class="box   gap-16">
+  <div class="box gap-16">
     <router-outlet></router-outlet>
   </div>
 </div>

@@ -4,7 +4,7 @@
   align-items: stretch;
 }
 
-.host > .box {
+.host>.box {
   flex: 1;
   display: flex;
   flex-direction: column;

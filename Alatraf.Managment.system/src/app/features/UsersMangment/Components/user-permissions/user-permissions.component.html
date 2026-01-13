@@ -1,284 +1,268 @@
 <div class="width-100">
-  <p class="title-md">الصلاحيات</p>
+  <div class="row space-between flex-center">
+
+    <p class="title-md">الصلاحيات</p>
+
+    <div class="width-100"></div>
+
+    <div class="gap-16">
+
+      <button class="btn primary label-sm small-btn margin-8">
+        اضافة صلاحيات
+      </button>
+      <button class="btn primary label-sm small-btn margin-8">
+        حذف صلاحيات
+      </button>
+
+    </div>
+  </div>
   <span class="home-line"></span>
 </div>
 
-<form class="max-hight-712 column gap-16">
-  <table class="permissions-table">
-    <!-- <thead>
-      <tr>
+<div class="main-content-wrapper">
+  <form class="scrollable-area column gap-16">
+    <table class="permissions-table">
+      <!-- <thead>
+        <tr>
+  
+  
+          <th>الإدارة</th>
+          <th >عرض</th>
+          <th>إضافة</th>
+          <th>تعديل</th>
+          <th>حذف</th>
+          <th>طباعة</th>
+          <th>تغيير الحالة</th>
+          <th
+            *ngFor="let extraLabel of extraColumns; trackBy: trackByExtraHeader"
+          >
+            {{ extraLabel }}
+          </th>
+        </tr>
+      </thead> -->
 
+      <thead>
+        <tr>
+          <th>الإدارة</th>
 
-        <th>الإدارة</th>
-        <th >عرض</th>
-        <th>إضافة</th>
-        <th>تعديل</th>
-        <th>حذف</th>
-        <th>طباعة</th>
-        <th>تغيير الحالة</th>
-        <th
-          *ngFor="let extraLabel of extraColumns; trackBy: trackByExtraHeader"
-        >
-          {{ extraLabel }}
-        </th>
-      </tr>
-    </thead> -->
-
-    <thead>
-      <tr>
-        <th>الإدارة</th>
-
-        @if (showRead()) {
-        <th>عرض</th>
-        } @if (showCreate()) {
-        <th>إضافة</th>
-        } @if (showUpdate()) {
-        <th>تعديل</th>
-        } @if (showDelete()) {
-        <th>حذف</th>
-        } @if (showPrint()) {
-        <th>طباعة</th>
-        } @if (showChangeStatus()) {
-        <th>تغيير الحالة</th>
-        }
-
-        <th
-          *ngFor="
-            let extraLabel of visibleExtraColumns();
-            trackBy: trackByExtraHeader
-          "
-        >
-          {{ extraLabel }}
-        </th>
-      </tr>
-    </thead>
-
-    <!-- <tbody>
-      <tr *ngFor="let group of permissionGroups; trackBy: trackByLabel">
-        <td>{{ group.label }}</td>
-        <td>
-          @if (group.read) {
-          <label class="ring-toggle">
-            <input
-              type="checkbox"
-              [checked]="isPermGranted(group.read)"
-              disabled
-            />
-            <span class="ring"></span>
-          </label>
-          } @else {
-          <span class="muted">—</span>
+          @if (showRead()) {
+          <th>عرض</th>
+          } @if (showCreate()) {
+          <th>إضافة</th>
+          } @if (showUpdate()) {
+          <th>تعديل</th>
+          } @if (showDelete()) {
+          <th>حذف</th>
+          } @if (showPrint()) {
+          <th>طباعة</th>
+          } @if (showChangeStatus()) {
+          <th>تغيير الحالة</th>
           }
-        </td>
-        <td>
-          @if (group.create) {
-          <label class="ring-toggle">
-            <input
-              type="checkbox"
-              [checked]="isPermGranted(group.create)"
-              disabled
-            />
-            <span class="ring"></span>
-          </label>
-          } @else {
-          <span class="muted">—</span>
-          }
-        </td>
-        <td>
-          @if (group.update) {
-          <label class="ring-toggle">
-            <input
-              type="checkbox"
-              [checked]="isPermGranted(group.update)"
-              disabled
-            />
-            <span class="ring"></span>
-          </label>
-          } @else {
-          <span class="muted">—</span>
-          }
-        </td>
-        <td>
-          @if (group.delete) {
-          <label class="ring-toggle">
-            <input
-              type="checkbox"
-              [checked]="isPermGranted(group.delete)"
-              disabled
-            />
-            <span class="ring"></span>
-          </label>
-          } @else {
-          <span class="muted">—</span>
-          }
-        </td>
-        <td>
-          @if (group.print) {
-          <label class="ring-toggle">
-            <input
-              type="checkbox"
-              [checked]="isPermGranted(group.print)"
-              disabled
-            />
-            <span class="ring"></span>
-          </label>
-          } @else {
-          <span class="muted">—</span>
-          }
-        </td>
-        <td>
-          @if (group.changeStatus) {
-          <label class="ring-toggle">
-            <input
-              type="checkbox"
-              [checked]="isPermGranted(group.changeStatus)"
-              disabled
-            />
-            <span class="ring"></span>
-          </label>
-          } @else {
-          <span class="muted">—</span>
-          }
-        </td>
-        <td
-          *ngFor="let extraLabel of extraColumns; trackBy: trackByExtraHeader"
-        >
-          @if (getExtraPerm(group, extraLabel)) {
-          <label class="ring-toggle">
-            <input
-              type="checkbox"
-              [checked]="isPermGranted(getExtraPerm(group, extraLabel))"
-              disabled
-            />
-            <span class="ring"></span>
-          </label>
-          } @else {
-          <span class="muted">—</span>
-          }
-        </td>
-      </tr>
-    </tbody> -->
 
-    <tbody>
-      <ng-container
-        *ngFor="let group of permissionGroups; trackBy: trackByLabel"
-      >
-        <tr *ngIf="hasAnyGroupPermission(group)">
-          <!-- Group label -->
-          <td>{{ group.label }}</td>
-
-          <!-- Read -->
-          <td *ngIf="showRead()">
-            <ng-container *ngIf="group.read; else noPerm">
-              <label class="ring-toggle">
-                <input
-                  type="checkbox"
-                  [checked]="isPermGranted(group.read)"
-                  disabled
-                />
-                <span class="ring"></span>
-              </label>
-            </ng-container>
-          </td>
-
-          <!-- Create -->
-          <td *ngIf="showCreate()">
-            <ng-container *ngIf="group.create; else noPerm">
-              <label class="ring-toggle">
-                <input
-                  type="checkbox"
-                  [checked]="isPermGranted(group.create)"
-                  disabled
-                />
-                <span class="ring"></span>
-              </label>
-            </ng-container>
-          </td>
-
-          <!-- Update -->
-          <td *ngIf="showUpdate()">
-            <ng-container *ngIf="group.update; else noPerm">
-              <label class="ring-toggle">
-                <input
-                  type="checkbox"
-                  [checked]="isPermGranted(group.update)"
-                  disabled
-                />
-                <span class="ring"></span>
-              </label>
-            </ng-container>
-          </td>
-
-          <!-- Delete -->
-          <td *ngIf="showDelete()">
-            <ng-container *ngIf="group.delete; else noPerm">
-              <label class="ring-toggle">
-                <input
-                  type="checkbox"
-                  [checked]="isPermGranted(group.delete)"
-                  disabled
-                />
-                <span class="ring"></span>
-              </label>
-            </ng-container>
-          </td>
-
-          <!-- Print -->
-          <td *ngIf="showPrint()">
-            <ng-container *ngIf="group.print; else noPerm">
-              <label class="ring-toggle">
-                <input
-                  type="checkbox"
-                  [checked]="isPermGranted(group.print)"
-                  disabled
-                />
-                <span class="ring"></span>
-              </label>
-            </ng-container>
-          </td>
-
-          <!-- Change Status -->
-          <td *ngIf="showChangeStatus()">
-            <ng-container *ngIf="group.changeStatus; else noPerm">
-              <label class="ring-toggle">
-                <input
-                  type="checkbox"
-                  [checked]="isPermGranted(group.changeStatus)"
-                  disabled
-                />
-                <span class="ring"></span>
-              </label>
-            </ng-container>
-          </td>
-
-          <!-- Extras -->
-          <td
-            *ngFor="
+          <th *ngFor="
               let extraLabel of visibleExtraColumns();
               trackBy: trackByExtraHeader
-            "
+            ">
+            {{ extraLabel }}
+          </th>
+        </tr>
+      </thead>
+
+      <!-- <tbody>
+        <tr *ngFor="let group of permissionGroups; trackBy: trackByLabel">
+          <td>{{ group.label }}</td>
+          <td>
+            @if (group.read) {
+            <label class="ring-toggle">
+              <input
+                type="checkbox"
+                [checked]="isPermGranted(group.read)"
+                disabled
+              />
+              <span class="ring"></span>
+            </label>
+            } @else {
+            <span class="muted">—</span>
+            }
+          </td>
+          <td>
+            @if (group.create) {
+            <label class="ring-toggle">
+              <input
+                type="checkbox"
+                [checked]="isPermGranted(group.create)"
+                disabled
+              />
+              <span class="ring"></span>
+            </label>
+            } @else {
+            <span class="muted">—</span>
+            }
+          </td>
+          <td>
+            @if (group.update) {
+            <label class="ring-toggle">
+              <input
+                type="checkbox"
+                [checked]="isPermGranted(group.update)"
+                disabled
+              />
+              <span class="ring"></span>
+            </label>
+            } @else {
+            <span class="muted">—</span>
+            }
+          </td>
+          <td>
+            @if (group.delete) {
+            <label class="ring-toggle">
+              <input
+                type="checkbox"
+                [checked]="isPermGranted(group.delete)"
+                disabled
+              />
+              <span class="ring"></span>
+            </label>
+            } @else {
+            <span class="muted">—</span>
+            }
+          </td>
+          <td>
+            @if (group.print) {
+            <label class="ring-toggle">
+              <input
+                type="checkbox"
+                [checked]="isPermGranted(group.print)"
+                disabled
+              />
+              <span class="ring"></span>
+            </label>
+            } @else {
+            <span class="muted">—</span>
+            }
+          </td>
+          <td>
+            @if (group.changeStatus) {
+            <label class="ring-toggle">
+              <input
+                type="checkbox"
+                [checked]="isPermGranted(group.changeStatus)"
+                disabled
+              />
+              <span class="ring"></span>
+            </label>
+            } @else {
+            <span class="muted">—</span>
+            }
+          </td>
+          <td
+            *ngFor="let extraLabel of extraColumns; trackBy: trackByExtraHeader"
           >
-            <ng-container *ngIf="getExtraPerm(group, extraLabel); else noPerm">
-              <label class="ring-toggle">
-                <input
-                  type="checkbox"
-                  [checked]="isPermGranted(getExtraPerm(group, extraLabel))"
-                  disabled
-                />
-                <span class="ring"></span>
-              </label>
-            </ng-container>
+            @if (getExtraPerm(group, extraLabel)) {
+            <label class="ring-toggle">
+              <input
+                type="checkbox"
+                [checked]="isPermGranted(getExtraPerm(group, extraLabel))"
+                disabled
+              />
+              <span class="ring"></span>
+            </label>
+            } @else {
+            <span class="muted">—</span>
+            }
           </td>
         </tr>
-      </ng-container>
+      </tbody> -->
 
-      <!-- No Permission Template -->
-      <ng-template #noPerm>
-        <span class="muted">—</span>
-      </ng-template>
-    </tbody>
-  </table>
-</form>
+      <tbody>
+        <ng-container *ngFor="let group of permissionGroups; trackBy: trackByLabel">
+          <tr *ngIf="hasAnyGroupPermission(group)">
+            <!-- Group label -->
+            <td>{{ group.label }}</td>
+
+            <!-- Read -->
+            <td *ngIf="showRead()">
+              <ng-container *ngIf="group.read; else noPerm">
+                <label class="ring-toggle">
+                  <input type="checkbox" [checked]="isPermGranted(group.read)" disabled />
+                  <span class="ring"></span>
+                </label>
+              </ng-container>
+            </td>
+
+            <!-- Create -->
+            <td *ngIf="showCreate()">
+              <ng-container *ngIf="group.create; else noPerm">
+                <label class="ring-toggle">
+                  <input type="checkbox" [checked]="isPermGranted(group.create)" disabled />
+                  <span class="ring"></span>
+                </label>
+              </ng-container>
+            </td>
+
+            <!-- Update -->
+            <td *ngIf="showUpdate()">
+              <ng-container *ngIf="group.update; else noPerm">
+                <label class="ring-toggle">
+                  <input type="checkbox" [checked]="isPermGranted(group.update)" disabled />
+                  <span class="ring"></span>
+                </label>
+              </ng-container>
+            </td>
+
+            <!-- Delete -->
+            <td *ngIf="showDelete()">
+              <ng-container *ngIf="group.delete; else noPerm">
+                <label class="ring-toggle">
+                  <input type="checkbox" [checked]="isPermGranted(group.delete)" disabled />
+                  <span class="ring"></span>
+                </label>
+              </ng-container>
+            </td>
+
+            <!-- Print -->
+            <td *ngIf="showPrint()">
+              <ng-container *ngIf="group.print; else noPerm">
+                <label class="ring-toggle">
+                  <input type="checkbox" [checked]="isPermGranted(group.print)" disabled />
+                  <span class="ring"></span>
+                </label>
+              </ng-container>
+            </td>
+
+            <!-- Change Status -->
+            <td *ngIf="showChangeStatus()">
+              <ng-container *ngIf="group.changeStatus; else noPerm">
+                <label class="ring-toggle">
+                  <input type="checkbox" [checked]="isPermGranted(group.changeStatus)" disabled />
+                  <span class="ring"></span>
+                </label>
+              </ng-container>
+            </td>
+
+            <!-- Extras -->
+            <td *ngFor="
+                let extraLabel of visibleExtraColumns();
+                trackBy: trackByExtraHeader
+              ">
+              <ng-container *ngIf="getExtraPerm(group, extraLabel); else noPerm">
+                <label class="ring-toggle">
+                  <input type="checkbox" [checked]="isPermGranted(getExtraPerm(group, extraLabel))" disabled />
+                  <span class="ring"></span>
+                </label>
+              </ng-container>
+            </td>
+          </tr>
+        </ng-container>
+
+        <!-- No Permission Template -->
+        <ng-template #noPerm>
+          <span class="muted">—</span>
+        </ng-template>
+      </tbody>
+    </table>
+  </form>
+</div>
 
 <div class="row flex-center">
   <!-- <button class="btn secondary" disabled>تعديل</button> -->

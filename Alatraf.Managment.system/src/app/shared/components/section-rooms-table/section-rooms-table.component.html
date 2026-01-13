@@ -8,38 +8,40 @@
   <p class="title-md">الغرف الخاصة بالقسم</p>
   <span class="home-line"></span>
 </div>
-<div class="max-hight-712 column gap-16">
-  <table>
-    <thead>
-      <tr>
-        <th>رقم الغرفة</th>
-        <th class="buttons"></th>
-      </tr>
-    </thead>
+<div class="main-content-wrapper">
+  <div class="scrollable-area column gap-16">
+    <table>
+      <thead>
+        <tr>
+          <th>رقم الغرفة</th>
+          <th class="buttons"></th>
+        </tr>
+      </thead>
 
-    <tbody>
-      <tr *ngFor="let room of rooms()">
-        <td class="body-md">{{ room.roomName }}</td>
-        <td class="row gap-16">
-          <!-- <button class="btn primary icon" (click)="onEdit(room)">
-            <img src="assets/icons/pencil-icon.svg" alt="تعديل" />
-          </button> -->
+      <tbody>
+        <tr *ngFor="let room of rooms()">
+          <td class="body-md">{{ room.roomName }}</td>
+          <td class="row gap-16">
+            <!-- <button class="btn primary icon" (click)="onEdit(room)">
+              <img src="assets/icons/pencil-icon.svg" alt="تعديل" />
+            </button> -->
 
-          <button class="btn danger icon" (click)="onDelete(room)">
-            <img src="assets/icons/trash-icon.svg" alt="حذف" />
-          </button>
-        </td>
-      </tr>
+            <button class="btn danger icon" (click)="onDelete(room)">
+              <img src="assets/icons/trash-icon.svg" alt="حذف" />
+            </button>
+          </td>
+        </tr>
 
-      @if ( (!rooms() || rooms().length === 0)) {
-      <tr>
-        <td colspan="3" class="body-md text-center">
-          لا توجد غرف مرتبطة بهذا القسم
-        </td>
-      </tr>
-      }
-    </tbody>
-  </table>
+        @if ( (!rooms() || rooms().length === 0)) {
+        <tr>
+          <td colspan="3" class="body-md text-center">
+            لا توجد غرف مرتبطة بهذا القسم
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
 </div>
 
 }

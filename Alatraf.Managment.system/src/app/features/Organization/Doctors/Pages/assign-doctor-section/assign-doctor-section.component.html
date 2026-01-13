@@ -1,98 +1,72 @@
-<div class="max-hight-712 column gap-16">
-  <div class="width-100">
-    <p class="title-md">بيانات الطبيب</p>
-    <span class="home-line"></span>
-  </div>
+<div class="main-content-wrapper">
+  <div class="scrollable-area column gap-16">
+    <div class="width-100">
+      <p class="title-md">بيانات الطبيب</p>
+      <span class="home-line"></span>
+    </div>
 
-  @if (selectedDoctor()) {
-  <div class="row flex-center">
-    <label class="label-lg"> الاسم </label>
-    <input
-      class="label-lg"
-      type="text"
-      [value]="selectedDoctor()?.personDto?.fullname"
-      readonly
-    />
-    <label class="label-lg"> الرقم الوظيفي </label>
-    <input
-      class="label-lg"
-      type="text"
-      [value]="selectedDoctor()?.doctorId"
-      readonly
-    />
-  </div>
-  } @else {
-  <p class="flex-center">الرجاء اختيار طبيب لعرض بياناته.</p>
-  }
-
-  <form
-    *ngIf="form"
-    class="max-hight-712 column gap-24"
-    [formGroup]="form"
-    (ngSubmit)="onSubmit()"
-  >
+    @if (selectedDoctor()) {
     <div class="row flex-center">
-      <label class="label-lg"> القسم </label>
-      <select
-        class="label-lg"
-        formControlName="sectionId"
-        (change)="onSectionChange()"
-      >
-        <option [ngValue]="null" disabled>-- اختر القسم --</option>
-        @if(loadingSections()) {
-        <option [ngValue]="null" disabled>... جاري تحميل الأقسام</option>
-        } @for (section of sections(); track section.id) {
-        <option [ngValue]="section.id">{{ section.name }}</option>
+      <label class="label-lg"> الاسم </label>
+      <input class="label-lg" type="text" [value]="selectedDoctor()?.personDto?.fullname" readonly />
+      <label class="label-lg"> الرقم الوظيفي </label>
+      <input class="label-lg" type="text" [value]="selectedDoctor()?.doctorId" readonly />
+    </div>
+    } @else {
+    <p class="flex-center">الرجاء اختيار طبيب لعرض بياناته.</p>
+    }
+
+    <form *ngIf="form" class="column gap-24" [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="row flex-center">
+        <label class="label-lg"> القسم </label>
+        <select class="label-lg" formControlName="sectionId" (change)="onSectionChange()">
+          <option [ngValue]="null" disabled>-- اختر القسم --</option>
+          @if(loadingSections()) {
+          <option [ngValue]="null" disabled>... جاري تحميل الأقسام</option>
+          } @for (section of sections(); track section.id) {
+          <option [ngValue]="section.id">{{ section.name }}</option>
+          }
+        </select>
+
+        @if (isTherapyDoctor()) {
+        <label class="label-lg"> الغرفة </label>
+        <select class="label-lg" formControlName="roomId">
+          <option [ngValue]="null" disabled>-- اختر الغرفة --</option>
+          @if(loadingRooms()) {
+          <option [ngValue]="null" disabled>... جاري التحميل</option>
+          } @for (room of rooms(); track room.roomId) {
+          <option [ngValue]="room.roomId">{{ room.roomName }}</option>
+          }
+        </select>
         }
-      </select>
+      </div>
 
-      @if (isTherapyDoctor()) {
-      <label class="label-lg"> الغرفة </label>
-      <select class="label-lg" formControlName="roomId">
-        <option [ngValue]="null" disabled>-- اختر الغرفة --</option>
-        @if(loadingRooms()) {
-        <option [ngValue]="null" disabled>... جاري التحميل</option>
-        } @for (room of rooms(); track room.roomId) {
-        <option [ngValue]="room.roomId">{{ room.roomName }}</option>
-        }
-      </select>
-      }
-    </div>
+      <div class="row flex-center">
+        <label class="label-lg"> الحالة </label>
+        <select class="label-lg" formControlName="isActive">
+          <option [ngValue]="true">نشط</option>
+          <option [ngValue]="false">غير نشط</option>
+        </select>
+      </div>
 
-    <div class="row flex-center">
-      <label class="label-lg"> الحالة </label>
-      <select class="label-lg" formControlName="isActive">
-        <option [ngValue]="true">نشط</option>
-        <option [ngValue]="false">غير نشط</option>
-      </select>
-    </div>
+      <div class="row flex-center width-100">
+        <label class="label-lg">الملاحظات</label>
+        <textarea rows="2" class="label-lg" formControlName="notes" placeholder="إضافة ملاحظات (اختياري)"></textarea>
+      </div>
 
-    <div class="row flex-center width-100">
-      <label class="label-lg">الملاحظات</label>
-      <textarea
-        rows="2"
-        class="label-lg"
-        formControlName="notes"
-        placeholder="إضافة ملاحظات (اختياري)"
-      ></textarea>
-    </div>
-
-    <div class="row gap-16 flex-center">
-      <button
-        type="submit"
-        class="btn primary"
-        [disabled]="
-          isSubmitting() || form.invalid || (isEditMode() && form.pristine)
-        "
-      >
-        @if (isSubmitting()) {
-        <span>...جاري الحفظ</span>
-        } @else { @if (isEditMode()) {
-        <span>تعديل</span>
-        } @else {
-        <span>حفظ</span>
-        } }
-      </button>
-    </div>
-  </form>
+      <div class="row gap-16 flex-center">
+        <button type="submit" class="btn primary" [disabled]="
+            isSubmitting() || form.invalid || (isEditMode() && form.pristine)
+          ">
+          @if (isSubmitting()) {
+          <span>...جاري الحفظ</span>
+          } @else { @if (isEditMode()) {
+          <span>تعديل</span>
+          } @else {
+          <span>حفظ</span>
+          } }
+        </button>
+      </div>
+    </form>
+  </div>
 </div>

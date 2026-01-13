@@ -59,6 +59,7 @@
 body {
   background-color: var(--background-color);
   min-width: 880px;
+  height: 100vh
 }
 
 /* backdrop */

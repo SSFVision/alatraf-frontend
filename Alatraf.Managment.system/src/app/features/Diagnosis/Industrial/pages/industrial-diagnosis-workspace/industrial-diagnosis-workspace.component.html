@@ -15,20 +15,23 @@
   </h1>
 </div>
 
-<div class="max-hight-712 gap-16 padding-LR-24">
+<div class="main-content-wrapper">
+  <div class="scrollable-area gap-16 padding-LR-24">
 
-  <app-header-patient-info [patient]="ticket()?.patient!"></app-header-patient-info>
+    <app-header-patient-info [patient]="ticket()?.patient!"></app-header-patient-info>
 
-  @if (viewMode() === 'add') {
-  <app-add-industrial-diagnosis-form [ticketId]="ticket()?.ticketId!" [injuryReasons]="injuryReasons()"
-    [injurySides]="injurySides()" [injuryTypes]="injuryTypes()" [industrialParts]="industrialParts()"
-    [editMode]="isEditMode()" [existingRepairCard]="existingCard()" (submitForm)="saveIndustrialDiagnosis($event)">
-  </app-add-industrial-diagnosis-form>
-  }
+    @if (viewMode() === 'add') {
+    <app-add-industrial-diagnosis-form [ticketId]="ticket()?.ticketId!" [injuryReasons]="injuryReasons()"
+      [injurySides]="injurySides()" [injuryTypes]="injuryTypes()" [industrialParts]="industrialParts()"
+      [editMode]="isEditMode()" [existingRepairCard]="existingCard()" (submitForm)="saveIndustrialDiagnosis($event)">
+    </app-add-industrial-diagnosis-form>
+    }
 
-  @if (viewMode() === 'history') {
-  <app-previous-industrial-diagnosis [items]="patientRepairDiagnosis()" (viewDetails)="openHistoryDetails($event)">
-  </app-previous-industrial-diagnosis>
-  }
+    @if (viewMode() === 'history') {
+    <app-previous-industrial-diagnosis [items]="patientRepairDiagnosis()" (viewDetails)="openHistoryDetails($event)">
+    </app-previous-industrial-diagnosis>
+    }
+  </div>
 </div>
+
 }

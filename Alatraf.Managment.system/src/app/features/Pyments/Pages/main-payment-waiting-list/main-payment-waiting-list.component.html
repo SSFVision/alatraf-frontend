@@ -80,9 +80,11 @@
 
 
     <!-- Queue -->
-    <app-general-waiting-patient-queue class="max-hight-712 column gap-16" [patients]="patientsVM()"
-      [loading]="loading()" (select)="select($event)">
-    </app-general-waiting-patient-queue>
+    <div class="main-content-wrapper">
+      <app-general-waiting-patient-queue class="scrollable-area column gap-16" [patients]="patientsVM()"
+        [loading]="loading()" (select)="select($event)">
+      </app-general-waiting-patient-queue>
+    </div>
   </div>
 
   <!-- ===================================================== -->
