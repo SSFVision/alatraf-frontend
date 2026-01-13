@@ -22,13 +22,6 @@
   text-align: center;
 }
 
-/* .sticky {
-  position: sticky;
-  top: 0;
-  background-color: var(--white-color);
-  z-index: 1;
-} */
-
 /* search box */
 
 .search-box {
@@ -50,6 +43,13 @@
 }
 
 /* scrollable*/
+*:has(> .main-content-wrapper) {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
 .main-content-wrapper {
   flex: 1;
   position: relative;
