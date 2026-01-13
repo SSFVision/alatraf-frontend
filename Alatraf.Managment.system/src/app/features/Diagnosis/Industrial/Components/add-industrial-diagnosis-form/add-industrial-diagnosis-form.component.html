@@ -260,7 +260,7 @@
   </div>
 
   <div
-    *ngIf="industrialPartsForm.errors?.['atLeastOnePart']"
+    *ngIf="industrialPartsForm.touched && industrialPartsForm.errors?.['atLeastOnePart']"
     class="error-message label-lg flex-center"
   >
     يجب إضافة قطعة واحدة على الأقل
