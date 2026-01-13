@@ -16,6 +16,11 @@ import { RolesAndPermissionsFacadeService } from '../../Services/roles-and-permi
 import { UsersFacadeService } from '../../Services/users.facade.service';
 import { RoleDetailsDto } from '../../Models/Roles/role-details.dto';
 import { mapRoleToArabic } from '../../../../core/auth/Roles/app.user.roles.enum';
+import { DialogService } from '../../../../shared/components/dialog/dialog.service';
+import {
+  DialogConfig,
+  DialogType,
+} from '../../../../shared/components/dialog/DialogConfig';
 
 @Component({
   selector: 'app-user-role-assign',
@@ -48,8 +53,9 @@ export class UserRoleAssignComponent implements OnInit {
   isSaving = signal(false);
   isSaveSuccessful = signal(false);
   roleSelectionNotice = signal<string | null>(null);
-  private readonly minRoleMessage = 'يجب اختيار دور واحد على الأقل.';
+  private readonly minRoleMessage = '*يجب اختيار دور واحد على الأقل.';
   private env = inject(EnvironmentInjector);
+  private dialog = inject(DialogService);
   mapRoleToArabic = mapRoleToArabic;
 
   ngOnInit(): void {
@@ -111,11 +117,16 @@ export class UserRoleAssignComponent implements OnInit {
     });
   }
 
-  onSave() {
+  async onSave() {
     if (!this.currentUserId) return;
 
     const roleIds = this.selectedRoleIds();
     if (!this.ensureHasAtLeastOneRole()) {
+      return;
+    }
+
+    const confirmed = await this.confirmRoleAssignmentChange(roleIds);
+    if (!confirmed) {
       return;
     }
 
@@ -134,6 +145,28 @@ export class UserRoleAssignComponent implements OnInit {
       .subscribe();
   }
 
+  private async confirmRoleAssignmentChange(
+    roleIds: string[]
+  ): Promise<boolean> {
+    const roleNames = this.getSelectedRoleNames(roleIds);
+    const rolesText =
+      roleNames.length > 0
+        ? `[${roleNames.join('، ')}]`
+        : `${roleIds.length} دور`;
+
+    const config: DialogConfig = {
+      type: DialogType.Confirm,
+      title: 'تأكيد تعيين الأدوار',
+      message: `سيتم تعيين الأدوار التالية:\n${rolesText}\n\للمستخدم : ${
+        this.selectedUser()?.username ?? ''
+      }`,
+      confirmText: 'متابعة',
+      cancelText: 'تراجع',
+      showCancel: true,
+    };
+
+    return await this.dialog.confirmPromise(config);
+  }
   private listenToRoute() {
     this.route.paramMap.subscribe((params) => {
       const id = params.get('userId');
@@ -152,5 +185,12 @@ export class UserRoleAssignComponent implements OnInit {
       this.roleSelectionNotice.set(this.minRoleMessage);
     }
     return hasRole;
+  }
+
+  private getSelectedRoleNames(roleIds?: string[]): string[] {
+    const selected = new Set(roleIds ?? this.selectedRoleIds());
+    return this.roles()
+      .filter((r) => selected.has(r.roleId))
+      .map((r) => this.mapRoleToArabic(r.name));
   }
 }

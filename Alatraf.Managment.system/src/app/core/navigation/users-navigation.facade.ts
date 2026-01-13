@@ -10,16 +10,21 @@ export class UsersNavigationFacade {
   // Users
   // ==============================
   goToUsersMainPage(extras?: NavigationExtras): void {
-    this.go(AppRoutes.users.root, extras);
+    this.go(AppRoutes.users.root, { replaceUrl: true, ...extras });
   }
 
-
   goToUsersListPage(extras?: NavigationExtras): void {
-    this.go(`${AppRoutes.users.root}/${AppRoutes.users.list}`, extras);
+    this.go(`${AppRoutes.users.root}/${AppRoutes.users.list}`, {
+      replaceUrl: true,
+      ...extras,
+    });
   }
 
   goToCreateUserPage(extras?: NavigationExtras): void {
-    this.go(`${AppRoutes.users.root}/${AppRoutes.users.create}`, extras);
+    this.go(`${AppRoutes.users.root}/${AppRoutes.users.create}`, {
+      replaceUrl: true,
+      ...extras,
+    });
   }
 
   goToEditUserPage(userId: string, extras?: NavigationExtras): void {
@@ -35,7 +40,7 @@ export class UsersNavigationFacade {
   ): void {
     this.go(
       `${AppRoutes.users.root}/${AppRoutes.users.changeCredentials(userId)}`,
-      extras
+      { replaceUrl: true, ...extras }
     );
   }
 
@@ -45,32 +50,37 @@ export class UsersNavigationFacade {
   ): void {
     this.go(
       `${AppRoutes.users.root}/${AppRoutes.users.resetPassword(userId)}`,
-      extras
+      { replaceUrl: true, ...extras }
     );
   }
 
   goToViewUserPage(userId: string, extras?: NavigationExtras): void {
-    this.go(`${AppRoutes.users.root}/${AppRoutes.users.view(userId)}`, extras);
+    this.go(`${AppRoutes.users.root}/${AppRoutes.users.view(userId)}`, {
+      replaceUrl: true,
+      ...extras,
+    });
   }
 
   // ==============================
-  // User Permissions
+  // User Permissions / Roles
   // ==============================
   goToUserRoleAssignPage(userId: string, extras?: NavigationExtras): void {
     this.go(
       `${AppRoutes.users.root}/${AppRoutes.users.AssignRole(userId)}`,
-      extras
+      { replaceUrl: true, ...extras }
     );
   }
+
   goToUserPermissionsPage(
     userId: number | string,
     extras?: NavigationExtras
   ): void {
     this.go(
       `${AppRoutes.users.root}/${AppRoutes.users.permissions(userId)}`,
-      extras
+      { replaceUrl: true, ...extras }
     );
   }
+
   // ==============================
   // Internal Helper
   // ==============================

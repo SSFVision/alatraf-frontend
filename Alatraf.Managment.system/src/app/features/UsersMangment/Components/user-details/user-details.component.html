@@ -67,6 +67,7 @@
   <button
     class="btn primary label-md margin-LR-24"
     (click)="onReassignRoleClick()"
+    [disabled]="isUserAdmin()"
   >
     إعادة تعين الادوار
   </button>
