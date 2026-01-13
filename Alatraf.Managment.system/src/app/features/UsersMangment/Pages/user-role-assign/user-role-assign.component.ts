@@ -9,7 +9,7 @@ import {
   runInInjectionContext,
   signal,
 } from '@angular/core';
-import { finalize } from 'rxjs/operators';
+import { finalize, tap } from 'rxjs/operators';
 import { UsersNavigationFacade } from '../../../../core/navigation/users-navigation.facade';
 import { ActivatedRoute } from '@angular/router';
 import { RolesAndPermissionsFacadeService } from '../../Services/roles-and-permissions.facade.service';
@@ -46,6 +46,7 @@ export class UserRoleAssignComponent implements OnInit {
   currentUserId: string | null = null;
   selectedRoleIds = signal<string[]>([]);
   isSaving = signal(false);
+  isSaveSuccessful = signal(false);
   private env = inject(EnvironmentInjector);
   mapRoleToArabic = mapRoleToArabic;
 
@@ -86,6 +87,7 @@ export class UserRoleAssignComponent implements OnInit {
 
   onRoleToggle(event: Event, role: RoleDetailsDto) {
     const checked = (event.target as HTMLInputElement).checked;
+    this.isSaveSuccessful.set(false); // re-enable save after any change
     this.selectedRoleIds.update((ids) => {
       if (checked) {
         return ids.includes(role.roleId) ? ids : [...ids, role.roleId];
@@ -98,10 +100,18 @@ export class UserRoleAssignComponent implements OnInit {
     if (!this.currentUserId) return;
 
     const roleIds = this.selectedRoleIds();
+    this.isSaveSuccessful.set(false);
     this.isSaving.set(true);
     this.rolePermissionFacade
       .assignRoles(this.currentUserId, { roleIds })
-      .pipe(finalize(() => this.isSaving.set(false)))
+      .pipe(
+        tap((res) => {
+          if (res?.success) {
+            this.isSaveSuccessful.set(true);
+          }
+        }),
+        finalize(() => this.isSaving.set(false))
+      )
       .subscribe();
   }
 

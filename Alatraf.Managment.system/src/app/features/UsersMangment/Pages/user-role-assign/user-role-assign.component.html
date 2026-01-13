@@ -61,6 +61,8 @@
 
     <div class="row flex-center">
       <button
+              *ngIf="!isSaveSuccessful()"
+
         class="btn secondary"
         type="button"
         (click)="onSave()"
@@ -68,10 +70,19 @@
           !currentUserId ||
           isLoadingRoles() ||
           isLoadingSelectedUser() ||
-          isSaving()
+          isSaving() ||
+          isSaveSuccessful()
         "
       >
         حفظ
+      </button>
+      <button
+        *ngIf="isSaveSuccessful()"
+        class="btn red"
+        type="button"
+        (click)="onClose()"
+      >
+        إغلاق
       </button>
     </div>
   </ng-container>

@@ -286,7 +286,7 @@
   </div>
 
   <div
-    *ngIf="programs.errors?.['atLeastOneProgram']"
+    *ngIf="programs.touched && programs.errors?.['atLeastOneProgram']"
     class="error-message label-lg flex-center"
   >
     يجب إضافة برنامج علاجي واحد على الأقل
@@ -298,8 +298,8 @@
     <button
       class="btn primary label-md"
       type="submit"
-      [disabled]=" submitting()"
-      >
+      [disabled]="submitting()"
+    >
       <!-- [disabled]="form.invalid || submitting()" -->
 
       حفظ
