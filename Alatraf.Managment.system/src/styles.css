@@ -20,6 +20,8 @@
 
   scrollbar-width: thin;
   scrollbar-color: var(--primary-color) var(--background-color);
+  min-height: 0;
+  flex-shrink: 0;
 }
 
 *::-webkit-scrollbar {
@@ -59,6 +61,7 @@
 body {
   background-color: var(--background-color);
   min-width: 880px;
+  height: 100vh
 }
 
 /* backdrop */

@@ -22,22 +22,27 @@
 </div>
 }
 
-<div class="max-hight-712 column gap-16 padding-LR-24">
+<div class="main-content-wrapper">
+
+  <div class="scrollable-area column gap-16 padding-LR-24">
 
 
-  <app-header-patient-info [patient]="ticket()?.patient!"></app-header-patient-info>
+    <app-header-patient-info [patient]="ticket()?.patient!"></app-header-patient-info>
 
-  @if(viewMode() === 'add') {
-  <app-add-therapy-diagnosis-form [ticketId]="ticket()?.ticketId!" [injuryReasons]="injuryReasons()"
-    [injurySides]="injurySides()" [injuryTypes]="injuryTypes()" [medicalPrograms]="medicalPrograms()"
-    [editMode]="isEditMode()" [existingTherapyCard]="existingCard()"
-    (submitForm)="saveTherapyDiagnosis($event)"></app-add-therapy-diagnosis-form>
+    @if(viewMode() === 'add') {
+    <app-add-therapy-diagnosis-form [ticketId]="ticket()?.ticketId!" [injuryReasons]="injuryReasons()"
+      [injurySides]="injurySides()" [injuryTypes]="injuryTypes()" [medicalPrograms]="medicalPrograms()"
+      [editMode]="isEditMode()" [existingTherapyCard]="existingCard()"
+      (submitForm)="saveTherapyDiagnosis($event)"></app-add-therapy-diagnosis-form>
 
-  }
-  @if (viewMode() === 'history') {
-  <app-previous-therapy-card-diagnosis [items]="patientTherapyDiagnoisis()"
-    (viewDetails)="onViewCard($event)"></app-previous-therapy-card-diagnosis>
-  }
+    }
+    @if (viewMode() === 'history') {
+    <app-previous-therapy-card-diagnosis [items]="patientTherapyDiagnoisis()"
+      (viewDetails)="onViewCard($event)"></app-previous-therapy-card-diagnosis>
+    }
+
+  </div>
 
 </div>
+
 }

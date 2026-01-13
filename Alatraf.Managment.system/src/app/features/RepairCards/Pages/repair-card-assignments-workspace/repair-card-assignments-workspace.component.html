@@ -1,98 +1,81 @@
 @if (loadingRepairCard()) {
-  <div class="flex-center">
-    <span class="loader"></span>
-  </div>
-  <p class="flex-center">جاري تحميل بيانات المريض...</p>
+<div class="flex-center">
+  <span class="loader"></span>
+</div>
+<p class="flex-center">جاري تحميل بيانات المريض...</p>
 }
 @else {
 
 <div class="row gap-16">
   <h1 class="title-lg cursor-pointer">تعيين الأطراف الصناعية</h1>
 </div>
+<div class="main-content-wrapper">
+  <div class="scrollable-area column gap-16">
+    <!-- Patient Info -->
+    <div class="column gap-16" id="patient-info-container">
+      <app-header-patient-info [patient]="patient()!"></app-header-patient-info>
+    </div>
 
-<div class="max-hight-712 column gap-16">
-  <!-- Patient Info -->
-  <div class="column gap-16" id="patient-info-container">
-    <app-header-patient-info [patient]="patient()!"></app-header-patient-info>
+    <!-- Section title -->
+    <div class="width-100">
+      <p class="title-md">بيانات الفنيين</p>
+      <span class="home-line"></span>
+    </div>
+
+    <!-- Assign Industrial Parts Form -->
+    <form [formGroup]="assignForm" (ngSubmit)="submit()">
+      <table class="no-shadow">
+        <thead>
+          <tr>
+            <th class="label-lg">القطعة</th>
+            <th class="label-lg">القسم</th>
+            <th class="label-lg">الفني</th>
+          </tr>
+        </thead>
+
+        <tbody formArrayName="assignments">
+          <tr *ngFor="let group of assignmentsArray.controls; let i = index" [formGroupName]="i">
+            <!-- Industrial Part -->
+            <td>
+              <input type="text" class="label-lg" [value]="repairCard()?.diagnosisIndustrialParts?.[i]?.partName"
+                disabled />
+            </td>
+
+            <!-- Section -->
+            <td>
+              <select class="label-lg" formControlName="sectionId" (change)="onSectionChange(i)">
+                <option value="" disabled hidden>القسم</option>
+                <option *ngFor="let section of sections()" [value]="section.id">
+                  {{ section.name }}
+                </option>
+              </select>
+            </td>
+
+            <!-- Technician -->
+            <td>
+              <select class="label-lg" formControlName="doctorId">
+                <option value="" disabled hidden>الفني</option>
+                <option *ngFor="let doctor of getDoctorsForRow(i)" [value]="doctor.id">
+                  {{ doctor.name }}
+                </option>
+              </select>
+            </td>
+          </tr>
+        </tbody>
+
+        <!-- Submit -->
+        <tfoot>
+          <tr>
+            <td colspan="3" class="text-end padding-16">
+              <button type="submit" class="btn primary" [disabled]="assignForm.disabled">
+                حفظ التعيين
+              </button>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </form>
   </div>
-
-  <!-- Section title -->
-  <div class="width-100">
-    <p class="title-md">بيانات الفنيين</p>
-    <span class="home-line"></span>
-  </div>
-
-  <!-- Assign Industrial Parts Form -->
-  <form [formGroup]="assignForm" (ngSubmit)="submit()">
-    <table class="no-shadow">
-      <thead>
-        <tr>
-          <th class="label-lg">القطعة</th>
-          <th class="label-lg">القسم</th>
-          <th class="label-lg">الفني</th>
-        </tr>
-      </thead>
-
-      <tbody formArrayName="assignments">
-        <tr
-          *ngFor="let group of assignmentsArray.controls; let i = index"
-          [formGroupName]="i"
-        >
-          <!-- Industrial Part -->
-          <td>
-            <input
-              type="text"
-              class="label-lg"
-              [value]="repairCard()?.diagnosisIndustrialParts?.[i]?.partName"
-              disabled
-            />
-          </td>
-
-          <!-- Section -->
-          <td>
-            <select
-              class="label-lg"
-              formControlName="sectionId"
-              (change)="onSectionChange(i)"
-            >
-              <option value="" disabled hidden>القسم</option>
-              <option *ngFor="let section of sections()" [value]="section.id">
-                {{ section.name }}
-              </option>
-            </select>
-          </td>
-
-          <!-- Technician -->
-          <td>
-            <select class="label-lg" formControlName="doctorId">
-              <option value="" disabled hidden>الفني</option>
-              <option
-                *ngFor="let doctor of getDoctorsForRow(i)"
-                [value]="doctor.id"
-              >
-                {{ doctor.name }}
-              </option>
-            </select>
-          </td>
-        </tr>
-      </tbody>
-
-      <!-- Submit -->
-      <tfoot>
-        <tr>
-          <td colspan="3" class="text-end padding-16">
-            <button
-              type="submit"
-              class="btn primary"
-              [disabled]="assignForm.disabled"
-            >
-              حفظ التعيين
-            </button>
-          </td>
-        </tr>
-      </tfoot>
-    </table>
-  </form>
 </div>
 
 }

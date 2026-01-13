@@ -8,12 +8,7 @@
 
   <div class="row flex-center">
     <label class="label-lg">اسم المستخدم</label>
-    <input
-      class="label-lg"
-      type="text"
-      [value]="selectedUser()?.username"
-      readonly
-    />
+    <input class="label-lg" type="text" [value]="selectedUser()?.username" readonly />
   </div>
 
   <div class="width-100">
@@ -21,47 +16,39 @@
     <span class="home-line"></span>
   </div>
 
-  <form class="max-hight-712 column gap-16">
-    <table class="permissions-table">
-      <thead>
-        <tr>
-          <th>الدور</th>
-          <th>تعيين</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let role of roles(); trackBy: trackByRoleId">
-          <td>{{ mapRoleToArabic(role.name) }}</td>
-          <td>
-            <label class="ring-toggle">
-              <input
-                type="checkbox"
-                [checked]="isRoleChecked(role)"
-                [value]="role.roleId"
-                name="role-{{ role.roleId }}"
-                (change)="onRoleToggle($event, role)"
-                [disabled]="isLoadingRoles() || isLoadingSelectedUser()"
-              />
-              <span class="ring"></span>
-            </label>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </form>
+  <div class="main-content-wrapper">
+    <form class="scrollable-area column gap-16">
+      <table class="permissions-table">
+        <thead>
+          <tr>
+            <th>الدور</th>
+            <th>تعيين</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let role of roles(); trackBy: trackByRoleId">
+            <td>{{ mapRoleToArabic(role.name) }}</td>
+            <td>
+              <label class="ring-toggle">
+                <input type="checkbox" [checked]="isRoleChecked(role)" [value]="role.roleId"
+                  name="role-{{ role.roleId }}" (change)="onRoleToggle($event, role)"
+                  [disabled]="isLoadingRoles() || isLoadingSelectedUser()" />
+                <span class="ring"></span>
+              </label>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+  </div>
 
   <div class="row flex-center">
-    <button
-      class="btn secondary"
-      type="button"
-      (click)="onSave()"
-      [disabled]="
+    <button class="btn secondary" type="button" (click)="onSave()" [disabled]="
         !currentUserId ||
         isLoadingRoles() ||
         isLoadingSelectedUser() ||
         isSaving()
-      "
-    >
+      ">
       حفظ
     </button>
   </div>

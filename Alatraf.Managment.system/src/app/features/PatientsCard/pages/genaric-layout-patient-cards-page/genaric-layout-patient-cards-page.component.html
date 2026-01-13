@@ -13,9 +13,10 @@
       <img src="assets/icons/search-icon.svg" class="search-icon" alt="search" />
       <input type="text" placeholder="بحث: اسم المريض او رقمه" (input)="onSearch($any($event.target).value)" />
     </div>
-
-    <app-patient-cards-list class="max-hight-712 column gap-16" [items]="facade.items()" [loading]="facade.isLoading()"
-      (select)="onSelectCard($event)"></app-patient-cards-list>
+    <div class="main-content-wrapper">
+      <app-patient-cards-list class="scrollable-area column gap-16" [items]="facade.items()"
+        [loading]="facade.isLoading()" (select)="onSelectCard($event)"></app-patient-cards-list>
+    </div>
 
     <!-- Add Button -->
     <div class="flex-center">

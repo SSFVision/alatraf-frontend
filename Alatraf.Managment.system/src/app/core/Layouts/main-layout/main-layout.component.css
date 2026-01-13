@@ -19,21 +19,11 @@ header {
   height: fit-content;
 }
 
-/* main {
-  grid-area: main;
-  display: block;
-  height: auto !important;
-  max-height: none !important;
-  overflow: visible !important;
-} */
-
 main {
   grid-area: main;
   display: flex;
   flex-direction: column;
-  /* ترتيب الصفوف تحت بعضها */
   height: auto;
-  min-height: 100%;
-  /* لضمان ملء مساحة الـ grid */
+  min-height: 0;
   overflow: visible !important;
 }

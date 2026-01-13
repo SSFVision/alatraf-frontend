@@ -10,12 +10,11 @@
   gap: 10px;
 
   max-height: none !important;
-  min-height: none !important;
+  min-height: 0 !important;
 
   flex: 1;
   overflow: hidden;
   box-sizing: border-box;
-
 }
 
 .center-content {
@@ -49,6 +48,25 @@
   transform: translateY(-50%);
   cursor: pointer;
 }
+
+/* scrollable*/
+.main-content-wrapper {
+  flex: 1;
+  position: relative;
+  min-height: 0;
+  width: 100%;
+}
+
+
+.scrollable-area {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* loader */
 
 .loader {
   width: 48px;

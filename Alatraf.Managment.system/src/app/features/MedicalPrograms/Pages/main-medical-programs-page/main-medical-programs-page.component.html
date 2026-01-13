@@ -17,8 +17,10 @@
     </div>
 
     <!-- LIST -->
-    <app-management-entity-card class="max-hight-712 column gap-16" [items]="card()" [loading]="loading()"
-      (select)="onCardSelected($event)"></app-management-entity-card>
+    <div class="main-content-wrapper">
+      <app-management-entity-card class="scrollable-area column gap-16" [items]="card()" [loading]="loading()"
+        (select)="onCardSelected($event)"></app-management-entity-card>
+    </div>
 
     <!-- ADD BUTTON -->
     <div class="flex-center">
