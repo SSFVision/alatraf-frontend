@@ -10,15 +10,15 @@
     type="text"
     [value]="user()?.username ?? ''"
     readonly
-    [disabled]="isLoading()"
+    disabled
   />
   <label class="label-lg"> الرقم الوظيفي </label>
   <input
     class="label-lg"
     type="text"
-    [value]="user()?.userId ?? ''"
+    [value]="user()?.userId"
     readonly
-    [disabled]="isLoading()"
+    disabled
   />
 </div>
 
@@ -29,9 +29,12 @@
     type="text"
     [value]="user()?.username ?? ''"
     readonly
-    [disabled]="isLoading()"
+    disabled
   />
-  <button class="btn primary label-md margin-LR-24" (click)="onRestPasswordClick()">
+  <button
+    class="btn primary label-md margin-LR-24"
+    (click)="onRestPasswordClick()"
+  >
     إعادة تعيين كلمة المرور
   </button>
 </div>
@@ -42,9 +45,29 @@
     class="label-lg"
     [ngModel]="user()?.isActive ?? false"
     [disabled]="true"
-
-    >
+  >
     <option [ngValue]="true">نشط</option>
     <option [ngValue]="false">غير نشط</option>
   </select>
+</div>
+
+<div class="row flex-center">
+  <label class="title-md"> دور المستخدم في النظام </label>
+  <div class="roles-container label-lg">
+    <ng-container *ngIf="user()?.roles?.length; else noRoles">
+      <span class="role-chip" *ngFor="let role of user()!.roles">
+        {{ mapRoleToArabic(role) }}
+      </span>
+    </ng-container>
+    <ng-template #noRoles>
+      <span class="label-md roles-empty">لا يوجد أدوار</span>
+    </ng-template>
+  </div>
+
+  <button
+    class="btn primary label-md margin-LR-24"
+    (click)="onReassignRoleClick()"
+  >
+    إعادة تعين الادوار
+  </button>
 </div>

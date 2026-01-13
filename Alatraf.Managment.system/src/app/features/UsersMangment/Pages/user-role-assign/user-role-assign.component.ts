@@ -4,6 +4,7 @@ import {
   EnvironmentInjector,
   OnInit,
   effect,
+  computed,
   inject,
   runInInjectionContext,
   signal,
@@ -32,6 +33,15 @@ export class UserRoleAssignComponent implements OnInit {
   private userFacade = inject(UsersFacadeService);
   selectedUser = this.userFacade.selectedUser;
   isLoadingSelectedUser = this.userFacade.isLoadingSelectedUser;
+  isInitialLoading = computed(
+    () => this.isLoadingRoles() || this.isLoadingSelectedUser()
+  );
+  hasLoadedData = computed(() => {
+    const user = this.selectedUser();
+    const roles = this.roles();
+    // Consider data ready when we have a user and either roles finished loading or some roles arrived
+    return !!user && (!this.isLoadingRoles() || roles.length > 0);
+  });
 
   currentUserId: string | null = null;
   selectedRoleIds = signal<string[]>([]);
@@ -42,24 +52,23 @@ export class UserRoleAssignComponent implements OnInit {
   ngOnInit(): void {
     this.listenToRoute();
     this.rolePermissionFacade.loadRoles();
+    console.log('Roles Loaded:', this.roles());
     runInInjectionContext(this.env, () => {
-      effect(
-        () => {
-          const user = this.selectedUser();
-          const availableRoles = this.roles();
-          if (!user) {
-            this.selectedRoleIds.set([]);
-            return;
-          }
+      effect(() => {
+        const user = this.selectedUser();
+        const availableRoles = this.roles();
+        if (!user) {
+          this.selectedRoleIds.set([]);
+          return;
+        }
 
-          const userRoleNames = new Set(user.roles ?? []);
-          const matchedRoleIds = availableRoles
-            .filter((r) => userRoleNames.has(r.name))
-            .map((r) => r.roleId);
+        const userRoleNames = new Set(user.roles ?? []);
+        const matchedRoleIds = availableRoles
+          .filter((r) => userRoleNames.has(r.name))
+          .map((r) => r.roleId);
 
-          this.selectedRoleIds.set(matchedRoleIds);
-        },
-      );
+        this.selectedRoleIds.set(matchedRoleIds);
+      });
     });
   }
 
@@ -92,7 +101,7 @@ export class UserRoleAssignComponent implements OnInit {
     this.isSaving.set(true);
     this.rolePermissionFacade
       .assignRoles(this.currentUserId, { roleIds })
-      .pipe(finalize(() => this.isSaving.set(true)))
+      .pipe(finalize(() => this.isSaving.set(false)))
       .subscribe();
   }
 
