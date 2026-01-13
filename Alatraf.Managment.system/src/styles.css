@@ -20,8 +20,6 @@
 
   scrollbar-width: thin;
   scrollbar-color: var(--primary-color) var(--background-color);
-  min-height: 0;
-  flex-shrink: 0;
 }
 
 *::-webkit-scrollbar {
