@@ -35,8 +35,10 @@
         ملغي
       </button>
     </div>
-    <app-waiting-appointment-card class="max-hight-712 column gap-16" [appointments]="appointments()"
-      (select)="onSelectAppointment($event)" [loading]="isloading()"></app-waiting-appointment-card>
+    <div class="main-content-wrapper">
+      <app-waiting-appointment-card class="scrollable-area column gap-16" [appointments]="appointments()"
+        (select)="onSelectAppointment($event)" [loading]="isloading()"></app-waiting-appointment-card>
+    </div>
   </div>
 
   <div class="box gap-16">

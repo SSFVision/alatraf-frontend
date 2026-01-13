@@ -52,8 +52,10 @@
     </div>
 
     <!-- Waiting list -->
-    <app-waiting-patient-card class="max-hight-712 column gap-16" [tickets]="tickets()" (select)="select($event)"
-      [loading]="loading()"></app-waiting-patient-card>
+    <div class="main-content-wrapper">
+      <app-waiting-patient-card class="scrollable-area column gap-16" [tickets]="tickets()" (select)="select($event)"
+        [loading]="loading()"></app-waiting-patient-card>
+    </div>
 
     <!-- Pagination Component -->
     <!-- <app-pagination [page]="pageRequest().page" [pageSize]="pageRequest().pageSize" [totalCount]="totalCount()"

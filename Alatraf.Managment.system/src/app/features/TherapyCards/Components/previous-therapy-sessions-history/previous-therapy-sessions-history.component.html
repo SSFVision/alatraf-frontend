@@ -1,81 +1,58 @@
-<!-- <div class="max-hight-712 column gap-16"> -->
-  <!-- Header -->
-  <div class="width-100">
-    <p class="title-md">الجلسات السابقة</p>
-    <span class="home-line"></span>
-  </div>
+<!-- Header -->
+<div class="width-100">
+  <p class="title-md">الجلسات السابقة</p>
+  <span class="home-line"></span>
+</div>
 
-  <!-- Table -->
-  <table *ngIf="sessions().length > 0; else noData" ass="no-shadow">
-    <thead>
-      <tr>
-        <th class="title-sm">رقم الجلسة</th>
-        <th class="title-sm">التاريخ</th>
-        <th class="title-sm">البرامج العلاجية</th>
-        <th class="title-sm">الطبيب المعالج</th>
-        <th class="buttons"></th>
-      </tr>
-    </thead>
+<!-- Table -->
+<table *ngIf="sessions().length > 0; else noData" ass="no-shadow">
+  <thead>
+    <tr>
+      <th class="title-sm">رقم الجلسة</th>
+      <th class="title-sm">التاريخ</th>
+      <th class="title-sm">البرامج العلاجية</th>
+      <th class="title-sm">الطبيب المعالج</th>
+      <th class="buttons"></th>
+    </tr>
+  </thead>
 
-    <tbody>
-      <ng-container *ngFor="let session of sessions()">
-        <ng-container
-          *ngFor="let program of session.sessionPrograms; let i = index"
-        >
-          <tr>
-            <td
-              *ngIf="i === 0"
-              class="body-md"
-              [attr.rowspan]="session.sessionPrograms.length"
-            >
-              {{ session.number }}
-            </td>
+  <tbody>
+    <ng-container *ngFor="let session of sessions()">
+      <ng-container *ngFor="let program of session.sessionPrograms; let i = index">
+        <tr>
+          <td *ngIf="i === 0" class="body-md" [attr.rowspan]="session.sessionPrograms.length">
+            {{ session.number }}
+          </td>
 
-            <td
-              *ngIf="i === 0"
-              class="body-md"
-              [attr.rowspan]="session.sessionPrograms.length"
-            >
-              {{ session.sessionDate }}
-            </td>
+          <td *ngIf="i === 0" class="body-md" [attr.rowspan]="session.sessionPrograms.length">
+            {{ session.sessionDate }}
+          </td>
 
-            <td class="body-md">
-              {{ program.programName }}
-            </td>
+          <td class="body-md">
+            {{ program.programName }}
+          </td>
 
-            <td class="body-md">
-              {{ program.doctorName ?? '-' }}
-            </td>
+          <td class="body-md">
+            {{ program.doctorName ?? '-' }}
+          </td>
 
-            <td
-              *ngIf="i === 0"
-              class="buttons"
-              [attr.rowspan]="session.sessionPrograms.length"
-            >
-              <button
-                class="btn primary icon"
-                (click)="viewDetails.emit(session.sessionId)"
-                title="عرض التفاصيل"
-              >
-                <img
-                  src="assets/icons/eye-icon.svg"
-                  alt="عرض التفاصيل"
-                />
-              </button>
-            </td>
-          </tr>
-        </ng-container>
+          <td *ngIf="i === 0" class="buttons" [attr.rowspan]="session.sessionPrograms.length">
+            <button class="btn primary icon" (click)="viewDetails.emit(session.sessionId)" title="عرض التفاصيل">
+              <img src="assets/icons/eye-icon.svg" alt="عرض التفاصيل" />
+            </button>
+          </td>
+        </tr>
       </ng-container>
-    </tbody>
+    </ng-container>
+  </tbody>
 
 
 
-  </table>
+</table>
 
-  <!-- No data -->
-  <ng-template #noData>
-    <p class="body-md padding-16 text-center">
-      لا توجد جلسات سابقة.
-    </p>
-  </ng-template>
-<!-- </div> -->
+<!-- No data -->
+<ng-template #noData>
+  <p class="body-md padding-16 text-center">
+    لا توجد جلسات سابقة.
+  </p>
+</ng-template>
