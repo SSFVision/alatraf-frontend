@@ -2,23 +2,12 @@
 <div class="backdrop" (click)="backdropClick()"></div>
 
 <!-- dialog box -->
-<div
-  #dialogBox
-  class="box dialog"
-  [style.width]="config.width || '650px'"
-  role="dialog"
-  aria-modal="true"
-  aria-labelledby="dialogTitle"
->
-  <div class="space-between sticky dialog-header">
+<div #dialogBox class="box dialog" [style.width]="config.width || '650px'" role="dialog" aria-modal="true"
+  aria-labelledby="dialogTitle">
+  <div class="space-between   dialog-header">
     <h2 id="dialogTitle" class="title-lg">{{ config.title }}</h2>
 
-    <img
-      src="assets/icons/close-icon.svg"
-      alt="إغلاق"
-      class="close-icon"
-      (click)="close(false)"
-    />
+    <img src="assets/icons/close-icon.svg" alt="إغلاق" class="close-icon" (click)="close(false)" />
   </div>
 
   <div>
@@ -28,10 +17,7 @@
 
   <!-- custom payload (read-only fields) -->
   <form class="padding-LR-24 column gap-16" *ngIf="config.payload">
-    <div
-      class="row flex-center"
-      *ngFor="let item of objectEntries(config.payload)"
-    >
+    <div class="row flex-center" *ngFor="let item of objectEntries(config.payload)">
       <label class="label-lg">{{ item.key }}</label>
       <input class="label-lg" type="text" [value]="item.value" disabled />
     </div>
@@ -39,27 +25,16 @@
 
   <!-- actions -->
   <div class="row gap-32 flex-center dialog-actions">
-    <button
-      class="btn danger label-md"
-      *ngIf="config.type === 'delete' || config.type === 'confirm'"
-      (click)="close(true)"
-    >
+    <button class="btn danger label-md" *ngIf="config.type === 'delete' || config.type === 'confirm'"
+      (click)="close(true)">
       {{ config.confirmText || "حذف" }}
     </button>
 
-    <button
-      class="btn primary label-md"
-      *ngIf="config.type === 'success'"
-      (click)="close(true)"
-    >
+    <button class="btn primary label-md" *ngIf="config.type === 'success'" (click)="close(true)">
       {{ config.confirmText || "موافق" }}
     </button>
 
-    <button
-      class="btn secondary label-md"
-      *ngIf="config.showCancel !== false"
-      (click)="close(false)"
-    >
+    <button class="btn secondary label-md" *ngIf="config.showCancel !== false" (click)="close(false)">
       {{ config.cancelText || "إلغاء" }}
     </button>
   </div>

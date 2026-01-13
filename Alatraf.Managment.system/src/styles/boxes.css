@@ -22,12 +22,12 @@
   text-align: center;
 }
 
-.sticky {
+/* .sticky {
   position: sticky;
   top: 0;
   background-color: var(--white-color);
   z-index: 1;
-}
+} */
 
 /* search box */
 
