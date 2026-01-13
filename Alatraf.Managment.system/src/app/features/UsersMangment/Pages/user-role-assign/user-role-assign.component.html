@@ -28,6 +28,10 @@
       <span class="home-line"></span>
     </div>
 
+    <div *ngIf="roleSelectionNotice()" class="validation-message">
+      {{ roleSelectionNotice() }}
+    </div>
+
     <div class="main-content-wrapper">
       <form class="column gap-16">
         <table class="permissions-table">
@@ -61,8 +65,7 @@
 
     <div class="row flex-center">
       <button
-              *ngIf="!isSaveSuccessful()"
-
+        *ngIf="!isSaveSuccessful()"
         class="btn secondary"
         type="button"
         (click)="onSave()"

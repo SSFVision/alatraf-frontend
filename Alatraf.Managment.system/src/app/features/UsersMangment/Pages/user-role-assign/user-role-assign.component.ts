@@ -47,13 +47,14 @@ export class UserRoleAssignComponent implements OnInit {
   selectedRoleIds = signal<string[]>([]);
   isSaving = signal(false);
   isSaveSuccessful = signal(false);
+  roleSelectionNotice = signal<string | null>(null);
+  private readonly minRoleMessage = 'يجب اختيار دور واحد على الأقل.';
   private env = inject(EnvironmentInjector);
   mapRoleToArabic = mapRoleToArabic;
 
   ngOnInit(): void {
     this.listenToRoute();
     this.rolePermissionFacade.loadRoles();
-    console.log('Roles Loaded:', this.roles());
     runInInjectionContext(this.env, () => {
       effect(() => {
         const user = this.selectedUser();
@@ -69,6 +70,12 @@ export class UserRoleAssignComponent implements OnInit {
           .map((r) => r.roleId);
 
         this.selectedRoleIds.set(matchedRoleIds);
+      });
+
+      effect(() => {
+        if (this.selectedRoleIds().length === 0) {
+          this.roleSelectionNotice.set(this.minRoleMessage);
+        }
       });
     });
   }
@@ -90,8 +97,16 @@ export class UserRoleAssignComponent implements OnInit {
     this.isSaveSuccessful.set(false); // re-enable save after any change
     this.selectedRoleIds.update((ids) => {
       if (checked) {
+        this.roleSelectionNotice.set(null);
         return ids.includes(role.roleId) ? ids : [...ids, role.roleId];
       }
+
+      if (ids.length <= 1 && ids.includes(role.roleId)) {
+        (event.target as HTMLInputElement).checked = true;
+        this.ensureHasAtLeastOneRole([]);
+        return ids;
+      }
+
       return ids.filter((id) => id !== role.roleId);
     });
   }
@@ -100,6 +115,10 @@ export class UserRoleAssignComponent implements OnInit {
     if (!this.currentUserId) return;
 
     const roleIds = this.selectedRoleIds();
+    if (!this.ensureHasAtLeastOneRole()) {
+      return;
+    }
+
     this.isSaveSuccessful.set(false);
     this.isSaving.set(true);
     this.rolePermissionFacade
@@ -124,5 +143,14 @@ export class UserRoleAssignComponent implements OnInit {
         this.userFacade.getUserById(id);
       }
     });
+  }
+
+  private ensureHasAtLeastOneRole(candidateRoles?: string[]): boolean {
+    const rolesToCheck = candidateRoles ?? this.selectedRoleIds();
+    const hasRole = rolesToCheck.length > 0;
+    if (!hasRole) {
+      this.roleSelectionNotice.set(this.minRoleMessage);
+    }
+    return hasRole;
   }
 }
