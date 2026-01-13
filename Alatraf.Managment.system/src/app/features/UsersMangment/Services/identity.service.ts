@@ -11,7 +11,6 @@ import { CreateUserRequest } from '../Models/create-user.request';
 import { GetUserFilterRequest } from '../Models/get-user-filter.request';
 import { PermissionIdsRequest } from '../Models/permission-ids.request';
 import { PermissionDto } from '../Models/Permissions/permission.dto';
-import { RemoveRolesRequest } from '../Models/remove-roles.request';
 import { ResetPasswordRequest } from '../Models/reset-password.request';
 import { RoleDetailsDto } from '../Models/Roles/role-details.dto';
 import { UserListItemDto } from '../Models/Users/user-list-item.dto';
@@ -77,16 +76,7 @@ export class IdentityService extends BaseApiService {
   ): Observable<ApiResult<void>> {
     const url = `${this.endpoint}/users/${userId}/roles`;
     const headers = new HttpHeaders().set('X-Enable-Loader', 'true');
-    return this.post<void>(url, dto, headers);
-  }
-
-  removeRoles(
-    userId: string,
-    dto: RemoveRolesRequest
-  ): Observable<ApiResult<void>> {
-    const url = `${this.endpoint}/users/${userId}/roles`;
-    const headers = new HttpHeaders().set('X-Enable-Loader', 'true');
-    return this.deleteWithBody<void>(url, dto, headers);
+    return this.put<void>(url, dto, headers);
   }
 
   getRoles(): Observable<ApiResult<RoleDetailsDto[]>> {
@@ -99,18 +89,9 @@ export class IdentityService extends BaseApiService {
     userId: string,
     dto: PermissionIdsRequest
   ): Observable<ApiResult<void>> {
-    const url = `${this.endpoint}/users/${userId}/permissions/grant`;
+    const url = `${this.endpoint}/users/${userId}/permissions`;
     const headers = new HttpHeaders().set('X-Enable-Loader', 'true');
-    return this.post<void>(url, dto, headers);
-  }
-
-  denyPermissionsToUser(
-    userId: string,
-    dto: PermissionIdsRequest
-  ): Observable<ApiResult<void>> {
-    const url = `${this.endpoint}/users/${userId}/permissions/deny`;
-    const headers = new HttpHeaders().set('X-Enable-Loader', 'true');
-    return this.post<void>(url, dto, headers);
+    return this.put<void>(url, dto, headers);
   }
 
   // Permissions queries
