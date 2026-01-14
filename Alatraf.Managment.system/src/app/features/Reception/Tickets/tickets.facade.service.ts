@@ -22,7 +22,7 @@ export class TicketFacade extends BaseFacade {
   tickets = this._tickets.asReadonly();
   private _isLoading = signal<boolean>(false);
   isLoading = this._isLoading.asReadonly();
-
+  private pageSizedefult = 3;
   private _filters = signal<TicketFilterRequest>({
     searchTerm: '',
     sortBy: 'createdAt',
@@ -38,7 +38,7 @@ export class TicketFacade extends BaseFacade {
 
   private _pageRequest = signal<PageRequest>({
     page: 1,
-    pageSize: 20,
+    pageSize: this.pageSizedefult,
   });
   pageRequest = this._pageRequest.asReadonly();
 
@@ -153,7 +153,7 @@ export class TicketFacade extends BaseFacade {
 
     this._pageRequest.set({
       page: 1,
-      pageSize: 20,
+      pageSize: this.pageSizedefult,
     });
 
     this._tickets.set([]);

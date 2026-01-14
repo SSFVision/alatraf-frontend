@@ -1,7 +1,4 @@
-import {
-  DialogConfig,
-  DialogType,
-} from '../../../../shared/components/dialog/DialogConfig';
+import { CommonModule } from '@angular/common';
 import {
   Component,
   effect,
@@ -17,25 +14,25 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { CacheService } from '../../../../core/services/cache.service';
+import { UsersNavigationFacade } from '../../../../core/navigation/users-navigation.facade';
 import { FormValidationState } from '../../../../core/utils/form-validation-state';
 import {
   formatPhoneNumberInput,
   preventNonNumericInput,
   yemeniPhoneNumberValidator,
 } from '../../../../core/utils/person.validators';
+import { DialogService } from '../../../../shared/components/dialog/dialog.service';
+import {
+  DialogConfig,
+  DialogType,
+} from '../../../../shared/components/dialog/DialogConfig';
 import { CreateUserRequest } from '../../Models/create-user.request';
 import { UsersFacadeService } from '../../Services/users.facade.service';
-import { CommonModule } from '@angular/common';
-import { UsersNavigationFacade } from '../../../../core/navigation/users-navigation.facade';
-import { ArabicSuccessMessages } from '../../../../core/locals/Arabic';
-import { DialogService } from '../../../../shared/components/dialog/dialog.service';
-import { DateInputComponent } from '../../../../shared/components/date-input/date-input.component';
 
 @Component({
   selector: 'app-add-new-user-page',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DateInputComponent],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './add-new-user-page.component.html',
   styleUrl: './add-new-user-page.component.css',
 })
