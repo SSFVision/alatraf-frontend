@@ -30,11 +30,12 @@ import { CommonModule } from '@angular/common';
 import { UsersNavigationFacade } from '../../../../core/navigation/users-navigation.facade';
 import { ArabicSuccessMessages } from '../../../../core/locals/Arabic';
 import { DialogService } from '../../../../shared/components/dialog/dialog.service';
+import { DateInputComponent } from '../../../../shared/components/date-input/date-input.component';
 
 @Component({
   selector: 'app-add-new-user-page',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, DateInputComponent],
   templateUrl: './add-new-user-page.component.html',
   styleUrl: './add-new-user-page.component.css',
 })

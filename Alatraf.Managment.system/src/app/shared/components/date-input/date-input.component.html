@@ -1,0 +1,13 @@
+<mat-form-field appearance="fill" class="full-width">
+  <mat-label>Select date</mat-label>
+  <input
+    matInput
+    [matDatepicker]="picker"
+    [max]="maxDate"
+    [(ngModel)]="selectedDate"
+    (dateChange)="dateChanged($event)"
+    placeholder="dd-mm-yyyy"
+  />
+  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-datepicker #picker></mat-datepicker>
+</mat-form-field>

@@ -8,7 +8,10 @@ export class NavigationAuthFacade {
   private router = inject(Router);
 
   private go(path: string | any[], extras?: NavigationExtras): void {
-    this.router.navigate(Array.isArray(path) ? path : [path], extras);
+    this.router.navigate(Array.isArray(path) ? path : [path], {
+      replaceUrl: true,
+      ...extras,
+    });
   }
 
   goToUnauthorized(extras?: NavigationExtras): void {
@@ -16,12 +19,11 @@ export class NavigationAuthFacade {
   }
 
   goToLogout(extras?: NavigationExtras): void {
-    this.go(AppRoutes.auth.login, { replaceUrl: true, ...extras });
+    this.go(AppRoutes.auth.login, extras);
   }
 
   goToTokenExpired(): void {
     this.go(AppRoutes.auth.login, {
-      replaceUrl: true,
       queryParams: { reason: 'expired' },
     });
   }
@@ -39,14 +41,14 @@ export class NavigationAuthFacade {
         return `${AppRoutes.diagnosis.root}/${AppRoutes.diagnosis.therapy.root}`;
       case AppUserRole.IndustrialDoctor:
         return `${AppRoutes.diagnosis.root}/${AppRoutes.diagnosis.industrial.root}`;
-     case AppUserRole.TherapyManagementReceptionist:
+      case AppUserRole.TherapyManagementReceptionist:
         return AppRoutes.therapyCards.root;
       case AppUserRole.FinanceEmployee:
         return AppRoutes.finance.root;
-        case AppUserRole.SalesEmployee:
+      case AppUserRole.SalesEmployee:
         return AppRoutes.finance.root;
       case AppUserRole.AppointmentsEmployee:
-      return `${AppRoutes.Appointment.root}/${AppRoutes.Appointment.manage}`;
+        return `${AppRoutes.Appointment.root}/${AppRoutes.Appointment.manage}`;
       case AppUserRole.Admin:
         return AppRoutes.users.root;
 
@@ -64,7 +66,7 @@ export class NavigationAuthFacade {
   redirectAfterLogin(role: AppUserRole): void {
     console.log('try Navigate ', role);
     const home = this.getHomeRouteForRole(role);
-    this.go(home, { replaceUrl: true });
+    this.go(home);
   }
 
   goToRoleHome(role: AppUserRole): void {

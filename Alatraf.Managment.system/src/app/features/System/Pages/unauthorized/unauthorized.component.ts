@@ -14,6 +14,6 @@ export class UnauthorizedComponent {
 
   goHome() {
     const role = this.auth.getUser()?.roles?.[0] as any;
-    this.navigation.goToRoleHome(role);
+    this.navigation.goToRoleHome(role,);
   }
 }
