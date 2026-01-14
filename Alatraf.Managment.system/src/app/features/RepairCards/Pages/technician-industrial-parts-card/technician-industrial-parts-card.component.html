@@ -10,9 +10,9 @@
     لا يوجد مرضى جلسات مسندة لهذا الطبيب حالياً
   </p>
 </div>
-} @for (part of parts(); track part.diagnosisIndustrialPartId) {
-
+}
 <div class="flex-parent">
+  @for (part of parts(); track part.diagnosisIndustrialPartId) {
   <div class="flex-child card primary-card" (click)="onCardClick(part)">
     <p class="body-md">
       {{ part.patientName }}
@@ -25,5 +25,6 @@
       <p class="body-sm primary-color-50">{{ part.unitName }}</p>
     </div>
   </div>
+  }
 </div>
-} }
+}

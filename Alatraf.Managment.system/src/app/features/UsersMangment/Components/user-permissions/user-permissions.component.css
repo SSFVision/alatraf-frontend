@@ -1,0 +1,24 @@
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  justify-content: center;
+}
+
+.card {
+  background-color: var(--background-color);
+  padding: 12px;
+  width: 100%;
+}
+
+.card .width-100 {
+  margin: 0;
+}
+
+.card .width-100 .title-md {
+  font-weight: bold;
+}
+
+.home-line {
+  opacity: 75%;
+}

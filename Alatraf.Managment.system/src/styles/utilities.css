@@ -109,10 +109,6 @@
   position: relative;
 }
 
-.max-hight-800 {
-  flex: 1;
-}
-
 .hight-800 {
   max-height: 700px;
   min-height: 680px;
