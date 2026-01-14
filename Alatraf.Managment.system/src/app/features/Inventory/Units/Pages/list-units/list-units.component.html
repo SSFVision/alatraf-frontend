@@ -1,0 +1,48 @@
+<div class="column gap-16">
+  <div class="row space-between align-center">
+    <h2 class="title-lg">الوحدات</h2>
+
+    <div class="primary-color-background WH-40 flex-center border-radius-20">
+      <h2 class="title-md white-color margin-auto">
+        {{ filteredUnits().length }}
+      </h2>
+    </div>
+  </div>
+
+  <div class="search-box">
+    <img src="assets/icons/search-icon.svg" class="search-icon" alt="search" />
+    <input
+      type="text"
+      placeholder="بحث: اسم الوحدة"
+      (input)="onSearch($any($event.target).value)"
+    />
+  </div>
+
+  <table class="">
+    <thead>
+      <tr>
+        <th class="label-lg">اسم الوحدة</th>
+        <th class="buttons"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngIf="filteredUnits().length === 0">
+        <td class="body-md" colspan="2">لا توجد وحدات</td>
+      </tr>
+
+      <tr *ngFor="let unit of filteredUnits()" class="hover-row">
+        <td class="body-md">{{ unit.name }}</td>
+
+        <td class="row gap-16 body-md">
+          <button class="btn primary icon" (click)="onEdit(unit)">
+            <img src="assets/icons/pencil-icon.svg" alt="تعديل" />
+          </button>
+          <button class="btn danger icon" (click)="onDelete(unit)">
+            <img src="assets/icons/trash-icon.svg" alt="حذف" />
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,15 @@
+<div class="column gap-24">
+  <div class="space-between">
+    <div class="row gap-16">
+      <h2 class="title-lg cursor-pointer" [class.primary-color-50]="activeTab() !== 'add'" (click)="goToAdd()">
+        إضافة وحدة 
+      </h2>
+      <h2 class="title-lg cursor-pointer" [class.primary-color-50]="activeTab() !== 'list'" (click)="goToList()">
+        الوحدات
+      </h2>
+    </div>
+
+  </div>
+
+  <router-outlet></router-outlet>
+</div>

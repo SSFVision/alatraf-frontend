@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
-import { AppRoutes } from './core/routing/app.routes.map';
 import { AuthLayoutComponent } from './core/Layouts/auth-layout/auth-layout.component';
 import { MainLayoutComponent } from './core/Layouts/main-layout/main-layout.component';
 import { AuthGuard } from './core/guards/auth.guard';
+import { AppRoutes } from './core/routing/app.routes.map';
 
 export const APP_ROUTES: Routes = [
   {
@@ -99,6 +99,7 @@ export const APP_ROUTES: Routes = [
             (m) => m.IndustrialPartsRoutes
           ),
       },
+
       {
         path: AppRoutes.sections.root,
         loadChildren: () =>
@@ -132,6 +133,13 @@ export const APP_ROUTES: Routes = [
         loadChildren: () =>
           import('./features/PatientsCard/patient-cards.routes').then(
             (m) => m.PATIENT_CARDS_ROUTES
+          ),
+      },
+      {
+        path: AppRoutes.reports.root,
+        loadChildren: () =>
+          import('./features/Reports/reportes.route').then(
+            (m) => m.REPORTS_ROUTES
           ),
       },
     ],

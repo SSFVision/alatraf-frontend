@@ -21,7 +21,6 @@ export class ManageAppointmentsComponent {
   private nav = inject(AppointmentsNavigationFacade);
 
   ngOnInit() {
-    // this.isButtonVisible.set(true);
     this.appointmentFacade.updateFilters({ status: undefined });
   }
 

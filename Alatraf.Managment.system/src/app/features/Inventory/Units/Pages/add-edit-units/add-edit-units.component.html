@@ -1,0 +1,31 @@
+<h1 class="title-lg">
+  {{ isEditMode() ? "تعديل وحدة" : "إضافة وحدة" }}
+</h1>
+
+<form
+  class="padding-LR-24 column gap-16"
+  [formGroup]="form"
+  (ngSubmit)="submit()"
+>
+  <div class="width-100">
+    <p class="title-md">بيانات الوحدة</p>
+    <span class="home-line"></span>
+  </div>
+
+  <div class="row flex-center">
+    <label class="label-lg">الاسم</label>
+    <input class="label-lg" type="text" formControlName="name" />
+  </div>
+
+  <div class="flex-center gap-16">
+    <button class="btn primary" type="submit" [disabled]="!canSubmit()">
+      {{ isEditMode() ? "تعديل" : "إضافة" }}
+    </button>
+
+    @if (canDelete()) {
+    <button class="btn danger" type="button" (click)="delete()" tabindex="-1">
+      حذف
+    </button>
+    }
+  </div>
+</form>

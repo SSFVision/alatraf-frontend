@@ -70,6 +70,13 @@ export const PERMISSIONS = {
     DELETE: 'industrialPart:delete',
   },
 
+  Unit: {
+    CREATE: 'unit:create',
+    READ: 'unit:read',
+    UPDATE: 'unit:update',
+    DELETE: 'unit:delete',
+  },
+
   MedicalProgram: {
     CREATE: 'medicalProgram:create',
     READ: 'medicalProgram:read',

@@ -10,6 +10,7 @@ export class IndustrialPartsNavigationFacade {
     this.go(AppRoutes.industrialParts.root, extras);
   }
 
+ 
   goToIndustrialPartsListPage(extras?: NavigationExtras): void {
     this.go(
       `${AppRoutes.industrialParts.root}/${AppRoutes.industrialParts.list}`,
