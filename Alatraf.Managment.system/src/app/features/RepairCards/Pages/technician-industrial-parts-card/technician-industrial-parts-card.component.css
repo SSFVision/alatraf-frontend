@@ -1,0 +1,10 @@
+.flex-parent {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.flex-child {
+  flex: 0 0 calc(50% - 8px);
+  box-sizing: border-box;
+}
