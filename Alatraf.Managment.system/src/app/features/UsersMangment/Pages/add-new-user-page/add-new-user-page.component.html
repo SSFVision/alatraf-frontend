@@ -70,7 +70,12 @@
       </select>
 
       <label class="label-lg">تاريخ الميلاد</label>
-      <input class="label-lg" type="date" formControlName="birthdate" [max]="maxDate" />
+      <input
+        class="label-lg"
+        type="date"
+        formControlName="birthdate"
+        [max]="maxDate"
+      />
       <!-- <app-date-input formControlName="birthdate"></app-date-input> -->
       <div class="error-message label-lg" *ngIf="hasBackendError('birthdate')">
         {{ getBackendError("birthdate") }}
@@ -83,14 +88,14 @@
 
     <!-- العنوان -->
     <div class="row flex-center">
-      <label class="label-lg">العنوان</label>
-      <input class="label-lg" type="text" formControlName="address" />
+      <app-address-select class="row flex-center" formControlName="addressId">
+      </app-address-select>
 
-      <div class="error-message label-lg" *ngIf="hasBackendError('address')">
-        {{ getBackendError("address") }}
+      <div class="error-message label-lg" *ngIf="hasBackendError('addressId')">
+        {{ getBackendError("addressId") }}
       </div>
 
-      <div *ngIf="hasFrontendError('address')" class="error-message label-lg">
+      <div *ngIf="hasFrontendError('addressId')" class="error-message label-lg">
         العنوان مطلوب
       </div>
     </div>

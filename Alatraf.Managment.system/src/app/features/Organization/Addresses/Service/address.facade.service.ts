@@ -8,8 +8,8 @@ import { SearchManager } from '../../../../core/utils/search-manager';
 
 import { AddressService } from './address.service';
 import { AddressDto } from '../Models/address.dto';
-import { CreateAdressRequest } from '../Models/create-adress.request';
-import { UpdateAdressRequest } from '../Models/update-adress.request';
+import { CreateAddressRequest } from '../Models/create-adress.request';
+import { UpdateAddressRequest } from '../Models/update-adress.request';
 
 @Injectable({ providedIn: 'root' })
 export class AddressesFacade extends BaseFacade {
@@ -92,7 +92,7 @@ export class AddressesFacade extends BaseFacade {
   // ---------------------------------------------
   // CREATE / UPDATE
   // ---------------------------------------------
-  createAddress(dto: CreateAdressRequest) {
+  createAddress(dto: CreateAddressRequest) {
     return this.handleCreateOrUpdate(this.service.createAddress(dto), {
       successMessage: 'تم إنشاء العنوان بنجاح',
       defaultErrorMessage: 'فشل إنشاء العنوان. يرجى المحاولة لاحقاً.',
@@ -108,7 +108,7 @@ export class AddressesFacade extends BaseFacade {
     );
   }
 
-  updateAddress(id: number, dto: UpdateAdressRequest) {
+  updateAddress(id: number, dto: UpdateAddressRequest) {
     return this.handleCreateOrUpdate(this.service.updateAddress(id, dto), {
       successMessage: 'تم تعديل العنوان بنجاح',
       defaultErrorMessage: 'فشل تعديل العنوان. حاول لاحقاً.',
@@ -158,7 +158,7 @@ export class AddressesFacade extends BaseFacade {
     this.totalCount.update((c) => c + 1);
   }
 
-  private updateAddressInList(id: number, dto: UpdateAdressRequest) {
+  private updateAddressInList(id: number, dto: UpdateAddressRequest) {
     this._addresses.update((list) =>
       list.map((a) => (a.id === id ? { ...a, name: dto.name } : a))
     );

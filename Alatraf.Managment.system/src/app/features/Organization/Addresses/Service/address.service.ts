@@ -7,8 +7,8 @@ import { BaseApiService } from '../../../../core/services/base-api.service';
 import { AddressDto } from '../Models/address.dto';
 import { PageRequest } from '../../../../core/models/Shared/page-request.model';
 import { PaginatedList } from '../../../../core/models/Shared/paginated-list.model';
-import { CreateAdressRequest } from '../Models/create-adress.request';
-import { UpdateAdressRequest } from '../Models/update-adress.request';
+import { CreateAddressRequest } from '../Models/create-adress.request';
+import { UpdateAddressRequest } from '../Models/update-adress.request';
 
 @Injectable({
   providedIn: 'root',
@@ -38,7 +38,7 @@ export class AddressService extends BaseApiService {
   }
 
   // POST: Create Address
-  createAddress(dto: CreateAdressRequest): Observable<ApiResult<AddressDto>> {
+  createAddress(dto: CreateAddressRequest): Observable<ApiResult<AddressDto>> {
     const headers = new HttpHeaders().set('X-Enable-Loader', 'true');
     return this.post<AddressDto>(this.endpoint, dto, headers);
   }
@@ -46,7 +46,7 @@ export class AddressService extends BaseApiService {
   // PUT: Update Address
   updateAddress(
     addressId: number,
-    dto: UpdateAdressRequest
+    dto: UpdateAddressRequest
   ): Observable<ApiResult<void>> {
     const headers = new HttpHeaders().set('X-Enable-Loader', 'true');
     return this.put<void>(`${this.endpoint}/${addressId}`, dto, headers);

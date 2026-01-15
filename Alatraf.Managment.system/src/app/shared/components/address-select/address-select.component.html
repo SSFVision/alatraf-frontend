@@ -1,0 +1,30 @@
+<label class="label-lg">العنوان</label>
+
+<mat-form-field appearance="outline" class="address-field">
+  <div class="input-wrapper">
+    <input
+      matInput
+      class="address-input"
+      [class.error]="showError"
+      placeholder="ابحث عن عنوان"
+      [formControl]="searchCtrl"
+      [matAutocomplete]="auto"
+      (blur)="onTouched()"
+    />
+
+    <!-- Loading spinner -->
+    <span *ngIf="loading()" class="spinner"></span>
+  </div>
+
+  <mat-autocomplete
+    #auto="matAutocomplete"
+    (optionSelected)="onOptionSelected($event.option.value)"
+    (scroll)="loadMore()"
+  >
+    <mat-option *ngFor="let a of addresses()" [value]="a.id">
+      <span [innerHTML]="highlight(a.name)"></span>
+    </mat-option>
+
+    <mat-option *ngIf="loading()" disabled> جاري التحميل... </mat-option>
+  </mat-autocomplete>
+</mat-form-field>

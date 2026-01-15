@@ -1,3 +1,3 @@
-export interface CreateAdressRequest {
+export interface CreateAddressRequest {
   name: string;
 }

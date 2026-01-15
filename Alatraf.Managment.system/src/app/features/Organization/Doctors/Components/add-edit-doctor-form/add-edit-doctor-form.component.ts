@@ -97,7 +97,7 @@ export class AddEditDoctorFormComponent {
       ],
       birthdate: [null, [Validators.required]],
 
-      address: ['', [Validators.required]],
+      addressId: [null, [Validators.required]],
       gender: [true, [Validators.required]],
       specialization: ['', [Validators.required]],
       departmentId: [null, [Validators.required]],
@@ -110,7 +110,7 @@ export class AddEditDoctorFormComponent {
       nationalNo: doctor.personDto?.nationalNo,
       phone: doctor.personDto?.phone,
       birthdate: FormatDateForInput(doctor.personDto?.birthdate),
-      address: doctor.personDto?.address,
+      addressId: doctor.personDto?.addressId,
       gender: ChangeGenderToBoolean(doctor.personDto?.gender) ?? false,
       specialization: doctor.specialization,
       departmentId: doctor.departmentId,

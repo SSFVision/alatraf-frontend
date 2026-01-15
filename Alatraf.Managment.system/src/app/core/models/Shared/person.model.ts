@@ -7,5 +7,6 @@ export interface PersonDto {
   address?: string ;
   gender: string;
   autoRegistrationNumber?: string | null;
+  addressId?: number;
 
 }

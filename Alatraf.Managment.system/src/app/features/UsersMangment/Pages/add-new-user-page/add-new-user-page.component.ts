@@ -28,11 +28,12 @@ import {
 } from '../../../../shared/components/dialog/DialogConfig';
 import { CreateUserRequest } from '../../Models/create-user.request';
 import { UsersFacadeService } from '../../Services/users.facade.service';
+import { AddressSelectComponent } from "../../../../shared/components/address-select/address-select.component";
 
 @Component({
   selector: 'app-add-new-user-page',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, AddressSelectComponent],
   templateUrl: './add-new-user-page.component.html',
   styleUrl: './add-new-user-page.component.css',
 })
@@ -65,7 +66,7 @@ export class AddNewUserPageComponent implements OnInit {
           yemeniPhoneNumberValidator(),
         ],
       ],
-      address: ['', Validators.required],
+      addressId: [null, Validators.required],
       nationalNo: ['', Validators.required],
       userName: ['', Validators.required],
       password: ['ِAdmin@123', Validators.required],

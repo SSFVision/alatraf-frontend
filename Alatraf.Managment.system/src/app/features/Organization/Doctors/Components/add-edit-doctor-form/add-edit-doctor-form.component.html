@@ -76,7 +76,7 @@
       } }
     </div>
 
-    <div class="row flex-center">
+    <!-- <div class="row flex-center">
       <label class="label-lg">العنوان</label>
       <input class="label-lg" type="text" placeholder="ادخل عنوان الطبيب" formControlName="address" />
       <div class="error-message label-lg" *ngIf="hasBackendError('address')">
@@ -85,8 +85,20 @@
       @if (hasFrontendError('address')) {
       <div class="error-message label-lg">العنوان مطلوب.</div>
       }
-    </div>
+    </div> -->
+  <!-- العنوان -->
+    <div class="row flex-center">
+      <app-address-select class="row flex-center" formControlName="addressId">
+      </app-address-select>
 
+      <div class="error-message label-lg" *ngIf="hasBackendError('addressId')">
+        {{ getBackendError("addressId") }}
+      </div>
+
+      <div *ngIf="hasFrontendError('addressId')" class="error-message label-lg">
+        العنوان مطلوب
+      </div>
+    </div>
     <div class="row flex-center">
       <label class="label-lg">التخصص</label>
       <input class="label-lg" type="text" placeholder="ادخل تخصص الطبيب" formControlName="specialization" />
