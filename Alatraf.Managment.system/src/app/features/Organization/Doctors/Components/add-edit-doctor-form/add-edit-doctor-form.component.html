@@ -1,5 +1,9 @@
 <div class="main-content-wrapper">
-  <form [formGroup]="form" (ngSubmit)="submit()" class="scrollable-area column gap-24">
+  <form
+    [formGroup]="form"
+    (ngSubmit)="submit()"
+    class="scrollable-area column gap-24"
+  >
     <div class="width-100">
       <p class="title-md">بيانات الطبيب</p>
       <span class="home-line"></span>
@@ -7,7 +11,12 @@
 
     <div class="row flex-center">
       <label class="label-lg">الاسم</label>
-      <input class="label-lg" type="text" placeholder="ادخل اسم الطبيب كاملاً" formControlName="fullname" />
+      <input
+        class="label-lg"
+        type="text"
+        placeholder="ادخل اسم الطبيب كاملاً"
+        formControlName="fullname"
+      />
       <!-- Backend Validation -->
       <div class="error-message label-lg" *ngIf="hasBackendError('fullname')">
         {{ getBackendError("fullname") }}
@@ -25,7 +34,12 @@
 
     <div class="row flex-center">
       <label class="label-lg">رقم الهوية</label>
-      <input class="label-lg" type="text" placeholder="ادخل رقم الهوية" formControlName="nationalNo" />
+      <input
+        class="label-lg"
+        type="text"
+        placeholder="ادخل رقم الهوية"
+        formControlName="nationalNo"
+      />
       <div class="error-message label-lg" *ngIf="hasBackendError('nationalNo')">
         {{ getBackendError("nationalNo") }}
       </div>
@@ -41,8 +55,14 @@
 
     <div class="row flex-center">
       <label class="label-lg">رقم الهاتف</label>
-      <input class="label-lg" type="text" formControlName="phone" (input)="formatPhoneNumberInput(getControl('phone'))"
-        (keypress)="preventNonNumericInput($event)" (blur)="form.controls['phone'].markAsTouched()" />
+      <input
+        class="label-lg"
+        type="text"
+        formControlName="phone"
+        (input)="formatPhoneNumberInput(getControl('phone'))"
+        (keypress)="preventNonNumericInput($event)"
+        (blur)="form.controls['phone'].markAsTouched()"
+      />
       <div class="error-message label-lg" *ngIf="hasBackendError('phone')">
         {{ getBackendError("phone") }}
       </div>
@@ -86,9 +106,12 @@
       <div class="error-message label-lg">العنوان مطلوب.</div>
       }
     </div> -->
-  <!-- العنوان -->
+    <!-- العنوان -->
     <div class="row flex-center">
-      <app-address-select class="row flex-center" formControlName="addressId">
+      <app-address-select class="row flex-center" 
+              [initialAddressName]="addressName()"
+
+      formControlName="addressId">
       </app-address-select>
 
       <div class="error-message label-lg" *ngIf="hasBackendError('addressId')">
@@ -101,9 +124,17 @@
     </div>
     <div class="row flex-center">
       <label class="label-lg">التخصص</label>
-      <input class="label-lg" type="text" placeholder="ادخل تخصص الطبيب" formControlName="specialization" />
+      <input
+        class="label-lg"
+        type="text"
+        placeholder="ادخل تخصص الطبيب"
+        formControlName="specialization"
+      />
 
-      <div class="error-message label-lg" *ngIf="hasBackendError('specialization')">
+      <div
+        class="error-message label-lg"
+        *ngIf="hasBackendError('specialization')"
+      >
         {{ getBackendError("specialization") }}
       </div>
       @if (hasFrontendError('specialization')) {
@@ -119,7 +150,10 @@
         <option [value]="dept.id">{{ dept.name }}</option>
         }
       </select>
-      <div class="error-message label-lg" *ngIf="hasBackendError('departmentId')">
+      <div
+        class="error-message label-lg"
+        *ngIf="hasBackendError('departmentId')"
+      >
         {{ getBackendError("departmentId") }}
       </div>
       @if (hasFrontendError('departmentId')) {
@@ -128,10 +162,16 @@
     </div>
 
     <div class="row gap-16 flex-center padding-top-16">
-      <button type="submit" class="btn primary"
-        [disabled]="form.invalid || isSaving() || (isEditMode() && form.pristine)">
-        @if (isSaving()) { <span>جاري الحفظ...</span> } @else { @if (isEditMode())
-        { <span>حفظ التعديلات</span> } @else { <span>حفظ</span> } }
+      <button
+        type="submit"
+        class="btn primary"
+        [disabled]="
+          form.invalid || isSaving() || (isEditMode() && form.pristine)
+        "
+      >
+        @if (isSaving()) { <span>جاري الحفظ...</span> } @else { @if
+        (isEditMode()) { <span>حفظ التعديلات</span> } @else { <span>حفظ</span> }
+        }
       </button>
       @if (isEditMode()) {
       <button type="button" class="btn danger" (click)="onDeleteDoctor()">

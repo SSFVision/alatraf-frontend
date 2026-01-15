@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import {
   Component,
   inject,
+  input,
+  effect,
   Optional,
   Self,
   OnDestroy,
@@ -19,6 +21,7 @@ import {
   debounceTime,
   distinctUntilChanged,
   map,
+  filter,
   switchMap,
   takeUntil,
   tap,
@@ -57,6 +60,9 @@ export class AddressSelectComponent
   selectedId: number | null = null;
   disabled = false;
 
+  // Modern Angular 19 input signal for prefilled address name
+  initialAddressName = input<string | null>(null);
+
   private ngControl: NgControl | null;
 
   private destroy$ = new Subject<void>();
@@ -71,13 +77,25 @@ export class AddressSelectComponent
     if (this.ngControl) {
       this.ngControl.valueAccessor = this;
     }
+
+    // React to changes in the input signal and seed the display without extra fetches
+    effect(() => {
+      const name = this.initialAddressName();
+      const id = this.selectedId;
+      if (!name || id == null) return;
+
+      const address: AddressDto = { id, name };
+      this.ensureAddressOption(address);
+      this.searchCtrl.setValue(name, { emitEvent: false });
+    });
   }
 
   ngOnInit(): void {
     this.searchCtrl.valueChanges
       .pipe(
         tap((value) => this.handleInputChange(value)),
-        debounceTime(300),
+        debounceTime(500),
+        filter((term) => typeof term === 'string'),
         distinctUntilChanged(),
         tap(() => {
           this.loading.set(true);
@@ -85,7 +103,7 @@ export class AddressSelectComponent
           this.hasMore = true;
         }),
         switchMap((term) => {
-          const searchTerm = typeof term === 'string' ? term : null;
+          const searchTerm = term as string;
           return this.addressApi.getAddresses(searchTerm, this.page).pipe(
             map((res) => {
               const items = res.data?.items ?? [];
@@ -103,7 +121,8 @@ export class AddressSelectComponent
         this.loading.set(false);
       });
 
-    this.searchCtrl.setValue('');
+    // Keep initial value blank without triggering a fetch
+    this.searchCtrl.setValue('', { emitEvent: false });
   }
 
   ngOnDestroy(): void {
@@ -126,17 +145,29 @@ export class AddressSelectComponent
       return;
     }
 
+    const nameFromInput = this.initialAddressName();
+    if (nameFromInput) {
+      const address: AddressDto = { id: value, name: nameFromInput };
+      this.ensureAddressOption(address);
+      this.searchCtrl.setValue(address.name, { emitEvent: false });
+      return;
+    }
+
     // Fetch by id when coming from patchValue with an id not in the current page
     this.addressApi.getAddressById(value).subscribe((res) => {
       const address = res.data;
       if (!address) return;
 
-      this.addresses.update((list) => {
-        const already = list.some((a) => a.id === address.id);
-        return already ? list : [address, ...list];
-      });
+      this.ensureAddressOption(address);
 
       this.searchCtrl.setValue(address.name, { emitEvent: false });
+    });
+  }
+
+  private ensureAddressOption(address: AddressDto) {
+    this.addresses.update((list) => {
+      const exists = list.some((a) => a.id === address.id);
+      return exists ? list : [address, ...list];
     });
   }
 
@@ -208,7 +239,6 @@ export class AddressSelectComponent
     );
   }
 
-  // ===== Infinite scroll =====
   loadMore() {
     if (this.loading() || !this.hasMore) return;
 

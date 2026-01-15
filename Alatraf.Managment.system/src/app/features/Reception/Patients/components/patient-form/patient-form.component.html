@@ -88,21 +88,14 @@
       </div>
     </div>
 
-    <!-- العنوان -->
-    <!-- <div class="row flex-center">
-      <label class="label-lg">العنوان</label>
-      <input class="label-lg" type="text" formControlName="address" />
-      <div class="error-message label-lg" *ngIf="hasBackendError('address')">
-        {{ getBackendError("address") }}
-      </div>
-
-      <div *ngIf="hasFrontendError('address')" class="error-message label-lg">
-        العنوان مطلوب
-      </div>
-    </div> -->
+ 
     <!-- العنوان -->
     <div class="row flex-center">
-      <app-address-select class="row flex-center" formControlName="addressId">
+      <app-address-select
+        class="row flex-center"
+        formControlName="addressId"
+        [initialAddressName]="addressName()"
+      >
       </app-address-select>
 
       <div class="error-message label-lg" *ngIf="hasBackendError('addressId')">

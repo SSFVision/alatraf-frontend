@@ -9,6 +9,7 @@ import {
   OnInit,
   output,
   runInInjectionContext,
+  signal,
   SimpleChanges,
 } from '@angular/core';
 import {
@@ -36,7 +37,7 @@ import {
   preventNonNumericInput,
   yemeniPhoneNumberValidator,
 } from '../../../../../core/utils/person.validators';
-import { AddressSelectComponent } from "../../../../../shared/components/address-select/address-select.component";
+import { AddressSelectComponent } from '../../../../../shared/components/address-select/address-select.component';
 import { CreatePatientRequest } from '../../models/create-patient.request';
 
 @Component({
@@ -59,7 +60,7 @@ export class PatientFormComponent implements OnChanges, OnInit {
 
   form!: FormGroup;
   private validationState!: FormValidationState;
-
+  addressName = signal<string>('');
   preventNonNumericInput = preventNonNumericInput;
   formatPhoneNumberInput = formatPhoneNumberInput;
   //  for caching  form data an  refresh page
@@ -114,13 +115,14 @@ export class PatientFormComponent implements OnChanges, OnInit {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['patient'] && this.patient() && this.form) {
       const p = this.patient() as PatientDto;
+      this.addressName.set(p.personDto?.address ?? '');
 
       this.form.patchValue({
         fullname: p.personDto?.fullname ?? '',
         gender: ChangeGenderToBoolean(p.personDto?.gender),
         birthdate: FormatDateForInput(p.personDto?.birthdate),
         phone: p.personDto?.phone ?? '',
-        addressId:  p.personDto?.addressId,
+        addressId: p.personDto?.addressId,
         nationalNo: p.personDto?.nationalNo ?? '',
         patientType: PatientType.Normal,
       });
@@ -155,17 +157,9 @@ export class PatientFormComponent implements OnChanges, OnInit {
     return this.validationState.hasFrontendError(controlName);
   }
 
-  private formatDate(date: string | null | undefined): string | null {
-    if (!date) return null;
-
-    const d = new Date(date);
-    return isNaN(d.getTime()) ? null : d.toISOString().split('T')[0];
-  }
-
   onClose() {
     // 🔹 Clear draft when user cancels form
     this.cache.clear(this.DRAFT_KEY);
     this.close.emit();
   }
-
 }
