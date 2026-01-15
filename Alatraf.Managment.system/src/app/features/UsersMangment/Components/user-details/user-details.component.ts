@@ -40,10 +40,10 @@ export class UserDetailsComponent {
       return;
     }
 
-    if (currentUser?.roles.includes(AppUserRole.Admin)) {
-      this.toast.warning('تعذر إعادة تعيين الدور. المستخدم  مسؤولاً.');
-      return;
-    }
+    // if (currentUser?.roles.includes(AppUserRole.Admin)) {
+    //   this.toast.warning('تعذر إعادة تعيين الدور. المستخدم  مسؤولاً.');
+    //   return;
+    // }
     this.userNav.goToUserRoleAssignPage(currentUser.userId);
   }
   isUserAdmin(): boolean {

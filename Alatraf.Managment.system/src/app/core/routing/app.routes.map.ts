@@ -170,7 +170,16 @@ export const AppRoutes = {
     edit: (industrialPartId: number | string) => `edit/${industrialPartId}`,
 
     view: (industrialPartId: number | string) => `view/${industrialPartId}`,
+
+    units: {
+      root: 'units',
+      create: 'units/create',
+      list: 'units/list',
+
+      edit: (unitId: number | string) => `units/edit/${unitId}`,
+    },
   },
+
   sections: {
     root: 'sections',
 
@@ -239,6 +248,7 @@ export const AppRoutes = {
 
   dashboard: {
     root: 'dashboard',
+    reports: 'dashboard/reports',
   },
   users: {
     root: 'users',
@@ -259,12 +269,9 @@ export const AppRoutes = {
     permissions: (userId: number | string) => `${userId}/permissions`,
     AssignRole: (userId: number | string) => `assign-role/${userId}`,
   },
-
-  management: {
-    root: 'management',
-    dashboard: 'management/dashboard',
+  reports: {
+    root: 'reports',
   },
-
   system: {
     unauthorized: 'unauthorized',
     notFound: 'not-found',

@@ -6,11 +6,12 @@ import { AppRoutes } from '../../core/routing/app.routes.map';
 export class DashboardNavigationFacade {
   private router = inject(Router);
 
-
   goToDashboard(extras?: NavigationExtras): void {
     this.go(AppRoutes.dashboard.root, extras);
   }
-
+  goToReports(extras?: NavigationExtras): void {
+    this.go(AppRoutes.reports.root, extras);
+  }
 
   goToUsers(extras?: NavigationExtras): void {
     this.go(AppRoutes.users.root, extras);
@@ -28,14 +29,7 @@ export class DashboardNavigationFacade {
   //   this.go(AppRoutes.reports.root, extras);
   // }
 
-
-  private go(
-    path: string | any[],
-    extras?: NavigationExtras
-  ): void {
-    this.router.navigate(
-      Array.isArray(path) ? path : [path],
-      extras
-    );
+  private go(path: string | any[], extras?: NavigationExtras): void {
+    this.router.navigate(Array.isArray(path) ? path : [path], extras);
   }
 }

@@ -1,0 +1,52 @@
+.date-input-error {
+  color: #b91c1c;
+  font-size: 14px;
+}
+
+.date-input-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.custom-date-picker {
+  width: 100%;
+}
+
+.custom-date-picker input {
+  height: 40px;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 16px;
+  outline: none;
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.2);
+  color: var(--primary-color);
+  background-color: var(--white-color);
+  font-size: 13.6px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.custom-date-picker input:focus {
+  border-color: var(--primary-color-50);
+  border-width: 2px;
+}
+
+.custom-date-picker mat-datepicker-toggle {
+  color: var(--primary-color);
+}
+
+.custom-date-picker input.ng-invalid.ng-touched {
+  border: 1px solid var(--card-red);
+  background-color: #fff6f6;
+}
+
+.custom-date-picker .mat-form-field-underline,
+.custom-date-picker .mat-form-field-wrapper {
+  display: none;
+}
+
+.custom-date-picker .mat-form-field-flex {
+  padding: 0;
+}
+

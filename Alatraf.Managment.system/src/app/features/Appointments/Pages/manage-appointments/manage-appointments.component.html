@@ -10,34 +10,63 @@
     </div>
 
     <div class="search-box">
-      <img src="assets/icons/search-icon.svg" class="search-icon" alt="search" />
-      <input type="text" placeholder="بحث: اسم المريض أو الرقم" #searchBox (input)="onSearch(searchBox.value)" />
+      <img
+        src="assets/icons/search-icon.svg"
+        class="search-icon"
+        alt="search"
+      />
+      <input
+        type="text"
+        placeholder="بحث: اسم المريض أو الرقم"
+        #searchBox
+        (input)="onSearch(searchBox.value)"
+      />
     </div>
 
     <div class="filters-container">
-      <button class="filter-btn" [class.active]="selectedFilter() === undefined" (click)="setFilter(undefined)">
+      <button
+        class="filter-btn"
+        [class.active]="selectedFilter() === undefined"
+        (click)="setFilter(undefined)"
+      >
         الكل
       </button>
-      <button class="filter-btn" [class.active]="selectedFilter() === AppointmentStatus.Scheduled"
-        (click)="setFilter(AppointmentStatus.Scheduled)">
+      <button
+        class="filter-btn"
+        [class.active]="selectedFilter() === AppointmentStatus.Scheduled"
+        (click)="setFilter(AppointmentStatus.Scheduled)"
+      >
         مجدولة
       </button>
-      <button class="filter-btn" [class.active]="selectedFilter() === AppointmentStatus.Today"
-        (click)="setFilter(AppointmentStatus.Today)">
+      <button
+        class="filter-btn"
+        [class.active]="selectedFilter() === AppointmentStatus.Today"
+        (click)="setFilter(AppointmentStatus.Today)"
+      >
         اليوم
       </button>
-      <button class="filter-btn" [class.active]="selectedFilter() === AppointmentStatus.Absent"
-        (click)="setFilter(AppointmentStatus.Absent)">
+      <button
+        class="filter-btn"
+        [class.active]="selectedFilter() === AppointmentStatus.Absent"
+        (click)="setFilter(AppointmentStatus.Absent)"
+      >
         متأخر
       </button>
-      <button class="filter-btn" [class.active]="selectedFilter() === AppointmentStatus.Cancelled"
-        (click)="setFilter(AppointmentStatus.Cancelled)">
+      <button
+        class="filter-btn"
+        [class.active]="selectedFilter() === AppointmentStatus.Cancelled"
+        (click)="setFilter(AppointmentStatus.Cancelled)"
+      >
         ملغي
       </button>
     </div>
     <div class="main-content-wrapper">
-      <app-waiting-appointment-card class="scrollable-area column gap-16" [appointments]="appointments()"
-        (select)="onSelectAppointment($event)" [loading]="isloading()"></app-waiting-appointment-card>
+      <app-waiting-appointment-card
+        class="scrollable-area column gap-16"
+        [appointments]="appointments()"
+        (select)="onSelectAppointment($event)"
+        [loading]="isloading()"
+      ></app-waiting-appointment-card>
     </div>
   </div>
 

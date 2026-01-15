@@ -8,6 +8,7 @@ import { UnitService } from './unit.service';
 import { CreateUnitRequest } from '../Models/create-unit.request';
 import { UnitDto } from '../Models/unit.dto';
 import { UpdateUnitRequest } from '../Models/update-unit.request';
+import { UnitsNavigationFacade } from '../../../../core/navigation/units-navigation.facade';
 
 @Injectable({ providedIn: 'root' })
 export class UnitsFacade extends BaseFacade {
@@ -19,6 +20,11 @@ export class UnitsFacade extends BaseFacade {
 
   private _units = signal<UnitDto[]>([]);
   units = this._units.asReadonly();
+
+  private _selectedUnit = signal<UnitDto | null>(null);
+  selectedUnit = this._selectedUnit.asReadonly();
+
+  isEditMode = signal<boolean>(false);
 
   formValidationErrors = signal<Record<string, string[]>>({});
 
@@ -46,7 +52,6 @@ export class UnitsFacade extends BaseFacade {
       tap((res) => {
         if (res.success && res.data) {
           this.formValidationErrors.set({});
-          this.loadUnits();
           // this.addUnitToList(res.data);
         } else if (res.validationErrors) {
           this.formValidationErrors.set(res.validationErrors);
@@ -71,7 +76,7 @@ export class UnitsFacade extends BaseFacade {
       })
     );
   }
-
+private navUnits= inject(UnitsNavigationFacade);
   deleteUnit(unit: UnitDto): void {
     if (!unit?.id) return;
 
@@ -86,11 +91,44 @@ export class UnitsFacade extends BaseFacade {
       defaultErrorMessage: 'فشل حذف الوحدة. حاول لاحقاً.',
     }).subscribe((success) => {
       if (success) {
-        this.loadUnits();
-
+this.navUnits.goToAddNewUnitsPage();
         // this.removeUnitFromList(unit.id);
       }
     });
+  }
+
+  enterCreateMode(): void {
+    this.isEditMode.set(false);
+    this._selectedUnit.set(null);
+    this.formValidationErrors.set({});
+  }
+
+  enterEditMode(unit: UnitDto): void {
+    this.isEditMode.set(true);
+    this._selectedUnit.set(unit);
+    this.formValidationErrors.set({});
+  }
+
+  loadUnitForEdit(id: number): void {
+    const local = this._units().find((u) => u.id === id);
+    if (local) {
+      this.enterEditMode(local);
+      return;
+    }
+
+    this.service
+      .getUnitById(id)
+      .pipe(
+        tap((res: ApiResult<UnitDto>) => {
+          if (res.isSuccess && res.data) {
+            this.enterEditMode(res.data);
+          } else {
+            this.toast.error(res.errorDetail ?? 'لم يتم العثور على الوحدة');
+            this.enterCreateMode();
+          }
+        })
+      )
+      .subscribe();
   }
 
   private addUnitToList(unit: UnitDto) {

@@ -33,21 +33,34 @@ export const MENU_CONFIG: MenuCategory[] = [
         route: AppRoutes.doctors.root,
         requiredPermissions: [PERMISSIONS.Doctor.CREATE],
       },
-        {
+      {
         label: ' إدارة الاقسام ',
         icon: 'assets/icons/grid-fill-w.svg',
         activeIcon: 'assets/icons/grid-fill-b.svg',
         route: `${AppRoutes.sections.root}`,
         requiredPermissions: [PERMISSIONS.Section.READ],
       },
-        {
+      {
         label: 'البرامج العلاجية ',
         icon: 'assets/icons/dumbbell-w.svg',
         activeIcon: 'assets/icons/dumbbell-b.svg',
         route: `${AppRoutes.medicalPrograms.root}`,
         requiredPermissions: [PERMISSIONS.MedicalProgram.READ],
       },
-    
+      {
+        label: 'الاطراف الصناعية ',
+        icon: 'assets/icons/prosthetic-foot-w.svg',
+        activeIcon: 'assets/icons/prosthetic-foot-b.svg',
+        route: `${AppRoutes.industrialParts.root}`,
+        requiredPermissions: [PERMISSIONS.IndustrialPart.READ],
+      },
+      {
+        label: ' التقارير ',
+        icon: 'assets/icons/dumbbell-w.svg',
+        activeIcon: 'assets/icons/dumbbell-b.svg',
+        route: `${AppRoutes.reports.root}`,
+        requiredPermissions: [PERMISSIONS.MedicalProgram.READ],
+      },
     ],
   },
 
@@ -89,14 +102,13 @@ export const MENU_CONFIG: MenuCategory[] = [
         route: `${AppRoutes.therapyCards.root}`,
         requiredPermissions: [PERMISSIONS.TherapyCard.READ_SESSION],
       },
-         {
+      {
         label: ' الاصابات',
         icon: 'assets/icons/services-w.svg',
         activeIcon: 'assets/icons/services-b.svg',
         route: AppRoutes.injuries.root,
         requiredPermissions: [PERMISSIONS.IndustrialPart.READ],
       },
-    
     ],
   },
 
@@ -117,13 +129,6 @@ export const MENU_CONFIG: MenuCategory[] = [
         activeIcon: 'assets/icons/credit-card-b.svg',
         route: `${AppRoutes.repairCards.root}`,
         requiredPermissions: [PERMISSIONS.RepairCard.ASSIGN_TECHNICIAN],
-      },
-      {
-        label: 'الاطراف الصناعية ',
-        icon: 'assets/icons/prosthetic-foot-w.svg',
-        activeIcon: 'assets/icons/prosthetic-foot-b.svg',
-        route: `${AppRoutes.industrialParts.root}`,
-        requiredPermissions: [PERMISSIONS.IndustrialPart.READ],
       },
 
       {

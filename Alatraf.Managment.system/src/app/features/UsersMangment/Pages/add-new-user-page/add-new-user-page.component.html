@@ -2,9 +2,14 @@
 
 <div class="box dialog">
   <!-- Header -->
-  <div class="space-between  ">
+  <div class="space-between">
     <h2 class="title-lg">إضافة مستخدم جديد</h2>
-    <img src="assets/icons/close-icon.svg" alt="إغلاق" (click)="onClose()" class="close-icon cursor-pointer" />
+    <img
+      src="assets/icons/close-icon.svg"
+      alt="إغلاق"
+      (click)="onClose()"
+      class="close-icon cursor-pointer"
+    />
   </div>
 
   <div>
@@ -12,7 +17,11 @@
     <span class="home-line"></span>
   </div>
 
-  <form class="padding-LR-24 column gap-16" [formGroup]="form" (ngSubmit)="onSave()">
+  <form
+    class="padding-LR-24 column gap-16"
+    [formGroup]="form"
+    (ngSubmit)="onSave()"
+  >
     <!-- الاسم الكامل -->
     <div class="row flex-center">
       <label class="label-lg">الاسم الكامل</label>
@@ -30,8 +39,14 @@
     <!-- رقم الهاتف -->
     <div class="row flex-center">
       <label class="label-lg">رقم الهاتف</label>
-      <input class="label-lg" type="text" formControlName="phone" (input)="formatPhoneNumberInput(getControl('phone'))"
-        (keypress)="preventNonNumericInput($event)" (blur)="form.controls['phone'].markAsTouched()" />
+      <input
+        class="label-lg"
+        type="text"
+        formControlName="phone"
+        (input)="formatPhoneNumberInput(getControl('phone'))"
+        (keypress)="preventNonNumericInput($event)"
+        (blur)="form.controls['phone'].markAsTouched()"
+      />
       <div class="error-message label-lg" *ngIf="hasBackendError('phone')">
         {{ getBackendError("phone") }}
       </div>
@@ -56,7 +71,7 @@
 
       <label class="label-lg">تاريخ الميلاد</label>
       <input class="label-lg" type="date" formControlName="birthdate" [max]="maxDate" />
-
+      <!-- <app-date-input formControlName="birthdate"></app-date-input> -->
       <div class="error-message label-lg" *ngIf="hasBackendError('birthdate')">
         {{ getBackendError("birthdate") }}
       </div>
@@ -88,7 +103,10 @@
       <div class="error-message label-lg" *ngIf="hasBackendError('nationalNo')">
         {{ getBackendError("nationalNo") }}
       </div>
-      <div *ngIf="hasFrontendError('nationalNo')" class="error-message label-lg">
+      <div
+        *ngIf="hasFrontendError('nationalNo')"
+        class="error-message label-lg"
+      >
         رقم الهوية مطلوب
       </div>
     </div>

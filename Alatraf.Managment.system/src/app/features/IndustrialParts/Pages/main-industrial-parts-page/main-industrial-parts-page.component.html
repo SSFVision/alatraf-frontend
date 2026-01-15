@@ -1,5 +1,5 @@
 <div class="row gap-16">
-  <div class="box max-width-324 gap-24  " id="therapy-program-list-container">
+  <div class="box max-width-324 gap-24">
     <div class="row space-between">
       <h2 class="title-md">الاطراف الصناعية</h2>
 
@@ -10,13 +10,25 @@
       </div>
     </div>
     <div class="search-box">
-      <img src="assets/icons/search-icon.svg" class="search-icon" alt="search" />
-      <input type="text" placeholder="بحث: اسم الطرف أو الرقم" (input)="onSearch($any($event.target).value)" />
+      <img
+        src="assets/icons/search-icon.svg"
+        class="search-icon"
+        alt="search"
+      />
+      <input
+        type="text"
+        placeholder="بحث: اسم الطرف أو الرقم"
+        (input)="onSearch($any($event.target).value)"
+      />
     </div>
 
     <div class="main-content-wrapper">
-      <app-management-entity-card class="scrollable-area column gap-16" [items]="card()" [loading]="loading()"
-        (select)="onCardSelected($event)"></app-management-entity-card>
+      <app-management-entity-card
+        class="scrollable-area column gap-16"
+        [items]="card()"
+        [loading]="loading()"
+        (select)="onCardSelected($event)"
+      ></app-management-entity-card>
     </div>
     <div class="flex-center">
       <button class="btn primary" (click)="goToIndustrialPart()">
@@ -25,12 +37,11 @@
     </div>
   </div>
 
-  <div class="box   gap-16">
-    @if (selectedId() ||addMode()) {
-    <router-outlet></router-outlet>}
-    @else {
-    <app-workspace-welcome subtitle="مرحباً بك" imageSrc="assets/images/bro-1.svg"></app-workspace-welcome>
-    }
-  </div>
+  <div class="box gap-16">
+    <button class="btn primary lable-lg" (click)="onAddUnit()">
+      إضافة وحدة قياس
+    </button>
 
+    <router-outlet></router-outlet>
+  </div>
 </div>

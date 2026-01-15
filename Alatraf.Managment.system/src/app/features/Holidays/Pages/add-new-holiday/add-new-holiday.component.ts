@@ -217,12 +217,10 @@ export class AddNewHolidayComponent {
     }
   }
 
-  holidayNav=inject(HolidaysNavigationFacade);
-OnCloseEditHoliday(){
-this.holidayNav.goToHolidayList();
-
-  
-}
+  holidayNav = inject(HolidaysNavigationFacade);
+  OnCloseEditHoliday() {
+    this.holidayNav.goToHolidayList();
+  }
   // Helpers for template validation (match patient form pattern)
   getControl(name: string): AbstractControl | null {
     return this.form.get(name);

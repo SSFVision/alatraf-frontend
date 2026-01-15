@@ -1,16 +1,15 @@
 import { Component, effect, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { ManagementEntityCardUiModel } from '../../../../shared/models/management-entity-card.ui-model';
 import { IndustrialPartsNavigationFacade } from '../../../../core/navigation/industrial-parts-navigation.facade';
 import { ManagementEntityCardComponent } from '../../../../shared/components/management-entity-card/management-entity-card.component';
-import { MedicalProgramsNavigationFacade } from '../../../../core/navigation/navigation-medical-programs.facade';
-import { MedicalProgramsFacade } from '../../../MedicalPrograms/Services/medical-programs.facade.service';
+import { ManagementEntityCardUiModel } from '../../../../shared/models/management-entity-card.ui-model';
 import { IndustrialPartsFacade } from '../../Services/industrial-parts.facade.service';
-import { WorkspaceWelcomeComponent } from "../../../../shared/components/workspace-welcome/workspace-welcome.component";
+import { throttleTime } from 'rxjs';
+import { UnitsNavigationFacade } from '../../../../core/navigation/units-navigation.facade';
 
 @Component({
   selector: 'app-main-industrial-parts-page',
-  imports: [RouterOutlet, ManagementEntityCardComponent, WorkspaceWelcomeComponent],
+  imports: [RouterOutlet, ManagementEntityCardComponent],
   templateUrl: './main-industrial-parts-page.component.html',
   styleUrl: './main-industrial-parts-page.component.css',
 })
@@ -33,7 +32,6 @@ export class MainIndustrialPartsPageComponent {
           // sectionName: p.industrialPartUnits ?? null,
         }))
       );
-
     });
   }
   ngOnInit(): void {
@@ -43,7 +41,10 @@ export class MainIndustrialPartsPageComponent {
     this.selectedId.set(id);
     this.nav.goToEditIndustrialPartPage(id);
   }
-
+  private navUnit = inject(UnitsNavigationFacade);
+  onAddUnit() {
+    this.navUnit.goToAddNewUnitsPage();
+  }
   goToIndustrialPart() {
     this.addMode.set(true);
     this.nav.goToCreateIndustrialPartPage();
