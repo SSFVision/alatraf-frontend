@@ -18,6 +18,8 @@ export class UserPermissionsComponent {
   permissions = computed(() => this.user()?.permissions ?? []);
   permissionsSet = computed(() => new Set(this.permissions()));
 
+
+
   isPermGranted(perm?: string): boolean {
     if (!perm) return false;
     return this.permissionsSet().has(perm);
@@ -27,9 +29,7 @@ export class UserPermissionsComponent {
     return value ?? index;
   }
 
-permissionGroups = PERMISSION_GROUPS;
-
-
+  permissionGroups = PERMISSION_GROUPS;
 
   extraColumns = Array.from(
     new Set(
