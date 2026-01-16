@@ -104,4 +104,9 @@ export class UserPermissionsComponent {
       )
     );
   });
+
+  
+  editUserPermissions(){
+    
+  }
 }

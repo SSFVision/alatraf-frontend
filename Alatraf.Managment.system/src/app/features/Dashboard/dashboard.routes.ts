@@ -6,7 +6,7 @@ export const DASHBOARD_ROUTES: Routes = [
   {
     path: '',
     canActivate: [PermissionGuard],
-    data: { permission: PERMISSIONS.User.READ },
+    // data: { permission: PERMISSIONS.User.READ },
     loadComponent: () =>
       import('./pages/dashboard-main-page/dashboard-main-page.component').then(
         (m) => m.DashboardMainPageComponent

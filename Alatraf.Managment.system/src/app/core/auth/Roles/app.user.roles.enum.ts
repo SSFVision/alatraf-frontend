@@ -10,9 +10,8 @@ export enum AppUserRole {
   ExchangeOrderEmployee = 'ExchangeOrderEmployee',
   SalesEmployee = 'SalesEmployee',
   PurchaseEmployee = 'PurchaseEmployee',
-    AppointmentsEmployee = 'AppointmentsEmployee', 
-      ExitsEmployee = 'ExitsEmployee',                     
-
+  AppointmentsEmployee = 'AppointmentsEmployee',
+  ExitsEmployee = 'ExitsEmployee',
 }
 export const RoleArabicMap: Record<AppUserRole, string> = {
   [AppUserRole.Admin]: 'مدير',

@@ -39,6 +39,10 @@ import { InjuryDto } from '../../../../../core/models/injuries/injury.dto';
 import { TherapyDiagnosisFacade } from '../../Services/therapy-diagnosis.facade.Service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import {
+  noFutureDatesValidator,
+  noPastDatesValidator,
+} from '../../../../../core/utils/validators/date-validators';
 
 @Component({
   selector: 'app-add-therapy-diagnosis-form',
@@ -77,23 +81,11 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges, OnDestroy {
   form: FormGroup = this.fb.group(
     {
       diagnosisText: ['', [Validators.required, Validators.maxLength(1000)]],
-      injuryDate: [
-        '',
-        [
-          Validators.required,
-          AddTherapyDiagnosisFormComponent.noFutureDatesValidator,
-        ],
-      ],
+      injuryDate: ['', [Validators.required, noFutureDatesValidator]],
       injuryReasons: [[] as number[], Validators.required],
       injurySides: [[] as number[], Validators.required],
       injuryTypes: [[] as number[], Validators.required],
-      programStartDate: [
-        '',
-        [
-          Validators.required,
-          AddTherapyDiagnosisFormComponent.noPastDatesValidator,
-        ],
-      ],
+      programStartDate: ['', [Validators.required, noPastDatesValidator]],
       programEndDate: [{ value: '', disabled: true }],
       numberOfSessions: [{ value: null, disabled: true }, Validators.required],
       therapyCardType: [TherapyCardType.General, Validators.required],
@@ -452,35 +444,5 @@ export class AddTherapyDiagnosisFormComponent implements OnChanges, OnDestroy {
       return med != null && med !== '' && dur != null && dur !== '';
     });
     return hasOne ? null : { atLeastOneProgram: true };
-  }
-
-  private static noFutureDatesValidator(
-    control: AbstractControl
-  ): ValidationErrors | null {
-    const selectedDate = new Date(control.value);
-    if (isNaN(selectedDate.getTime())) {
-      return null;
-    }
-    const today = new Date();
-    today.setHours(23, 59, 59, 999);
-    if (selectedDate.getTime() > today.getTime()) {
-      return { futureDate: true };
-    }
-    return null;
-  }
-
-  private static noPastDatesValidator(
-    control: AbstractControl
-  ): ValidationErrors | null {
-    const selectedDate = new Date(control.value);
-    if (isNaN(selectedDate.getTime())) {
-      return null;
-    }
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    if (selectedDate.getTime() < today.getTime()) {
-      return { pastDate: true };
-    }
-    return null;
   }
 }

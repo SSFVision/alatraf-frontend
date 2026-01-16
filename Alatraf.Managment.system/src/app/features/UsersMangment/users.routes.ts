@@ -67,6 +67,15 @@ export const USERS_ROUTES: Routes = [
             (m) => m.UserRoleAssignComponent
           ),
       },
+      // {
+      //   path: 'grant-permissions/:userId',
+      //   canActivate: [PermissionGuard],
+      //   data: { permission: PERMISSIONS.User.ASSIGN_ROLES },
+      //   loadComponent: () =>
+      //     import('./Pages/edit-user-permissions/edit-user-permissions.component').then(
+      //       (m) => m.EditUserPermissionsComponent
+      //     ),
+      // },
     ],
   },
 ];

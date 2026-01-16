@@ -1,0 +1,153 @@
+<div class="space-between">
+  <p class="title-md">تعديل الصلاحيات</p>
+  <img
+    src="assets/icons/close-icon.svg"
+    alt="إغلاق"
+    (click)="onClose()"
+    class="close-icon cursor-pointer"
+  />
+</div>
+<div class="search-box">
+  <img src="assets/icons/search-icon.svg" class="search-icon" alt="search" />
+  <input
+    type="text"
+    placeholder="بحث: اسم  الصلاحية  "
+    [(ngModel)]="searchTerm"
+  />
+</div>
+<div class="row flex-center">
+  <!-- <label class="label-lg">تصفية حسب المجموعة</label> -->
+  <select class="label-lg" [(ngModel)]="selectedGroupLabel">
+    <option *ngFor="let option of groupSelectOptions" [value]="option.value">
+      {{ option.label }}
+    </option>
+  </select>
+</div>
+<div class="main-content-wrapper">
+  <form class="scrollable-area column gap-16">
+    <div class="cards-grid">
+      <ng-container *ngFor="let group of filteredGroups()">
+        <div class="card">
+          <div class="width-100 row space-between">
+            <h3 class="title-md">{{ group.label }}</h3>
+
+            <label class="ring-toggle">
+              <input
+                type="checkbox"
+                [checked]="isAllChecked(group)"
+                [indeterminate]="isIndeterminate(group)"
+                (change)="toggleAllCardPermissions(group, $event)"
+              />
+              <span class="ring"></span>
+            </label>
+          </div>
+          <span class="home-line"></span>
+
+          <div class="column">
+            <!-- Read -->
+            <div class="row space-between padding-12" *ngIf="group.read">
+              <span class="title-md flex-center">عرض</span>
+              <label class="ring-toggle">
+                <input
+                  type="checkbox"
+                  [checked]="isChecked(group.read)"
+                  (change)="togglePermission(group.read, $event)"
+                />
+                <span class="ring"></span>
+              </label>
+            </div>
+
+            <!-- Create -->
+            <div class="row space-between padding-12" *ngIf="group.create">
+              <span class="title-md flex-center">إضافة</span>
+              <label class="ring-toggle">
+                <input
+                  type="checkbox"
+                  [checked]="isChecked(group.create)"
+                  (change)="togglePermission(group.create, $event)"
+                />
+                <span class="ring"></span>
+              </label>
+            </div>
+
+            <!-- Update -->
+            <div class="row space-between padding-12" *ngIf="group.update">
+              <span class="title-md flex-center">تعديل</span>
+              <label class="ring-toggle">
+                <input
+                  type="checkbox"
+                  [checked]="isChecked(group.update)"
+                  (change)="togglePermission(group.update, $event)"
+                />
+                <span class="ring"></span>
+              </label>
+            </div>
+
+            <!-- Delete -->
+            <div class="row space-between padding-12" *ngIf="group.delete">
+              <span class="title-md flex-center">حذف</span>
+              <label class="ring-toggle">
+                <input
+                  type="checkbox"
+                  [checked]="isChecked(group.delete)"
+                  (change)="togglePermission(group.delete, $event)"
+                />
+                <span class="ring"></span>
+              </label>
+            </div>
+
+            <!-- Print -->
+            <div class="row space-between padding-12" *ngIf="group.print">
+              <span class="title-md flex-center">طباعة</span>
+              <label class="ring-toggle">
+                <input
+                  type="checkbox"
+                  [checked]="isChecked(group.print)"
+                  (change)="togglePermission(group.print, $event)"
+                />
+                <span class="ring"></span>
+              </label>
+            </div>
+
+            <!-- Change Status -->
+            <div
+              class="row space-between padding-12"
+              *ngIf="group.changeStatus"
+            >
+              <span class="title-md flex-center">تغيير الحالة</span>
+              <label class="ring-toggle">
+                <input
+                  type="checkbox"
+                  [checked]="isChecked(group.changeStatus)"
+                  (change)="togglePermission(group.changeStatus, $event)"
+                />
+                <span class="ring"></span>
+              </label>
+            </div>
+
+            <!-- Extra Permissions -->
+            <ng-container *ngFor="let extra of group.extras ?? []">
+              <div class="row space-between padding-12">
+                <span class="title-md flex-center">{{ extra.label }}</span>
+                <label class="ring-toggle">
+                  <input
+                    type="checkbox"
+                    [checked]="isChecked(extra.perm)"
+                    (change)="togglePermission(extra.perm, $event)"
+                  />
+                  <span class="ring"></span>
+                </label>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </form>
+</div>
+<div class="row flex-center gap-16">
+  <button type="button" class="btn primary" (click)="savePermissions()">
+    حفظ
+  </button>
+  <button class="btn red" type="button" (click)="onClose()">إلغاء</button>
+</div>

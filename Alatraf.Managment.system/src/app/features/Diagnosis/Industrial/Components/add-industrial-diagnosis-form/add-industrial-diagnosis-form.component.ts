@@ -42,6 +42,7 @@ import { InjuryDto } from '../../../../../core/models/injuries/injury.dto';
 import { FormValidationState } from '../../../../../core/utils/form-validation-state';
 import { RepairCardDiagnosisDto } from '../../Models/repair-card-diagnosis.dto';
 import { RepairCardDiagnosisFacade } from '../../Services/repair-card-diagnosis.facade.service';
+import { noFutureDatesValidator } from '../../../../../core/utils/validators/date-validators';
 
 @Component({
   selector: 'app-add-industrial-diagnosis-form',
@@ -92,7 +93,7 @@ export class AddIndustrialDiagnosisFormComponent
   // --------------------------
   form: FormGroup = this.fb.group({
     diagnosisText: ['', [Validators.required, Validators.maxLength(2000)]],
-    injuryDate: ['', [Validators.required, this.noFutureDatesValidator]],
+    injuryDate: ['', [Validators.required, noFutureDatesValidator]],
     injuryReasons: [[] as number[], Validators.required],
     injurySides: [[] as number[], Validators.required],
     injuryTypes: [[] as number[], Validators.required],
@@ -444,18 +445,5 @@ export class AddIndustrialDiagnosisFormComponent
       .get('quantity')
       ?.updateValueAndValidity({ onlySelf: true, emitEvent: false });
   }
-  private noFutureDatesValidator(
-    control: AbstractControl
-  ): ValidationErrors | null {
-    const selectedDate = new Date(control.value);
-    if (isNaN(selectedDate.getTime())) {
-      return null;
-    }
-    const today = new Date();
-    today.setHours(23, 59, 59, 999);
-    if (selectedDate.getTime() > today.getTime()) {
-      return { futureDate: true };
-    }
-    return null;
-  }
+ 
 }

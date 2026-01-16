@@ -266,11 +266,18 @@ export const AppRoutes = {
 
     view: (userId: number | string) => `view/${userId}`,
 
-    permissions: (userId: number | string) => `${userId}/permissions`,
+    grandPermissions: (userId: number | string) => `grant-permissions/${userId}`,
     AssignRole: (userId: number | string) => `assign-role/${userId}`,
   },
   reports: {
     root: 'reports',
+
+    patients: 'patients',
+    diagnosis: 'therapy-diagnosis-reports',
+    sessions: 'sessions',
+
+    // Optional helper
+    report: (type: string) => `${type}`,
   },
   system: {
     unauthorized: 'unauthorized',

@@ -6,6 +6,7 @@ import {
   effect,
   inject,
   runInInjectionContext,
+  signal,
 } from '@angular/core';
 import {
   AbstractControl,
@@ -16,19 +17,14 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { finalize, throttleTime } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
+import { finalize } from 'rxjs/operators';
+import { AuthFacade } from '../../../../core/auth/auth.facade';
 import { UsersNavigationFacade } from '../../../../core/navigation/users-navigation.facade';
 import { FormValidationState } from '../../../../core/utils/form-validation-state';
+import { DialogService } from '../../../../shared/components/dialog/dialog.service';
 import { ChangeCredentialsRequest } from '../../Models/change-credentials.request';
 import { UsersFacadeService } from '../../Services/users.facade.service';
-import { signal } from '@angular/core';
-import { AuthFacade } from '../../../../core/auth/auth.facade';
-import { DialogService } from '../../../../shared/components/dialog/dialog.service';
-import {
-  DialogConfig,
-  DialogType,
-} from '../../../../shared/components/dialog/DialogConfig';
 
 const requireNewCredential: ValidatorFn = (
   control: AbstractControl
@@ -91,14 +87,7 @@ export class ChangeCredentialsComponent implements OnInit {
   }
 
   private confirmLogout() {
-    // const config: DialogConfig = {
-    //   title: ' إنشاء المستخدم تم بنجاح',
-    //   payload: {
-    //     message: 'سيتم تسجيل خروجك من النظام لتسجيل الدخول بالإسم الجديد.',
-    //   },
-    //   showCancel: false,
-    //   type: DialogType.Success,
-    // };
+   
     this.dialogService
       .confirmSuccess(' سيتم تسجيل خروجك من النظام لتسجيل الدخول بالإسم الجديد',' إنشاء المستخدم تم بنجاح')
       .subscribe((confirm) => {

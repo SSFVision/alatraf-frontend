@@ -1,14 +1,14 @@
+import { CommonModule, NgFor } from '@angular/common';
 import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   FormArray,
   FormBuilder,
   FormGroup,
-  Validators,
   ReactiveFormsModule,
+  Validators,
 } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { CommonModule, NgFor } from '@angular/common';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { HeaderPatientInfoComponent } from '../../../../shared/components/header-patient-info/header-patient-info.component';
 
@@ -19,10 +19,11 @@ import {
   PatientDto,
   PatientType,
 } from '../../../../core/models/Shared/patient.model';
+import { GetDoctorDto } from '../../../Organization/Models/get-doctor.dto';
 import { OrganizationService } from '../../../Organization/organization.service';
 import { AssignIndustrialPartsRequest } from '../../Models/assign-industrial-parts.request';
 import { RepairCardsFacade } from '../../Services/repair-cards.facade.service';
-import { GetDoctorDto } from '../../../Organization/Models/get-doctor.dto';
+import { CreateDeliveryDateComponent } from '../create-delivery-date/create-delivery-date.component';
 
 @Component({
   selector: 'app-repair-card-assignments-workspace',
@@ -32,6 +33,8 @@ import { GetDoctorDto } from '../../../Organization/Models/get-doctor.dto';
     NgFor,
     ReactiveFormsModule,
     HeaderPatientInfoComponent,
+    CreateDeliveryDateComponent,
+    
   ],
   templateUrl: './repair-card-assignments-workspace.component.html',
   styleUrl: './repair-card-assignments-workspace.component.css',
@@ -206,26 +209,24 @@ export class RepairCardAssignmentsWorkspaceComponent {
       [rowIndex]: true,
     }));
 
-    this.organizationService
-      .getDoctorsBySection(sectionId)
-      .subscribe((res) => {
-        if (res.isSuccess && res.data) {
-          this.doctorsByRowIndex.update((state) => ({
-            ...state,
-            [rowIndex]: res.isSuccess && res.data ? res.data : [],
-          }));
-        } else {
-          this.doctorsByRowIndex.update((state) => ({
-            ...state,
-            [rowIndex]: [],
-          }));
-        }
-
-        this.loadingDoctorsByRow.update((state) => ({
+    this.organizationService.getDoctorsBySection(sectionId).subscribe((res) => {
+      if (res.isSuccess && res.data) {
+        this.doctorsByRowIndex.update((state) => ({
           ...state,
-          [rowIndex]: false,
+          [rowIndex]: res.isSuccess && res.data ? res.data : [],
         }));
-      });
+      } else {
+        this.doctorsByRowIndex.update((state) => ({
+          ...state,
+          [rowIndex]: [],
+        }));
+      }
+
+      this.loadingDoctorsByRow.update((state) => ({
+        ...state,
+        [rowIndex]: false,
+      }));
+    });
   }
 
   getDoctorsForRow(rowIndex: number): any[] {
@@ -235,6 +236,9 @@ export class RepairCardAssignmentsWorkspaceComponent {
   // ------------------------------------------------------------------
   // Submit Assign Industrial Parts
   // ------------------------------------------------------------------
+
+  makeCardDeliveryTime = signal<boolean>(false);
+
   submit(): void {
     if (this.assignForm.invalid) {
       this.assignForm.markAllAsTouched();
@@ -249,8 +253,18 @@ export class RepairCardAssignmentsWorkspaceComponent {
       .assignIndustrialParts(this.repairCardId, request)
       .subscribe((res) => {
         if (res.success) {
+          this.makeCardDeliveryTime.set(true);
           this.assignForm.disable();
         }
       });
+  }
+
+  openDeliveryDateDialog = signal<boolean>(false);
+  onCardDeliveryTimeClick() {
+    this.openDeliveryDateDialog.set(true);
+  }
+
+  onCloseDeliveryDateDialog() {
+    this.openDeliveryDateDialog.set(false);
   }
 }

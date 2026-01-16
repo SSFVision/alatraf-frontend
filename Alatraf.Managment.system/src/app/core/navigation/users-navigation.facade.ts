@@ -65,10 +65,10 @@ export class UsersNavigationFacade {
   // User Permissions / Roles
   // ==============================
   goToUserRoleAssignPage(userId: string, extras?: NavigationExtras): void {
-    this.go(
-      `${AppRoutes.users.root}/${AppRoutes.users.AssignRole(userId)}`,
-      { replaceUrl: true, ...extras }
-    );
+    this.go(`${AppRoutes.users.root}/${AppRoutes.users.AssignRole(userId)}`, {
+      replaceUrl: true,
+      ...extras,
+    });
   }
 
   goToUserPermissionsPage(
@@ -76,7 +76,7 @@ export class UsersNavigationFacade {
     extras?: NavigationExtras
   ): void {
     this.go(
-      `${AppRoutes.users.root}/${AppRoutes.users.permissions(userId)}`,
+      `${AppRoutes.users.root}/${AppRoutes.users.grandPermissions(userId)}`,
       { replaceUrl: true, ...extras }
     );
   }
