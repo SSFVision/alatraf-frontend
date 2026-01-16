@@ -1,0 +1,70 @@
+<div class="backdrop" (click)="onClose()"></div>
+
+<div class="box dialog">
+  <div class="space-between">
+    <h2 class="title-lg">تعيين موعد التسليم</h2>
+    <img
+      src="assets/icons/close-icon.svg"
+      alt="إغلاق"
+      (click)="onClose()"
+      class="close-icon cursor-pointer"
+    />
+  </div>
+
+  <form
+    class="padding-LR-24 column gap-16"
+    [formGroup]="form"
+    (ngSubmit)="onSubmit()"
+  >
+    <div>
+      <p class="title-md">بيانات موعد التسليم</p>
+      <span class="home-line"></span>
+    </div>
+
+    <div class="row flex-center">
+      <label class="label-lg">تاريخ التسليم</label>
+      <input
+        class="label-lg"
+        type="date"
+        formControlName="deliveryDate"
+        [min]="today"
+      />
+
+      <div
+        class="error-message label-lg"
+        *ngIf="hasFrontendError('deliveryDate')"
+      >
+        تاريخ التسليم مطلوب
+      </div>
+
+      <div
+        class="error-message label-lg"
+        *ngIf="hasBackendError('deliveryDate')"
+      >
+        {{ getBackendError("deliveryDate") }}
+      </div>
+    </div>
+
+    <div class="row flex-center">
+      <label class="label-lg">ملاحظات</label>
+      <textarea class="label-lg" rows="3" formControlName="notes"></textarea>
+
+      <div class="error-message label-lg" *ngIf="hasBackendError('notes')">
+        {{ getBackendError("notes") }}
+      </div>
+    </div>
+
+    <div class="row flex-center gap-16">
+      <button
+        class="btn primary"
+        type="submit"
+        [disabled]="form.invalid || isSubmitting() || submissionDone()"
+      >
+        حفظ
+      </button>
+      <button class="btn secondary" type="button" (click)="onClose()">
+        إلغاء
+      </button>
+    </div>
+  </form>
+</div>

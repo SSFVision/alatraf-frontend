@@ -6,7 +6,7 @@ import {
   ReportType,
   ReportCriteria,
   REPORTS_CRITERIA,
-} from '../../reports.criteria';
+} from '../../reports.types';
 
 @Component({
   selector: 'app-reports-dropdown-select',

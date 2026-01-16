@@ -1,4 +1,5 @@
 import { PERMISSIONS } from '../../core/auth/Roles/permissions.map';
+import { AppRoutes } from '../../core/routing/app.routes.map';
 
 export interface ReportCriteria {
   key: string;
@@ -6,25 +7,24 @@ export interface ReportCriteria {
   label: string;
 
   permission?: string;
-
 }
 
 export const REPORTS_CRITERIA: readonly ReportCriteria[] = [
+  // {
+  //   key: AppRoutes.reports.patients,
+  //   label: 'تقرير المرضى',
+  //   permission: PERMISSIONS.Patient.READ,
+  // },
   {
-    key: 'patients',
-    label: 'تقرير المرضى',
-    permission: PERMISSIONS.Patient.READ,
-  },
-  {
-    key: 'diagnosis',
+    key: AppRoutes.reports.diagnosis,
     label: 'تقرير التشخيصات',
     permission: PERMISSIONS.MedicalProgram.READ,
   },
-  {
-    key: 'sessions',
-    label: 'تقرير الجلسات',
-    permission: PERMISSIONS.TherapyCard.READ_SESSION,
-  },
+  // {
+  //   key: AppRoutes.reports.sessions,
+  //   label: 'تقرير الجلسات',
+  //   permission: PERMISSIONS.TherapyCard.READ_SESSION,
+  // },
 ] as const;
 
 /**

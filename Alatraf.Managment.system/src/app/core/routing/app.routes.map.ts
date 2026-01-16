@@ -273,7 +273,7 @@ export const AppRoutes = {
     root: 'reports',
 
     patients: 'patients',
-    diagnosis: 'diagnosis',
+    diagnosis: 'therapy-diagnosis-reports',
     sessions: 'sessions',
 
     // Optional helper

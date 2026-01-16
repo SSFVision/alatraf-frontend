@@ -9,6 +9,7 @@ import { GetPaidRepairCardsFilterRequest } from '../Models/paid-repair-cards-fil
 import { RepairCardsManagementService } from './repair-cards-management.service';
 import { AssignIndustrialPartsRequest } from '../Models/assign-industrial-parts.request';
 import { SearchManager } from '../../../core/utils/search-manager';
+import { CreateDeliveryTimeRequest } from '../Models/create-delivery-time.request';
 
 @Injectable({
   providedIn: 'root',
@@ -182,6 +183,39 @@ export class RepairCardsFacade extends BaseFacade {
         }
 
         this.assigningIndustrialParts.set(false);
+      })
+    );
+  }
+   // ================= Create Delivery Time =================
+  creatingDeliveryTime = signal<boolean>(false);
+  deliveryTimeCreated = signal<boolean>(false);
+  deliveryTimeFormErrors = signal<Record<string, string[]>>({});
+
+  createDeliveryTime(
+    repairCardId: number,
+    request: CreateDeliveryTimeRequest
+  ) {
+    this.creatingDeliveryTime.set(true);
+    this.deliveryTimeCreated.set(false);
+    this.deliveryTimeFormErrors.set({});
+
+    return this.handleCreateOrUpdate(
+      this.repairCardsService.createDeliveryTime(repairCardId, request),
+      {
+        successMessage: 'تم تعيين موعد التسليم بنجاح',
+        defaultErrorMessage: 'فشل إنشاء موعد التسليم، حاول مرة أخرى',
+      }
+    ).pipe(
+      tap((res) => {
+        if (res.success) {
+          this.deliveryTimeCreated.set(true);
+        }
+
+        if (res.validationErrors) {
+          this.deliveryTimeFormErrors.set(res.validationErrors);
+        }
+
+        this.creatingDeliveryTime.set(false);
       })
     );
   }
