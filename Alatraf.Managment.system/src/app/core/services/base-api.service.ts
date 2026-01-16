@@ -49,7 +49,6 @@ export class BaseApiService {
   protected createHeaders(custom?: HttpHeaders): HttpHeaders {
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      // 'X-Enable-Loader': 'true',
     });
 
     if (custom) {
@@ -162,8 +161,6 @@ export class BaseApiService {
       .pipe(catchError((err) => this.handleError(err)));
   }
 
-  // Some APIs require a DELETE request with a body payload. Angular supports this via request('DELETE').
-  // This method preserves the existing delete() signature while enabling DELETE-with-body when needed.
   protected deleteWithBody<T>(
     endpoint: string,
     body: any,
@@ -185,4 +182,25 @@ export class BaseApiService {
       .get<ApiResult<T>>(this.normalize(fullUrl))
       .pipe(catchError((err) => this.handleError(err)));
   }
+
+  /**
+ * POST request returning a Blob (PDF/file)
+ */
+protected postBlob(endpoint: string, body: any = null, headers?: HttpHeaders): Observable<Blob> {
+  const url = this.buildUrl(endpoint);
+
+  // If headers are needed for auth, include them, but do NOT set Content-Type
+  const opts: { headers?: HttpHeaders; responseType: 'blob' } = {
+    responseType: 'blob',
+  };
+
+  if (headers) {
+    opts.headers = headers;
+  }
+
+  return this.http.post(url, body, opts).pipe(
+    catchError((err) => this.handleError(err))
+  );
+}
+
 }
