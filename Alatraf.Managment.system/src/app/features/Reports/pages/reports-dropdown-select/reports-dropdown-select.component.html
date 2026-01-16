@@ -1,0 +1,13 @@
+<label class="label-lg"> نوع التقرير </label>
+
+<select
+  class="label-lg"
+  [value]="selectedReportKey"
+  (change)="onSelect($event)"
+>
+  <option value="" disabled selected>اختر نوع التقرير</option>
+
+  <option *ngFor="let report of enabledReports" [value]="report.key">
+    {{ report.label }}
+  </option>
+</select>

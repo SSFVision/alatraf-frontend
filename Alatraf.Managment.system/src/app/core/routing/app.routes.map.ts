@@ -271,6 +271,13 @@ export const AppRoutes = {
   },
   reports: {
     root: 'reports',
+
+    patients: 'patients',
+    diagnosis: 'diagnosis',
+    sessions: 'sessions',
+
+    // Optional helper
+    report: (type: string) => `${type}`,
   },
   system: {
     unauthorized: 'unauthorized',
