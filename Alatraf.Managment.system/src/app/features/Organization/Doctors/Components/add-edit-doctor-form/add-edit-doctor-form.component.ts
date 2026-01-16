@@ -30,11 +30,12 @@ import { CreateDoctorRequest } from '../../Models/create-doctor.request';
 import { DoctorDto } from '../../Models/doctor.dto';
 import { UpdateDoctorRequest } from '../../Models/update-doctor.request';
 import { DoctorFacade } from './../../Service/doctor.facade.service';
+import { AddressSelectComponent } from '../../../../../shared/components/address-select/address-select.component';
 
 @Component({
   selector: 'app-add-edit-doctor-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, AddressSelectComponent],
   templateUrl: './add-edit-doctor-form.component.html',
   styleUrl: './add-edit-doctor-form.component.css',
 })
@@ -97,12 +98,13 @@ export class AddEditDoctorFormComponent {
       ],
       birthdate: [null, [Validators.required]],
 
-      address: ['', [Validators.required]],
+      addressId: [null, [Validators.required]],
       gender: [true, [Validators.required]],
       specialization: ['', [Validators.required]],
       departmentId: [null, [Validators.required]],
     });
   }
+  addressName = signal<string>('');
 
   private populateForm(doctor: DoctorDto): void {
     const formData = {
@@ -110,18 +112,18 @@ export class AddEditDoctorFormComponent {
       nationalNo: doctor.personDto?.nationalNo,
       phone: doctor.personDto?.phone,
       birthdate: FormatDateForInput(doctor.personDto?.birthdate),
-      address: doctor.personDto?.address,
+      addressId: doctor.personDto?.addressId,
       gender: ChangeGenderToBoolean(doctor.personDto?.gender) ?? false,
       specialization: doctor.specialization,
       departmentId: doctor.departmentId,
     };
-
+    this.addressName.set(doctor.personDto?.address ?? '');
     this.form.patchValue(formData, { emitEvent: false });
-  if (doctor.hasAssignments ) {
-    this.form.get('departmentId')?.disable({ emitEvent: false });
-  } else {
-    this.form.get('departmentId')?.enable({ emitEvent: false });
-  }
+    if (doctor.hasAssignments) {
+      this.form.get('departmentId')?.disable({ emitEvent: false });
+    } else {
+      this.form.get('departmentId')?.enable({ emitEvent: false });
+    }
 
     this.form.markAsPristine();
     this.form.markAsUntouched();

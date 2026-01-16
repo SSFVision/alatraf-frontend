@@ -122,6 +122,7 @@ export class RepairCardAssignmentsWorkspaceComponent {
         birthdate: undefined,
         phone: undefined,
         address: undefined,
+        addressId: undefined,
         nationalNo: undefined,
         autoRegistrationNumber: undefined,
       },

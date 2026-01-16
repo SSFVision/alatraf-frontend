@@ -50,7 +50,7 @@ export class NavigationAuthFacade {
       case AppUserRole.AppointmentsEmployee:
         return `${AppRoutes.Appointment.root}/${AppRoutes.Appointment.manage}`;
       case AppUserRole.Admin:
-        return `${AppRoutes.industrialParts.root}`;
+        return `${AppRoutes.users.root}`;
 
       // return `${AppRoutes.Appointment.root}/${AppRoutes.Appointment.manage}`;
       // case 'Manager':

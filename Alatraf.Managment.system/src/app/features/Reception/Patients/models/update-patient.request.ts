@@ -5,7 +5,7 @@ export interface UpdatePatientRequest {
   birthdate: string | null;          // ISO date string (YYYY-MM-DD)
   phone: string;
   nationalNo?: string | null;
-  address: string;
+  addressId: number;
   gender: boolean;
   patientType: PatientType;
 }

@@ -3,9 +3,10 @@ export interface CreateUserRequest {
   birthdate: string;
   phone: string;
   nationalNo?: string | null;
-  address: string;
+  addressId: number;
   gender: boolean;
   userName: string;
   password: string;
   isActive: boolean;
+
 }

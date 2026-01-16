@@ -6,7 +6,7 @@ export interface UpdateDoctorRequest {
   phone: string;
 
   nationalNo: string;
-  address: string;
+  addressId: number;
 
 
   gender: boolean;

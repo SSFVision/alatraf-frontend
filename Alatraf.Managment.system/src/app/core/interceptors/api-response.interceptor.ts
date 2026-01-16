@@ -31,7 +31,9 @@ export const apiResponseInterceptor: HttpInterceptorFn = (req, next) => {
       if (event instanceof HttpResponse) {
         const body = event.body;
         console.log('✅ Correct Response from backend', event);
-
+        if (req.responseType === 'blob') {
+          return event;
+        }
         const apiResult = ApiResult.success(event.body, event.status);
         const successMsg = req.headers.get('X-Success-Toast');
         if (successMsg) {

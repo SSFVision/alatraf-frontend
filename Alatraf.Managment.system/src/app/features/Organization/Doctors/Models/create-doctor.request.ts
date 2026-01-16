@@ -3,7 +3,7 @@ export interface CreateDoctorRequest {
   birthdate: string;
   phone: string;
   nationalNo: string;
-  address: string;
+  addressId: number;
   gender: boolean;
   specialization: string;
   departmentId: number;
