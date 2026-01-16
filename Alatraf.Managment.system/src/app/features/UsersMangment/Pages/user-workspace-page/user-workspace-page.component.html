@@ -1,11 +1,35 @@
-<h2 class="title-lg">المستخدمون</h2>
+<!-- <h2 class="title-lg" >المستخدمون</h2> -->
 @if (isLoadingSelectedUser()) {
 <div class="flex-center">
   <span class="loader"></span>
 </div>
-<p class="flex-center">جاري تحميل بيانات القسم...</p>
+<p class="flex-center">جاري تحميل بيانات المستخدم...</p>
 } @else {
-<app-user-details class="column gap-16" [user]="selectedUser()"
-  [isLoading]="isLoadingSelectedUser()"></app-user-details>
-<app-user-permissions class="column gap-16" [user]="selectedUser()"></app-user-permissions>
+<app-user-details
+  *ngIf="!canedit()"
+  class="column gap-16"
+  [user]="selectedUser()"
+  [isLoading]="isLoadingSelectedUser()"
+></app-user-details>
+<button
+  *ngIf="!canedit()"
+  class="btn primary label-md margin-LR-24"
+  (click)="editUserPermissions()"
+>
+  تعديل الصلاحيات
+</button>
+
+<app-user-permissions
+  *ngIf="!canedit()"
+  class="column gap-16"
+  [user]="selectedUser()"
+></app-user-permissions>
+
+<app-edit-user-permissions
+  class="column gap-16"
+  *ngIf="canedit()"
+  [user]="selectedUser()!"
+  (close)="OnCloseEditUserPermissions()"
+></app-edit-user-permissions>
+
 }

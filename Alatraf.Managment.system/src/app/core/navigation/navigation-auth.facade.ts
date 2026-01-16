@@ -34,28 +34,50 @@ export class NavigationAuthFacade {
 
   private getHomeRouteForRole(role: AppUserRole): string {
     switch (role) {
+      // 1
+      case AppUserRole.Admin:
+        return `${AppRoutes.users.root}`;
+
+      // 2
       case AppUserRole.Receptionist:
         return AppRoutes.reception.root;
-
+      // 3
       case AppUserRole.TherapyDoctor:
         return `${AppRoutes.diagnosis.root}/${AppRoutes.diagnosis.therapy.root}`;
+      // 4
       case AppUserRole.IndustrialDoctor:
         return `${AppRoutes.diagnosis.root}/${AppRoutes.diagnosis.industrial.root}`;
+      // 5
+      case AppUserRole.TechnicalManagementReceptionist:
+        return AppRoutes.repairCards.root;
+      // 6
       case AppUserRole.TherapyManagementReceptionist:
         return AppRoutes.therapyCards.root;
-      case AppUserRole.FinanceEmployee:
-        return AppRoutes.finance.root;
-      case AppUserRole.SalesEmployee:
-        return AppRoutes.finance.root;
+      //7
       case AppUserRole.AppointmentsEmployee:
         return `${AppRoutes.Appointment.root}/${AppRoutes.Appointment.manage}`;
-      case AppUserRole.Admin:
-        return `${AppRoutes.reports.root}`;
+      // 8
+      case AppUserRole.FinanceEmployee:
+        return AppRoutes.finance.root;
+      // 9 
+      //  the folwing  roles Are Related to Stores Employees
+      case AppUserRole.ExitsEmployee:
+        return AppRoutes.dashboard.root;
+      //10
+      case AppUserRole.PurchaseEmployee:
+        return AppRoutes.dashboard.root;
+      //11
 
-      // return `${AppRoutes.Appointment.root}/${AppRoutes.Appointment.manage}`;
-      // case 'Manager':
-      //   return AppRoutes.management.dashboard;
+      case AppUserRole.OrdersEmployee:
+        return AppRoutes.dashboard.root;
+      //12
+      case AppUserRole.ExchangeOrderEmployee:
+        return AppRoutes.dashboard.root;
+      // 13
+      case AppUserRole.SalesEmployee:
+        return AppRoutes.dashboard.root;
 
+ 
       default: {
         return AppRoutes.dashboard.root;
       }

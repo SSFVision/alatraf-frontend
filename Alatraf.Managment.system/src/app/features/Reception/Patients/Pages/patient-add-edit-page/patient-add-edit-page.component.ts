@@ -9,6 +9,7 @@ import { CreatePatientRequest } from '../../models/create-patient.request';
 import { UpdatePatientRequest } from '../../models/update-patient.request';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PatientSelectTarget } from '../../../../../shared/enums/patient-select-target.enum';
+import { DialogType } from '../../../../../shared/components/dialog/DialogConfig';
 
 // NEW DTOs
 
@@ -77,9 +78,14 @@ export class PatientAddEditPageComponent {
             const newPatientId = this.facade.createdPatientId();
 
             this.dialogService
-              .confirmSuccess(ArabicSuccessMessages.saved)
-              .subscribe((confirm) =>
-                 {
+              .confirm({
+                type: DialogType.Success,
+                title: 'نجاح',
+                message: ArabicSuccessMessages.saved,
+                confirmText: 'إصدار تذكرة',
+                showCancel: true,
+              })
+              .subscribe((confirm) => {
                 if (!confirm || !newPatientId) return;
 
                 if (this.redirectTarget === 'select-patient') {
