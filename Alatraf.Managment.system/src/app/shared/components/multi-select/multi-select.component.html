@@ -1,54 +1,44 @@
-
-
 <div class="ms-container" [class.ms-disabled]="disabled">
-  <!-- منطقة التشيبس / العرض -->
-  <div class="ms-display" (click)="toggleDropdown($event)">
+
+  <!-- منطقة العرض (chips + input) -->
+  <div class="ms-display" (click)="focusInput()">
+
     <div class="ms-chips-wrapper">
-      <!-- لو في عناصر مختارة نظهرها كـ chips -->
-      <ng-container *ngIf="value.length; else msPlaceholder">
-        <div class="ms-chip" *ngFor="let option of selectedOptions">
-          <span class="ms-chip-label">
-            {{ option.label }}
-          </span>
+      <!-- chips -->
+      <div class="ms-chip" *ngFor="let option of selectedOptions">
+        <span class="ms-chip-label">
+          {{ option.label }}
+        </span>
 
-          <button
-            type="button"
-            class="ms-chip-remove"
-            (click)="clearOne(option, $event)"
-          >
-            ✕
-          </button>
-        </div>
-      </ng-container>
+        <button type="button" class="ms-chip-remove" (click)="clearOne(option, $event)">
+          ✕
+        </button>
+      </div>
 
-      <!-- placeholder -->
-      <ng-template #msPlaceholder>
-        <span class="ms-placeholder">{{ placeholder }}</span>
-      </ng-template>
+      <!-- input (search + focus + tab) -->
+      <input #searchInput class="ms-input ms-chip-label" type="text"
+        [placeholder]="selectedOptions.length ? '' : placeholder" [value]="searchTerm" [disabled]="disabled"
+        (input)="onSearch($event)" (focus)="openDropdown()" (keydown)="onInputKeydown($event)" />
     </div>
 
+    <!-- actions -->
     <div class="ms-actions">
-      <button
-        type="button"
-        class="ms-clear-all"
-        *ngIf="value.length"
-        (click)="clearAll($event)"
-      >
+      <button type="button" class="ms-clear-all" *ngIf="value.length" (click)="clearAll($event)">
         مسح الكل
       </button>
 
-      <span class="ms-arrow" [class.ms-arrow-open]="isOpen"></span>
+      <span class="ms-arrow" [class.ms-arrow-open]="isOpen">
+      </span>
     </div>
+
   </div>
 
-  <!-- قائمة الخيارات (dropdown) -->
+  <!-- dropdown -->
   <div class="ms-dropdown" *ngIf="isOpen">
-    <div
-      class="ms-option"
-      *ngFor="let option of options"
-      [class.ms-option-selected]="isSelected(option)"
-      (click)="toggleOption(option)"
-    >
+
+    <div class="ms-option" *ngFor="let option of filteredOptions" [class.ms-option-selected]="isSelected(option)"
+      (click)="toggleOption(option)">
+
       <div class="ms-option-label">
         {{ option.label }}
       </div>
@@ -58,8 +48,10 @@
       </div>
     </div>
 
-    <div class="ms-no-options" *ngIf="!options.length">
-      لا توجد خيارات متاحة
+    <div class="ms-no-options" *ngIf="!filteredOptions.length">
+      لا توجد نتائج
     </div>
+
   </div>
+
 </div>

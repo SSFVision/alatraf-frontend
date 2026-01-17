@@ -6,7 +6,6 @@
 .ms-container {
   position: relative;
   display: block;
-  /* عشان ياخذ عرض 100% مثل input */
   width: 100%;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
@@ -18,7 +17,7 @@
   pointer-events: none;
 }
 
-/* صندوق العرض – نفس ستايل input تقريباً */
+/* صندوق العرض */
 .ms-display {
   display: flex;
   align-items: center;
@@ -37,13 +36,7 @@
   background-color: var(--white-color);
   color: var(--primary-color);
 
-  cursor: pointer;
-}
-
-/* لما تكون القائمة مفتوحة نخليها كأنها focus */
-.ms-display.ms-display-open {
-  border-color: var(--primary-color-50);
-  border-width: 2px;
+  cursor: text;
 }
 
 /* منطقة التشيبس */
@@ -56,7 +49,7 @@
   min-height: 24px;
 }
 
-/* chip واحد */
+/* chip */
 .ms-chip {
   display: inline-flex;
   align-items: center;
@@ -67,10 +60,6 @@
   font-size: 12px;
   color: var(--primary-color);
   white-space: nowrap;
-}
-
-.ms-chip-hidden {
-  display: none;
 }
 
 .ms-chip-label {
@@ -94,7 +83,7 @@
   color: var(--gray-color);
 }
 
-/* الجزء الأيمن (السهم + مسح الكل) */
+/* actions */
 .ms-actions {
   display: flex;
   align-items: center;
@@ -113,7 +102,7 @@
   color: var(--red-color);
 }
 
-/* السهم (أيقونة SVG) */
+/* arrow */
 .ms-arrow {
   width: 20px;
   height: 20px;
@@ -129,7 +118,7 @@
   transform: rotate(180deg);
 }
 
-/* القائمة المنسدلة */
+/* dropdown */
 .ms-dropdown {
   position: absolute;
   top: calc(100% + 4px);
@@ -147,7 +136,7 @@
   z-index: 1000;
 }
 
-/* عنصر خيار واحد */
+/* option */
 .ms-option {
   display: flex;
   align-items: center;
@@ -173,13 +162,21 @@
 .ms-option-right {
   font-size: 14px;
   color: var(--green-color);
-  /* علامة صح بلون أخضر لطيف */
 }
 
-/* لا توجد خيارات */
+/* no options */
 .ms-no-options {
   padding: 10px 12px;
   font-size: 13px;
   text-align: center;
   color: var(--gray-color);
+}
+
+/* ✅ input (الحل النهائي) */
+.ms-input {
+  all: unset;
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  color: inherit;
 }
