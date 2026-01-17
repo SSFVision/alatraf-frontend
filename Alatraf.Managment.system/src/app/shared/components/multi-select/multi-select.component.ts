@@ -5,7 +5,11 @@ import {
   HostListener,
   Input,
   Output,
-  forwardRef
+  forwardRef,
+  OnInit,
+  OnChanges,
+  SimpleChanges,
+  ViewChild
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -32,11 +36,18 @@ export interface MultiSelectOption {
     },
   ],
 })
-export class MultiSelectComponent implements ControlValueAccessor {
+export class MultiSelectComponent
+  implements ControlValueAccessor, OnInit, OnChanges {
+
   @Input() options: MultiSelectOption[] = [];
   @Input() placeholder: string = 'اختر واحد أو أكثر';
 
-  // disabled now comes from form + input (both supported)
+  @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
+
+  searchTerm = '';
+  filteredOptions: MultiSelectOption[] = [];
+  isOpen = false;
+
   private _disabled = false;
   @Input()
   set disabled(value: boolean) {
@@ -48,18 +59,14 @@ export class MultiSelectComponent implements ControlValueAccessor {
 
   @Output() selectionChange = new EventEmitter<any[]>();
 
-  isOpen = false;
-
-  // internal value managed by CVA
   private _value: any[] = [];
 
-  // CVA callbacks
-  private onChange: (value: any[]) => void = () => {};
-  private onTouched: () => void = () => {};
+  private onChange: (value: any[]) => void = () => { };
+  private onTouched: () => void = () => { };
 
-  constructor(private elRef: ElementRef) {}
+  constructor(private elRef: ElementRef) { }
 
-  // ------------ ControlValueAccessor implementation ------------
+  // ---------------- CVA ----------------
 
   writeValue(value: any[] | null): void {
     this._value = Array.isArray(value) ? [...value] : [];
@@ -77,14 +84,13 @@ export class MultiSelectComponent implements ControlValueAccessor {
     this._disabled = isDisabled;
   }
 
-  // ------------ Helpers ------------
+  // ---------------- Helpers ----------------
 
   get value(): any[] {
-    return this._value || [];
+    return this._value;
   }
 
   get selectedOptions(): MultiSelectOption[] {
-    if (!this.value.length) return [];
     return this.options.filter(o => this.value.includes(o.value));
   }
 
@@ -98,27 +104,42 @@ export class MultiSelectComponent implements ControlValueAccessor {
     this.selectionChange.emit(this._value);
   }
 
-  // ------------ UI Events ------------
+  // ---------------- Focus & Dropdown ----------------
+
+  focusInput(): void {
+    if (!this.disabled) {
+      this.searchInput?.nativeElement.focus();
+    }
+  }
+
+  openDropdown(): void {
+    if (this.disabled) return;
+
+    if (!this.isOpen) {
+      this.isOpen = true;
+      this.filteredOptions = [...this.options];
+    }
+  }
+
+  closeDropdown(): void {
+    this.isOpen = false;
+    this.searchTerm = '';
+    this.filteredOptions = [...this.options];
+  }
+
+  // ---------------- Outside Click ----------------
 
   @HostListener('document:click', ['$event'])
-  onDocumentClick(event: Event) {
+  onDocumentClick(event: Event): void {
     if (!this.elRef.nativeElement.contains(event.target)) {
       if (this.isOpen) {
-        this.isOpen = false;
+        this.closeDropdown();
         this.markAsTouched();
       }
     }
   }
 
-  toggleDropdown(event: MouseEvent): void {
-    if (this.disabled) return;
-    event.stopPropagation();
-    this.isOpen = !this.isOpen;
-
-    if (!this.isOpen) {
-      this.markAsTouched();
-    }
-  }
+  // ---------------- Options ----------------
 
   isSelected(option: MultiSelectOption): boolean {
     return this.value.includes(option.value);
@@ -127,8 +148,7 @@ export class MultiSelectComponent implements ControlValueAccessor {
   toggleOption(option: MultiSelectOption): void {
     if (this.disabled) return;
 
-    const exists = this.isSelected(option);
-    const newValue = exists
+    const newValue = this.isSelected(option)
       ? this.value.filter(v => v !== option.value)
       : [...this.value, option.value];
 
@@ -137,17 +157,56 @@ export class MultiSelectComponent implements ControlValueAccessor {
 
   clearOne(option: MultiSelectOption, event: MouseEvent): void {
     event.stopPropagation();
-    if (!this.isSelected(option)) return;
-
-    const newValue = this.value.filter(v => v !== option.value);
-    this.updateValue(newValue);
+    this.updateValue(this.value.filter(v => v !== option.value));
   }
 
   clearAll(event: MouseEvent): void {
     event.stopPropagation();
-    if (!this.value.length) return;
-
     this.updateValue([]);
   }
-}
 
+  // ---------------- Search ----------------
+
+  onSearch(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.searchTerm = input.value;
+    this.filterOptions();
+  }
+
+  filterOptions(): void {
+    const term = this.searchTerm.toLowerCase().trim();
+    this.filteredOptions = this.options.filter(option =>
+      option.label.toLowerCase().includes(term)
+    );
+  }
+
+  // ---------------- Keyboard ----------------
+
+  onInputKeydown(event: KeyboardEvent): void {
+    switch (event.key) {
+      case 'Escape':
+        this.closeDropdown();
+        this.markAsTouched();
+        break;
+
+      case 'Backspace':
+        if (!this.searchTerm && this.value.length) {
+          this.updateValue(this.value.slice(0, -1));
+        }
+        break;
+    }
+  }
+
+  // ---------------- Lifecycle ----------------
+
+  ngOnInit(): void {
+    this.filteredOptions = [...this.options];
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['options']) {
+      this.filteredOptions = [...this.options];
+      this.filterOptions();
+    }
+  }
+}

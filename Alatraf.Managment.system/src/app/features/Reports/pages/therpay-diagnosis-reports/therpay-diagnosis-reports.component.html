@@ -1,1 +1,107 @@
-<p>therpay-diagnosis-reports works!</p>
+<div class="main-content-wrapper">
+  <div class="scrollable-area column gap-16 column gap-16">
+    <div class="width-100">
+      <p class="title-md">
+        الفلاتر
+      </p>
+
+      <span class="home-line"></span>
+    </div>
+    <form class="column gap-16">
+
+      <div class="row flex-center">
+        <label class="label-lg">رقم التشخيص</label>
+        <input class="label-lg" type="number" name="diagnosisId">
+      </div>
+
+      <div class="row flex-center">
+        <label class="label-lg">نص التشخيص</label>
+        <input class="label-lg" type="text" name="diagnosisText" placeholder="يحتوي على">
+      </div>
+
+      <div class="row flex-center">
+        <label class="label-lg">اسم المريض</label>
+        <input class="label-lg" type="text" name="patientName" placeholder="يحتوي على">
+      </div>
+
+      <!-- العمر -->
+
+      <div class="row flex-center">
+        <label class="label-lg">العمر </label>
+        <input class="label-lg" type="text" name="patientName" placeholder="">
+      </div>
+
+      <div class="row flex-center">
+        <label class="label-lg">الجنس</label>
+        <select class="label-lg">
+          <option value="">الكل</option>
+          <option value="true">ذكر</option>
+          <option value="false">أنثى</option>
+        </select>
+      </div>
+
+      <div class="row flex-center">
+        <label class="label-lg">نوع الكرت</label>
+        <select class="label-lg">
+          <option value="">الكل</option>
+          <option value="true">عام</option>
+          <option value="false">خاص</option>
+        </select>
+      </div>
+
+      <div class="row flex-center">
+        <label class="label-lg">رقم المريض</label>
+        <input class="label-lg" type="number" name="patientId">
+      </div>
+
+      <div class="row flex-center">
+        <label class="label-lg">رقم التذكرة</label>
+        <input class="label-lg" type="number" name="ticketId">
+      </div>
+
+      <div class="row flex-center">
+        <label class="label-lg">تاريخ الإصابة</label>
+        <input class="label-lg" type="date" name="injuryDate">
+      </div>
+
+      <div class="row flex-center">
+        <label class="label-lg">أسباب الإصابة</label>
+        <app-multi-select placeholder="اختر الأسباب"></app-multi-select>
+      </div>
+
+      <div class="row flex-center">
+        <label class="label-lg">جهة الإصابة</label>
+        <app-multi-select placeholder="اختر الجهة"></app-multi-select>
+      </div>
+
+      <div class="row flex-center">
+        <label class="label-lg">نوع الإصابة</label>
+        <app-multi-select placeholder="اختر النوع"></app-multi-select>
+      </div>
+
+      <div class="row flex-center">
+        <label class="label-lg">تاريخ بداية البرنامج</label>
+        <input class="label-lg" type="date" name="injuryDate">
+      </div>
+
+      <div class="row flex-center">
+        <label class="label-lg">تاريخ نهاية البرنامج</label>
+        <input class="label-lg" type="date" name="injuryDate">
+      </div>
+
+      <div class="row flex-center">
+        <label class="label-lg">حلة الكرت </label>
+        <select class="label-lg" name="hasTherapyCards">
+          <option value="">الكل</option>
+          <option value="true">ساري</option>
+          <option value="false">متهي</option>
+        </select>
+      </div>
+
+      <div class="flex-center">
+        <button class="btn primary"> تنفيذ </button>
+      </div>
+
+    </form>
+  </div>
+</div>

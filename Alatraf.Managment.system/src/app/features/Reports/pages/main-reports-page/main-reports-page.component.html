@@ -1,16 +1,9 @@
-<div class="row gap-16 fill-height">
-  <main class="padding-32 row gap-16 padding-24">
-    <div class="box hight-800 gap-16">
-      <div class="width-100">
-        <p class="title-md">بيانات القسم</p>
-        <span class="home-line"></span>
-      </div>
-
-      <app-reports-dropdown-select
-        class="row flex-center"
-      ></app-reports-dropdown-select>
-
-      <router-outlet></router-outlet>
-    </div>
-  </main>
+<div class="box gap-16">
+  <h1 class="title-lg">
+    التقارير
+  </h1>
+  <div class="padding-LR-24 column gap-16">
+    <app-reports-dropdown-select class="row flex-center"></app-reports-dropdown-select>
+    <router-outlet></router-outlet>
+  </div>
 </div>

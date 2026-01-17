@@ -1,0 +1,12 @@
+:host {
+  display: flex;
+  flex: 1;
+  align-items: stretch;
+}
+
+:host>.box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 300px;
+}
